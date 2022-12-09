@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import datetime
 
 from odoo import fields, models, api
@@ -24,9 +26,10 @@ class Transferencia(models.Model):
     ubicacion_origen_id = fields.Many2one(comodel_name='transferencias.ubicaciones', string='Ubicación Origen',
                                           required=True, tracking=True, track_visibility='onchange')
 
-    ubicacion_destino = fields.Many2one(comodel_name='transferencias.ubicaciones', string='Ubicación Destino',
+    ubicacion_destino_id = fields.Many2one(comodel_name='transferencias.ubicaciones', string='Ubicación Destino',
                                         required=True, tracking=True, track_visibility='onchange')
 
     activos_ids = fields.Many2many(comodel_name='transferencias.activos', string='Activos', required=True)
 
     archivo = fields.Binary(string="Evidencia Digital")
+    nombre_archivo = fields.Char(string='Evidencia Digital',required=False)

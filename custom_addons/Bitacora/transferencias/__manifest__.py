@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+
 {
-    'name': "transferencias",
+    'name': "Transferencias de Activos Fijos",
 
     'summary': """
         Módulo para llevar el control de las transferencias de Activos Fijos""",
@@ -19,13 +20,19 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','mail'],
+    'depends': ['base','hr','mail'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
-        'views/views.xml',
-        'views/templates.xml',
+        'security/roles.xml',
+        'security/ir.model.access.csv',
+        'views/MainMenu.xml',
+        'views/Marcas.xml',
+        'views/Ubicaciones.xml',
+        'views/Responsables.xml',
+        'views/Activos.xml',
+        'views/Transferencias.xml',
+
     ],
     # only loaded in demonstration mode
     'demo': [

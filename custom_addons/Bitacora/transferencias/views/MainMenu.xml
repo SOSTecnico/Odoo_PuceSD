@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- This Menu Item will appear in the Upper bar, That's why It needs NO parent or action -->
+        <menuitem id="transferencias.main_menu" web_icon="transferencias,static/src/img/icon.png" name="Transferencias" />
+
+    </data>
+</odoo>

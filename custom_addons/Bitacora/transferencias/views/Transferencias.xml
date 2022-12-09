@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="transferencias.transferencias_form_view" model="ir.ui.view">
+            <field name="name">transferencias.transferencias.form</field>
+            <field name="model">transferencias.transferencias</field>
+            <field name="arch" type="xml">
+                <form string="Transferencias">
+                    <sheet>
+                        <group>
+                            <field name="fecha"></field>
+                            <field name="codigo"></field>
+                            <field name="custodio_origen_id"></field>
+                            <field name="custodio_destino_id"></field>
+                            <field name="ubicacion_origen_id"></field>
+                            <field name="ubicacion_destino_id"></field>
+                            <field name="archivo" filename="nombre_archivo"></field>
+                            <field name="nombre_archivo" invisible="1"></field>
+                        </group>
+                        <group string="Activos Fijos" name="activos_fijos">
+                            <field nolabel="1" name="activos_ids"></field>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+                <record id="transferencias.transferencias_tree_view" model="ir.ui.view">
+                    <field name="name">transferencias.transferencias.tree</field>
+                    <field name="model">transferencias.transferencias</field>
+                    <field name="arch" type="xml">
+                        <tree string="Transferencias">
+                            <field name="fecha"/>
+                            <field name="codigo"/>
+                            <field name="custodio_origen_id" optional="show"/>
+                            <field name="custodio_destino_id" optional="show"/>
+                            <field name="ubicacion_origen_id" optional="hide"/>
+                            <field name="ubicacion_destino_id" optional="show"/>
+                            <field name="archivo" filename="nombre_archivo" widget="binary" optional="show"/>
+                            <field name="nombre_archivo" invisible="1"/>
+                            <field name="activos_ids" widget="many2many_tags" optional="show"></field>
+                        </tree>
+                    </field>
+                </record>
+
+        <!--        <record id="transferencias.transferencias_search_view" model="ir.ui.view">-->
+        <!--            <field name="name">transferencias.transferencias.transferencias.search</field>-->
+        <!--            <field name="model">transferencias.transferencias.transferencias</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <search string="Transferencias">-->
+        <!--                    <group expand="1" string="Group By">-->
+        <!--                        <filter string="Example Field" name="example_field" domain="[]"-->
+        <!--                                context="{'group_by':'example_field'}"/>-->
+        <!--                    </group>-->
+        <!--                </search>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+        <record id="transferencias.transferencias_act_window" model="ir.actions.act_window">
+            <field name="name">Transferencias Activos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">transferencias.transferencias</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Transferencias.
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="1" name="Transferencias" id="transferencias.transferencias_menu"
+                  parent="transferencias.main_menu" action="transferencias.transferencias_act_window"/>
+
+    </data>
+</odoo>

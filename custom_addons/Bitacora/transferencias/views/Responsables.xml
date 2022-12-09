@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem sequence="200" id="transferencias.responsables_menu" name="Responsables" parent="transferencias.main_menu"
+                  action="hr.open_view_employee_list_my"></menuitem>
+
+    </data>
+</odoo>
