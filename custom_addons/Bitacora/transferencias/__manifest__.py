@@ -32,6 +32,7 @@
         'views/Responsables.xml',
         'views/Activos.xml',
         'views/Transferencias.xml',
+        'reports/Transferencias.xml'
 
     ],
     # only loaded in demonstration mode

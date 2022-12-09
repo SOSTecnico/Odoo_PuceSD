@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="transferencias.action_report_transferencias" model="ir.actions.report">
+            <field name="name">Reporte Transferencia</field>
+            <field name="model">transferencias.transferencias</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">transferencias.report_transferencias</field>
+            <field name="report_file">transferencias.report_transferencias</field>
+            <field name="binding_model_id" ref="transferencias.model_transferencias_transferencias"></field>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="transferencias.report_transferencias">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h2>Sample positronix</h2>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>
