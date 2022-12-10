@@ -3,21 +3,139 @@
     <data>
 
         <record id="transferencias.action_report_transferencias" model="ir.actions.report">
-            <field name="name">Reporte Transferencia</field>
+            <field name="name">Transferencia sin firmas</field>
             <field name="model">transferencias.transferencias</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">transferencias.report_transferencias</field>
             <field name="report_file">transferencias.report_transferencias</field>
             <field name="binding_model_id" ref="transferencias.model_transferencias_transferencias"></field>
             <field name="binding_type">report</field>
+            <field name="print_report_name">'Transferencia %s' % (object.codigo)</field>
         </record>
 
         <template id="transferencias.report_transferencias">
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
+                <t t-foreach="docs" t-as="object">
                     <t t-call="web.external_layout">
                         <div class="page">
-                            <h2>Sample positronix</h2>
+                            <h2>Transferencia de Activos Fijos</h2>
+                            <div class="row">
+                                <div class="col-3">
+                                    <strong>Fecha:</strong>
+                                    <span t-esc="object.fecha"></span>
+                                </div>
+                                <div class="col-5">
+                                    <strong>Tipo:</strong>
+                                    <span t-esc="object.tipo_transferencia_id.name"></span>
+                                </div>
+                                <div class="col-4">
+                                    <strong>Código:</strong>
+                                    <span t-esc="object.codigo"></span>
+                                </div>
+                            </div>
+
+                            <table class="table table-sm shadow rounded" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Datos Personal</th>
+                                        <th>Dependencia de Origen(Entrega)</th>
+                                        <th>Dependencia de Destino(Recibe)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Responsable</td>
+                                        <td>
+                                            <span t-esc="object.custodio_origen_id.name"></span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="object.custodio_destino_id.name"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Departamento</td>
+                                        <td>
+                                            <span t-esc="object.ubicacion_origen_id.departamento_id.name"></span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="object.ubicacion_destino_id.departamento_id.name"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ubicación</td>
+                                        <td>
+                                            <span t-esc="object.ubicacion_origen_id.name"></span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="object.ubicacion_destino_id.name"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-sm shadow rounded" style="width:100%; font-size:10pt">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" colspan="100">Información Básica de Activos Fijos</th>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <th>Nº</th>
+                                        <th>Descripción del Activo</th>
+                                        <th>Código</th>
+                                        <th>Nº. Serie</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="object.activos_ids" t-as="activo">
+                                        <tr class="text-center">
+                                            <td t-esc="activo_index+1"></td>
+                                            <td t-esc="activo.tipo_activo_id.name"></td>
+                                            <td t-esc="activo.codigo"></td>
+                                            <td t-esc="activo.serie"></td>
+                                            <td t-esc="activo.estado.upper()"></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfooter>
+                                    <tr class="text-center">
+                                        <td colspan="2">
+                                            <label>Total Activos:
+                                                <span t-esc="len(object.activos_ids)"></span>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                </tfooter>
+                            </table>
+                            <strong>Observaciones</strong>
+                            <textarea class="form-control shadow" t-esc="object.observaciones"></textarea>
+                            <div class="row mt-2">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>Firmas Departamento Origen</th>
+                                            <th>Firmas Departamento Destino</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="text-center">
+                                            <td style="height:7em"></td>
+                                            <td style="height:7em"></td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td>Firma y Sello Responsable Actual</td>
+                                            <td>Firma y Sello Nuevo Responsable</td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td style="height:7em"></td>
+                                            <td style="height:7em"></td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td>Elaborado: Recursos Físicos/DTI</td>
+                                            <td>Captura Activos Fijos</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </t>
                 </t>

@@ -11,10 +11,12 @@
                         <group>
                             <field name="fecha"></field>
                             <field name="codigo"></field>
+                            <field name="tipo_transferencia_id"></field>
                             <field name="custodio_origen_id"></field>
                             <field name="custodio_destino_id"></field>
-                            <field name="ubicacion_origen_id"></field>
-                            <field name="ubicacion_destino_id"></field>
+                            <field name="ubicacion_origen_id" domain="[('departamento_id','!=',False)]"></field>
+                            <field name="ubicacion_destino_id" domain="[('departamento_id','!=',False)]"></field>
+                            <field name="observaciones"></field>
                             <field name="archivo" filename="nombre_archivo"></field>
                             <field name="nombre_archivo" invisible="1"></field>
                         </group>
@@ -30,23 +32,23 @@
             </field>
         </record>
 
-                <record id="transferencias.transferencias_tree_view" model="ir.ui.view">
-                    <field name="name">transferencias.transferencias.tree</field>
-                    <field name="model">transferencias.transferencias</field>
-                    <field name="arch" type="xml">
-                        <tree string="Transferencias">
-                            <field name="fecha"/>
-                            <field name="codigo"/>
-                            <field name="custodio_origen_id" optional="show"/>
-                            <field name="custodio_destino_id" optional="show"/>
-                            <field name="ubicacion_origen_id" optional="hide"/>
-                            <field name="ubicacion_destino_id" optional="show"/>
-                            <field name="archivo" filename="nombre_archivo" widget="binary" optional="show"/>
-                            <field name="nombre_archivo" invisible="1"/>
-                            <field name="activos_ids" widget="many2many_tags" optional="show"></field>
-                        </tree>
-                    </field>
-                </record>
+        <record id="transferencias.transferencias_tree_view" model="ir.ui.view">
+            <field name="name">transferencias.transferencias.tree</field>
+            <field name="model">transferencias.transferencias</field>
+            <field name="arch" type="xml">
+                <tree string="Transferencias">
+                    <field name="fecha"/>
+                    <field name="codigo"/>
+                    <field name="custodio_origen_id" optional="show"/>
+                    <field name="custodio_destino_id" optional="show"/>
+                    <field name="ubicacion_origen_id" optional="hide"/>
+                    <field name="ubicacion_destino_id" optional="show"/>
+                    <field name="archivo" filename="nombre_archivo" widget="binary" optional="show"/>
+                    <field name="nombre_archivo" invisible="1"/>
+                    <field name="activos_ids" widget="many2many_tags" optional="show"></field>
+                </tree>
+            </field>
+        </record>
 
         <!--        <record id="transferencias.transferencias_search_view" model="ir.ui.view">-->
         <!--            <field name="name">transferencias.transferencias.transferencias.search</field>-->

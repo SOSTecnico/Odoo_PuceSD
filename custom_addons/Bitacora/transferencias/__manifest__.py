@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','hr','mail'],
+    'depends': ['base','hr','mail','web_m2x_options'],
 
     # always loaded
     'data': [
@@ -32,6 +32,7 @@
         'views/Responsables.xml',
         'views/Activos.xml',
         'views/Transferencias.xml',
+        'views/TipoTransferencias.xml',
         'reports/Transferencias.xml'
 
     ],
