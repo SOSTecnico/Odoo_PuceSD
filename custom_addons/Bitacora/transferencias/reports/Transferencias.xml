@@ -107,7 +107,8 @@
                                 </tfooter>
                             </table>
                             <strong>Observaciones</strong>
-                            <textarea class="form-control shadow" t-esc="object.observaciones"></textarea>
+                            <textarea class="form-control shadow" style="font-size:11pt" rows="3"
+                                      t-esc="object.observaciones"></textarea>
                             <div class="row mt-2">
                                 <table class="table table-sm">
                                     <thead>
@@ -137,11 +138,28 @@
                                 </table>
                             </div>
                         </div>
+                        <div style="margin-top:auto">
+                            <div style="font-size:9pt; ">
+                                <strong>Cláusula de Compromiso</strong>
+                                <p class="text-justify">
+                                    Como funcionario de la Pontificia Universidad Católica del Ecuador Sede Santo
+                                    Domingo acepto que los activos relacionados en el presente documento están bajo mi
+                                    responsabilidad, por lo cual les daré un uso adecuado al desempeño de mis funciones
+                                    y a la destinación institucional prevista para cada uno de ellos. En consecuencia,
+                                    serán asumidos por mí el daño o la pérdida de los mismos debidos a mi negligencia o
+                                    incumplimiento de los instructivos relacionados con su uso y conservación. Me
+                                    comprometo a informar oportunamente a la Oficina de Activos Fijos sobre cualquier
+                                    desplazamiento, traslado temporal o definitivo de dichos activos mediante la
+                                    tramitación de los formatos respectivos, y sobre cualquier situación que ponga en
+                                    inminente riesgo los bienes relacionados.
+                                </p>
+
+                            </div>
+                        </div>
                     </t>
                 </t>
             </t>
         </template>
-
 
     </data>
 </odoo>
