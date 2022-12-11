@@ -47,6 +47,9 @@ class Activo(models.Model):
     _description = 'Activo Fijo'
     _rec_name = 'codigo'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _sql_constraints = [
+        ('codigo_activo', 'unique(codigo)', 'Ya existe un activo con el código que intenta ingresar')]
+
 
     active = fields.Boolean(string='Activo', default=True, required=False)
     codigo = fields.Char(string='Código', required=True, tracking=True)

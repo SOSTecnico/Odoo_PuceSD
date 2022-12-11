@@ -17,7 +17,7 @@
                             <field name="ubicacion_origen_id" domain="[('departamento_id','!=',False)]"></field>
                             <field name="ubicacion_destino_id" domain="[('departamento_id','!=',False)]"></field>
                             <field name="observaciones"></field>
-                            <field name="archivo" filename="nombre_archivo"></field>
+                            <field name="archivo" attrs="{'accept':'application/pdf'}" filename="nombre_archivo"></field>
                             <field name="nombre_archivo" invisible="1"></field>
                         </group>
                         <group string="Activos Fijos" name="activos_fijos">
