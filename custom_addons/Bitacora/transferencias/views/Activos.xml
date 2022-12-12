@@ -11,8 +11,9 @@
                         <field name="estado" widget="statusbar" clickable="1"></field>
                     </header>
                     <sheet>
-                        <widget name="web_ribbon" title="Archivado" bg_color="bg-danger" attrs="{'invisible':[('active','=',True)]}"></widget>
-                        <group>
+                        <widget name="web_ribbon" title="Archivado" bg_color="bg-danger"
+                                attrs="{'invisible':[('active','=',True)]}"></widget>
+                        <group name="datos">
                             <field name="codigo"></field>
                             <field name="referencia"></field>
                             <field name="serie"></field>

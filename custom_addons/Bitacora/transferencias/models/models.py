@@ -50,7 +50,6 @@ class Activo(models.Model):
     _sql_constraints = [
         ('codigo_activo', 'unique(codigo)', 'Ya existe un activo con el código que intenta ingresar')]
 
-
     active = fields.Boolean(string='Activo', default=True, required=False)
     codigo = fields.Char(string='Código', required=True, tracking=True)
     referencia = fields.Char(string='Referencia', required=False, tracking=True)

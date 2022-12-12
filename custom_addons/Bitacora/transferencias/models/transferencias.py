@@ -50,9 +50,18 @@ class Transferencia(models.Model):
 
     clausula = """Como funcionario de la Pontificia Universidad Católica del Ecuador Sede Santo Domingo acepto que los activos relacionados en el presente documento están  bajo  mi  responsabilidad,  por  lo  cual  les  daré un uso adecuado al  desempeño de mis funciones y a la destinación institucional prevista para cada uno de ellos."""
 
-
-    @api.constrains('archivo','nombre_archivo')
+    @api.constrains('archivo', 'nombre_archivo')
     def _check_file_type(self):
 
         if self.nombre_archivo and not self.nombre_archivo.endswith('.pdf'):
             raise ValidationError('Solo se permite la Evidencia en formato PDF')
+
+    @api.model
+    def create(self, values):
+
+        res = super(Transferencia, self).create(values)
+        for activo in res.activos_ids:
+            activo.responsable_id = res.custodio_destino_id
+            activo.ubicacion_id = res.ubicacion_destino_id
+
+        return res
