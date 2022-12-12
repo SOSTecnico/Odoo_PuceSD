@@ -50,14 +50,14 @@
                             <table class="table table-sm shadow rounded" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Datos Personal</th>
+                                        <th></th>
                                         <th>Dependencia de Origen(Entrega)</th>
                                         <th>Dependencia de Destino(Recibe)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Responsable</td>
+                                        <td>Responsable:</td>
                                         <td>
                                             <span t-esc="object.custodio_origen_id.name"></span>
                                         </td>
@@ -66,7 +66,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Departamento</td>
+                                        <td>Departamento:</td>
                                         <td>
                                             <span t-esc="object.ubicacion_origen_id.departamento_id.name"></span>
                                         </td>
@@ -75,7 +75,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Ubicación</td>
+                                        <td>Ubicación:</td>
                                         <td>
                                             <span t-esc="object.ubicacion_origen_id.name"></span>
                                         </td>
@@ -136,8 +136,8 @@
                                             <td style="height:7em"></td>
                                         </tr>
                                         <tr class="text-center">
-                                            <td>Firma y Sello Responsable Actual</td>
-                                            <td>Firma y Sello Nuevo Responsable</td>
+                                            <td style="border:1px solid black">Firma y Sello Responsable Actual</td>
+                                            <td style="border:1px solid black">Firma y Sello Nuevo Responsable</td>
                                         </tr>
                                         <tr class="text-center">
                                             <td style="height:7em"></td>
@@ -151,13 +151,10 @@
                                 </table>
                             </div>
                         </div>
-                        <div style="margin-top:auto">
-                            <div style="font-size:9pt; ">
-                                <strong>Cláusula de Compromiso</strong>
-                                <p class="text-justify" t-esc="object.clausula">
-                                </p>
-
-                            </div>
+                        <div style="font-size:9pt">
+                            <strong>Cláusula de Compromiso</strong>
+                            <p class="text-justify" t-esc="object.clausula">
+                            </p>
                         </div>
                     </t>
                 </t>

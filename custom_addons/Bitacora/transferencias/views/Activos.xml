@@ -11,7 +11,7 @@
                         <field name="estado" widget="statusbar" clickable="1"></field>
                     </header>
                     <sheet>
-                        <widget name="web_ribbon" title="Archivado" bg_color="bg-danger"
+                        <widget name="web_ribbon" title="Baja" bg_color="bg-danger"
                                 attrs="{'invisible':[('active','=',True)]}"></widget>
                         <group name="datos">
                             <field name="codigo"></field>
@@ -21,7 +21,7 @@
                                    options="{'create':false, 'm2o_dialog':false}"></field>
                             <field name="tipo_activo_id"
                                    options="{'create':false,'create_edit':true, 'm2o_dialog':false}"></field>
-                            <field name="ubicacion_id" options="{'create':false,'create_edit':true, 'm2o_dialog':false}"
+                            <field name="ubicacion_id" options="{'create':false, 'm2o_dialog':false}"
                                    domain="[('departamento_id','!=',False)]"></field>
                             <field name="descripcion_estado"></field>
                             <field name="active" invisible="1"></field>

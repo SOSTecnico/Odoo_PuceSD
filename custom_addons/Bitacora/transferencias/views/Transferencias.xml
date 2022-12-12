@@ -18,10 +18,10 @@
                             <field name="custodio_destino_id"
                                    options="{'create':false,'create_edit':true,'m2o_dialog':false}"></field>
                             <field name="ubicacion_origen_id"
-                                   options="{'create':false,'create_edit':true,'m2o_dialog':false}"
+                                   options="{'create':false,'create_edit':false,'m2o_dialog':false}"
                                    domain="[('departamento_id','!=',False)]"></field>
                             <field name="ubicacion_destino_id"
-                                   options="{'create':false,'create_edit':true,'m2o_dialog':false}"
+                                   options="{'create':false,'create_edit':false,'m2o_dialog':false}"
                                    domain="[('departamento_id','!=',False)]"></field>
                             <field name="observaciones"></field>
                             <field name="archivo" attrs="{'accept':'application/pdf'}"

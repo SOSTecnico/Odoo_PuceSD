@@ -26,6 +26,7 @@
     'data': [
         'security/roles.xml',
         'security/ir.model.access.csv',
+        'data/TiposTransferencia.xml',
         'views/MainMenu.xml',
         'views/Marcas.xml',
         'views/Ubicaciones.xml',

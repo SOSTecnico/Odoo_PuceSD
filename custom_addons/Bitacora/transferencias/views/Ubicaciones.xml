@@ -10,7 +10,7 @@
                             <sheet>
                                 <group>
                                     <field name="name"/>
-                                    <field name="departamento_id" options="{'create':false}"/>
+                                    <field name="departamento_id" domain="[('departamento_id','=',False)]" options="{'create':false}"/>
                                 </group>
                             </sheet>
                             <div class="oe_chatter">

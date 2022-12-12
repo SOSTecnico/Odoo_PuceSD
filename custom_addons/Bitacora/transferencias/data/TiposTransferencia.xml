@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="transferencias.data_tipo_transferencia_1" model="transferencias.tipos_transferencias">
+            <field name="name">Entrega inicial del activo fijo (Nuevo).</field>
+        </record>
+        <record id="transferencias.data_tipo_transferencia_2" model="transferencias.tipos_transferencias">
+            <field name="name">Traslado interno (dentro de la misma escuela o departamento).</field>
+        </record>
+        <record id="transferencias.data_tipo_transferencia_3" model="transferencias.tipos_transferencias">
+            <field name="name">Traslado externo (a otra escuela o departamento).</field>
+        </record>
+        <record id="transferencias.data_tipo_transferencia_4" model="transferencias.tipos_transferencias">
+            <field name="name">Devolución a la Oficina de Recursos Físicos por obsolescencia.</field>
+        </record>
+        <record id="transferencias.data_tipo_transferencia_5" model="transferencias.tipos_transferencias">
+            <field name="name">Cambio de Custodio.</field>
+        </record>
+    </data>
+</odoo>
