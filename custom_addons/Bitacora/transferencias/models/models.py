@@ -31,6 +31,9 @@ class Ubicacion(models.Model):
     _name = 'transferencias.ubicaciones'
     _description = 'Ubicación'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _sql_constraints = [
+        ('ubicacion_name', 'unique(name)', 'Ya existe una ubicación con ese nombre')]
+
 
     name = fields.Char(string='Nombre', tracking=True, required=True)
     departamento_id = fields.Many2one(comodel_name='transferencias.ubicaciones', string='Departamento', required=False,
