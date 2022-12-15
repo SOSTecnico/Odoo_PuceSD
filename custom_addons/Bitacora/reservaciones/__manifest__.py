@@ -22,7 +22,12 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/Roles.xml',
+        'security/ir.model.access.csv',
+        'views/MainMenu.xml',
+        'views/Escuelas.xml',
+        'views/Eventos.xml',
+        'views/Recursos.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

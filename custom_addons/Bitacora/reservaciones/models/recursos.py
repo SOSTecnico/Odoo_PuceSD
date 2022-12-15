@@ -10,3 +10,9 @@ class Recurso(models.Model):
     capacidad = fields.Integer(string='Capacidad', required=False)
     disponible = fields.Integer(string='Disponible', required=False)
     observaciones = fields.Text(string="Observaciones", required=False)
+
+    requerimientos_id = fields.One2many(
+        comodel_name='reservaciones.req',
+        inverse_name='recurso_id',
+        string='Requerimientos',
+        required=False)

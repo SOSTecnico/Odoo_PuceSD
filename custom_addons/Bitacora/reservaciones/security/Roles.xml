@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.module.category" id="reservaciones_category">
+            <field name="name">Reservaciones</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="reservaciones.group_reservaciones_user" model="res.groups">
+            <field name="name">Usuario</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="reservaciones.reservaciones_category"/>
+        </record>
+
+        <record id="reservaciones.group_reservaciones_admin" model="res.groups">
+            <field name="name">Administrador</field>
+            <field name="category_id" ref="reservaciones.reservaciones_category"/>
+            <field name="implied_ids" eval="[(4, ref('reservaciones.group_reservaciones_user'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+
+    </data>
+</odoo>

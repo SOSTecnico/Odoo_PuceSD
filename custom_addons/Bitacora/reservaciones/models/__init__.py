@@ -2,3 +2,5 @@
 
 from . import escuelas
 from . import eventos
+from . import requerimientos
+from . import recursos

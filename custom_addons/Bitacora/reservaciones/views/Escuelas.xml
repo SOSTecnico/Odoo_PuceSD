@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+<!--
+        <record id="reservaciones.escuelas_form_view" model="ir.ui.view">
+            <field name="name">reservaciones.escuelas.form</field>
+            <field name="model">reservaciones.escuelas</field>
+            <field name="arch" type="xml">
+                <form string="Reservaciones">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="example_title"/>
+                            <h1>
+                                <field name="example_title" placeholder="Title"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="create_date"/>
+                            </group>
+                            <group>
+                                <field name="example_field"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+-->
+
+ <!--       <record id="reservaciones.escuelas_tree_view" model="ir.ui.view">
+            <field name="name">reservaciones.reservaciones.escuelas.tree</field>
+            <field name="model">reservaciones.reservaciones.escuelas</field>
+            <field name="arch" type="xml">
+                <tree string="Reservaciones">
+                    <field name="create_date"/>
+                    <field name="example_field"/>
+                </tree>
+            </field>
+        </record>
+-->
+<!--
+        <record id="reservaciones.escuelas_search_view" model="ir.ui.view">
+            <field name="name">reservaciones.reservaciones.escuelas.search</field>
+            <field name="model">reservaciones.reservaciones.escuelas</field>
+            <field name="arch" type="xml">
+                <search string="Reservaciones">
+                    <group expand="1" string="Group By">
+                        <filter string="Example Field" name="example_field" domain="[]"
+                                context="{'group_by':'example_field'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+-->
+
+        <record id="reservaciones.escuelas_act_window" model="ir.actions.act_window">
+            <field name="name">Reservaciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reservaciones.escuelas</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Escuelas.
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="200" name="Escuelas" id="reservaciones.escuelas_menu" parent="reservaciones.main_menu" action="reservaciones.escuelas_act_window"/>
+
+    </data>
+</odoo>
