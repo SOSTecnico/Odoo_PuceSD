@@ -12,14 +12,11 @@
                             <field name="name"/>
                             <field name="capacidad"/>
                             <field name="disponible"/>
+                            <field name="observaciones"/>
                         </group>
                         <notebook>
                             <page name="requerimientos" string="Requerimientos">
-                                <field name="requerimientos_id">
-                                    <tree>
-                                        <field name="det_req_id"></field>
-                                    </tree>
-                                </field>
+                                <field name="requerimientos_id"></field>
                             </page>
                         </notebook>
                     </sheet>

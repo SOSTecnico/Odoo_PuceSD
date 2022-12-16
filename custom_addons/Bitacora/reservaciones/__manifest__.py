@@ -28,6 +28,7 @@
         'views/Escuelas.xml',
         'views/Eventos.xml',
         'views/Recursos.xml',
+        'views/Requerimientos.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

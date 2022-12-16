@@ -15,4 +15,4 @@ class Recurso(models.Model):
         comodel_name='reservaciones.req',
         inverse_name='recurso_id',
         string='Requerimientos',
-        required=False)
+        required=False,tracking=True)
