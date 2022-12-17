@@ -12,8 +12,9 @@ class Requerimiento(models.Model):
     _name = 'reservaciones.req'
     _description = 'Requerimiento'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _rec_name = 'codigo'
 
-    name = fields.Char(string="Periodo", required=True, tracking=True)
+    codigo = fields.Char(string="Código", required=True, tracking=True)
 
     det_req_id = fields.Many2many(comodel_name='reservaciones.detalle_req', string='Detalle Requerimiento',
                                   required=True, tracking=True)

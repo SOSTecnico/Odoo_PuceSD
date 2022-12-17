@@ -8,20 +8,22 @@
             <field name="arch" type="xml">
                 <form string="Requerimientos">
                     <header>
-                        <field name="estado" widget="statusbar" attrs="{'clickable':[('active','=',True)]}" ></field>
+                        <field name="active" invisible="1"></field>
+                        <field name="estado" widget="statusbar" clickable="1"></field>
                     </header>
                     <sheet>
-                        <field name="active" invisible="1"></field>
                         <widget name="web_ribbon" title="ARCHIVADO" bg_color="bg-danger"
                                 attrs="{'invisible':[('active','=',True)]}"></widget>
                         <group>
-                            <field name="name" attrs="{'readonly':[('active','=',False)]}"></field>
+                            <field name="codigo" placeholder="Puede ser el periodo académico actual"
+                                   attrs="{'readonly':[('active','=',False)]}"></field>
                             <field name="solicitante_id" attrs="{'readonly':[('active','=',False)]}"></field>
                             <field name="observaciones" attrs="{'readonly':[('active','=',False)]}"></field>
                             <field name="recurso_id" required="1" attrs="{'readonly':[('active','=',False)]}"></field>
                         </group>
                         <group>
-                            <field nolabel="1" name="det_req_id" required="1" attrs="{'readonly':[('active','=',False)]}"/>
+                            <field nolabel="1" name="det_req_id" required="1"
+                                   attrs="{'readonly':[('active','=',False)]}"/>
                         </group>
                     </sheet>
                     <div class="oe_chatter">
@@ -37,10 +39,8 @@
             <field name="model">reservaciones.req</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="estado" invisible="1"></field>
-                    <button string="Realizado" attrs="{'invisible':[('estado','=','realizado')]}"
-                            class="btn btn-primary" type="object" name="req_realizado"></button>
-                    <field name="name"></field>
+                    <field name="estado"></field>
+                    <field name="codigo"></field>
                     <field name="solicitante_id"></field>
                     <field name="det_req_id" widget="many2many_tags"></field>
                 </tree>
@@ -76,6 +76,32 @@
 
         <menuitem name="Requerimientos" id="reservaciones.requerimientos_menu" parent="reservaciones.main_menu"
                   action="reservaciones.requerimientos_act_window"/>
+
+        <!--DETALLE DE REQUERIMIENTOS -->
+
+        <record id="reservaciones.detalle_requerimientos_view_form" model="ir.ui.view">
+            <field name="name">reservaciones.detalle_requerimientos_view_form</field>
+            <field name="model">reservaciones.detalle_req</field>
+            <field name="arch" type="xml">
+                <form string="reservaciones.detalle_requerimientos_form">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="reservaciones.detalle_req_action" model="ir.actions.act_window">
+            <field name="name">Detalle de Requerimientos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reservaciones.detalle_req</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="reservaciones.detalle_req_menu" name="Detalle de Requerimientos" parent="reservaciones.main_menu"
+                  action="reservaciones.detalle_req_action"/>
 
     </data>
 </odoo>

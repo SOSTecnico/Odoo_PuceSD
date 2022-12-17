@@ -56,7 +56,7 @@
 -->
 
         <record id="reservaciones.escuelas_act_window" model="ir.actions.act_window">
-            <field name="name">Reservaciones</field>
+            <field name="name">Escuelas</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">reservaciones.escuelas</field>
             <field name="view_mode">tree,form</field>

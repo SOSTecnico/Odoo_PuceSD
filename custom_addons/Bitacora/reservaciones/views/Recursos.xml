@@ -16,7 +16,25 @@
                         </group>
                         <notebook>
                             <page name="requerimientos" string="Requerimientos">
-                                <field name="requerimientos_id"></field>
+                                <field name="requerimientos_id">
+                                    <form>
+                                        <header>
+                                            <field name="estado" widget="statusbar" clickable="1"></field>
+                                        </header>
+                                        <sheet>
+                                            <field name="active" invisible="1"></field>
+                                            <group>
+                                                <field name="codigo"
+                                                       placeholder="Puede ser el periodo académico actual"></field>
+                                                <field name="solicitante_id"></field>
+                                                <field name="observaciones"></field>
+                                            </group>
+                                            <group>
+                                                <field nolabel="1" name="det_req_id" required="1"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
                             </page>
                         </notebook>
                     </sheet>
