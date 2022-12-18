@@ -6,4 +6,4 @@ class Evento(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Evento'
 
-    name = fields.Char(string="Evento", trancking=True, required=True)
+    name = fields.Char(string="Evento", tracking=True, required=True)

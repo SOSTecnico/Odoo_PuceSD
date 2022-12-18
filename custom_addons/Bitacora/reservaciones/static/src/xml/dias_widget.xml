@@ -1,0 +1,12 @@
+<templates id="reservaciones.template_dias_widget" xml:space="preserve">
+    <t t-name="reservaciones.DiasWidget">
+        <div>
+            <ul class="list-group" style="list-style:none">
+                <li class="" style="" t-foreach="widget.dias" t-as="dia">
+                    <label t-att-for="dia" t-esc="dia"></label>
+                    <input t-att-id="dia" type="checkbox" t-att-value="dia"/>
+                </li>
+            </ul>
+        </div>
+    </t>
+</templates>

@@ -16,7 +16,7 @@
                         </group>
                         <notebook>
                             <page name="requerimientos" string="Requerimientos">
-                                <field name="requerimientos_id">
+                                <field name="requerimientos_id" widget="section_and_note_one2many">
                                     <form>
                                         <header>
                                             <field name="estado" widget="statusbar" clickable="1"></field>
@@ -82,7 +82,7 @@
             </field>
         </record>
 
-        <menuitem sequence="1" name="Recursos" id="reservaciones.recursos_menu" parent="reservaciones.main_menu"
+        <menuitem sequence="2" name="Recursos" id="reservaciones.recursos_menu" parent="reservaciones.main_menu"
                   action="reservaciones.recursos_act_window"/>
 
     </data>

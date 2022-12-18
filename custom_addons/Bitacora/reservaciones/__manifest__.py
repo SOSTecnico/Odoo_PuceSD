@@ -18,8 +18,16 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','mail','web_m2x_options','hr'],
-
+    'depends': ['base', 'mail', 'web_m2x_options', 'hr'],
+    'assets': {
+        'web.assets_backend': {
+            'reservaciones/static/src/js/dias_widget.js',
+            'reservaciones/static/src/css/dias_widget.css',
+        },
+        'web.assets_qweb': {
+            'reservaciones/static/src/xml/dias_widget.xml'
+        }
+    },
     # always loaded
     'data': [
         'security/Roles.xml',
@@ -29,6 +37,8 @@
         'views/Eventos.xml',
         'views/Recursos.xml',
         'views/Requerimientos.xml',
+        'views/Reservas.xml',
+
     ],
     # only loaded in demonstration mode
     'demo': [
