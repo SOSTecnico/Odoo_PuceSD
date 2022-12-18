@@ -80,9 +80,10 @@ class Reserva(models.Model):
 class DetalleReserva(models.Model):
     _name = 'reservaciones.detalle_reserva'
     _description = 'Detalle Reserva'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char()
-    inicio = fields.Datetime(string='Inicio', required=False)
-    fin = fields.Datetime(string='Fin', required=False)
+    name = fields.Char(related='reserva_id.evento_id.name')
+    inicio = fields.Datetime(string='Inicio', required=False, tracking=True)
+    fin = fields.Datetime(string='Fin', required=False, tracking=True)
     reserva_id = fields.Many2one(comodel_name='reservaciones.reservas', string='Reserva', required=False,
-                                 ondelete='cascade')
+                                 ondelete='cascade', tracking=True)
