@@ -45,28 +45,48 @@ class Reserva(models.Model):
             if record.hora_inicio >= record.hora_fin:
                 raise ValidationError("La Hora de Inicio no puede ser menor o igual que la Hora Final")
 
+
     def generar_detalle_reserva(self):
 
         # DATOS DE INFORMACIÓN
         fecha_inicio = self.fecha_inicio
         fecha_fin = self.fecha_fin
-        tz = pytz.timezone('UTC')
         hora_inicio = (datetime.min + timedelta(hours=self.hora_inicio)).time()
         hora_fin = (datetime.min + timedelta(hours=self.hora_fin)).time()
 
-        # MODELO DETALLE RESERVA
         detalle_reserva = self.env['reservaciones.detalle_reserva']
+
 
         # Si la reserva no es concurrente, se genera un solo registro
         if fecha_inicio == fecha_fin:
             inicio = datetime.combine(fecha_inicio, hora_inicio)
             fin = datetime.combine(fecha_inicio, hora_fin)
 
+
             detalle_reserva.create({
                 'inicio': inicio + timedelta(hours=5),
                 'fin': fin + timedelta(hours=5),
                 'reserva_id': self.id
             })
+        else:
+            # Si la reserva es concurrente(Varias fechas), se genera varios registros en detalle reservas,
+            # desde la fecha inicial hasta la fecha final en los horarios establecidos y días seleccionados
+
+            if not self.dias:
+                raise ValidationError('Si es un reserva concurrente, debe seleccionar al menos un día')
+
+            fecha_temp = fecha_inicio
+
+            while fecha_temp <= fecha_fin:
+                if fecha_temp.strftime("%A").lower() in self.dias:
+                    inicio = datetime.combine(fecha_temp, hora_inicio)
+                    fin = datetime.combine(fecha_temp, hora_fin)
+                    detalle_reserva.create({
+                        'inicio': inicio + timedelta(hours=5),
+                        'fin': fin + timedelta(hours=5),
+                        'reserva_id': self.id
+                    })
+                fecha_temp = fecha_temp + timedelta(days=1)
 
     @api.model
     def create(self, values):
@@ -74,6 +94,15 @@ class Reserva(models.Model):
         res = super(Reserva, self).create(values)
         res.codigo = f"{datetime.now().strftime('%Y%d')}-{random.randint(1000, 9999)}"
         res.generar_detalle_reserva()
+
+        return res
+
+    def write(self, values):
+
+        res = super(Reserva, self).write(values)
+        self.detalle_reserva_id.unlink()
+        self.generar_detalle_reserva()
+
         return res
 
 
