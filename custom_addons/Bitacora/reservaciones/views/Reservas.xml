@@ -11,7 +11,7 @@
                         <div class="oe_title">
                             <label for="codigo"/>
                             <h1>
-                                <field name="codigo" class="oe_read_only"/>
+                                <field name="codigo" readonly="1"/>
                             </h1>
                         </div>
                         <group col="2">
@@ -21,6 +21,7 @@
                                 <field name="evento_id" colspan="12"></field>
                                 <field name="responsable_id"/>
                                 <field name="recurso_id"/>
+                                <field name="ambiente"/>
                             </group>
                             <group>
                                 <field name="hora_inicio" widget="float_time"/>
@@ -29,6 +30,11 @@
                                 <field name="dias" widget="dias_widget"/>
                             </group>
                         </group>
+                        <notebook>
+                            <page name="detalle_reservas" string="Detalle de Reserva">
+                                <field name="detalle_reserva_id"></field>
+                            </page>
+                        </notebook>
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
@@ -79,6 +85,63 @@
 
         <menuitem sequence="1" name="Reservas" id="reservaciones.reservas_menu" parent="reservaciones.main_menu"
                   action="reservaciones.reservas_act_window"/>
+
+        <!--DETALLE DE RESERVAS-->
+
+<!--        <record id="reservaciones.reservas_form_view" model="ir.ui.view">
+            <field name="name">reservaciones.reservas.form</field>
+            <field name="model">reservaciones.reservas</field>
+            <field name="arch" type="xml">
+                <form string="Reservas">
+                    <sheet>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>-->
+
+
+                <record id="reservaciones.detalle_reserva_tree_view" model="ir.ui.view">
+                    <field name="name">reservaciones.detalle_reserva.tree</field>
+                    <field name="model">reservaciones.detalle_reserva</field>
+                    <field name="arch" type="xml">
+                        <tree string="">
+                            <field name="inicio"/>
+                            <field name="fin"/>
+                            <field name="reserva_id"/>
+                        </tree>
+                    </field>
+                </record>
+
+        <!--
+                <record id="reservaciones.reservas_search_view" model="ir.ui.view">
+                    <field name="name">.reservaciones.reservas.search</field>
+                    <field name="model">.reservaciones.reservas</field>
+                    <field name="arch" type="xml">
+                        <search string="ModelTitle">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>
+        -->
+
+        <record id="reservaciones.detalle_reserva_act_window" model="ir.actions.act_window">
+            <field name="name">Detalle de Reservas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reservaciones.detalle_reserva</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Reservas.
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="2" name="Detalle Reservas" id="reservaciones.detalle_reservas_menu" parent="reservaciones.main_menu"
+                  action="reservaciones.detalle_reserva_act_window"/>
 
     </data>
 </odoo>

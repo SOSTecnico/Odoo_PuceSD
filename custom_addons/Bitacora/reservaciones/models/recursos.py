@@ -1,6 +1,5 @@
 from odoo import fields, models, api
 
-
 class Recurso(models.Model):
     _name = 'reservaciones.recursos'
     _description = 'Recurso'
@@ -15,4 +14,4 @@ class Recurso(models.Model):
         comodel_name='reservaciones.req',
         inverse_name='recurso_id',
         string='Requerimientos',
-        required=False,tracking=True)
+        required=False, tracking=True)
