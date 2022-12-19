@@ -101,11 +101,21 @@
                                 <tbody>
                                     <t t-foreach="object.activos_ids" t-as="activo">
                                         <tr class="text-center">
-                                            <td t-esc="activo_index+1"></td>
-                                            <td t-esc="activo.tipo_activo_id.name"></td>
-                                            <td t-esc="activo.codigo"></td>
-                                            <td t-esc="activo.serie"></td>
-                                            <td t-esc="activo.estado.upper()"></td>
+                                            <td>
+                                                <span t-esc="activo_index+1"></span>
+                                            </td>
+                                            <td>
+                                                <span t-esc="activo.tipo_activo_id.name"></span>
+                                            </td>
+                                            <td>
+                                                <span t-esc="activo.codigo"></span>
+                                            </td>
+                                            <td>
+                                                <span t-esc="activo.serie"></span>
+                                            </td>
+                                            <td>
+                                                <span t-esc="activo.estado.upper()"></span>
+                                            </td>
                                         </tr>
                                     </t>
                                 </tbody>
