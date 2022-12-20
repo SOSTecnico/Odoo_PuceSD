@@ -119,6 +119,7 @@
                     <field name="name"/>
                     <field name="recurso_id"/>
                     <field name="responsable_id"/>
+                    <field name="reserva_id"/>
                 </calendar>
             </field>
         </record>

@@ -12,7 +12,7 @@ class Reserva(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'codigo'
 
-    active = fields.Boolean(string='Active', required=False, default=True)
+    active = fields.Boolean(string='Active', required=False, default=True, tracking=True)
 
     codigo = fields.Char(string="Código de Reserva")
     fecha_inicio = fields.Date(string='Fecha Inicio', required=True, tracking=True)
@@ -158,4 +158,4 @@ class DetalleReserva(models.Model):
     recurso_id = fields.Many2one(string='Recurso', required=False, related='reserva_id.recurso_id', store=True)
     responsable_id = fields.Many2one(string='Responsable', required=False, related='reserva_id.responsable_id')
 
-    active = fields.Boolean(string='Active', required=False, default=True)
+    active = fields.Boolean(string='Active', required=False, default=True,tracking=True)

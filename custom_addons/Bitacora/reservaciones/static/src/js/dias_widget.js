@@ -10,7 +10,6 @@ const DiasWidget = AbstractField.extend({
         this.dias = moment.weekdays();
         this._super.apply(this, arguments)
         this.selectedDays = eval(this.value) || [];
-        console.log(this)
 
     },
     _renderReadonly: function () {
