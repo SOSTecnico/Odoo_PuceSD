@@ -12,6 +12,8 @@ class Reserva(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'codigo'
 
+    active = fields.Boolean(string='Active', required=False, default=True)
+
     codigo = fields.Char(string="Código de Reserva")
     fecha_inicio = fields.Date(string='Fecha Inicio', required=True, tracking=True)
     fecha_fin = fields.Date(string='Fecha Fin', required=False, tracking=True)
@@ -45,7 +47,6 @@ class Reserva(models.Model):
             if record.hora_inicio >= record.hora_fin:
                 raise ValidationError("La Hora de Inicio no puede ser menor o igual que la Hora Final")
 
-
     def generar_detalle_reserva(self):
 
         # DATOS DE INFORMACIÓN
@@ -56,16 +57,33 @@ class Reserva(models.Model):
 
         detalle_reserva = self.env['reservaciones.detalle_reserva']
 
-
         # Si la reserva no es concurrente, se genera un solo registro
         if fecha_inicio == fecha_fin:
-            inicio = datetime.combine(fecha_inicio, hora_inicio)
-            fin = datetime.combine(fecha_inicio, hora_fin)
+            inicio = datetime.combine(fecha_inicio, hora_inicio) + timedelta(hours=5)
+            fin = datetime.combine(fecha_inicio, hora_fin) + timedelta(hours=5)
 
+            # Se genera la consulta para obtener todos los horarios que coincidan con:
+            # El recurso, la fecha y la hora de inicio y fin
+            domain = [
+                ('recurso_id', '=', self.recurso_id.id),
+                '|',
+                '|',
+                '&', ('inicio', '<=', inicio), ('fin', '>', inicio),
+                '&', ('inicio', '<', fin), ('fin', '>=', fin),
+                '&', ('inicio', '>', inicio), ('fin', '<', fin)
+            ]
+
+            reservaciones = detalle_reserva.search(domain)
+            codigos = []
+            for r in reservaciones:
+                codigos.append(r.reserva_id.codigo)
+
+            if codigos:
+                raise ValidationError("Existe un choque de Horario, Código(s): %s" % codigos)
 
             detalle_reserva.create({
-                'inicio': inicio + timedelta(hours=5),
-                'fin': fin + timedelta(hours=5),
+                'inicio': inicio,
+                'fin': fin,
                 'reserva_id': self.id
             })
         else:
@@ -79,11 +97,30 @@ class Reserva(models.Model):
 
             while fecha_temp <= fecha_fin:
                 if fecha_temp.strftime("%A").lower() in self.dias:
-                    inicio = datetime.combine(fecha_temp, hora_inicio)
-                    fin = datetime.combine(fecha_temp, hora_fin)
+                    inicio = datetime.combine(fecha_temp, hora_inicio) + timedelta(hours=5)
+                    fin = datetime.combine(fecha_temp, hora_fin) + timedelta(hours=5)
+
+                    # Se genera la consulta para obtener todos los horarios que coincidan con:
+                    # El recurso, la fecha y la hora de inicio y fin por cada día
+                    domain = [
+                        ('recurso_id', '=', self.recurso_id.id),
+                        '|',
+                        '|',
+                        '&', ('inicio', '<=', inicio), ('fin', '>', inicio),
+                        '&', ('inicio', '<', fin), ('fin', '>=', fin),
+                        '&', ('inicio', '>', inicio), ('fin', '<', fin)
+                    ]
+                    reservaciones = detalle_reserva.search(domain)
+                    codigos = []
+                    for r in reservaciones:
+                        codigos.append(r.reserva_id.codigo)
+
+                    if codigos:
+                        raise ValidationError("Existe un choque de Horario, Código(s): %s" % codigos)
+
                     detalle_reserva.create({
-                        'inicio': inicio + timedelta(hours=5),
-                        'fin': fin + timedelta(hours=5),
+                        'inicio': inicio,
+                        'fin': fin,
                         'reserva_id': self.id
                     })
                 fecha_temp = fecha_temp + timedelta(days=1)
@@ -93,16 +130,18 @@ class Reserva(models.Model):
         # Add code here
         res = super(Reserva, self).create(values)
         res.codigo = f"{datetime.now().strftime('%Y%d')}-{random.randint(1000, 9999)}"
-        res.generar_detalle_reserva()
 
         return res
 
     def write(self, values):
 
         res = super(Reserva, self).write(values)
+
         self.detalle_reserva_id.unlink()
         self.generar_detalle_reserva()
 
+        for detalle_reserva in self.detalle_reserva_id:
+            detalle_reserva.active = self.active
         return res
 
 
@@ -116,3 +155,7 @@ class DetalleReserva(models.Model):
     fin = fields.Datetime(string='Fin', required=False, tracking=True)
     reserva_id = fields.Many2one(comodel_name='reservaciones.reservas', string='Reserva', required=False,
                                  ondelete='cascade', tracking=True)
+    recurso_id = fields.Many2one(string='Recurso', required=False, related='reserva_id.recurso_id', store=True)
+    responsable_id = fields.Many2one(string='Responsable', required=False, related='reserva_id.responsable_id')
+
+    active = fields.Boolean(string='Active', required=False, default=True)

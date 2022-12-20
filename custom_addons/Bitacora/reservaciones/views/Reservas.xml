@@ -7,7 +7,10 @@
             <field name="model">reservaciones.reservas</field>
             <field name="arch" type="xml">
                 <form string="Reservas">
+                    <field name="active" invisible="1"></field>
                     <sheet>
+                        <widget name="web_ribbon" title="ARCHIVADO" bg_color="bg-danger"
+                                attrs="{'invisible':[('active','=',True)]}"></widget>
                         <div class="oe_title">
                             <label for="codigo"/>
                             <h1>
@@ -45,16 +48,23 @@
         </record>
 
 
-        <!--        <record id="reservaciones.reservas_tree_view" model="ir.ui.view">
+                <record id="reservaciones.reservas_tree_view" model="ir.ui.view">
                     <field name="name">reservaciones.reservas.tree</field>
                     <field name="model">reservaciones.reservas</field>
                     <field name="arch" type="xml">
                         <tree string="ModelTitle">
-                            <field name="create_date"/>
-                            <field name="example_field"/>
+                            <field name="codigo"/>
+                            <field name="recurso_id"/>
+                            <field name="responsable_id"/>
+                            <field name="evento_id"/>
+                            <field name="fecha_inicio"/>
+                            <field name="hora_inicio" widget="float_time"/>
+                            <field name="hora_fin" widget="float_time"/>
+                            <field name="dias"/>
+                            <field name="fecha_fin"/>
                         </tree>
                     </field>
-                </record>-->
+                </record>
 
         <!--
                 <record id="reservaciones.reservas_search_view" model="ir.ui.view">
@@ -104,8 +114,11 @@
             <field name="name">reservaciones.detalle_reservas.calendar</field>
             <field name="model">reservaciones.detalle_reserva</field>
             <field name="arch" type="xml">
-                <calendar create="false" string="Detalle Reservas" date_start="inicio" mode="month" date_stop="fin" quick_add="False">
+                <calendar string="Detalle Reservas" create="false" date_start="inicio" mode="month" date_stop="fin"
+                          quick_add="False">
                     <field name="name"/>
+                    <field name="recurso_id"/>
+                    <field name="responsable_id"/>
                 </calendar>
             </field>
         </record>
