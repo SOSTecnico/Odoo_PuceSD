@@ -65,3 +65,13 @@ class Transferencia(models.Model):
             activo.ubicacion_id = res.ubicacion_destino_id
 
         return res
+
+    def write(self, values):
+        # Add code here
+        res = super(Transferencia, self).write(values)
+        for activo in self.activos_ids:
+            activo.responsable_id = self.custodio_destino_id
+            activo.ubicacion_id = self.ubicacion_destino_id
+
+        return res
+
