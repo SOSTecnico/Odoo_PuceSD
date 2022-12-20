@@ -17,6 +17,7 @@
                             <field name="codigo"></field>
                             <field name="referencia"></field>
                             <field name="serie"></field>
+                            <field name="marca_id"></field>
                             <field name="responsable_id"
                                    options="{'create':false, 'm2o_dialog':false}"></field>
                             <field name="tipo_activo_id"

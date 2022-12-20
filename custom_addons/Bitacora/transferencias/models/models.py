@@ -34,7 +34,6 @@ class Ubicacion(models.Model):
     _sql_constraints = [
         ('ubicacion_name', 'unique(name)', 'Ya existe una ubicación con ese nombre')]
 
-
     name = fields.Char(string='Nombre', tracking=True, required=True)
     departamento_id = fields.Many2one(comodel_name='transferencias.ubicaciones', string='Departamento', required=False,
                                       tracking=True)
@@ -71,3 +70,4 @@ class Activo(models.Model):
                                    tracking=True)
 
     serie = fields.Char(string='Serie', required=False)
+    marca_id = fields.Many2one(comodel_name='transferencias.marcas', string='Marca', required=False)

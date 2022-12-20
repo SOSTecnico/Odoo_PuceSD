@@ -62,24 +62,24 @@ class Reserva(models.Model):
             inicio = datetime.combine(fecha_inicio, hora_inicio) + timedelta(hours=5)
             fin = datetime.combine(fecha_inicio, hora_fin) + timedelta(hours=5)
 
-            # Se genera la consulta para obtener todos los horarios que coincidan con:
-            # El recurso, la fecha y la hora de inicio y fin
-            domain = [
-                ('recurso_id', '=', self.recurso_id.id),
-                '|',
-                '|',
-                '&', ('inicio', '<=', inicio), ('fin', '>', inicio),
-                '&', ('inicio', '<', fin), ('fin', '>=', fin),
-                '&', ('inicio', '>', inicio), ('fin', '<', fin)
-            ]
-
-            reservaciones = detalle_reserva.search(domain)
-            codigos = []
-            for r in reservaciones:
-                codigos.append(r.reserva_id.codigo)
-
-            if codigos:
-                raise ValidationError("Existe un choque de Horario, Código(s): %s" % codigos)
+            # # Se genera la consulta para obtener todos los horarios que coincidan con:
+            # # El recurso, la fecha y la hora de inicio y fin
+            # domain = [
+            #     ('recurso_id', '=', self.recurso_id.id),
+            #     '|',
+            #     '|',
+            #     '&', ('inicio', '<=', inicio), ('fin', '>', inicio),
+            #     '&', ('inicio', '<', fin), ('fin', '>=', fin),
+            #     '&', ('inicio', '>', inicio), ('fin', '<', fin)
+            # ]
+            #
+            # reservaciones = detalle_reserva.search(domain)
+            # codigos = []
+            # for r in reservaciones:
+            #     codigos.append(r.reserva_id.codigo)
+            #
+            # if codigos:
+            #     raise ValidationError("Existe un choque de Horario, Código(s): %s" % codigos)
 
             detalle_reserva.create({
                 'inicio': inicio,
@@ -99,24 +99,6 @@ class Reserva(models.Model):
                 if fecha_temp.strftime("%A").lower() in self.dias:
                     inicio = datetime.combine(fecha_temp, hora_inicio) + timedelta(hours=5)
                     fin = datetime.combine(fecha_temp, hora_fin) + timedelta(hours=5)
-
-                    # Se genera la consulta para obtener todos los horarios que coincidan con:
-                    # El recurso, la fecha y la hora de inicio y fin por cada día
-                    domain = [
-                        ('recurso_id', '=', self.recurso_id.id),
-                        '|',
-                        '|',
-                        '&', ('inicio', '<=', inicio), ('fin', '>', inicio),
-                        '&', ('inicio', '<', fin), ('fin', '>=', fin),
-                        '&', ('inicio', '>', inicio), ('fin', '<', fin)
-                    ]
-                    reservaciones = detalle_reserva.search(domain)
-                    codigos = []
-                    for r in reservaciones:
-                        codigos.append(r.reserva_id.codigo)
-
-                    if codigos:
-                        raise ValidationError("Existe un choque de Horario, Código(s): %s" % codigos)
 
                     detalle_reserva.create({
                         'inicio': inicio,
@@ -158,4 +140,38 @@ class DetalleReserva(models.Model):
     recurso_id = fields.Many2one(string='Recurso', required=False, related='reserva_id.recurso_id', store=True)
     responsable_id = fields.Many2one(string='Responsable', required=False, related='reserva_id.responsable_id')
 
-    active = fields.Boolean(string='Active', required=False, default=True,tracking=True)
+    active = fields.Boolean(string='Active', required=False, default=True, tracking=True)
+
+    @api.constrains('inicio', 'fin')
+    def _check_inicio_fin(self):
+        for record in self:
+            if record.inicio > record.fin:
+                raise ValidationError("La Fecha y Hora de Inicio no puede ser menor que la Fecha y Hora Final")
+
+
+    def write(self, values):
+
+        res = super(DetalleReserva, self).write(values)
+
+        # Se genera la consulta para obtener todos los horarios que coincidan con:
+        # El recurso, la fecha y la hora de inicio y fin por cada día
+
+        detalle_reserva = self.env['reservaciones.detalle_reserva']
+        domain = [
+            ('id', '!=', self.id),
+            ('recurso_id', '=', self.recurso_id.id),
+            '|',
+            '|',
+            '&', ('inicio', '<=', self.inicio), ('fin', '>', self.inicio),
+            '&', ('inicio', '<', self.fin), ('fin', '>=', self.fin),
+            '&', ('inicio', '>', self.inicio), ('fin', '<', self.fin)
+        ]
+        reservaciones = detalle_reserva.search(domain)
+        codigos = []
+        for r in reservaciones:
+            codigos.append(r.reserva_id.codigo)
+
+        if codigos:
+            raise ValidationError("Existe un choque de Horarios, Código(s): %s" % codigos)
+
+        return res
