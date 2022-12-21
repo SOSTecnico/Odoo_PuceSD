@@ -66,26 +66,22 @@
             </field>
         </record>
 
-        <!--
-                <record id="reservaciones.reservas_search_view" model="ir.ui.view">
-                    <field name="name">.reservaciones.reservas.search</field>
-                    <field name="model">.reservaciones.reservas</field>
-                    <field name="arch" type="xml">
-                        <search string="ModelTitle">
-                            <group expand="1" string="Group By">
-                                <filter string="Example Field" name="example_field" domain="[]"
-                                        context="{'group_by':'example_field'}"/>
-                            </group>
-                        </search>
-                    </field>
-                </record>
-        -->
+        <record id="reservaciones.reservas_search_view" model="ir.ui.view">
+            <field name="name">reservaciones.reservas.search</field>
+            <field name="model">reservaciones.reservas</field>
+            <field name="arch" type="xml">
+                <search string="Reservas">
+                    <field name="recurso_id" string="Recurso" context="{'group_by':'recurso_id'}"/>
+                </search>
+            </field>
+        </record>
 
         <record id="reservaciones.reservas_act_window" model="ir.actions.act_window">
             <field name="name">Reservas</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">reservaciones.reservas</field>
             <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_recurso_id':1}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     There is no examples click here to add new Reservas.
@@ -128,7 +124,7 @@
             <field name="model">reservaciones.detalle_reserva</field>
             <field name="arch" type="xml">
                 <calendar string="Detalle Reservas" create="false" date_start="inicio" mode="month" date_stop="fin"
-                          quick_add="False">
+                          quick_add="False" color="name">
                     <field name="name"/>
                     <field name="recurso_id"/>
                     <field name="responsable_id"/>
@@ -136,6 +132,7 @@
                 </calendar>
             </field>
         </record>
+
 
 
         <record id="reservaciones.detalle_reserva_tree_view" model="ir.ui.view">
