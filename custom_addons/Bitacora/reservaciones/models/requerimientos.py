@@ -25,7 +25,7 @@ class Requerimiento(models.Model):
 
     observaciones = fields.Text(string="Observaciones", required=False, tracking=True)
 
-    active = fields.Boolean(string='State', required=False, default=True)
+    active = fields.Boolean(string='State', required=False, default=True, tracking=True)
 
     estado = fields.Selection(
         string='Estado',

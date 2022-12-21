@@ -116,15 +116,20 @@ class Reserva(models.Model):
         return res
 
     def write(self, values):
+        print(self.env.user.id,"mi id")
+        print(self.create_uid,"user created")
+        if self.create_uid.id == self.env.user.id or self.env.user.has_group('reservaciones.group_reservaciones_admin'):
 
-        res = super(Reserva, self).write(values)
+            res = super(Reserva, self).write(values)
 
-        self.detalle_reserva_id.unlink()
-        self.generar_detalle_reserva()
+            self.detalle_reserva_id.sudo().unlink()
+            self.generar_detalle_reserva()
 
-        for detalle_reserva in self.detalle_reserva_id:
-            detalle_reserva.active = self.active
-        return res
+            for detalle_reserva in self.detalle_reserva_id:
+                detalle_reserva.sudo().active = self.active
+            return res
+        else:
+            raise ValidationError('Solo puedes modificar Reservaciones que hayas creado!')
 
 
 class DetalleReserva(models.Model):

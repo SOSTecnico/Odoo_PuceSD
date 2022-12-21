@@ -38,7 +38,8 @@
             <field name="name">reservaciones.requerimientos.tree</field>
             <field name="model">reservaciones.req</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree default_order='create_date desc'>
+                    <field name="create_date" invisible="1"/>
                     <field name="estado"></field>
                     <field name="codigo"></field>
                     <field name="solicitante_id"></field>
