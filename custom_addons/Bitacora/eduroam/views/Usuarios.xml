@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="eduroam.usuarios_form_view" model="ir.ui.view">
+            <field name="name">eduroam.usuarios.form</field>
+            <field name="model">eduroam.usuarios</field>
+            <field name="arch" type="xml">
+                <form string="Usuarios">
+                    <header>
+                        <button name="obtener_usuarios" string="Usuarios" type="object"></button>
+                    </header>
+                    <sheet>
+                        <field name="name"></field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--        <record id="eduroam.usuarios_tree_view" model="ir.ui.view">-->
+        <!--            <field name="name">eduroam.eduroam.usuarios.tree</field>-->
+        <!--            <field name="model">eduroam.eduroam.usuarios</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <tree string="Usuarios">-->
+        <!--                    <field name="create_date"/>-->
+        <!--                    <field name="example_field"/>-->
+        <!--                </tree>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+        <!--        <record id="eduroam.usuarios_search_view" model="ir.ui.view">-->
+        <!--            <field name="name">eduroam.eduroam.usuarios.search</field>-->
+        <!--            <field name="model">eduroam.eduroam.usuarios</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <search string="Usuarios">-->
+        <!--                    <group expand="1" string="Group By">-->
+        <!--                        <filter string="Example Field" name="example_field" domain="[]"-->
+        <!--                                context="{'group_by':'example_field'}"/>-->
+        <!--                    </group>-->
+        <!--                </search>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+        <record id="eduroam.usuarios_act_window" model="ir.actions.act_window">
+            <field name="name">Usuarios</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">eduroam.usuarios</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Usuarios.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Eduroam" id="eduroam.main_menu" groups="eduroam.group_admin"
+                  web_icon="eduroam,static/description/icon.png"/>
+
+        <menuitem name="Usuarios" id="eduroam.usuarios_menu" parent="eduroam.main_menu"
+                  action="eduroam.usuarios_act_window"/>
+
+        <record model="ir.actions.act_url" id="eduroam.action_generar_script">
+            <field name="name">Enlace a Generar Usuarios EDUROAM</field>
+            <field name="url">/eduroam/formulario</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Generar SCRIPT" id="eduroam.generar_script_menu" parent="eduroam.main_menu"
+                  action="eduroam.action_generar_script"></menuitem>
+
+
+        <template id="eduroam.template_generar_usuario">
+            <t t-call="website.layout">
+                <div class="container mt-4">
+                    <form class="bg-white rounded mx-5 p-4 shadow" action="/eduroam/generar_usuarios">
+                        <div>
+                            <label>Ingrese las Cédulas:</label>
+                            <input name="cedulas" class="form-control"></input>
+                        </div>
+                        <button class="btn btn-primary mt-3">CONSULTAR</button>
+                    </form>
+                </div>
+            </t>
+        </template>
+
+        <template id="eduroam.template_eduroam_script">
+            <t t-call="website.layout">
+                <div class="container mt-4">
+                    <div class="mx-4 p-4 shadow">
+                        <style>
+                            .users p{
+                            margin:0
+                            }
+                        </style>
+                        <div class="row users">
+                            <div class="col-4" t-att-id="usuario['PIDM']" t-foreach="usuarios" t-as="usuario">
+                                <button class="copy btn btn-sm btn-info">Copiar</button>
+                                <div>
+                                    <span>
+                                        dn:
+                                        <span>
+
+                                            <span t-esc="'cn='+usuario['APELLIDOS'].replace('/',' ').upper()"></span>
+                                            <span t-esc="usuario['PRIMER_NOMBRE'].upper()"></span>
+                                            <span t-esc="usuario['SEGUNDO_NOMBRE'].upper()"></span>
+                                            ,cn=Docentes,dc=pucesd,dc=edu,dc=ec
+                                        </span>
+
+                                    </span>
+                                    <br/>
+                                    <span>cn:
+                                        <span t-esc="usuario['APELLIDOS'].replace('/',' ').upper()"></span>
+                                        <span t-esc="usuario['PRIMER_NOMBRE'].upper()"></span>
+                                        <span t-esc="usuario['SEGUNDO_NOMBRE'].upper()"></span>
+                                    </span>
+                                    <br/>
+                                    <span>gidnumber: 500</span>
+                                    <br/>
+                                    <span>givenname:
+                                        <span t-esc="usuario['PRIMER_NOMBRE'].upper()"></span>
+                                        <span t-esc="usuario['SEGUNDO_NOMBRE'].upper()"></span>
+                                    </span>
+                                    <br/>
+                                    <span>
+                                        homedirectory:
+                                        <span>
+                                            <span t-esc="'/home/users/'+''.join([usuario['PRIMER_NOMBRE'][:1].lower(),usuario['SEGUNDO_NOMBRE'][:1].lower(),usuario['APELLIDOS'].split('/')[0].lower(),usuario['APELLIDOS'].split('/')[1][:1].lower()])"></span>
+                                        </span>
+
+                                    </span>
+                                    <br/>
+                                    <span>loginshell: /bin/sh</span>
+                                    <br/>
+                                    <span>mail:
+                                        <span t-esc="''.join([usuario['PRIMER_NOMBRE'][:1].lower(),usuario['SEGUNDO_NOMBRE'][:1].lower(),usuario['APELLIDOS'].split('/')[0].lower(),usuario['APELLIDOS'].split('/')[1][:1].lower(),'@pucesd.edu.ec'])"></span>
+                                    </span>
+                                    <br/>
+                                    <span>objectclass: inetOrgPerson</span>
+                                    <br/>
+                                    <span>objectclass: posixAccount</span>
+                                    <br/>
+                                    <span>objectclass: top</span>
+                                    <br/>
+                                    <span>sn:
+                                        <span t-esc="usuario['APELLIDOS'].replace('/',' ').upper()"></span>
+                                        <span t-esc="usuario['PRIMER_NOMBRE'].upper()"></span>
+                                        <span t-esc="usuario['SEGUNDO_NOMBRE'].upper()"></span>
+                                    </span>
+                                    <br/>
+                                    <span>
+                                        uid:
+                                        <span t-esc="''.join([usuario['PRIMER_NOMBRE'][:1].lower(),usuario['SEGUNDO_NOMBRE'][:1].lower(),usuario['APELLIDOS'].split('/')[0].lower(),usuario['APELLIDOS'].split('/')[1][:1].lower()])"></span>
+                                    </span>
+                                    <br/>
+                                    <span>uidnumber:
+                                        <span t-esc="usuario['PIDM']"></span>
+                                    </span>
+                                    <br/>
+                                    <span>
+                                        userpassword:
+                                        <span t-esc="usuario['CEDULA']"></span>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <script>
+                            let button = document.getElementsByClassName('copy')
+                            button.addEventListener('click',function(ev){
+                            console.log(ev)
+                            })
+                        </script>
+                        <div class="row">
+                            <a href="/eduroam/formulario" class="mt-3 btn btn-secondary">Regresar</a>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>
