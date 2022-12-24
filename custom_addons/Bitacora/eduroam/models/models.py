@@ -25,12 +25,37 @@ class UsuariosWifi(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Usuario con acceso Wifi EDUROAM'
 
-    name = fields.Char(string='Nombre', required=True, tracking=True)
-    email = fields.Char(string='Email', required=False, tracking=True)
-    username = fields.Char(string='Nombre de Usuario', required=False, tracking=True)
+    name = fields.Char(string='Nombre Completo', required=True, tracking=True, compute="_compute_full_name", store=True)
+    username = fields.Char(string='Nombre de Usuario', required=False, tracking=True, compute='_compute_username',
+                           store=True)
+    email = fields.Char(string='Email', required=False, tracking=True, compute='_compute_email', store=True)
     password = fields.Char(string='Contraseña', required=False, tracking=True)
     pidm = fields.Char(string='PIDM', required=False, tracking=True)
     cedula = fields.Char(string='Cédula', required=False, tracking=True)
+    primer_nombre = fields.Char(string='Primer Nombre', required=False, tracking=True)
+    segundo_nombre = fields.Char(string='Segundo Nombre', required=False, tracking=True)
+    primer_apellido = fields.Char(string='Primer Apellido', required=False, tracking=True)
+    segundo_apellido = fields.Char(string='Segundo Apellido', required=False, tracking=True)
+    creado = fields.Boolean(string='Creado', default=False, required=False, tracking=True)
+
+    @api.depends('primer_nombre', 'segundo_nombre', 'primer_apellido', 'segundo_apellido')
+    def _compute_full_name(self):
+        for usuario in self:
+            usuario.name = f"{usuario.primer_apellido} {usuario.segundo_apellido} {usuario.primer_nombre} {usuario.segundo_nombre}"
+
+    @api.depends('primer_nombre', 'segundo_nombre', 'primer_apellido', 'segundo_apellido')
+    def _compute_username(self):
+        for usuario in self:
+            usuario.username = f"{usuario.primer_nombre[:1].lower()}{usuario.segundo_nombre[:1].lower()}{usuario.primer_apellido.lower()}{usuario.segundo_apellido[:1].lower()}"
+
+    @api.depends('username')
+    def _compute_email(self):
+        for usuario in self:
+            usuario.email = f"{usuario.username}@pucesd.edu.ec"
+
+    def cambiar_estado(self):
+        for usuario in self:
+            usuario.creado = not usuario.creado
 
     def obtener_usuarios(self, cedulas):
         sql = f"""SELECT spri.SPRIDEN_FIRST_NAME AS primer_nombre,spri.SPRIDEN_MI AS segundo_nombre, 
