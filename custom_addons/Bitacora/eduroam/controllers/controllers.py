@@ -10,6 +10,8 @@ class Eduroam(http.Controller):
     def index(self, **kw):
         if request.env.user.has_group('eduroam.group_admin'):
             return request.render('eduroam.template_generar_usuario')
+        else:
+            return request.redirect('/')
 
     @http.route('/eduroam/generar_usuarios', auth='user', website=True)
     def generar_script(self, **data):
@@ -41,16 +43,3 @@ class Eduroam(http.Controller):
                 return request.render('eduroam.template_generar_usuario',
                                       {'error': 'Ocurrió un Error, favor comuníquese con el Desarrollador',
                                        'message': Error})
-
-#     @http.route('/eduroam/eduroam/objects', auth='public')
-#     def list(self, **kw):
-#         return http.request.render('eduroam.listing', {
-#             'root': '/eduroam/eduroam',
-#             'objects': http.request.env['eduroam.eduroam'].search([]),
-#         })
-
-#     @http.route('/eduroam/eduroam/objects/<model("eduroam.eduroam"):obj>', auth='public')
-#     def object(self, obj, **kw):
-#         return http.request.render('eduroam.object', {
-#             'object': obj
-#         })

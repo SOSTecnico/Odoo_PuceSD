@@ -20,8 +20,12 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','mail','web_m2x_options'],
-
+    'depends': ['base', 'mail', 'web_m2x_options'],
+    'assets': {
+        'web.assets_frontend': {
+            'eduroam/static/src/js/eduroam.js'
+        }
+    },
     # always loaded
     'data': [
         'security/Roles.xml',
