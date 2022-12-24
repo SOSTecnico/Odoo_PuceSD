@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from oracledb import Error
+
 from odoo import http
 from odoo.http import request
 
@@ -9,16 +11,19 @@ class Eduroam(http.Controller):
         if request.env.user.has_group('eduroam.group_admin'):
             return request.render('eduroam.template_generar_usuario')
 
-    @http.route('/eduroam/generar_usuarios', auth='user', website=True)
+    @http.route('/eduroam/generar_usuarios', method=['POST'], auth='user', website=True)
     def generar_script(self, **data):
         if request.env.user.has_group('eduroam.group_admin'):
             cedulas = data['cedulas'].split(',')
             UsuariosModel = request.env['eduroam.usuarios']
-            result = UsuariosModel.obtener_usuarios(cedulas)
-            print(result)
-            return request.render('eduroam.template_eduroam_script', {'usuarios':result})
-
-
+            try:
+                result = UsuariosModel.obtener_usuarios(cedulas)
+                print(result)
+                return request.render('eduroam.template_eduroam_script', {'usuarios': result})
+            except Error:
+                return request.render('eduroam.template_generar_usuario',
+                                      {'error': 'Ocurrió un Error, favor comuníquese con el Desarrollador',
+                                       'message': Error})
 
 #     @http.route('/eduroam/eduroam/objects', auth='public')
 #     def list(self, **kw):

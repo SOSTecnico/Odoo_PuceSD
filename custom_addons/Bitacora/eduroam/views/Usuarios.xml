@@ -7,9 +7,6 @@
             <field name="model">eduroam.usuarios</field>
             <field name="arch" type="xml">
                 <form string="Usuarios">
-                    <header>
-                        <button name="obtener_usuarios" string="Usuarios" type="object"></button>
-                    </header>
                     <sheet>
                         <field name="name"></field>
                     </sheet>
@@ -72,7 +69,14 @@
         <template id="eduroam.template_generar_usuario">
             <t t-call="website.layout">
                 <div class="container mt-4">
-                    <form class="bg-white rounded mx-5 p-4 shadow" action="/eduroam/generar_usuarios">
+                    <div>
+                        <p class="alert alert-danger" t-if="error">
+                            <t t-esc="error"/>
+                            <t t-esc="message"></t>
+                        </p>
+                    </div>
+                    <form class="bg-white rounded mx-5 p-4 shadow" method="POST" action="/eduroam/generar_usuarios">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                         <div>
                             <label>Ingrese las Cédulas:</label>
                             <input name="cedulas" class="form-control"></input>
