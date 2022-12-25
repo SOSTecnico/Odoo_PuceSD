@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="wifi.estudiantes_form_view" model="ir.ui.view">
+            <field name="name">wifi.estudiantes.form</field>
+            <field name="model">wifi.estudiantes</field>
+            <field name="arch" type="xml">
+                <form string="Estudiantes">
+                    <header>
+                        <button class="btn btn-primary" string="Sincronizar Usuario" name="sincronizar_usuarios"
+                                type="object"></button>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"></label>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group col="4">
+                            <field name="nombres"/>
+                            <field name="apellidos"/>
+                            <field name="username"/>
+                            <field name="email"/>
+                            <field name="cedula"/>
+                            <field name="password"/>
+                            <field name="carrera" colspan="4"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="wifi.estudiantes_tree_view" model="ir.ui.view">
+            <field name="name">wifi.estudiantes.tree</field>
+            <field name="model">wifi.estudiantes</field>
+            <field name="arch" type="xml">
+                <tree string="Estudiantes">
+                    <header>
+                        <button class="btn btn-info ml-2" name="sincronizar_usuarios" string="Sincronizar" type="object"></button>
+                    </header>
+                    <field name="name"/>
+                    <field name="username"/>
+                    <field name="cedula"/>
+                    <field name="email"/>
+                    <field name="carrera"/>
+                </tree>
+            </field>
+        </record>
+        <!--
+
+                <record id="wifi.estudiantes_search_view" model="ir.ui.view">
+                    <field name="name">wifi.wifi.estudiantes.search</field>
+                    <field name="model">wifi.wifi.estudiantes</field>
+                    <field name="arch" type="xml">
+                        <search string="Estudiantes">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>
+        -->
+
+        <record id="wifi.estudiantes_act_window" model="ir.actions.act_window">
+            <field name="name">Estudiantes Wifi</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wifi.estudiantes</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    No se encuentran Datos...
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Estudiantes" id="wifi.estudiantes_menu" parent="wifi.main_menu"
+                  action="wifi.estudiantes_act_window"/>
+
+    </data>
+</odoo>
