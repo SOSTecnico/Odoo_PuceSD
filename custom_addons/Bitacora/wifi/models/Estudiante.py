@@ -50,8 +50,6 @@ class WifiDB:
                 raise ValidationError(f"Ocurrió un error al Actualizar Usuarios: {ex}")
 
 
-radius = WifiDB()
-
 
 class EstudianteWifi(models.Model):
     _name = 'wifi.estudiantes'
@@ -83,19 +81,11 @@ class EstudianteWifi(models.Model):
         if self.cedula:
             self.password = self.cedula
 
-    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
-
-        if view_type == 'tree':
-            self.sincronizar_usuarios_desde_radius()
-
-        return super(EstudianteWifi, self).fields_view_get(view_id, view_type, toolbar, submenu)
-
-    def sincronizar_usuarios_desde_radius(self):
+    def recuperar_usuarios_desde_radius(self):
         print("iniciando sincronización...")
-
+        radius = WifiDB()
         usuarios = radius.obtener_usuarios()
         usuarios_wifi = self.search([]).mapped('username')
-        print(usuarios[0])
         for usuario in usuarios:
             if not usuario['username'] in usuarios_wifi:
                 self.create({
@@ -110,6 +100,7 @@ class EstudianteWifi(models.Model):
 
     def sincronizar_usuarios(self):
         print("Actualizando Usuarios")
+        radius = WifiDB()
         usuarios = []
         for usuario in self:
             # No cambiar el orden de los parametros, caso contrario cambiar la consulta en la Clase WifiDB
@@ -118,6 +109,5 @@ class EstudianteWifi(models.Model):
                  usuario.carrera, usuario.cedula, usuario.username, usuario.password, usuario.nombres,
                  usuario.apellidos, usuario.email,
                  usuario.carrera))
-        print(usuarios)
         result = radius.actualizar_usuarios(usuarios)
         print("Cantidad de Filas Afectadas ", result)

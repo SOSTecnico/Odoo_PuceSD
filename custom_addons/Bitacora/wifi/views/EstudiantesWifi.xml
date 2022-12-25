@@ -40,7 +40,7 @@
             <field name="name">wifi.estudiantes.tree</field>
             <field name="model">wifi.estudiantes</field>
             <field name="arch" type="xml">
-                <tree string="Estudiantes">
+                <tree string="Estudiantes" banner_route="/wifi/tree/estudiantes">
                     <header>
                         <button class="btn btn-info ml-2" name="sincronizar_usuarios" string="Sincronizar" type="object"></button>
                     </header>
@@ -82,6 +82,7 @@
 
         <menuitem name="Estudiantes" id="wifi.estudiantes_menu" parent="wifi.main_menu"
                   action="wifi.estudiantes_act_window"/>
+
 
     </data>
 </odoo>
