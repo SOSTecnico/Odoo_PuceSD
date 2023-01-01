@@ -40,7 +40,7 @@
             <field name="name">wifi.estudiantes.tree</field>
             <field name="model">wifi.estudiantes</field>
             <field name="arch" type="xml">
-                <tree string="Estudiantes" banner_route="/wifi/tree/estudiantes">
+                <tree js_class="button_in_tree" string="Estudiantes">
                     <header>
                         <button class="btn btn-info ml-2" name="sincronizar_usuarios" string="Sincronizar" type="object"></button>
                     </header>

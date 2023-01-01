@@ -17,15 +17,24 @@
     # for the full list
     'category': 'Uncategorized',
     'version': '0.1',
-
+    'assets': {
+        'web.assets_backend': {
+            'wifi/static/src/js/tree_buttons.js'
+        },
+        'web.assets_qweb': {
+            'wifi/static/src/xml/tree_buttons.xml'
+        }
+    },
     # any module necessary for this one to work correctly
     'depends': ['base', 'mail'],
     # always loaded
     'data': [
+        'data/Parametros.xml',
         'security/Roles.xml',
         'security/ir.model.access.csv',
         'views/MainMenu.xml',
         'views/EstudiantesWifi.xml',
+        'views/Configuraciones.xml',
     ],
     # only loaded in demonstration mode
 }

@@ -1,24 +1,43 @@
 from odoo import fields, models, api
+from odoo.http import request
 import mysql.connector
 from mysql.connector import Error
 
 from odoo.exceptions import ValidationError
-from odoo.tools import config
 
 
 class WifiDB:
 
     def __init__(self):
         try:
+            config = self.obtener_parametros_conexion_radius()
+
             self.conexion = mysql.connector.connect(
-                host=config.get('wifi_host'),
-                port=config.get('wifi_port'),
-                user=config.get('wifi_user'),
-                password=config.get('wifi_password'),
-                db=config.get('wifi_db_name')
+                host=config['host'],
+                port=config['port'],
+                user=config['db_user'],
+                password=config['db_password'],
+                db=config['db_name']
             )
         except Error as ex:
             raise ValidationError(f"Ocurrió un error al conectarse a la Base de Datos: {ex}")
+
+    def obtener_parametros_conexion_radius(self):
+        configuracion = request.env['wifi.configuracion'].search_read([('clave', 'like', 'radius')],
+                                                                      fields=['clave', 'value'])
+        config = {}
+        for c in configuracion:
+            if c['clave'] == 'radius_host':
+                config['host'] = c['value']
+            if c['clave'] == 'radius_port':
+                config['port'] = c['value']
+            if c['clave'] == 'radius_db_name':
+                config['db_name'] = c['value']
+            if c['clave'] == 'radius_db_user':
+                config['db_user'] = c['value']
+            if c['clave'] == 'radius_db_password':
+                config['db_password'] = c['value']
+        return config
 
     def obtener_usuarios(self):
         if self.conexion.is_connected():
@@ -26,6 +45,7 @@ class WifiDB:
                 cursor = self.conexion.cursor(dictionary=True)
                 cursor.execute("""SELECT * FROM radcheck""")
                 result = cursor.fetchall()
+
                 return result
             except Error as ex:
                 raise ValidationError(f"Ocurrió un error al Obtener Usuarios: {ex}")
@@ -49,6 +69,17 @@ class WifiDB:
             except Error as ex:
                 raise ValidationError(f"Ocurrió un error al Actualizar Usuarios: {ex}")
 
+    def eliminar_usuarios(self, values):
+        if self.conexion.is_connected():
+            try:
+                cursor = self.conexion.cursor()
+                print(values)
+                cursor.executemany("""DELETE FROM radcheck WHERE username = %s""", values)
+                self.conexion.commit()
+                result = cursor.rowcount
+                return result
+            except Error as ex:
+                raise ValidationError(f"Ocurrió un error al Eliminar Usuarios: {ex}")
 
 
 class EstudianteWifi(models.Model):
@@ -81,6 +112,7 @@ class EstudianteWifi(models.Model):
         if self.cedula:
             self.password = self.cedula
 
+    @api.model
     def recuperar_usuarios_desde_radius(self):
         print("iniciando sincronización...")
         radius = WifiDB()
@@ -111,3 +143,12 @@ class EstudianteWifi(models.Model):
                  usuario.carrera))
         result = radius.actualizar_usuarios(usuarios)
         print("Cantidad de Filas Afectadas ", result)
+
+    def unlink(self):
+        usuarios = []
+        for u in self:
+            usuarios.append((u.username,))
+        res = super(EstudianteWifi, self).unlink()
+        radius = WifiDB()
+        radius.eliminar_usuarios(usuarios)
+        return res

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="wifi.config_data_1" model="wifi.configuracion">
+            <field name="name">Radius Host</field>
+            <field name="clave">radius_host</field>
+            <field name="value">localhost</field>
+        </record>
+
+        <record id="wifi.config_data_2" model="wifi.configuracion">
+            <field name="name">Radius Port</field>
+            <field name="clave">radius_port</field>
+            <field name="value">3306</field>
+        </record>
+
+        <record id="wifi.config_data_3" model="wifi.configuracion">
+            <field name="name">Radius Base de Datos</field>
+            <field name="clave">radius_db_name</field>
+            <field name="value">radcheck</field>
+        </record>
+
+        <record id="wifi.config_data_4" model="wifi.configuracion">
+            <field name="name">Radius Usuario de Base de Datos</field>
+            <field name="clave">radius_db_user</field>
+            <field name="value"></field>
+        </record>
+
+        <record id="wifi.config_data_5" model="wifi.configuracion">
+            <field name="name">Contraseña</field>
+            <field name="clave">radius_db_password</field>
+            <field name="value"></field>
+        </record>
+
+        <record id="wifi.config_data_6" model="wifi.configuracion">
+            <field name="name">Host Oracle</field>
+            <field name="clave">oracle_host</field>
+            <field name="value"></field>
+        </record>
+
+    </data>
+</odoo>

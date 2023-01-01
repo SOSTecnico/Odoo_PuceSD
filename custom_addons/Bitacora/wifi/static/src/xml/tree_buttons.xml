@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+   <t t-extend="ListView.buttons" t-name="wifi.buttons_tree">
+       <t t-jquery="button.o_list_button_add" t-operation="after">
+           <button type="button" class="btn btn-success mx-1  recuperar_usuarios_radius">
+               Recuperar Usuarios
+           </button>
+       </t>
+   </t>
+</templates>

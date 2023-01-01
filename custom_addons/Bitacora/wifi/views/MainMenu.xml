@@ -3,6 +3,5 @@
     <data>
 
         <menuitem id="wifi.main_menu" name="Acceso WIFI" web_icon="wifi,static/description/icon.png"></menuitem>
-
     </data>
 </odoo>
