@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="1">
+    <data noupdate="1" >
 
         <record id="wifi.config_data_1" model="wifi.configuracion">
             <field name="name">Radius Host</field>
@@ -17,25 +17,49 @@
         <record id="wifi.config_data_3" model="wifi.configuracion">
             <field name="name">Radius Base de Datos</field>
             <field name="clave">radius_db_name</field>
-            <field name="value">radcheck</field>
+            <field name="value">radius</field>
         </record>
 
         <record id="wifi.config_data_4" model="wifi.configuracion">
             <field name="name">Radius Usuario de Base de Datos</field>
             <field name="clave">radius_db_user</field>
-            <field name="value"></field>
+            <field name="value">root</field>
         </record>
 
         <record id="wifi.config_data_5" model="wifi.configuracion">
-            <field name="name">Contraseña</field>
+            <field name="name">Radius Contraseña Usuario de Base de Datos</field>
             <field name="clave">radius_db_password</field>
             <field name="value"></field>
         </record>
 
         <record id="wifi.config_data_6" model="wifi.configuracion">
-            <field name="name">Host Oracle</field>
+            <field name="name">Oracle Host</field>
             <field name="clave">oracle_host</field>
-            <field name="value"></field>
+            <field name="value">172.31.2.61</field>
+        </record>
+
+        <record id="wifi.config_data_7" model="wifi.configuracion">
+            <field name="name">Oracle Port</field>
+            <field name="clave">oracle_port</field>
+            <field name="value">5061</field>
+        </record>
+
+        <record id="wifi.config_data_8" model="wifi.configuracion">
+            <field name="name">Oracle Service Name</field>
+            <field name="clave">oracle_service_name</field>
+            <field name="value">PROD</field>
+        </record>
+
+        <record id="wifi.config_data_9" model="wifi.configuracion">
+            <field name="name">Oracle Usuario Base de Datos</field>
+            <field name="clave">oracle_db_user</field>
+            <field name="value">QUERY_PUCESDO</field>
+        </record>
+
+        <record id="wifi.config_data_10" model="wifi.configuracion">
+            <field name="name">Oracle Contraseña Base de Datos</field>
+            <field name="clave">oracle_db_password</field>
+            <field name="value">l2UY656_</field>
         </record>
 
     </data>

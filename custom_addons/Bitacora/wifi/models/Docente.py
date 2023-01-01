@@ -1,28 +1,55 @@
 # -*- coding: utf-8 -*-
+from oracledb import Error
 
 from odoo import fields, models, api
 
 import oracledb
 
+from odoo.exceptions import ValidationError
+from odoo.http import request
+
 
 class OracleUsuarios:
 
     def execute_query(self, query):
-        connection = oracledb.connect(user="QUERY_PUCESDO", password="l2UY656_", dsn="172.31.2.61:5061/PROD")
+        try:
+            config = self.obtener_parametros_conexion_radius()
+            connection = oracledb.connect(user=config['db_user'], password=config['db_password'],
+                                          dsn=f"{config['host']}:{config['port']}/{config['service_name']}")
 
-        # Se crea el cursor
-        cursor = connection.cursor()
-        # Se realiza la consulta, la cual se devuelve en forma de Tuplas
-        cursor.execute(query)
-        # Para generar el resultado en forma de DICT
-        columns = [col[0] for col in cursor.description]
-        cursor.rowfactory = lambda *args: dict(zip(columns, args))
-        # Se devuelve el resultado de la consulta
-        return cursor.fetchall()
+            # Se crea el cursor
+            cursor = connection.cursor()
+            # Se realiza la consulta, la cual se devuelve en forma de Tuplas
+            cursor.execute(query)
+            # Para generar el resultado en forma de DICT
+            columns = [col[0] for col in cursor.description]
+            cursor.rowfactory = lambda *args: dict(zip(columns, args))
+            # Se devuelve el resultado de la consulta
+            return cursor.fetchall()
+        except Error as e:
+            print(e)
+            raise ValidationError(f"Ocurrió un error al conectarse a la Base de Datos: {e}")
+
+    def obtener_parametros_conexion_radius(self):
+        configuracion = request.env['wifi.configuracion'].search_read([('clave', 'like', 'oracle')],
+                                                                      fields=['clave', 'value'])
+        config = {}
+        for c in configuracion:
+            if c['clave'] == 'oracle_host':
+                config['host'] = c['value']
+            if c['clave'] == 'oracle_port':
+                config['port'] = c['value']
+            if c['clave'] == 'oracle_service_name':
+                config['service_name'] = c['value']
+            if c['clave'] == 'oracle_db_user':
+                config['db_user'] = c['value']
+            if c['clave'] == 'oracle_db_password':
+                config['db_password'] = c['value']
+        return config
 
 
 class UsuariosWifi(models.Model):
-    _name = 'eduroam.usuarios'
+    _name = 'wifi.docentes'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Usuario con acceso Wifi EDUROAM'
 

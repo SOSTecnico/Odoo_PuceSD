@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+   <t t-extend="ListView.buttons" t-name="wifi.docentes_buttons_template">
+       <t t-jquery="button.o_list_button_add" t-operation="after">
+           <a target="_blank" type="button" href="/wifi/formulario" class="btn btn-dark mx-1 formulario_crear_docentes">
+               Generar Script
+           </a>
+       </t>
+   </t>
+</templates>

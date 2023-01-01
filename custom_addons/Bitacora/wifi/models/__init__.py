@@ -2,3 +2,4 @@
 
 from . import Estudiante
 from . import WifiConfig
+from . import Docente

@@ -19,10 +19,15 @@
     'version': '0.1',
     'assets': {
         'web.assets_backend': {
-            'wifi/static/src/js/tree_buttons.js'
+            'wifi/static/src/js/tree_buttons.js',
+            'wifi/static/src/js/docentes_tree_button.js',
+        },
+        'web.assets_frontend':{
+            'wifi/static/src/js/docentes_copy_clipboard.js'
         },
         'web.assets_qweb': {
-            'wifi/static/src/xml/tree_buttons.xml'
+            'wifi/static/src/xml/tree_buttons.xml',
+            'wifi/static/src/xml/docentes_buttons_tree.xml',
         }
     },
     # any module necessary for this one to work correctly
@@ -35,6 +40,7 @@
         'views/MainMenu.xml',
         'views/EstudiantesWifi.xml',
         'views/Configuraciones.xml',
+        'views/DocentesWifi.xml',
     ],
     # only loaded in demonstration mode
 }
