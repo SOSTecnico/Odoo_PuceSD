@@ -52,21 +52,19 @@
                 </tree>
             </field>
         </record>
-        <!--
 
-                <record id="wifi.estudiantes_search_view" model="ir.ui.view">
-                    <field name="name">wifi.wifi.estudiantes.search</field>
-                    <field name="model">wifi.wifi.estudiantes</field>
-                    <field name="arch" type="xml">
-                        <search string="Estudiantes">
-                            <group expand="1" string="Group By">
-                                <filter string="Example Field" name="example_field" domain="[]"
-                                        context="{'group_by':'example_field'}"/>
-                            </group>
-                        </search>
-                    </field>
-                </record>
-        -->
+        <record id="wifi.estudiantes_search_view" model="ir.ui.view">
+            <field name="name">wifi.estudiantes.search</field>
+            <field name="model">wifi.estudiantes</field>
+            <field name="arch" type="xml">
+                <search string="Estudiantes">
+                    <field name="carrera" string="Carrera" context="{'group_by':'carrera'}"/>
+                    <field name="cedula" string="Cédula"/>
+                    <field name="name" string="Nombre"/>
+                    <field name="username" string="Usuario"/>
+                </search>
+            </field>
+        </record>
 
         <record id="wifi.estudiantes_act_window" model="ir.actions.act_window">
             <field name="name">Estudiantes Wifi</field>
