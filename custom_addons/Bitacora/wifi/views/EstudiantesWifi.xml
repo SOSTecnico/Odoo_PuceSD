@@ -18,7 +18,7 @@
                                 <field name="name"/>
                             </h1>
                         </div>
-                        <group col="4">
+                        <group>
                             <field name="nombres"/>
                             <field name="apellidos"/>
                             <field name="username"/>

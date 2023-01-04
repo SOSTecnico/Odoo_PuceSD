@@ -69,5 +69,5 @@ class Activo(models.Model):
     ubicacion_id = fields.Many2one(comodel_name='transferencias.ubicaciones', string='Ubicación Actual', required=False,
                                    tracking=True)
 
-    serie = fields.Char(string='Serie', required=False)
-    marca_id = fields.Many2one(comodel_name='transferencias.marcas', string='Marca', required=False)
+    serie = fields.Char(string='Serie', required=False,tracking=True)
+    marca_id = fields.Many2one(comodel_name='transferencias.marcas', string='Marca', required=False,tracking=True)
