@@ -42,7 +42,8 @@
             <field name="arch" type="xml">
                 <tree js_class="button_in_tree" string="Estudiantes">
                     <header>
-                        <button class="btn btn-info ml-2" name="sincronizar_usuarios" string="Sincronizar" type="object"></button>
+                        <button class="btn btn-info ml-2" name="sincronizar_usuarios" string="Sincronizar"
+                                type="object"></button>
                     </header>
                     <field name="name"/>
                     <field name="username"/>
@@ -62,6 +63,8 @@
                     <field name="cedula" string="Cédula"/>
                     <field name="name" string="Nombre"/>
                     <field name="username" string="Usuario"/>
+                    <filter name="created_at" string="Últimos Creados"
+                            domain="[('create_date','>=',(datetime.datetime.now() - datetime.timedelta(hours=1)).strftime('%Y-%m-%d %H:%M'))]"/>
                 </search>
             </field>
         </record>
