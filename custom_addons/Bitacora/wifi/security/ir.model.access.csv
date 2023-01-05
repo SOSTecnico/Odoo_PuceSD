@@ -1,5 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_wifi_estudiantes,wifi.estudiantes,model_wifi_estudiantes,wifi.group_admin,1,1,1,1
-access_wifi_configuracion,wifi.configuracion,model_wifi_configuracion,wifi.group_admin,1,1,1,1
-access_wifi_docentes,wifi.docentes,model_wifi_docentes,wifi.group_admin,1,1,1,1
+access_wifi_estudiantes,wifi.estudiantes,model_wifi_estudiantes,wifi.group_responsable,1,1,1,1
+access_wifi_configuracion,wifi.configuracion,model_wifi_configuracion,wifi.group_responsable,1,0,0,0
+access_wifi_docentes,wifi.docentes,model_wifi_docentes,wifi.group_responsable,1,0,0,0
 access_wifi_docentes_user,wifi.docentes_user,model_wifi_docentes,wifi.group_user,1,0,0,0
