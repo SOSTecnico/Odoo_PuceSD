@@ -43,7 +43,7 @@ class Transferencia(models.Model):
                                            required=True, tracking=True)
 
     activos_ids = fields.Many2many(comodel_name='transferencias.activos', string='Activos', required=True)
-    observaciones = fields.Text(string="Observaciones", required=False)
+    observaciones = fields.Text(string="Observaciones", required=False, tracking=True)
 
     archivo = fields.Binary(string="Evidencia Digital")
     nombre_archivo = fields.Char(string='Evidencia Digital', required=False)

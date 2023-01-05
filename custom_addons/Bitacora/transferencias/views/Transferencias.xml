@@ -48,7 +48,7 @@
             <field name="name">transferencias.transferencias.tree</field>
             <field name="model">transferencias.transferencias</field>
             <field name="arch" type="xml">
-                <tree string="Transferencias">
+                <tree string="Transferencias" default_order="fecha desc">
                     <field name="fecha"/>
                     <field name="codigo"/>
                     <field name="custodio_origen_id" optional="show"/>
