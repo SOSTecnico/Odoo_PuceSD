@@ -53,24 +53,23 @@
             </field>
         </record>
 
-        <!--        <record id="transferencias.activos_search_view" model="ir.ui.view">-->
-        <!--            <field name="name">transferencias.transferencias.activos.search</field>-->
-        <!--            <field name="model">transferencias.transferencias.activos</field>-->
-        <!--            <field name="arch" type="xml">-->
-        <!--                <search string="Transferencias">-->
-        <!--                    <group expand="1" string="Group By">-->
-        <!--                        <filter string="Example Field" name="example_field" domain="[]"-->
-        <!--                                context="{'group_by':'example_field'}"/>-->
-        <!--                    </group>-->
-        <!--                </search>-->
-        <!--            </field>-->
-        <!--        </record>-->
+                <record id="transferencias.activos_search_view" model="ir.ui.view">
+                    <field name="name">transferencias.activos.search</field>
+                    <field name="model">transferencias.activos</field>
+                    <field name="arch" type="xml">
+                        <search string="Transferencias">
+                            <field name="codigo"/>
+                            <field name="referencia"/>
+                            <field name="serie"/>
+                        </search>
+                    </field>
+                </record>
 
         <record id="transferencias.activos_act_window" model="ir.actions.act_window">
             <field name="name">Activos Fijos</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">transferencias.activos</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     There is no examples click here to add new Activos Fijos.
