@@ -82,7 +82,7 @@
             </field>
         </record>
 
-        <menuitem name="Permisos"  id="racetime.permisos_menu" parent="racetime.main_menu"
+        <menuitem name="Permisos"  sequence="20" id="racetime.permisos_menu" parent="racetime.main_menu"
                   action="racetime.permisos_act_window"/>
 
     </data>

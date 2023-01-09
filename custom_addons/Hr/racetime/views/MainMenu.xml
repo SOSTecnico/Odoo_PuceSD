@@ -3,6 +3,6 @@
     <data>
         <menuitem id="racetime.main_menu" name="Asistencias" web_icon="racetime,static/description/icon.png"></menuitem>
 
-        <menuitem groups="racetime.group_responsable" id="racetime.config_menu" name="Configuraciones" parent="racetime.main_menu"></menuitem>
+        <menuitem sequence="30" groups="racetime.group_responsable" id="racetime.config_menu" name="Configuraciones" parent="racetime.main_menu"></menuitem>
     </data>
 </odoo>

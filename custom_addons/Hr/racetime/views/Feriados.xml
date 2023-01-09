@@ -67,7 +67,7 @@
             </field>
         </record>
 
-        <menuitem sequence="10" name="Feriados" id="racetime.feriados_menu" parent="racetime.config_menu"
+        <menuitem sequence="25" name="Feriados" id="racetime.feriados_menu" parent="racetime.main_menu"
                   action="racetime.feriados_act_window"/>
 
     </data>

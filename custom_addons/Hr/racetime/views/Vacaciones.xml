@@ -65,7 +65,7 @@
             </field>
         </record>
 
-        <menuitem sequence="20" name="Vacaciones" id="racetime.vacaciones_menu" parent="racetime.config_menu"
+        <menuitem sequence="28" name="Vacaciones" id="racetime.vacaciones_menu" parent="racetime.main_menu"
                   action="racetime.vacaciones_act_window"/>
 
     </data>

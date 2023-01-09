@@ -25,6 +25,11 @@
                     </page>
                     <page name="vacaciones" string="Vacaciones">
                         <field name="vacaciones_id">
+                            <tree create="false">
+                                <field name="desde"/>
+                                <field name="hasta"/>
+                                <field name="observacion"/>
+                            </tree>
                         </field>
                     </page>
                 </xpath>
@@ -32,7 +37,7 @@
             </field>
         </record>
 
-        <menuitem id="racetime.empleados_menu" name="Empleados" parent="racetime.main_menu"
+        <menuitem sequence="10" id="racetime.empleados_menu" name="Empleados" parent="racetime.main_menu"
                   action="hr.open_view_employee_list_my"></menuitem>
 
     </data>
