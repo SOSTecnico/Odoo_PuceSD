@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_racetime_feriados,racetime.feriados,model_racetime_feriados,racetime.group_admin,1,1,1,1
+access_racetime_tipos_permiso,racetime.tipos_permiso,model_racetime_tipos_permiso,racetime.group_admin,1,1,1,1
+access_racetime_permisos,racetime.permisos,model_racetime_permisos,racetime.group_admin,1,1,1,1
+access_racetime_vacaciones,racetime.vacaciones,model_racetime_vacaciones,racetime.group_admin,1,1,1,1

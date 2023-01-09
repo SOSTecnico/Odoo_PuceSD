@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="racetime.permisos_form_view" model="ir.ui.view">
+            <field name="name">racetime.permisos.form</field>
+            <field name="model">racetime.permisos</field>
+            <field name="arch" type="xml">
+                <form string="Permisos">
+                    <header>
+                        <field name="estado" widget="statusbar" clickable="1"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Archivado" bg_color="bg-danger"
+                                attrs="{'invisible':[('active','=',True)]}"></widget>
+                        <group>
+                            <field name="active" invisible="1"/>
+                            <field name="empleado_id" options="{'create':false,'m2o_dialog':false}"/>
+                            <field name="tipo_permiso_id" options="{'create':false,'create_edit':true}"/>
+                            <field name="descripcion"/>
+                            <field name="desde" options="{'datepicker':{'format':'DD/MM/Y HH:mm:00'}}"/>
+                            <field name="hasta" options="{'datepicker':{'format':'DD/MM/Y HH:mm:00'}}"/>
+                            <field name="aprobado_por_id" attrs="{'required':[('estado','=','aprobado')]}"
+                                   options="{'create':false,'m2o_dialog':false}" widget="many2many_tags"/>
+                        </group>
+                        <notebook>
+                            <page string="Documento" name="documento_page">
+                                <group>
+                                    <field nolabel="1" name="adjunto" widget="pdf_viewer"
+                                           attrs="{'accept':'application/pdf'}"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="racetime.permisos_tree_view" model="ir.ui.view">
+            <field name="name">racetime.permisos.tree</field>
+            <field name="model">racetime.permisos</field>
+            <field name="arch" type="xml">
+                <tree default_order="desde desc" string="Permisos" sample="1" decoration-success="estado=='aprobado'"
+                      decoration-danger="estado=='pendiente'">
+                    <field name="empleado_id"/>
+                    <field name="desde"/>
+                    <field name="hasta"/>
+                    <field name="tipo_permiso_id"/>
+                    <field name="descripcion"/>
+                    <field name="estado" invisible="1"/>
+                    <field name="aprobado_por_id" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="racetime.permisos_search_view" model="ir.ui.view">
+            <field name="name">racetime.permisos.search</field>
+            <field name="model">racetime.permisos</field>
+            <field name="arch" type="xml">
+                <search string="Permisos">
+                    <field name="empleado_id" />
+                    <filter name="permisos_archivados" string="Archivados" domain="[('active','=',False)]"/>
+                    <filter name="tipo_permiso" string="Tipo de Permiso" context="{'group_by':'tipo_permiso_id'}"/>
+                    <filter name="empleado" string="Empleado" context="{'group_by':'empleado_id'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="racetime.permisos_act_window" model="ir.actions.act_window">
+            <field name="name">Permisos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.permisos</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Permisos.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Permisos"  id="racetime.permisos_menu" parent="racetime.main_menu"
+                  action="racetime.permisos_act_window"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.module.category" id="racetime.racetime_category">
+            <field name="name">Control de Asistencias</field>
+        </record>
+
+        <record id="racetime.group_user" model="res.groups">
+            <field name="name">Usuario</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="racetime.racetime_category"/>
+        </record>
+
+        <record id="racetime.group_responsable" model="res.groups">
+            <field name="name">Responsable</field>
+            <field name="category_id" ref="racetime.racetime_category"/>
+            <field name="implied_ids" eval="[(4, ref('racetime.group_user'))]"/>
+        </record>
+
+        <record id="racetime.group_admin" model="res.groups">
+            <field name="name">Administrador</field>
+            <field name="category_id" ref="racetime.racetime_category"/>
+            <field name="implied_ids" eval="[(4, ref('racetime.group_responsable'))]"/>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="racetime.vacaciones_form_view" model="ir.ui.view">
+            <field name="name">racetime.vacaciones.form</field>
+            <field name="model">racetime.vacaciones</field>
+            <field name="arch" type="xml">
+                <form string="Vacaciones">
+                    <sheet>
+                        <group>
+                            <div class="oe_title">
+                                <label for="empleado_id"/>
+                                <h1>
+                                    <field name="empleado_id" placeholder="Escriba el nombre de un empleado..."/>
+                                </h1>
+                            </div>
+                        </group>
+                        <group string="Detalle de Vacaciones">
+                            <field name="desde"/>
+                            <field name="hasta"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="racetime.vacaciones_tree_view" model="ir.ui.view">
+            <field name="name">racetime.vacaciones.tree</field>
+            <field name="model">racetime.vacaciones</field>
+            <field name="arch" type="xml">
+                <tree string="Vacaciones" sample="1">
+                    <field name="empleado_id"/>
+                    <field name="desde"/>
+                    <field name="hasta"/>
+                    <field name="observacion"/>
+                </tree>
+            </field>
+        </record>
+        <!--
+
+                <record id="racetime.vacaciones_search_view" model="ir.ui.view">
+                    <field name="name">.racetime.vacaciones.search</field>
+                    <field name="model">.racetime.vacaciones</field>
+                    <field name="arch" type="xml">
+                        <search string="ModelTitle">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>
+        -->
+
+        <record id="racetime.vacaciones_act_window" model="ir.actions.act_window">
+            <field name="name">Vacaciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.vacaciones</field>
+            <field name="view_mode">tree,form,kanban,graph,pivot</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Vacaciones
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="20" name="Vacaciones" id="racetime.vacaciones_menu" parent="racetime.config_menu"
+                  action="racetime.vacaciones_act_window"/>
+
+    </data>
+</odoo>

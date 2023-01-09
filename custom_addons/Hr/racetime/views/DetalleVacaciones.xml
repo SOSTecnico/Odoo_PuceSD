@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="racetime.detalle_vacaciones_form_view" model="ir.ui.view">
+            <field name="name">racetime.detalle_vacaciones.form</field>
+            <field name="model">racetime.detalle_vacaciones</field>
+            <field name="arch" type="xml">
+                <form string="Detalle Vacaciones">
+                    <sheet>
+                        <group>
+                            <field name="desde"/>
+                            <field name="hasta"/>
+                            <field name="observacion"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="racetime.detalle_vacaciones_tree_view" model="ir.ui.view">
+            <field name="name">racetime.detalle_vacaciones.tree</field>
+            <field name="model">racetime.detalle_vacaciones</field>
+            <field name="arch" type="xml">
+                <tree string="Detalle Vacaciones">
+                    <field name="desde"/>
+                    <field name="hasta"/>
+                    <field name="observacion"/>
+                </tree>
+            </field>
+        </record>
+
+<!--
+        <record id="racetime.detalle_vacaciones_search_view" model="ir.ui.view">
+            <field name="name">.racetime.detalle_vacaciones.search</field>
+            <field name="model">.racetime.detalle_vacaciones</field>
+            <field name="arch" type="xml">
+                <search string="Detalle Vacaciones">
+                    <group expand="1" string="Group By">
+                        <filter string="Example Field" name="example_field" domain="[]"
+                                context="{'group_by':'example_field'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="racetime.detalle_vacaciones_act_window" model="ir.actions.act_window">
+            <field name="name">Detalle Vacaciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">.racetime.detalle_vacaciones</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Detalle Vacaciones.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Detalle Vacaciones" id="racetime.detalle_vacaciones_menu" parent="your_root_menu" action="racetime.detalle_vacaciones_act_window"/>
+-->
+
+    </data>
+</odoo>

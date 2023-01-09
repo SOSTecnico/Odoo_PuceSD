@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="racetime.empleados_form_view_inherit" model="ir.ui.view">
+            <field name="name">racetime.empleado.form.view</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//page[@name='hr_settings']" position="after">
+                    <page name="permisos" string="Permisos">
+                        <field name="permisos_id">
+                            <tree create="false" decoration-success="estado=='aprobado'"
+                                  decoration-danger="estado=='pendiente'">
+                                <field name="estado" invisible="1"/>
+                                <field name="desde"/>
+                                <field name="hasta"/>
+                                <field name="tipo_permiso_id"/>
+                                <field name="descripcion"/>
+                                <field name="aprobado_por_id" widget="many2many_tags"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page name="vacaciones" string="Vacaciones">
+                        <field name="vacaciones_id">
+                        </field>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+        <menuitem id="racetime.empleados_menu" name="Empleados" parent="racetime.main_menu"
+                  action="hr.open_view_employee_list_my"></menuitem>
+
+    </data>
+</odoo>
