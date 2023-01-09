@@ -4,3 +4,4 @@ from . import Feriados
 from . import Permisos
 from . import Empleado
 from . import Vacaciones
+from . import Horas

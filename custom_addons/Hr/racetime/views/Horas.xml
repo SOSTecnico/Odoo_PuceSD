@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="racetime.horas_form_view" model="ir.ui.view">
+            <field name="name">racetime.horas.form</field>
+            <field name="model">racetime.horas</field>
+            <field name="arch" type="xml">
+                <form string="Horas">
+                    <header>
+                        <field name="estado" widget="statusbar" clickable="1"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="ARCHIVADO" bg_color="bg-danger"
+                                attrs="{'invisible':[('active','=',True)]}"></widget>
+                        <group>
+                            <div>
+                                <label class="font-weight-bold" for="empleado_id"></label>
+                                <h1>
+                                    <field name="empleado_id" options="{'create':false, 'm2o_dialog':false}"/>
+                                </h1>
+                            </div>
+                        </group>
+                        <group string="Detalle de Horas">
+                            <field name="active" invisible="1"/>
+                            <field name="inicio"/>
+                            <field name="fin"/>
+                            <field name="tipo"/>
+                            <field name="descripcion"/>
+                            <field name="aprobado_por_id" widget="many2many_tags"
+                                   attrs="{'required':[('estado','=','aprobado')]}"
+                                   options="{'create':false, 'm2o_dialog':false}"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="racetime.horas_tree_view" model="ir.ui.view">
+            <field name="name">racetime.horas.tree</field>
+            <field name="model">racetime.horas</field>
+            <field name="arch" type="xml">
+                <tree string="Horas">
+                    <field name="empleado_id"/>
+                    <field name="inicio"/>
+                    <field name="fin"/>
+                    <field name="tipo"/>
+                    <field name="descripcion"/>
+                    <field name="aprobado_por_id" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--        <record id="racetime.horas_search_view" model="ir.ui.view">
+                    <field name="name">.racetime.horas.search</field>
+                    <field name="model">.racetime.horas</field>
+                    <field name="arch" type="xml">
+                        <search string="Horas">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>-->
+
+        <record id="racetime.horas_act_window" model="ir.actions.act_window">
+            <field name="name">Horas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.horas</field>
+            <field name="view_mode">tree,form,graph,kanban,pivot</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Horas.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Horas" sequence="50" id="racetime.horas_menu" parent="racetime.main_menu"
+                  action="racetime.horas_act_window"/>
+
+    </data>
+</odoo>

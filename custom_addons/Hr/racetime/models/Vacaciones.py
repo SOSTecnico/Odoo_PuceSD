@@ -14,3 +14,4 @@ class Vacaciones(models.Model):
     observacion = fields.Text(string="Observación", required=False, tracking=True)
 
 
+

@@ -32,6 +32,7 @@
         'views/Permisos.xml',
         'views/Empleados.xml',
         'views/Vacaciones.xml',
+        'views/Horas.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
