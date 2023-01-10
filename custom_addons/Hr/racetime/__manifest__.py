@@ -33,6 +33,8 @@
         'views/Empleados.xml',
         'views/Vacaciones.xml',
         'views/Horas.xml',
+        'views/Config.xml',
+        'views/DetalleMarcaciones.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

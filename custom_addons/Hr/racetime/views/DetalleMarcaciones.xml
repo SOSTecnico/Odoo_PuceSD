@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+<!--
+        <record id="racetime.detalle_marcaciones_form_view" model="ir.ui.view">
+            <field name="name">racetime.racetime.detalle_marcaciones.form</field>
+            <field name="model">racetime.racetime.detalle_marcaciones</field>
+            <field name="arch" type="xml">
+                <form string="Detalle Marcaciones">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="example_title"/>
+                            <h1>
+                                <field name="example_title" placeholder="Title"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="create_date"/>
+                            </group>
+                            <group>
+                                <field name="example_field"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+-->
+
+<!--        <record id="racetime.detalle_marcaciones_tree_view" model="ir.ui.view">
+            <field name="name">racetime.detalle_marcaciones.tree</field>
+            <field name="model">racetime.detalle_marcaciones</field>
+            <field name="arch" type="xml">
+                <tree string="Detalle Marcaciones">
+                    <field name="create_date"/>
+                    <field name="example_field"/>
+                </tree>
+            </field>
+        </record>-->
+
+<!--        <record id="racetime.detalle_marcaciones_search_view" model="ir.ui.view">
+            <field name="name">racetime.racetime.detalle_marcaciones.search</field>
+            <field name="model">racetime.racetime.detalle_marcaciones</field>
+            <field name="arch" type="xml">
+                <search string="Detalle Marcaciones">
+                    <group expand="1" string="Group By">
+                        <filter string="Example Field" name="example_field" domain="[]"
+                                context="{'group_by':'example_field'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>-->
+
+        <record id="racetime.detalle_marcaciones_act_window" model="ir.actions.act_window">
+            <field name="name">Detalle Marcaciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.detalle_marcacion</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Detalle Marcaciones.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Detalle Marcaciones" sequence="11" id="racetime.detalle_marcaciones_menu" parent="racetime.marcaciones_menu" action="racetime.detalle_marcaciones_act_window"/>
+
+    </data>
+</odoo>

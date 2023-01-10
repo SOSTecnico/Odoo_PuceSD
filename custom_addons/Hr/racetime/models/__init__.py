@@ -5,3 +5,5 @@ from . import Permisos
 from . import Empleado
 from . import Vacaciones
 from . import Horas
+from . import Config
+from . import DetalleMarcaciones
