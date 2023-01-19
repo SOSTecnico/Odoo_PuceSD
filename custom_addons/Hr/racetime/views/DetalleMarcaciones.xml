@@ -2,32 +2,20 @@
 <odoo>
     <data>
 
-<!--
         <record id="racetime.detalle_marcaciones_form_view" model="ir.ui.view">
-            <field name="name">racetime.racetime.detalle_marcaciones.form</field>
-            <field name="model">racetime.racetime.detalle_marcaciones</field>
+            <field name="name">racetime.detalle_marcacion.form</field>
+            <field name="model">racetime.detalle_marcacion</field>
             <field name="arch" type="xml">
                 <form string="Detalle Marcaciones">
                     <sheet>
-                        <div class="oe_title">
-                            <label for="example_title"/>
-                            <h1>
-                                <field name="example_title" placeholder="Title"/>
-                            </h1>
-                        </div>
+<!--                        <button string="Marcaciones" type="object" name="obtener_marcaciones"></button>-->
                         <group>
-                            <group>
-                                <field name="create_date"/>
-                            </group>
-                            <group>
-                                <field name="example_field"/>
-                            </group>
+                            <field name="name"/>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
--->
 
 <!--        <record id="racetime.detalle_marcaciones_tree_view" model="ir.ui.view">
             <field name="name">racetime.detalle_marcaciones.tree</field>
