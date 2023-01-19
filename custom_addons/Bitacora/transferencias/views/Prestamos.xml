@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="transferencias.prestamos_form_view" model="ir.ui.view">
+            <field name="name">transferencias.prestamos.form</field>
+            <field name="model">transferencias.prestamos</field>
+            <field name="arch" type="xml">
+                <form string="Préstamos">
+                    <header>
+                        <button confirm="¿Está seguro de realizar el registro? Al pulsar 'Confirmar' se notificará mediante correo electrónico al custodio en cuestión "
+                                name="cambiar_a_completado" string="COMPLETADO" class="btn btn-info"
+                                type="object" attrs="{'invisible':[('estado','=','completado')]}"></button>
+
+                        <field name="estado" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="fecha"/>
+                            <field name="fecha_devolucion"/>
+                            <field name="empleado_id"/>
+                            <field name="correo_empleado"/>
+                            <field name="unidad"/>
+                            <field name="active" invisible="1"/>
+                            <field name="observaciones"/>
+                        </group>
+                        <notebook>
+                            <page name="activos" string="Activos Fijos">
+                                <group>
+                                    <field nolabel="1" name="activos_ids"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="transferencias.prestamos_tree_view" model="ir.ui.view">
+            <field name="name">transferencias.prestamos.tree</field>
+            <field name="model">transferencias.prestamos</field>
+            <field name="arch" type="xml">
+                <tree string="Préstamos">
+                    <field name="fecha"/>
+                    <field name="fecha_devolucion"/>
+                    <field name="empleado_id"/>
+                    <field name="unidad"/>
+                    <field name="active" invisible="1"/>
+                    <field name="observaciones"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--        <record id="transferencias.prestamos_search_view" model="ir.ui.view">
+                    <field name="name">transferencias.transferencias.prestamos.search</field>
+                    <field name="model">transferencias.transferencias.prestamos</field>
+                    <field name="arch" type="xml">
+                        <search string="Préstamos">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>-->
+
+        <record id="transferencias.prestamos_act_window" model="ir.actions.act_window">
+            <field name="name">Préstamos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">transferencias.prestamos</field>
+            <field name="view_mode">tree,form,graph,pivot,kanban</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Préstamos.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Préstamos" sequence="500" id="transferencias.prestamos_menu" parent="transferencias.main_menu"
+                  action="transferencias.prestamos_act_window"/>
+
+    </data>
+</odoo>

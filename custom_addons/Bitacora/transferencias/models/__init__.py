@@ -2,3 +2,4 @@
 
 from . import models
 from . import transferencias
+from . import Prestamos

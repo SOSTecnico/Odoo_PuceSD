@@ -34,7 +34,8 @@
         'views/Activos.xml',
         'views/Transferencias.xml',
         'views/TipoTransferencias.xml',
-        'reports/Transferencias.xml'
+        'views/Prestamos.xml',
+        'reports/Transferencias.xml',
 
     ],
     # only loaded in demonstration mode

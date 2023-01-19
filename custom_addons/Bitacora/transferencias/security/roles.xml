@@ -13,10 +13,16 @@
             <field name="category_id" ref="transferencias.transferencias_category"/>
         </record>
 
+        <record id="transferencias.group_responsable" model="res.groups">
+            <field name="name">Responsable</field>
+            <field name="implied_ids" eval="[(4, ref('transferencias.group_user'))]"/>
+            <field name="category_id" ref="transferencias.transferencias_category"/>
+        </record>
+
         <record id="transferencias.group_admin" model="res.groups">
             <field name="name">Administrador</field>
             <field name="category_id" ref="transferencias.transferencias_category"/>
-            <field name="implied_ids" eval="[(4, ref('transferencias.group_user'))]"/>
+            <field name="implied_ids" eval="[(4, ref('transferencias.group_responsable'))]"/>
         </record>
 
 
