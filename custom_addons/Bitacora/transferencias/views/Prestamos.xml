@@ -11,23 +11,39 @@
                         <button confirm="¿Está seguro de realizar el registro? Al pulsar 'Confirmar' se notificará mediante correo electrónico al custodio en cuestión "
                                 name="cambiar_a_completado" string="COMPLETADO" class="btn btn-info"
                                 type="object" attrs="{'invisible':[('estado','=','completado')]}"></button>
-
+                        <button groups="transferencias.group_admin" attrs="{'invisible':[('estado','=','pendiente')]}"
+                                name="cambiar_a_pendiente" type="object" string="PENDIENTE" class="btn btn-warning"
+                                confirm="¿Seguro de Cambiar el estado a 'PENDIENTE'?"></button>
                         <field name="estado" widget="statusbar"/>
                     </header>
                     <sheet>
+                        <widget name="web_ribbon" title="ARCHIVADO" bg_color="bg-danger"
+                                attrs="{'invisible':[('active','=',True)]}"></widget>
                         <group>
+                            <label for="name"></label>
+                            <h3>
+                                <field name="name"/>
+                            </h3>
                             <field name="fecha"/>
-                            <field name="fecha_devolucion"/>
+                            <field name="fecha_devolucion" readonly="1"/>
                             <field name="empleado_id"/>
                             <field name="correo_empleado"/>
-                            <field name="unidad"/>
+                            <field name="unidad" options="{'create':false,'m2o_dialog':false,'create_edit':true}"/>
                             <field name="active" invisible="1"/>
                             <field name="observaciones"/>
                         </group>
                         <notebook>
                             <page name="activos" string="Activos Fijos">
                                 <group>
-                                    <field nolabel="1" name="activos_ids"/>
+                                    <field nolabel="1" name="activos_ids">
+                                        <tree>
+                                            <field name="codigo"/>
+                                            <field name="serie"/>
+                                            <field name="tipo_activo_id"/>
+                                            <field name="estado"/>
+                                            <field name="descripcion_estado"/>
+                                        </tree>
+                                    </field>
                                 </group>
                             </page>
                         </notebook>
@@ -45,12 +61,14 @@
             <field name="model">transferencias.prestamos</field>
             <field name="arch" type="xml">
                 <tree string="Préstamos">
+                    <field name="name"/>
                     <field name="fecha"/>
                     <field name="fecha_devolucion"/>
                     <field name="empleado_id"/>
                     <field name="unidad"/>
                     <field name="active" invisible="1"/>
                     <field name="observaciones"/>
+                    <field name="activos_ids" widget="many2many_tags"/>
                 </tree>
             </field>
         </record>
