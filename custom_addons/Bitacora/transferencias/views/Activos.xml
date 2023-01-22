@@ -26,6 +26,7 @@
                                    domain="[('departamento_id','!=',False)]"></field>
                             <field name="descripcion_estado"></field>
                             <field name="active" invisible="1"></field>
+                            <field name="prestamo" widget="boolean_toggle"/>
                         </group>
                     </sheet>
                     <div class="oe_chatter">
@@ -53,17 +54,20 @@
             </field>
         </record>
 
-                <record id="transferencias.activos_search_view" model="ir.ui.view">
-                    <field name="name">transferencias.activos.search</field>
-                    <field name="model">transferencias.activos</field>
-                    <field name="arch" type="xml">
-                        <search string="Transferencias">
-                            <field name="codigo"/>
-                            <field name="referencia"/>
-                            <field name="serie"/>
-                        </search>
-                    </field>
-                </record>
+        <record id="transferencias.activos_search_view" model="ir.ui.view">
+            <field name="name">transferencias.activos.search</field>
+            <field name="model">transferencias.activos</field>
+            <field name="arch" type="xml">
+                <search string="Transferencias">
+                    <field name="codigo"/>
+                    <field name="referencia"/>
+                    <field name="serie"/>
+                    <group>
+                        <filter name="para_prestamos" string="Para Préstamos" domain="[('prestamo','=',True)]"/>
+                    </group>
+                </search>
+            </field>
+        </record>
 
         <record id="transferencias.activos_act_window" model="ir.actions.act_window">
             <field name="name">Activos Fijos</field>

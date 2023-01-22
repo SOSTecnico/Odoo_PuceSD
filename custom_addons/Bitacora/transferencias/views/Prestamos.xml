@@ -14,6 +14,10 @@
                         <button groups="transferencias.group_admin" attrs="{'invisible':[('estado','=','pendiente')]}"
                                 name="cambiar_a_pendiente" type="object" string="PENDIENTE" class="btn btn-warning"
                                 confirm="¿Seguro de Cambiar el estado a 'PENDIENTE'?"></button>
+                        <button confirm="¿Seguro de Realizar la notificación? Se enviará un correo electrónico al custodio en cuestión"
+                                class="btn btn-success" name="notificar_prestamo" type="object" string="NOTIFICAR"
+                                attrs="{'invisible':[('estado','=','completado')]}"></button>
+
                         <field name="estado" widget="statusbar"/>
                     </header>
                     <sheet>
@@ -35,7 +39,7 @@
                         <notebook>
                             <page name="activos" string="Activos Fijos">
                                 <group>
-                                    <field nolabel="1" name="activos_ids">
+                                    <field nolabel="1" name="activos_ids" context="{'search_default_para_prestamos':1}">
                                         <tree>
                                             <field name="codigo"/>
                                             <field name="serie"/>
@@ -100,6 +104,129 @@
 
         <menuitem name="Préstamos" sequence="500" id="transferencias.prestamos_menu" parent="transferencias.main_menu"
                   action="transferencias.prestamos_act_window"/>
+
+        <!--Plantillas de Correo Electrónico-->
+
+
+        <!--REALIZACIÓN DE PRESTAMO-->
+        <record id="transferencias.prestamo_email_template" model="mail.template">
+            <field name="name">Transferencias: Notificación de Préstamo</field>
+            <field name="model_id" ref="model_transferencias_prestamos"/>
+            <field name="email_to">{{object.correo_empleado}}</field>
+            <field name="email_from">cdti@pucesd.edu.ec</field>
+            <field name="reply_to">cdti@pucesd.edu.ec</field>
+            <field name="subject">Notificación Préstamo de Equipos</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <div>
+                    Estimado Usuario,
+                    <t t-out="object.empleado_id.name"></t>
+                    <br/>
+                    Mediante el presente correo se notifica que usted ha solicitado los siguientes equipos en calidad de
+                    préstamo.
+
+                    <table class="table table-sm">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Código</th>
+                                <th>Serie</th>
+                                <th>Estado</th>
+                                <th>Descripción Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="object.activos_ids" t-as="activo">
+                                <tr>
+                                    <td>
+                                        <t t-out="activo.tipo_activo_id.name"></t>
+                                    </td>
+                                    <td>
+                                        <t t-out="activo.codigo"></t>
+                                    </td>
+                                    <td>
+                                        <t t-out="activo.serie"></t>
+                                    </td>
+                                    <td>
+                                        <span t-out="activo.estado"></span>
+                                    </td>
+                                    <td>
+                                        <span t-out="activo.descripcion_estado"></span>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <h3>Claúsula de Compromiso</h3>
+                    <p>
+                        bla, bla, bla... no sé qué poner acolite para ver que le ponemos aquí.
+                    </p>
+
+                </div>
+            </field>
+        </record>
+
+
+        <!--REALIZACIÓN DE PRESTAMO-->
+        <record id="transferencias.prestamo_resuelto_email_template" model="mail.template">
+            <field name="name">Transferencias: Notificación de Préstamo Resuelto</field>
+            <field name="model_id" ref="model_transferencias_prestamos"/>
+            <field name="email_to">{{object.correo_empleado}}</field>
+            <field name="email_from">cdti@pucesd.edu.ec</field>
+            <field name="reply_to">cdti@pucesd.edu.ec</field>
+            <field name="subject">Notificación Préstamo de Equipos Resuelto</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <div>
+                    Estimado Usuario,
+                    <t t-out="object.empleado_id.name"></t>
+                    <br/>
+                    Mediante el presente correo se notifica que usted ha devuelto los siguientes equipos en calidad de
+                    préstamo.
+
+                    <table class="table table-sm">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Código</th>
+                                <th>Serie</th>
+                                <th>Estado</th>
+                                <th>Descripción Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="object.activos_ids" t-as="activo">
+                                <tr>
+                                    <td>
+                                        <t t-out="activo.tipo_activo_id.name"></t>
+                                    </td>
+                                    <td>
+                                        <t t-out="activo.codigo"></t>
+                                    </td>
+                                    <td>
+                                        <t t-out="activo.serie"></t>
+                                    </td>
+                                    <td>
+                                        <span t-out="activo.estado"></span>
+                                    </td>
+                                    <td>
+                                        <span t-out="activo.descripcion_estado"></span>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <h3>Claúsula de Compromiso</h3>
+                    <p>
+                        bla, bla, bla... no sé qué poner acolite para ver que le ponemos aquí.
+                    </p>
+
+                </div>
+            </field>
+        </record>
+
 
     </data>
 </odoo>
