@@ -72,6 +72,7 @@ class DetalleMarcacion(models.Model):
             config = self.obtener_parametros_conexion_biotime()
             conexion = pyodbc.connect(
                 'DRIVER={ODBC Driver 17 for SQL server}; SERVER=' + config['host'] +
+                ',' + config['port'] +
                 ';DATABASE=' + config['db_name'] +
                 ';UID=' + config['db_user'] +
                 ';PWD=' + config['db_password'])
