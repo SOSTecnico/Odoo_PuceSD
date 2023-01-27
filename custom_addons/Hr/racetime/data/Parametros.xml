@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="racetime.config_data_1" model="racetime.config">
+            <field name="name">BIOTIME Host</field>
+            <field name="key">biotime_host</field>
+            <field name="value">localhost</field>
+        </record>
+
+        <record id="racetime.config_data_2" model="racetime.config">
+            <field name="name">BIOTIME Port</field>
+            <field name="key">biotime_port</field>
+            <field name="value">3306</field>
+        </record>
+
+        <record id="racetime.config_data_3" model="racetime.config">
+            <field name="name">BIOTIME Base de Datos</field>
+            <field name="key">biotime_db_name</field>
+            <field name="value">radius</field>
+        </record>
+
+        <record id="racetime.config_data_4" model="racetime.config">
+            <field name="name">BIOTIME Usuario de Base de Datos</field>
+            <field name="key">biotime_db_user</field>
+            <field name="value">root</field>
+        </record>
+
+        <record id="racetime.config_data_5" model="racetime.config">
+            <field name="name">BIOTIME Contraseña Usuario de Base de Datos</field>
+            <field name="key">biotime_db_password</field>
+            <field name="value"></field>
+        </record>
+
+    </data>
+</odoo>

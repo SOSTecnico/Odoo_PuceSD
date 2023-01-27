@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--Cálculo de Marcaciones WIZARD-->
+        <record id="racetime.calculo_marcaciones_view_form" model="ir.ui.view">
+            <field name="name">racetime.calculo_marcaciones_view_form</field>
+            <field name="model">racetime.calculo_marcaciones</field>
+            <field name="arch" type="xml">
+                <form string="racetime.reporte_marcaciones_form">
+                    <group>
+                        <field name="fecha_inicio"/>
+                        <field name="fecha_fin"/>
+                        <field colspan="4" nolabel="1" name="empleados_ids"
+                               context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"></field>
+                    </group>
+                    <footer>
+                        <button name="prueba" string="GENERAR" type="object" class="oe_highlight"/>
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="racetime.calculo_marcaciones_act_window" model="ir.actions.act_window">
+            <field name="name">Cálculo de Marcaciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.calculo_marcaciones</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem sequence="2" name="Cálculo de Marcaciones" id="racetime.calculo_marcaciones_menu"
+                  parent="racetime.marcaciones_menu" action="racetime.calculo_marcaciones_act_window"/>
+
+        <!--Reporte de Marcaciones-->
+
+        <record id="racetime.reporte_marcaciones_view_form" model="ir.ui.view">
+            <field name="name">racetime.reporte_marcaciones_view_form</field>
+            <field name="model">racetime.reporte_marcaciones</field>
+            <field name="arch" type="xml">
+                <form string="racetime.reporte_marcaciones_form">
+                    <sheet>
+                        <group>
+                            <field name="marcacion_id"/>
+                            <field name="diferencia"/>
+                            <field name="observacion"/>
+                            <field name="empleado_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="racetime.reporte_marcaciones_view_tree" model="ir.ui.view">
+            <field name="name">racetime.reporte_marcaciones_view_tree</field>
+            <field name="model">racetime.reporte_marcaciones</field>
+            <field name="arch" type="xml">
+                <tree string="racetime.reporte_marcaciones_tree">
+                    <field name="marcacion_id"/>
+                    <field name="diferencia"/>
+                    <field name="observacion"/>
+                    <field name="empleado_id"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="racetime.reporte_marcaciones_act_window" model="ir.actions.act_window">
+            <field name="name">Reporte de Marcaciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.reporte_marcaciones</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+        </record>
+
+        <menuitem sequence="1" name="Reporte de Marcaciones" id="racetime.reporte_marcaciones_menu"
+                  parent="racetime.marcaciones_menu" action="racetime.reporte_marcaciones_act_window"/>
+
+    </data>
+</odoo>

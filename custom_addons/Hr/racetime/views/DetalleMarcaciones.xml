@@ -8,38 +8,43 @@
             <field name="arch" type="xml">
                 <form string="Detalle Marcaciones">
                     <sheet>
-<!--                        <button string="Marcaciones" type="object" name="obtener_marcaciones"></button>-->
+                        <button string="Marcaciones" type="object" name="obtener_marcaciones"></button>
                         <group>
-                            <field name="name"/>
+                            <field name="id_marcacion"/>
+                            <field name="emp_code"/>
+                            <field name="fecha_hora"/>
+                            <field name="empleado_id"/>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
 
-<!--        <record id="racetime.detalle_marcaciones_tree_view" model="ir.ui.view">
-            <field name="name">racetime.detalle_marcaciones.tree</field>
-            <field name="model">racetime.detalle_marcaciones</field>
+        <record id="racetime.detalle_marcaciones_tree_view" model="ir.ui.view">
+            <field name="name">racetime.detalle_marcacion.tree</field>
+            <field name="model">racetime.detalle_marcacion</field>
             <field name="arch" type="xml">
-                <tree string="Detalle Marcaciones">
-                    <field name="create_date"/>
-                    <field name="example_field"/>
+                <tree string="Detalle Marcaciones" js_class="marcaciones_buttons_tree">
+                    <field name="id_marcacion"/>
+                    <field name="emp_code"/>
+                    <field name="fecha_hora"/>
+                    <field name="empleado_id"/>
                 </tree>
             </field>
-        </record>-->
+        </record>
 
-<!--        <record id="racetime.detalle_marcaciones_search_view" model="ir.ui.view">
-            <field name="name">racetime.racetime.detalle_marcaciones.search</field>
-            <field name="model">racetime.racetime.detalle_marcaciones</field>
-            <field name="arch" type="xml">
-                <search string="Detalle Marcaciones">
-                    <group expand="1" string="Group By">
-                        <filter string="Example Field" name="example_field" domain="[]"
-                                context="{'group_by':'example_field'}"/>
-                    </group>
-                </search>
-            </field>
-        </record>-->
+        <!--        <record id="racetime.detalle_marcaciones_search_view" model="ir.ui.view">
+                    <field name="name">racetime.racetime.detalle_marcaciones.search</field>
+                    <field name="model">racetime.racetime.detalle_marcaciones</field>
+                    <field name="arch" type="xml">
+                        <search string="Detalle Marcaciones">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>-->
 
         <record id="racetime.detalle_marcaciones_act_window" model="ir.actions.act_window">
             <field name="name">Detalle Marcaciones</field>
@@ -53,7 +58,12 @@
             </field>
         </record>
 
-        <menuitem name="Detalle Marcaciones" sequence="11" id="racetime.detalle_marcaciones_menu" parent="racetime.marcaciones_menu" action="racetime.detalle_marcaciones_act_window"/>
+        <menuitem name="Detalle Marcaciones" sequence="11" id="racetime.detalle_marcaciones_menu"
+                  parent="racetime.marcaciones_menu" action="racetime.detalle_marcaciones_act_window"/>
+
+
+
+
 
     </data>
 </odoo>

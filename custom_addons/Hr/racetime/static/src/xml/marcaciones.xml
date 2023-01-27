@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+   <t t-extend="ListView.buttons" t-name="racetime.buttons_tree">
+       <t t-jquery="button.o_list_button_add" t-operation="after">
+           <button groups="racetime.group_admin" type="button" class="btn btn-success ml-1 obtener_marcaciones">
+               Obtener Marcaciones
+           </button>
+           <button type="button" class="btn btn-info ml-1 mr-1 obtener_marcaciones_al_dia">
+               Actualizar
+           </button>
+       </t>
+   </t>
+</templates>

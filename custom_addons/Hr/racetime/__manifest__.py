@@ -20,10 +20,18 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','mail','hr','web_m2x_options'],
-
+    'depends': ['base', 'mail', 'hr', 'web_m2x_options'],
+    'assets': {
+        'web.assets_backend': {
+            'racetime/static/src/js/marcaciones.js',
+        },
+        'web.assets_qweb': {
+            'racetime/static/src/xml/marcaciones.xml',
+        }
+    },
     # always loaded
     'data': [
+        'data/Parametros.xml',
         'security/Grupos.xml',
         'security/ir.model.access.csv',
         'views/MainMenu.xml',
@@ -34,7 +42,10 @@
         'views/Vacaciones.xml',
         'views/Horas.xml',
         'views/Config.xml',
+        'views/Horarios.xml',
+        'views/ReporteMarcaciones.xml',
         'views/DetalleMarcaciones.xml',
+        'views/CronMarcaciones.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -5,4 +5,7 @@ access_racetime_permisos,racetime.permisos,model_racetime_permisos,racetime.grou
 access_racetime_vacaciones,racetime.vacaciones,model_racetime_vacaciones,racetime.group_admin,1,1,1,1
 access_racetime_horas,racetime.horas,model_racetime_horas,racetime.group_admin,1,1,1,1
 access_racetime_config,racetime.config,model_racetime_config,racetime.group_admin,1,1,1,1
+access_racetime_horarios,racetime.horarios,model_racetime_horarios,racetime.group_admin,1,1,1,1
 access_racetime_detalle_marcacion,racetime.detalle_marcacion,model_racetime_detalle_marcacion,racetime.group_admin,1,1,1,1
+access_racetime_calculo_marcaciones,racetime.calculo_marcaciones,model_racetime_calculo_marcaciones,racetime.group_admin,1,1,1,1
+access_racetime_reporte_marcaciones,racetime.reporte_marcaciones,model_racetime_reporte_marcaciones,racetime.group_admin,1,1,1,1

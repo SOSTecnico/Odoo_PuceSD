@@ -9,3 +9,5 @@ class Empleado(models.Model):
 
     vacaciones_id = fields.One2many(comodel_name='racetime.vacaciones', inverse_name='empleado_id', string='Vacaciones',
                                     required=False)
+
+    emp_code = fields.Integer(string='Código Empleado', required=False, help="Código de Biométrico")
