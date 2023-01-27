@@ -15,7 +15,7 @@
                                context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"></field>
                     </group>
                     <footer>
-                        <button name="prueba" string="GENERAR" type="object" class="oe_highlight"/>
+                        <button name="calculo_marcaciones" string="GENERAR" type="object" class="oe_highlight"/>
                         <button string="Cancelar" class="oe_link" special="cancel"/>
                     </footer>
                 </form>
