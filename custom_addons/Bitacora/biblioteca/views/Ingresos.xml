@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="biblioteca.ingresos_form_view" model="ir.ui.view">
+            <field name="name">biblioteca.ingresos.form</field>
+            <field name="model">biblioteca.ingresos</field>
+            <field name="arch" type="xml">
+                <form string="Ingresos">
+                    <sheet>
+                        <group>
+                            <div>
+                                <label for="usuario_id"></label>
+                                <h1>
+                                    <field name="usuario_id"/>
+                                </h1>
+                            </div>
+                            <newline></newline>
+                            <div>
+                                <label for="fecha"></label>
+                                <h1>
+                                    <field name="fecha"/>
+                                </h1>
+                            </div>
+                            <field name="nombres"/>
+                            <field name="apellidos"/>
+                            <field name="cedula"/>
+                            <field name="email"/>
+                            <field name="carrera"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="biblioteca.ingresos_tree_view" model="ir.ui.view">
+            <field name="name">biblioteca.ingresos.tree</field>
+            <field name="model">biblioteca.ingresos</field>
+            <field name="arch" type="xml">
+                <tree string="Ingresos">
+                    <field name="fecha"/>
+                    <field name="usuario_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--        <record id="biblioteca.ingresos_search_view" model="ir.ui.view">
+                    <field name="name">.biblioteca.ingresos.search</field>
+                    <field name="model">.biblioteca.ingresos</field>
+                    <field name="arch" type="xml">
+                        <search string="Ingresos">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>-->
+
+        <record id="biblioteca.ingresos_act_window" model="ir.actions.act_window">
+            <field name="name">Ingresos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">biblioteca.ingresos</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Ingresos.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Ingresos" id="biblioteca.ingresos_menu" parent="biblioteca.main_menu"
+                  action="biblioteca.ingresos_act_window"/>
+
+    </data>
+</odoo>

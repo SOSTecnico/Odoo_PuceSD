@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem name="Biblioteca" id="biblioteca.main_menu"
+                  web_icon="biblioteca,static/description/icon.png"/>
+
+    </data>
+</odoo>
