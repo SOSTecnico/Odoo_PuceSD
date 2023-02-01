@@ -74,3 +74,5 @@ class Activo(models.Model):
 
     # Se agrega campo para distinguir si el activo es disponible para préstamos
     prestamo = fields.Boolean(string='Préstamo', required=False, default=False)
+    # Se agrega campo para indicar la ubicación fisica del activo
+    ubicacion_fisica = fields.Text(string="Ubicación Física", required=False)
