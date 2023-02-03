@@ -46,6 +46,8 @@
         'views/ReporteMarcaciones.xml',
         'views/DetalleMarcaciones.xml',
         'views/CronMarcaciones.xml',
+        'views/ReglasDeTiempo.xml',
+        'data/ReglasDeTiempo.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

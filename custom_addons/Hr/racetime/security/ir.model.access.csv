@@ -9,3 +9,4 @@ access_racetime_horarios,racetime.horarios,model_racetime_horarios,racetime.grou
 access_racetime_detalle_marcacion,racetime.detalle_marcacion,model_racetime_detalle_marcacion,racetime.group_admin,1,1,1,1
 access_racetime_calculo_marcaciones,racetime.calculo_marcaciones,model_racetime_calculo_marcaciones,racetime.group_admin,1,1,1,1
 access_racetime_reporte_marcaciones,racetime.reporte_marcaciones,model_racetime_reporte_marcaciones,racetime.group_admin,1,1,1,1
+access_racetime_reglas,racetime.reglas,model_racetime_reglas,racetime.group_admin,1,1,0,1

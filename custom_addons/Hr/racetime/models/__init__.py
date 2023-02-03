@@ -9,3 +9,4 @@ from . import Config
 from . import DetalleMarcaciones
 from . import ReporteMarcaciones
 from . import Horarios
+from . import ReglasTiempo
