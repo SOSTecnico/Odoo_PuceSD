@@ -57,9 +57,10 @@
             <field name="name">racetime.reporte_marcaciones_view_tree</field>
             <field name="model">racetime.reporte_marcaciones</field>
             <field name="arch" type="xml">
-                <tree string="racetime.reporte_marcaciones_tree" default_order="horario desc, marcacion_tiempo asc"
+                <tree string="racetime.reporte_marcaciones_tree" default_order="fecha desc, horario asc"
                       decoration-success="observacion == 'a_tiempo'" decoration-danger="observacion == 'atraso'"
                       decoration-warning="observacion == 'exceso'" decoration-info="observacion == 'adelanto'">
+                    <field name="fecha" invisible="1"/>
                     <field name="horario"/>
                     <field name="marcacion_tiempo"/>
                     <field name="diferencia" widget="float_time"/>

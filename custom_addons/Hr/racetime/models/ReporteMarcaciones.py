@@ -35,8 +35,6 @@ class ReporteMarcacionesWizard(models.TransientModel):
         if not horarios:
             raise ValidationError('Para realizar los cálculos por favor debe existir al menos un horario disponible')
 
-        reglas = self.env['racetime.reglas'].search([])
-
         for empleado in self.empleados_ids:
             print("-------------EMPLEADO---------------", empleado.name)
             # Horarios disponibles de cada empleado
@@ -47,8 +45,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
                  ('fecha_hora', '<=', self.fecha_fin)], order="fecha_hora asc")
 
             marcaciones_calculadas = self.env['racetime.reporte_marcaciones'].search(
-                [('empleado_id', '=', empleado.id), ('marcacion_tiempo', '>=', self.fecha_inicio),
-                 ('marcacion_tiempo', '<=', self.fecha_fin)])
+                [('empleado_id', '=', empleado.id), ('horario', '>=', self.fecha_inicio),
+                 ('horario', '<=', self.fecha_fin)])
 
             marcaciones_calculadas.unlink()
 
@@ -62,13 +60,20 @@ class ReporteMarcacionesWizard(models.TransientModel):
                         if fecha_ >= horario.fecha_inicio and fecha_ <= horario.fecha_fin:
                             h_activo = horario
 
-                    marcaciones_del_dia = marcaciones_empleado.filtered(lambda f: f.fecha_hora.date() == fecha_)
-                    self.calcular_marcaciones(marcaciones=marcaciones_del_dia, horario=h_activo, reglas=reglas)
-                    raise ValidationError('posi')
-                    # registros = self.generar_datos_marcacion(marcaciones_del_dia, h_activo, reglas, fecha_)
+                    if not h_activo.dias:
+                        h_activo.dias = []
 
-                    # if registros:
-                    #     self.crear_registros_marcacion(registros, empleado)
+                    if fecha_.strftime("%A") in h_activo.dias:
+
+                        marcaciones_del_dia = marcaciones_empleado.filtered(lambda f: f.fecha_hora.date() == fecha_)
+
+                        registros = self.calcular_marcaciones(marcaciones=marcaciones_del_dia, horario=h_activo)
+
+                        marcaciones = self.calcular_tiempos(registros=registros, empleado=empleado, fecha=fecha_)
+
+                        self.registrar_marcaciones(marcaciones=marcaciones, empleado=empleado,
+                                                   fecha_inicio=self.fecha_inicio, fecha_fin=self.fecha_fin)
+
                     fecha_ = fecha_ + timedelta(days=1)
                 fecha_ = self.fecha_inicio
         return {
@@ -80,164 +85,157 @@ class ReporteMarcacionesWizard(models.TransientModel):
             'target': 'main'
         }
 
-    # NUEVO METODO
-    def calcular_marcaciones(self, marcaciones, horario, reglas):
+    # ESTE CÁLCULO LO HIZO MIGUEL PERO EN PHP, se intenta pasarlo a python
+    def calcular_marcaciones(self, marcaciones, horario):
 
-        marcaciones_fijas = []
+        N1 = timedelta(hours=(horario.hora_inicio + 5))
+        N2 = timedelta(hours=(horario.inicio_descanso + 5))
+        N3 = timedelta(hours=(horario.fin_descanso + 5))
+        N4 = timedelta(hours=(horario.hora_fin + 5))
 
-        self.calcular_horas(marcaciones=marcaciones[0], horario=horario.hora_inicio, tipo='ingreso', reglas=reglas)
-        self.calcular_horas(marcaciones=marcaciones[1], horario=horario.inicio_descanso, tipo='ingreso',
-                            reglas=reglas)
-        self.calcular_horas(marcaciones=marcaciones[2], horario=horario.fin_descanso, tipo='ingreso', reglas=reglas)
-        self.calcular_horas(marcaciones=marcaciones[3], horario=horario.hora_fin, tipo='ingreso', reglas=reglas)
+        pint = (N2 - N1) / 2
+        nint1 = N1 + pint
+        nint2 = nint1 + pint
 
-    def generar_marcaciones_para_calcular(self, marcacion, horario, tipo):
-        m = timedelta(hours=marcacion.fecha_hora.time().hour, minutes=marcacion.fecha_hora.time().minute,
-                      seconds=marcacion.fecha_hora.time().second)
-        hora_inicio = timedelta(hours=(horario.hora_inicio + 5))
-        hora_fin = timedelta(hours=(horario.hora_fin + 5))
-        inicio_descanso = timedelta(hours=(horario.inicio_descanso + 5))
-        fin_descanso = timedelta(hours=(horario.fin_descanso + 5))
+        pint2 = (N3 - N2) / 2
+        nint3 = N2 + pint2
+        nint4 = nint3 + pint2
 
-        if tipo == 'ingreso':
-            return m
-        
+        pint3 = (N4 - N3) / 2
+        nint5 = N3 + pint3
+        nint6 = nint5 + pint3
 
+        marcacion1 = False
+        marcacion2 = False
+        marcacion3 = False
+        marcacion4 = False
 
+        interhorarios = [N1, nint1, nint2, nint3, nint4, nint5, nint6]
 
+        for m in marcaciones:
+            value = timedelta(hours=m.fecha_hora.time().hour, minutes=m.fecha_hora.time().minute,
+                              seconds=m.fecha_hora.time().second)
 
-    def calcular_horas(self, marcaciones, horario, tipo, reglas):
+            if value <= interhorarios[0]:
+                marcacion1 = m
+            elif value > interhorarios[0] and value <= interhorarios[1]:
+                marcacion1 = m
+            elif value > interhorarios[1] and value <= interhorarios[2]:
+                marcacion2 = m
+            elif value > interhorarios[2] and value <= interhorarios[3]:
+                marcacion2 = m
+            elif value > interhorarios[3] and value <= interhorarios[4]:
+                marcacion3 = m
+            elif value > interhorarios[4] and value <= interhorarios[5]:
+                marcacion3 = m
+            elif value > interhorarios[5] and value <= interhorarios[6]:
+                marcacion4 = m
+            elif value > interhorarios[6]:
+                marcacion4 = m
 
-        marcacion = timedelta(hours=marcaciones.fecha_hora.time().hour,
-                              minutes=marcaciones.fecha_hora.time().minute,
-                              seconds=marcaciones.fecha_hora.time().second)
-        hora = timedelta(hours=(horario + 5))
-        tolerancia = timedelta(hours=reglas.tolerancia)
-        tiempo_consideracion = timedelta(hours=reglas.sin_marcacion)
-        datos = {
-            'observacion': None,
-            'minutos': 0
+        return {
+            'marcaciones': [marcacion1, marcacion2, marcacion3, marcacion4],
+            'horas': [N1, N2, N3, N4],
         }
-        print("MARCACION: ", marcacion)
-        print("HORA: ", hora)
-        print("Tipo: ", tipo)
-        if marcacion < hora and tipo == 'ingreso':
-            diferencia = hora - marcacion
-            datos['observacion'] = 'a_tiempo'
-            datos['minutos'] = diferencia
-        elif marcacion < hora and tipo == 'salida':
-            datos['observacion'] = 'adelanto'
-            datos['minutos'] = hora - marcacion
-        elif marcacion > hora and tipo == 'ingreso':
-            diferencia = marcacion - hora
-            if diferencia > tiempo_consideracion:
-                datos['observacion'] = 'sin_marcacion'
-                datos['minutos'] = 0
-            else:
-                datos['observacion'] = 'a_tiempo' if diferencia <= tolerancia else 'atraso'
-                datos['minutos'] = diferencia
-        elif marcacion > hora and tipo == 'salida':
-            diferencia = marcacion - hora
-            if diferencia > tiempo_consideracion:
-                datos['minutos'] = 0
-                datos['observacion'] = 'sin_marcacion'
-            else:
-                datos['minutos'] = diferencia
-                datos['observacion'] = 'exceso'
-        print(datos)
-        print("--------------------")
-        return datos
 
-    # def calcular_marcacion(self, marcaciones, hora, tipo, reglas):
-    #     datos = {
-    #         'observacion': False,
-    #         'minutos': 0,
-    #         'marcacion_id': None,
-    #     }
-    #     tiempos = []
-    #     tipos_ingresos = []
-    #     marcaciones_id = []
-    #
-    #     tolerancia = timedelta(hours=reglas.tolerancia)
-    #
-    #     for m in marcaciones:
-    #         marcacion = timedelta(hours=m.fecha_hora.time().hour, minutes=m.fecha_hora.time().minute,
-    #                               seconds=m.fecha_hora.time().second)
-    #
-    #         if marcacion < hora and tipo == 'ingreso':
-    #             tiempos.append(hora - marcacion)
-    #             tipos_ingresos.append('adelanto')
-    #             marcaciones_id.append(m)
-    #
-    #         elif marcacion < hora and tipo == 'salida':
-    #             tiempos.append(hora - marcacion)
-    #             tipos_ingresos.append('adelanto')
-    #             marcaciones_id.append(m)
-    #         elif marcacion > hora and tipo == 'ingreso':
-    #             tiempos.append(marcacion - hora)
-    #             tipos_ingresos.append('atraso')
-    #             marcaciones_id.append(m)
-    #         elif marcacion > hora and tipo == 'salida':
-    #             tiempos.append(marcacion - hora)
-    #             tipos_ingresos.append('exceso')
-    #             marcaciones_id.append(m)
-    #
-    #     if marcaciones:
-    #         datos['minutos'] = min(tiempos)
-    #         datos['observacion'] = tipos_ingresos[tiempos.index(datos['minutos'])]
-    #         datos['marcacion_id'] = marcaciones_id[tiempos.index(datos['minutos'])]
-    #
-    #         if datos['observacion'] == 'atraso':
-    #             if datos['minutos'] <= tolerancia:
-    #                 datos['observacion'] = 'a_tiempo'
-    #
-    #         return datos
-    #
-    # def generar_datos_marcacion(self, marcaciones, horario, reglas, fecha):
-    #     datos = []
-    #     ingreso = self.calcular_marcacion(marcaciones,
-    #                                       timedelta(hours=(horario.hora_inicio + 5)), 'ingreso',
-    #                                       reglas)
-    #     if ingreso:
-    #         ingreso['horario'] = datetime.combine(fecha,
-    #                                               (datetime.min + timedelta(hours=(horario.hora_inicio + 5))).time())
-    #         datos.append(ingreso)
-    #     inicio_descanso = self.calcular_marcacion(marcaciones,
-    #                                               timedelta(hours=(horario.inicio_descanso + 5)),
-    #                                               'salida', reglas)
-    #     if inicio_descanso:
-    #         inicio_descanso['horario'] = datetime.combine(fecha, (
-    #                 datetime.min + timedelta(hours=(horario.inicio_descanso + 5))).time())
-    #         datos.append(inicio_descanso)
-    #     fin_descanso = self.calcular_marcacion(marcaciones,
-    #                                            timedelta(hours=(horario.fin_descanso + 5)),
-    #                                            'ingreso', reglas)
-    #     if fin_descanso:
-    #         fin_descanso['horario'] = datetime.combine(fecha, (
-    #                 datetime.min + timedelta(hours=(horario.fin_descanso + 5))).time())
-    #         datos.append(fin_descanso)
-    #     salida = self.calcular_marcacion(marcaciones,
-    #                                      timedelta(hours=(horario.hora_fin + 5)), 'salida',
-    #                                      reglas)
-    #     if salida:
-    #         salida['horario'] = datetime.combine(fecha, (
-    #                 datetime.min + timedelta(hours=(horario.hora_fin + 5))).time())
-    #         datos.append(salida)
-    #
-    #     for t in datos:
-    #         print(t)
-    #
-    #     return datos
-    #
-    # def crear_registros_marcacion(self, datos, empleado):
-    #     for m in datos:
-    #         self.env['racetime.reporte_marcaciones'].create({
-    #             'marcacion_id': m['marcacion_id'].id,
-    #             'diferencia': (m['minutos'].total_seconds() / 60),
-    #             'observacion': m['observacion'],
-    #             'empleado_id': empleado.id,
-    #             'horario': m['horario']
-    #         })
+    def calcular_tiempos(self, registros, empleado, fecha):
+        reglas = self.env['racetime.reglas'].search([])
+        tolerancia = timedelta(hours=reglas.tolerancia)
+
+        if registros['marcaciones'][0]:
+            marcacion = timedelta(hours=registros['marcaciones'][0].fecha_hora.time().hour,
+                                  minutes=registros['marcaciones'][0].fecha_hora.time().minute,
+                                  seconds=registros['marcaciones'][0].fecha_hora.time().second)
+
+            if marcacion > registros['horas'][0]:
+                diferencia_1 = marcacion - registros['horas'][0]
+                observacion_1 = 'atraso' if diferencia_1 > tolerancia else 'a_tiempo'
+            else:
+                diferencia_1 = registros['horas'][0] - marcacion
+                observacion_1 = 'a_tiempo'
+        else:
+            diferencia_1 = timedelta(seconds=0)
+            observacion_1 = 'sin_marcacion'
+
+        if registros['marcaciones'][1]:
+            marcacion = timedelta(hours=registros['marcaciones'][1].fecha_hora.time().hour,
+                                  minutes=registros['marcaciones'][1].fecha_hora.time().minute,
+                                  seconds=registros['marcaciones'][1].fecha_hora.time().second)
+
+            if marcacion > registros['horas'][1]:
+                diferencia_2 = marcacion - registros['horas'][1]
+                observacion_2 = 'exceso'
+            else:
+                diferencia_2 = registros['horas'][1] - marcacion
+                observacion_2 = 'adelanto'
+        else:
+            diferencia_2 = timedelta(seconds=0)
+            observacion_2 = 'sin_marcacion'
+
+        if registros['marcaciones'][2]:
+            marcacion = timedelta(hours=registros['marcaciones'][2].fecha_hora.time().hour,
+                                  minutes=registros['marcaciones'][2].fecha_hora.time().minute,
+                                  seconds=registros['marcaciones'][2].fecha_hora.time().second)
+
+            if marcacion > registros['horas'][2]:
+                diferencia_3 = marcacion - registros['horas'][2]
+                observacion_3 = 'atraso' if diferencia_3 > tolerancia else 'a_tiempo'
+            else:
+                diferencia_3 = registros['horas'][2] - marcacion
+                observacion_3 = 'a_tiempo'
+        else:
+            diferencia_3 = timedelta(seconds=0)
+            observacion_3 = 'sin_marcacion'
+
+        if registros['marcaciones'][3]:
+            marcacion = timedelta(hours=registros['marcaciones'][3].fecha_hora.time().hour,
+                                  minutes=registros['marcaciones'][3].fecha_hora.time().minute,
+                                  seconds=registros['marcaciones'][3].fecha_hora.time().second)
+
+            if marcacion > registros['horas'][3]:
+                diferencia_4 = marcacion - registros['horas'][3]
+                observacion_4 = 'exceso'
+            else:
+                diferencia_4 = registros['horas'][3] - marcacion
+                observacion_4 = 'adelanto'
+        else:
+            diferencia_4 = timedelta(seconds=0)
+            observacion_4 = 'sin_marcacion'
+
+        return [
+            {
+                'marcacion_id': registros['marcaciones'][0].id if registros['marcaciones'][0] else False,
+                'horario': datetime.combine(fecha, (datetime.min + registros['horas'][0]).time()),
+                'observacion': observacion_1,
+                'empleado_id': empleado.id,
+                'diferencia': diferencia_1.total_seconds() / 60
+            },
+            {
+                'marcacion_id': registros['marcaciones'][1].id if registros['marcaciones'][1] else False,
+                'horario': datetime.combine(fecha, (datetime.min + registros['horas'][1]).time()),
+                'observacion': observacion_2,
+                'empleado_id': empleado.id,
+                'diferencia': diferencia_2.total_seconds() / 60
+            },
+            {
+                'marcacion_id': registros['marcaciones'][2].id if registros['marcaciones'][2] else False,
+                'horario': datetime.combine(fecha, (datetime.min + registros['horas'][2]).time()),
+                'observacion': observacion_3,
+                'empleado_id': empleado.id,
+                'diferencia': diferencia_3.total_seconds() / 60
+            },
+            {
+                'marcacion_id': registros['marcaciones'][3].id if registros['marcaciones'][3] else False,
+                'horario': datetime.combine(fecha, (datetime.min + registros['horas'][3]).time()),
+                'observacion': observacion_4,
+                'empleado_id': empleado.id,
+                'diferencia': diferencia_4.total_seconds() / 60
+            },
+        ]
+
+    def registrar_marcaciones(self, marcaciones, empleado, fecha_inicio, fecha_fin):
+        for m in marcaciones:
+            self.env['racetime.reporte_marcaciones'].create(m)
 
 
 class ReporteMarcaciones(models.Model):
@@ -249,12 +247,20 @@ class ReporteMarcaciones(models.Model):
     diferencia = fields.Float(string='Diferencia', required=False)
     observacion = fields.Selection(string='Observación', required=False,
                                    selection=[('atraso', 'ATRASO'), ('adelanto', 'ADELANTO'), ('exceso', 'EXCESO'),
-                                              ('a_tiempo', 'A TIEMPO'), ('sin_marcación', 'SIN MARCACIÓN')], )
+                                              ('a_tiempo', 'A TIEMPO'), ('sin_marcacion', 'SIN MARCACIÓN')], )
     marcacion_tiempo = fields.Datetime(
         string='Marcación Empleado',
         required=False, related='marcacion_id.fecha_hora', store=True)
 
     horario = fields.Datetime(string='Horario', required=False)
+
+    def calcular_fecha(self):
+        for rec in self:
+            rec.fecha = rec.horario.date()
+
+    fecha = fields.Date(
+        string='Fecha',
+        required=False, compute='calcular_fecha', store=True)
 
     empleado_id = fields.Many2one(
         comodel_name='hr.employee',
