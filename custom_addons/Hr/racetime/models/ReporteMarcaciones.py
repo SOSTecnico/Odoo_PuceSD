@@ -50,35 +50,56 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
             marcaciones_calculadas.unlink()
 
-            if 'flexible' in horarios_empleado.mapped('tipo'):
-                pass
-            else:
-                while fecha_ <= self.fecha_fin:
-                    # Variable para guardar el horario activo y hacer comparaciones con las marcaciones
-                    h_activo = None
-                    for horario in horarios_empleado:
-                        if fecha_ >= horario.fecha_inicio and fecha_ <= horario.fecha_fin:
-                            h_activo = horario
+            # FERIADOS
+            feriados = self.env['racetime.feriados'].search(
+                ['|', ('desde', '>=', self.fecha_inicio), ('desde', '<=', self.fecha_fin),
+                 ('hasta', '>=', self.fecha_inicio), ('hasta', '<=', self.fecha_fin)])
 
-                    if not h_activo.dias:
-                        h_activo.dias = []
+            # PERMISOS
+            permisos_del_empleado = self.env['racetime.permisos'].search(
+                [('empleado_id', '=', empleado.id), ('desde', '>=', self.fecha_inicio)])
 
-                    if fecha_.strftime("%A") in h_activo.dias:
+            while fecha_ <= self.fecha_fin:
+                es_feriado = False
+                for feriado in feriados:
+                    if fecha_ >= feriado.desde and fecha_ <= feriado.hasta:
+                        es_feriado = True
 
-                        marcaciones_del_dia = marcaciones_empleado.filtered(lambda f: f.fecha_hora.date() == fecha_)
+                if not es_feriado:
 
-                        registros = self.calcular_marcaciones(marcaciones=marcaciones_del_dia, horario=h_activo)
+                    if 'flexible' in horarios_empleado.mapped('tipo'):
+                        pass
+                    else:
+                        # Variable para guardar el horario activo y hacer comparaciones con las marcaciones
+                        h_activo = None
+                        for horario in horarios_empleado:
+                            if fecha_ >= horario.fecha_inicio and fecha_ <= horario.fecha_fin:
+                                h_activo = horario
 
-                        marcaciones = self.calcular_tiempos(registros=registros, empleado=empleado, fecha=fecha_)
+                        if not h_activo.dias:
+                            h_activo.dias = []
 
-                        self.registrar_marcaciones(marcaciones=marcaciones, empleado=empleado,
-                                                   fecha_inicio=self.fecha_inicio, fecha_fin=self.fecha_fin)
+                        if fecha_.strftime("%A") in h_activo.dias:
+                            marcaciones_del_dia = marcaciones_empleado.filtered(lambda f: f.fecha_hora.date() == fecha_)
 
-                    fecha_ = fecha_ + timedelta(days=1)
-                fecha_ = self.fecha_inicio
+                            registros = self.calcular_marcaciones(marcaciones=marcaciones_del_dia, horario=h_activo)
+
+                            marcaciones = self.calcular_tiempos(registros=registros, empleado=empleado, fecha=fecha_,
+                                                                permisos=permisos_del_empleado)
+
+                            self.registrar_marcaciones(marcaciones=marcaciones, empleado=empleado,
+                                                       fecha_inicio=self.fecha_inicio, fecha_fin=self.fecha_fin)
+                else:
+                    # Aqui toca hacer un metodo para los feriados
+                    pass
+                fecha_ = fecha_ + timedelta(days=1)
+            fecha_ = self.fecha_inicio
+
         return {
             'type': 'tree',
             'name': 'Reporte de Marcaciones',
+            'context': {'search_default_group_empleado': 1, 'search_default_group_horario': 2,
+                        'search_default_group_observacion': 3},
             'view_mode': 'tree,form',
             'res_model': 'racetime.reporte_marcaciones',
             'type': 'ir.actions.act_window',
@@ -138,7 +159,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
             'horas': [N1, N2, N3, N4],
         }
 
-    def calcular_tiempos(self, registros, empleado, fecha):
+    def calcular_tiempos(self, registros, empleado, fecha, permisos):
         reglas = self.env['racetime.reglas'].search([])
         tolerancia = timedelta(hours=reglas.tolerancia)
 
@@ -150,6 +171,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
             if marcacion > registros['horas'][0]:
                 diferencia_1 = marcacion - registros['horas'][0]
                 observacion_1 = 'atraso' if diferencia_1 > tolerancia else 'a_tiempo'
+
+
             else:
                 diferencia_1 = registros['horas'][0] - marcacion
                 observacion_1 = 'a_tiempo'
@@ -248,9 +271,9 @@ class ReporteMarcaciones(models.Model):
     observacion = fields.Selection(string='Observación', required=False,
                                    selection=[('atraso', 'ATRASO'), ('adelanto', 'ADELANTO'), ('exceso', 'EXCESO'),
                                               ('a_tiempo', 'A TIEMPO'), ('sin_marcacion', 'SIN MARCACIÓN')], )
-    marcacion_tiempo = fields.Datetime(
-        string='Marcación Empleado',
-        required=False, related='marcacion_id.fecha_hora', store=True)
+
+    marcacion_tiempo = fields.Datetime(string='Marcación Empleado', required=False, related='marcacion_id.fecha_hora',
+                                       store=True)
 
     horario = fields.Datetime(string='Horario', required=False)
 
@@ -258,11 +281,8 @@ class ReporteMarcaciones(models.Model):
         for rec in self:
             rec.fecha = rec.horario.date()
 
-    fecha = fields.Date(
-        string='Fecha',
-        required=False, compute='calcular_fecha', store=True)
+    fecha = fields.Date(string='Fecha', required=False, compute='calcular_fecha', store=True)
 
-    empleado_id = fields.Many2one(
-        comodel_name='hr.employee',
-        string='Empleado',
-        required=False)
+    empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False)
+
+    permiso_id = fields.Many2one(comodel_name='racetime.permisos', string='Permiso', required=False)

@@ -48,6 +48,7 @@
         'views/CronMarcaciones.xml',
         'views/ReglasDeTiempo.xml',
         'data/ReglasDeTiempo.xml',
+        'data/Permisos.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

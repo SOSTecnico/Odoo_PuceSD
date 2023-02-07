@@ -43,7 +43,7 @@
                     <sheet>
                         <group>
                             <field name="horario"/>
-                            <field name="marcacion_id"/>
+                            <field name="marcacion_tiempo"/>
                             <field name="diferencia" widget="float_time"/>
                             <field name="observacion"/>
                             <field name="empleado_id"/>
@@ -70,11 +70,31 @@
             </field>
         </record>
 
+        <record id="racetime.reporte_marcacion_search_view" model="ir.ui.view">
+            <field name="name">racetime.reporte_marcacion.search.view</field>
+            <field name="model">racetime.reporte_marcaciones</field>
+            <field name="arch" type="xml">
+                <search string="">
+                    <field name="empleado_id"/>
+                    <filter name="atrasos" string="ATRASOS" domain="[('observacion','=','atraso')]"/>
+                    <filter name="adelanto" string="ADELANTO" domain="[('observacion','=','adelanto')]"/>
+                    <filter name="exceso" string="EXCESO" domain="[('observacion','=','exceso')]"/>
+                    <filter name="a_tiempo" string="A TIEMPO" domain="[('observacion','=','a_tiempo')]"/>
+                    <filter name="group_empleado" context="{'group_by':'empleado_id'}"/>
+                    <filter name="group_horario" context="{'group_by':'horario:month'}"/>
+                    <filter name="group_observacion" context="{'group_by':'observacion'}"/>
+                </search>
+            </field>
+        </record>
+
 
         <record id="racetime.reporte_marcaciones_act_window" model="ir.actions.act_window">
             <field name="name">Reporte de Marcaciones</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">racetime.reporte_marcaciones</field>
+            <field name="context">
+                {'search_default_group_empleado':1,'search_default_group_horario':2,'search_default_group_observacion':3}
+            </field>
             <field name="view_mode">tree,form,graph,pivot</field>
         </record>
 

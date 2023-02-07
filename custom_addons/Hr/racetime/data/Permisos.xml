@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        
-        $END$
-    
+
+        <record id="racetime.tipos_permisos_1" model="racetime.tipos_permiso">
+            <field name="name">MÉDICO</field>
+        </record>
+
+        <record id="racetime.tipos_permisos_2" model="racetime.tipos_permiso">
+            <field name="name">PERSONAL</field>
+        </record>
+
     </data>
 </odoo>
