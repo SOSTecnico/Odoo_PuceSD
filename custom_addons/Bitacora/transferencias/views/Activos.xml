@@ -24,6 +24,7 @@
                                    options="{'create':false,'create_edit':true, 'm2o_dialog':false}"></field>
                             <field name="ubicacion_id" options="{'create':false, 'm2o_dialog':false}"
                                    domain="[('departamento_id','!=',False)]"></field>
+                            <field name="ubicacion_fisica"/>
                             <field name="descripcion_estado"></field>
                             <field name="active" invisible="1"></field>
                             <field name="prestamo" widget="boolean_toggle"/>
