@@ -37,7 +37,7 @@
             <field name="name">biblioteca.ingresos.tree</field>
             <field name="model">biblioteca.ingresos</field>
             <field name="arch" type="xml">
-                <tree string="Ingresos">
+                <tree string="Ingresos" default_order="fecha desc">
                     <field name="fecha"/>
                     <field name="usuario_id"/>
                 </tree>
