@@ -6,8 +6,9 @@ from odoo import fields, models, api
 class Usuarios(models.Model):
     _name = 'biblioteca.usuarios'
     _description = 'Usuario Biblioteca'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(compute="_compute_name", store=True, string="Nombre")
+    name = fields.Char(compute="_compute_name", store=True, string="Nombre Completo")
     nombres = fields.Char(string='Nombres', required=True, tracking=True)
     apellidos = fields.Char(string='Apellidos', required=True, tracking=True)
     cedula = fields.Char(string='Cédula', required=True, tracking=True)
@@ -25,7 +26,7 @@ class Ingresos(models.Model):
     _description = 'Biblioteca Ingresos'
     _inherit = ['mail.activity.mixin', 'mail.thread']
 
-    name = fields.Char(related='usuario_id.name')
+    name = fields.Char(related='usuario_id.name', store=True)
     fecha = fields.Datetime(string='Fecha', required=True, tracking=True, default=lambda self: datetime.now())
     usuario_id = fields.Many2one(comodel_name='biblioteca.usuarios', string='Usuario', required=True, tracking=True)
     email = fields.Char(
@@ -42,5 +43,4 @@ class Ingresos(models.Model):
         required=False, related='usuario_id.apellidos')
     carrera = fields.Char(
         string='Carrera',
-        required=False, related='usuario_id.carrera')
-
+        required=False, related='usuario_id.carrera', store=True)
