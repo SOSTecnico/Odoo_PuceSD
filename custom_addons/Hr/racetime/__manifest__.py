@@ -49,6 +49,7 @@
         'views/ReglasDeTiempo.xml',
         'data/ReglasDeTiempo.xml',
         'data/Permisos.xml',
+        'data/Dias.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

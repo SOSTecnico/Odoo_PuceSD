@@ -11,22 +11,23 @@
                         <widget name="web_ribbon" title="ARCHIVADO" bg_color="bg-danger"
                                 attrs="{'invisible':[('active','=',True)]}"></widget>
                         <group col="4">
-
                             <field name="name"/>
-                            <field name="tipo"/>
                             <newline></newline>
                             <field name="fecha_inicio"/>
                             <field name="fecha_fin"/>
-                            <field name="hora_inicio" widget="float_time"/>
-                            <field name="inicio_descanso" widget="float_time"/>
-                            <field name="hora_fin" widget="float_time"/>
-                            <field name="fin_descanso" widget="float_time"/>
-                            <field name="dias" widget="dias_widget"/>
-
-
                         </group>
-                        <field colspan="4" name="empleados_ids" nolabel="1"
-                               context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"></field>
+                        <h3>Detalle Horario</h3>
+                        <group>
+                            <field name="total_horas" invisible="1"/>
+                            <div>
+                                <label for="horas"></label>
+                                <h4>
+                                    <field name="horas" widget="float_time"/>
+                                </h4>
+                            </div>
+                        </group>
+                        <field name="detalle_horario_id"/>
+                        <field name="empleados_ids"  context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"/>
                         <field name="active" invisible="1"/>
                     </sheet>
                     <div class="oe_chatter">
@@ -43,38 +44,16 @@
             <field name="arch" type="xml">
                 <tree string="Horarios">
                     <field name="name"/>
-                    <field name="tipo"/>
-                    <field name="fecha_inicio"/>
-                    <field name="fecha_fin"/>
-                    <field name="hora_inicio" widget="float_time"/>
-                    <field name="inicio_descanso" widget="float_time"/>
-                    <field name="fin_descanso" widget="float_time"/>
-                    <field name="hora_fin" widget="float_time"/>
-                    <field name="dias" optional="hide" widget="dias_widget"/>
+                    <field name="horas"/>
                 </tree>
             </field>
         </record>
-
-        <!--
-                <record id="racetime.horarios_search_view" model="ir.ui.view">
-                    <field name="name">.racetime.horarios.search</field>
-                    <field name="model">.racetime.horarios</field>
-                    <field name="arch" type="xml">
-                        <search string="Horarios">
-                            <group expand="1" string="Group By">
-                                <filter string="Example Field" name="example_field" domain="[]"
-                                        context="{'group_by':'example_field'}"/>
-                            </group>
-                        </search>
-                    </field>
-                </record>
-        -->
 
         <record id="racetime.horarios_act_window" model="ir.actions.act_window">
             <field name="name">Horarios</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">racetime.horarios</field>
-            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="view_mode">tree,kanban,form,graph,pivot</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     There is no examples click here to add new Horarios.
@@ -84,6 +63,43 @@
 
         <menuitem name="Horarios" id="racetime.horarios_menu" parent="racetime.config_menu"
                   action="racetime.horarios_act_window"/>
+
+
+        <!-- ******************************DETALLE DE HORARIOS VISTAS**********************-->
+
+        <record id="racetime.detalle_horarios_view_form" model="ir.ui.view">
+            <field name="name">racetime.detalle_horarios_view_form</field>
+            <field name="model">racetime.detalle_horarios</field>
+            <field name="arch" type="xml">
+                <form string="racetime.detalle_horarios_form">
+                    <sheet>
+                        <group col="4">
+                            <field name="marcacion_1" widget="float_time"/>
+                            <field name="marcacion_2" attrs="{'required':[('marcacion_1','>',0)]}" widget="float_time"/>
+                            <field name="marcacion_3" widget="float_time"/>
+                            <field name="marcacion_4" attrs="{'required':[('marcacion_3','>',0)]}" widget="float_time"/>
+                            <field name="dias" widget="many2many_checkboxes"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="racetime.detalle_horarios_view_tree" model="ir.ui.view">
+            <field name="name">racetime.detalle_horarios_view_tree</field>
+            <field name="model">racetime.detalle_horarios</field>
+            <field name="arch" type="xml">
+                <tree string="racetime.detalle_horarios_tree">
+                    <field name="marcacion_1" widget="float_time"/>
+                    <field name="marcacion_2" widget="float_time"/>
+                    <field name="marcacion_3" widget="float_time"/>
+                    <field name="marcacion_4" widget="float_time"/>
+                    <field name="dias" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
 
     </data>
 </odoo>
