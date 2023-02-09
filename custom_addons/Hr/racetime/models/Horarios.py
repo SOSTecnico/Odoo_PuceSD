@@ -23,3 +23,18 @@ class Horarios(models.Model):
                             selection=[('principal', 'PRINCIPAL'), ('flexible', 'FLEXIBLE'),
                                        ('cambio_horario', 'CAMBIO DE HORARIO')
                                        ])
+    detalle_horario_id = fields.One2many(comodel_name='racetime.detalle_horarios', inverse_name='horario_id',
+                                         string='Detalle de Horario', required=False)
+
+
+class DetalleHorarios(models.Model):
+    _name = 'racetime.detalle_horarios'
+    _description = 'DetalleHorarios'
+
+    name = fields.Char()
+    dias = fields.Char(string='Dias', required=True)
+    marcacion_1 = fields.Float(string='Marcacion Entrada', required=False)
+    marcacion_2 = fields.Float(string='Marcacion Salida', required=False)
+    marcacion_3 = fields.Float(string='Marcacion Entrada', required=False)
+    marcacion_4 = fields.Float(string='Marcacion Salida', required=False)
+    horario_id = fields.Many2one(comodel_name='racetime.horarios', string='Horario', required=False)

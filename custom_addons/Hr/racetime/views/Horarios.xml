@@ -22,6 +22,8 @@
                             <field name="hora_fin" widget="float_time"/>
                             <field name="fin_descanso" widget="float_time"/>
                             <field name="dias" widget="dias_widget"/>
+
+
                         </group>
                         <field colspan="4" name="empleados_ids" nolabel="1"
                                context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"></field>

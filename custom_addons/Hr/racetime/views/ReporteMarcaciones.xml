@@ -82,7 +82,7 @@
                     <filter name="a_tiempo" string="A TIEMPO" domain="[('observacion','=','a_tiempo')]"/>
                     <filter name="group_empleado" context="{'group_by':'empleado_id'}"/>
                     <filter name="group_horario" context="{'group_by':'horario:month'}"/>
-                    <filter name="group_observacion" context="{'group_by':'observacion'}"/>
+                    <filter name="group_observacion" context="{'group_by':'observacion'}" domain="[('observacion','!=','feriado')]"/>
                 </search>
             </field>
         </record>

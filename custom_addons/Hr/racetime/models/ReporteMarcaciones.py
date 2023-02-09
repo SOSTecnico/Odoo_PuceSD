@@ -23,9 +23,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
             self.fecha_fin = datetime.now()
 
     def calculo_marcaciones(self):
-        # Día:1 - Aquí yaceran todas las ilusiones de tener un sistema perfecto para calcular las horas y marcaciones
-        # de ingreso de los empleados, se presentarán inconvenientes y ocurrirán errores pero ahí vamos, con fé
-        # que de todas formas toca hacerlo... se irá actualizando este mensaje conforme avanza el proyecto.
+        # Día:18 - No sé cómo pero ya ha evolucionado esto a tal punto de que ya se puede ver algo en los reportes,
+        # esperamos que siga así y que se termine pronto, no sé cuanto más podré resistir :c.
 
         # Empezamos con la fecha inicio
         fecha_ = self.fecha_inicio
@@ -61,12 +60,10 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
             while fecha_ <= self.fecha_fin:
                 es_feriado = False
-                for feriado in feriados:
-                    if fecha_ >= feriado.desde and fecha_ <= feriado.hasta:
+                for fer in feriados:
+                    if fecha_ >= fer.desde and fecha_ <= fer.hasta:
                         es_feriado = True
-
                 if not es_feriado:
-
                     if 'flexible' in horarios_empleado.mapped('tipo'):
                         pass
                     else:
@@ -87,10 +84,11 @@ class ReporteMarcacionesWizard(models.TransientModel):
                             marcaciones = self.calcular_tiempos(registros=registros, empleado=empleado, fecha=fecha_,
                                                                 permisos=permisos_del_empleado)
 
-                            self.registrar_marcaciones(marcaciones=marcaciones, empleado=empleado,
-                                                       fecha_inicio=self.fecha_inicio, fecha_fin=self.fecha_fin)
+                            self.registrar_marcaciones(marcaciones=marcaciones)
                 else:
                     # Aqui toca hacer un metodo para los feriados
+                    marcaciones = self.generar_registros_feriados(fecha=fecha_, empleado=empleado)
+                    self.registrar_marcaciones(marcaciones=marcaciones)
                     pass
                 fecha_ = fecha_ + timedelta(days=1)
             fecha_ = self.fecha_inicio
@@ -231,34 +229,49 @@ class ReporteMarcacionesWizard(models.TransientModel):
                 'horario': datetime.combine(fecha, (datetime.min + registros['horas'][0]).time()),
                 'observacion': observacion_1,
                 'empleado_id': empleado.id,
-                'diferencia': diferencia_1.total_seconds() / 60
+                'diferencia': diferencia_1.total_seconds() / 60,
+                'fecha': fecha
             },
             {
                 'marcacion_id': registros['marcaciones'][1].id if registros['marcaciones'][1] else False,
                 'horario': datetime.combine(fecha, (datetime.min + registros['horas'][1]).time()),
                 'observacion': observacion_2,
                 'empleado_id': empleado.id,
-                'diferencia': diferencia_2.total_seconds() / 60
+                'diferencia': diferencia_2.total_seconds() / 60,
+                'fecha': fecha
             },
             {
                 'marcacion_id': registros['marcaciones'][2].id if registros['marcaciones'][2] else False,
                 'horario': datetime.combine(fecha, (datetime.min + registros['horas'][2]).time()),
                 'observacion': observacion_3,
                 'empleado_id': empleado.id,
-                'diferencia': diferencia_3.total_seconds() / 60
+                'diferencia': diferencia_3.total_seconds() / 60,
+                'fecha': fecha
             },
             {
                 'marcacion_id': registros['marcaciones'][3].id if registros['marcaciones'][3] else False,
                 'horario': datetime.combine(fecha, (datetime.min + registros['horas'][3]).time()),
                 'observacion': observacion_4,
                 'empleado_id': empleado.id,
-                'diferencia': diferencia_4.total_seconds() / 60
+                'diferencia': diferencia_4.total_seconds() / 60,
+                'fecha': fecha
             },
         ]
 
-    def registrar_marcaciones(self, marcaciones, empleado, fecha_inicio, fecha_fin):
+    def registrar_marcaciones(self, marcaciones):
         for m in marcaciones:
             self.env['racetime.reporte_marcaciones'].create(m)
+
+    def generar_registros_feriados(self, fecha, empleado):
+
+        datos = {
+            'marcacion_id': False,
+            'horario': datetime(year=fecha.year, month=fecha.month, day=fecha.day, hour=5, minute=0, second=0),
+            'observacion': 'feriado',
+            'empleado_id': empleado.id,
+            'diferencia': timedelta(seconds=0).total_seconds() / 60
+        }
+        return [datos]
 
 
 class ReporteMarcaciones(models.Model):
@@ -270,18 +283,15 @@ class ReporteMarcaciones(models.Model):
     diferencia = fields.Float(string='Diferencia', required=False)
     observacion = fields.Selection(string='Observación', required=False,
                                    selection=[('atraso', 'ATRASO'), ('adelanto', 'ADELANTO'), ('exceso', 'EXCESO'),
-                                              ('a_tiempo', 'A TIEMPO'), ('sin_marcacion', 'SIN MARCACIÓN')], )
+                                              ('a_tiempo', 'A TIEMPO'), ('sin_marcacion', 'SIN MARCACIÓN'),
+                                              ('feriado', 'FERIADO')], )
 
     marcacion_tiempo = fields.Datetime(string='Marcación Empleado', required=False, related='marcacion_id.fecha_hora',
                                        store=True)
 
     horario = fields.Datetime(string='Horario', required=False)
 
-    def calcular_fecha(self):
-        for rec in self:
-            rec.fecha = rec.horario.date()
-
-    fecha = fields.Date(string='Fecha', required=False, compute='calcular_fecha', store=True)
+    fecha = fields.Date(string='Fecha', required=False)
 
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False)
 
