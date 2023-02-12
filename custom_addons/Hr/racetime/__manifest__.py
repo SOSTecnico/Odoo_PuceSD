@@ -42,6 +42,7 @@
         'views/Vacaciones.xml',
         'views/Horas.xml',
         'views/Config.xml',
+        'views/AsignacionHorario.xml',
         'views/Horarios.xml',
         'views/ReporteMarcaciones.xml',
         'views/DetalleMarcaciones.xml',

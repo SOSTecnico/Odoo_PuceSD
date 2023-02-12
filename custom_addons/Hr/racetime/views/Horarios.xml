@@ -12,22 +12,21 @@
                                 attrs="{'invisible':[('active','=',True)]}"></widget>
                         <group col="4">
                             <field name="name"/>
-                            <newline></newline>
-                            <field name="fecha_inicio"/>
-                            <field name="fecha_fin"/>
+<!--                            <newline></newline>-->
+<!--                            <field name="fecha_inicio"/>-->
+<!--                            <field name="fecha_fin"/>-->
                         </group>
-                        <h3>Detalle Horario</h3>
                         <group>
                             <field name="total_horas" invisible="1"/>
-                            <div>
+                            <div class="text-center">
                                 <label for="horas"></label>
-                                <h4>
+                                <h2>
                                     <field name="horas" widget="float_time"/>
-                                </h4>
+                                </h2>
                             </div>
                         </group>
                         <field name="detalle_horario_id"/>
-                        <field name="empleados_ids"  context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"/>
+<!--                        <field name="empleados_ids"  context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"/>-->
                         <field name="active" invisible="1"/>
                     </sheet>
                     <div class="oe_chatter">
@@ -45,6 +44,7 @@
                 <tree string="Horarios">
                     <field name="name"/>
                     <field name="horas"/>
+                    <field name="detalle_horario_id"/>
                 </tree>
             </field>
         </record>
@@ -90,7 +90,7 @@
             <field name="name">racetime.detalle_horarios_view_tree</field>
             <field name="model">racetime.detalle_horarios</field>
             <field name="arch" type="xml">
-                <tree string="racetime.detalle_horarios_tree">
+                <tree string="racetime.detalle_horarios_tree" editable="bottom">
                     <field name="marcacion_1" widget="float_time"/>
                     <field name="marcacion_2" widget="float_time"/>
                     <field name="marcacion_3" widget="float_time"/>

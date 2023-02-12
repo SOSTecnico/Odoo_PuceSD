@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="racetime.asigancion_horario_form_view" model="ir.ui.view">
+            <field name="name">racetime.asignacion_horario.form</field>
+            <field name="model">racetime.asignacion_horario</field>
+            <field name="arch" type="xml">
+                <form string="ModelTitle">
+                    <sheet>
+                        <group>
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_fin"/>
+                            <field name="horario_id"/>
+                            <field name="horas" widget="float_time"/>
+                            <field name="empleado_id"
+                                   context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="racetime.asigancion_horario_tree_view" model="ir.ui.view">
+            <field name="name">racetime.asignacion_horario.tree</field>
+            <field name="model">racetime.asignacion_horario</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="fecha_inicio"/>
+                    <field name="fecha_fin"/>
+                    <field name="empleado_id"/>
+                    <field name="horas"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="racetime.asigancion_horario_search_view" model="ir.ui.view">
+            <field name="name">racetime.asignacion_horario.search</field>
+            <field name="model">racetime.asignacion_horario</field>
+            <field name="arch" type="xml">
+                <search string="">
+                    <field name="empleado_id" string="Empleado"/>
+                    <filter name="group_empleado" string="Empleados" context="{'group_by':'empleado_id'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="racetime.asigancion_horario_act_window" model="ir.actions.act_window">
+            <field name="name">Asignación de Horarios</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.asignacion_horario</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_empleado':1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+
+        <record id="racetime.asignar_horario_inidividual_action" model="ir.actions.act_window">
+            <field name="name">Asignacion Horario Individual</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.asignacion_horario</field>
+            <field name="view_mode">form</field>
+            <field name="target">main</field>
+        </record>
+
+        <menuitem name="Asignación Horario" id="racetime.asigancion_horario_menu" parent="racetime.main_menu"/>
+
+        <menuitem sequence="3" name="Horarios Asignados" id="racetime.asignacion_horario_lista"
+                  parent="racetime.asigancion_horario_menu" action="racetime.asigancion_horario_act_window"/>
+
+        <menuitem sequence="1" name="Individual" id="racetime.asignacion_horarios_individual_menu"
+                  parent="racetime.asigancion_horario_menu" action="racetime.asignar_horario_inidividual_action"/>
+
+        <!--***************************************************************************-->
+        <!--ASIGNACION MÚLTIPLE-->
+        <record id="racetime.asignacion_multiple_view_form" model="ir.ui.view">
+            <field name="name">racetime.asignacion_multiple_view_form</field>
+            <field name="model">racetime.asignacion_horario_multiple</field>
+            <field name="arch" type="xml">
+                <form string="racetime.asignacion_multiple_form">
+                    <sheet>
+                        <group>
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_fin"/>
+                            <field name="horario_id"/>
+                        </group>
+                        <field name="empleados_ids"
+                               context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"/>
+                    </sheet>
+                    <footer>
+                        <button name="generar_horarios" string="GENERAR HORARIOS" type="object" class="oe_highlight"/>
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="racetime.asignacion_multiple_action" model="ir.actions.act_window">
+            <field name="name">Asignación Múltiple</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.asignacion_horario_multiple</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem sequence="2" name="Múltiple" id="racetime.asignacion_horarios_multiple_menu"
+                  parent="racetime.asigancion_horario_menu" action="racetime.asignacion_multiple_action"/>
+
+    </data>
+</odoo>

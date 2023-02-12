@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <data noupdate="1">
         <record id="racetime.dias_1" model="racetime.dias">
-            <field name="name">Lunes</field>
+            <field name="name">lunes</field>
         </record>
 
         <record id="racetime.dias_2" model="racetime.dias">
-            <field name="name">Martes</field>
+            <field name="name">martes</field>
         </record>
 
         <record id="racetime.dias_3" model="racetime.dias">
-            <field name="name">Miércoles</field>
+            <field name="name">miércoles</field>
         </record>
 
         <record id="racetime.dias_4" model="racetime.dias">
-            <field name="name">Jueves</field>
+            <field name="name">jueves</field>
         </record>
 
         <record id="racetime.dias_5" model="racetime.dias">
-            <field name="name">Viernes</field>
+            <field name="name">viernes</field>
         </record>
 
         <record id="racetime.dias_6" model="racetime.dias">
-            <field name="name">Sábado</field>
+            <field name="name">sábado</field>
         </record>
 
         <record id="racetime.dias_7" model="racetime.dias">
-            <field name="name">Domingo</field>
+            <field name="name">domingo</field>
         </record>
     </data>
 </odoo>

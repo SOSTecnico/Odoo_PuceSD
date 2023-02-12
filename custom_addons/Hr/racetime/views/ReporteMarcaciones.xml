@@ -80,9 +80,11 @@
                     <filter name="adelanto" string="ADELANTO" domain="[('observacion','=','adelanto')]"/>
                     <filter name="exceso" string="EXCESO" domain="[('observacion','=','exceso')]"/>
                     <filter name="a_tiempo" string="A TIEMPO" domain="[('observacion','=','a_tiempo')]"/>
+                    <filter name="no_aplica" string="NO APLICA" domain="[('observacion','=','no_aplica')]"/>
                     <filter name="group_empleado" context="{'group_by':'empleado_id'}"/>
                     <filter name="group_horario" context="{'group_by':'horario:month'}"/>
-                    <filter name="group_observacion" context="{'group_by':'observacion'}" domain="[('observacion','!=','feriado')]"/>
+                    <filter name="group_observacion" context="{'group_by':'observacion'}"
+                            domain="[('observacion','!=','feriado')]"/>
                 </search>
             </field>
         </record>
@@ -93,7 +95,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">racetime.reporte_marcaciones</field>
             <field name="context">
-                {'search_default_group_empleado':1,'search_default_group_horario':2,'search_default_group_observacion':3}
+                {'search_default_group_empleado':1,'search_default_group_horario':2,'search_default_group_observacion':3,'search_default_atrasos':4,'search_default_adelanto':5,'search_default_exceso':6,'search_default_a_tiempo':7}
             </field>
             <field name="view_mode">tree,form,graph,pivot</field>
         </record>

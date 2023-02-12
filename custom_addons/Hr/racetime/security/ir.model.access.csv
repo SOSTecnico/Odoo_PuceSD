@@ -12,3 +12,5 @@ access_racetime_reporte_marcaciones,racetime.reporte_marcaciones,model_racetime_
 access_racetime_reglas,racetime.reglas,model_racetime_reglas,racetime.group_admin,1,1,0,1
 access_racetime_detalle_horarios,racetime.detalle_horarios,model_racetime_detalle_horarios,racetime.group_admin,1,1,1,1
 access_racetime_dias,racetime.dias,model_racetime_dias,racetime.group_admin,1,0,0,0
+access_racetime_asignacion_horario,racetime.asignacion_horario,model_racetime_asignacion_horario,racetime.group_admin,1,1,1,1
+access_racetime_asignacion_horario_multiple,racetime.asignacion_horario_multiple,model_racetime_asignacion_horario_multiple,racetime.group_admin,1,1,1,1
