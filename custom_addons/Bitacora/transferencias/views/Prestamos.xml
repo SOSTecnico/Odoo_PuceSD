@@ -118,50 +118,69 @@
             <field name="subject">Notificación Préstamo de Equipos</field>
             <field name="auto_delete" eval="True"/>
             <field name="body_html" type="html">
-                <div>
+                <div style="width:50%">
+
                     Estimado Usuario,
-                    <t t-out="object.empleado_id.name"></t>
+                    <h3>
+                        <t t-out="object.empleado_id.name"></t>
+                    </h3>
                     <br/>
                     Mediante el presente correo se notifica que usted ha solicitado los siguientes equipos en calidad de
-                    préstamo.
-
-                    <table class="table table-sm">
-                        <thead class="thead-dark">
+                    préstamo:
+                    <br/>
+                    <table style=" border-collapse: collapse; border: 1px solid black; width:100%">
+                        <thead class="">
                             <tr>
-                                <th>Tipo</th>
-                                <th>Código</th>
-                                <th>Serie</th>
-                                <th>Estado</th>
-                                <th>Descripción Estado</th>
+                                <th style="border: 1px solid black;">Tipo</th>
+                                <th style="border: 1px solid black;">Código</th>
+                                <th style="border: 1px solid black;">Serie</th>
+                                <th style="border: 1px solid black;">Estado</th>
+                                <th style="border: 1px solid black;">Descripción Estado</th>
                             </tr>
                         </thead>
                         <tbody>
                             <t t-foreach="object.activos_ids" t-as="activo">
                                 <tr>
-                                    <td>
+                                    <td style="border: 1px solid black; padding: .8em;">
                                         <t t-out="activo.tipo_activo_id.name"></t>
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black; padding: .8em;">
                                         <t t-out="activo.codigo"></t>
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black; padding: .8em;">
                                         <t t-out="activo.serie"></t>
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black; padding: .8em;">
                                         <span t-out="activo.estado"></span>
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black; padding: .8em;">
                                         <span t-out="activo.descripcion_estado"></span>
                                     </td>
                                 </tr>
                             </t>
                         </tbody>
                     </table>
+                    <br/>
+                    <div style="text-align: justify;">
+                    <p>Si usted no ha realizado ninguna solicitud de préstamos o la información aquí presentada y
+                        detallada no corresponde a los equipos que ha solitado por favor comuníquese inmediatamente con
+                        el Departamento de Tecnologías.
+                    </p>
+                    <p>En caso de no realizar ningún reclamo en las próximas 24 horas a partir de la generación de este
+                        correo se da por entendido que usted ha aceptado la solicitud de préstamo con los bienes
+                        descritos.
+                    </p>
 
                     <h3>Claúsula de Compromiso</h3>
-                    <p>
-                        bla, bla, bla... no sé qué poner acolite para ver que le ponemos aquí.
+                    <p style="text-decoration:underline; font-weight: bold">
+                        Los bienes aquí descritos se encuentran bajo la responsabilidad de la(s) personas que solicitan.
+                        Se le entrega en condiciones de funcionamiento a quien recibe, por tanto, cualquier alteración,
+                        daño o pérdida de estos será imputable siempre y cuando sea distinta al deterioro normal por
+                        uso.
+                        Esta responsabilidad es efectiva hasta el momento de la devolución de los equipos en condiciones
+                        normales y entrega del documento correspondiente.
                     </p>
+                    </div>
 
                 </div>
             </field>
@@ -173,56 +192,73 @@
             <field name="name">Transferencias: Notificación de Préstamo Resuelto</field>
             <field name="model_id" ref="model_transferencias_prestamos"/>
             <field name="email_to">{{object.correo_empleado}}</field>
-            <field name="email_from">cdti@pucesd.edu.ec</field>
+            <field name="email_from">odoo@pucesd.edu.ec</field>
             <field name="reply_to">cdti@pucesd.edu.ec</field>
-            <field name="subject">Notificación Préstamo de Equipos Resuelto</field>
+            <field name="subject">Notificación DEVOLUCIÓN de Préstamo de Equipos</field>
             <field name="auto_delete" eval="True"/>
             <field name="body_html" type="html">
-                <div>
+                <div style="width:50%">
                     Estimado Usuario,
-                    <t t-out="object.empleado_id.name"></t>
+                    <h3>
+                        <t t-out="object.empleado_id.name"></t>
+                    </h3>
                     <br/>
-                    Mediante el presente correo se notifica que usted ha devuelto los siguientes equipos en calidad de
-                    préstamo.
-
-                    <table class="table table-sm">
-                        <thead class="thead-dark">
+                    Mediante el presente correo se notifica que usted ha <strong>DEVUELTO</strong> los siguientes equipos en calidad de
+                    préstamo:
+                    <br/>
+                    <table style=" border-collapse: collapse; border: 1px solid black; width:100%">
+                        <thead class="">
                             <tr>
-                                <th>Tipo</th>
-                                <th>Código</th>
-                                <th>Serie</th>
-                                <th>Estado</th>
-                                <th>Descripción Estado</th>
+                                <th style="border: 1px solid black;">Tipo</th>
+                                <th style="border: 1px solid black;">Código</th>
+                                <th style="border: 1px solid black;">Serie</th>
+                                <th style="border: 1px solid black;">Estado</th>
+                                <th style="border: 1px solid black;">Descripción Estado</th>
                             </tr>
                         </thead>
                         <tbody>
                             <t t-foreach="object.activos_ids" t-as="activo">
                                 <tr>
-                                    <td>
+                                    <td style="border: 1px solid black; padding: .8em;">
                                         <t t-out="activo.tipo_activo_id.name"></t>
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black; padding: .8em;">
                                         <t t-out="activo.codigo"></t>
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black; padding: .8em;">
                                         <t t-out="activo.serie"></t>
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black; padding: .8em;">
                                         <span t-out="activo.estado"></span>
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black; padding: .8em;">
                                         <span t-out="activo.descripcion_estado"></span>
                                     </td>
                                 </tr>
                             </t>
                         </tbody>
                     </table>
-
-                    <h3>Claúsula de Compromiso</h3>
-                    <p>
-                        bla, bla, bla... no sé qué poner acolite para ver que le ponemos aquí.
+                    <br/>
+                    <div style="text-align: justify;">
+                    <p>Si usted no ha realizado ninguna solicitud de préstamos o la información aquí presentada y
+                        detallada no corresponde a los equipos que ha devuelto por favor comuníquese inmediatamente con
+                        el Departamento de Tecnologías.
+                    </p>
+                    <p>En caso de no realizar ningún reclamo en las próximas 24 horas a partir de la generación de este
+                        correo se da por entendido que usted ha aceptado el informe de devolución de préstamo con los bienes
+                        descritos.
                     </p>
 
+                    <h3>Claúsula de Compromiso</h3>
+                    <p style="text-decoration:underline; font-weight: bold">
+                        Los bienes aquí descritos se encuentran bajo la responsabilidad de la(s) personas que solicitan.
+                        Se le entrega en condiciones de funcionamiento a quien recibe, por tanto, cualquier alteración,
+                        daño o pérdida de estos será imputable siempre y cuando sea distinta al deterioro normal por
+                        uso.
+                        Esta responsabilidad es efectiva hasta el momento de la devolución de los equipos en condiciones
+                        normales y entrega del documento correspondiente.
+                    </p>
+                    </div>
                 </div>
             </field>
         </record>
