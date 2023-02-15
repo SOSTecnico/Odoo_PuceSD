@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+       <record id="rolpago.roles_form" model="ir.ui.view">
+           <field name="name">roles form</field>
+           <field name="model">rolpago.roles</field>
+           <field name="arch" type="xml">
+               <form string="rolpago.roles_form_form">
+                   <sheet>
+                       <group>
+                           <field name="periodo"/>
+                           <field name="empleado_id"/>
+                           <field name="rubros_id"/>
+
+                       </group>
+                   </sheet>
+               </form>
+           </field>
+       </record>
+
+<!--        <record id="ModelName_tree_view" model="ir.ui.view">-->
+<!--            <field name="name">ProjectName.ModelName.tree</field>-->
+<!--            <field name="model">ProjectName.ModelName</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree string="ModelTitle">-->
+<!--                    <field name="create_date"/>-->
+<!--                    <field name="example_field"/>-->
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="ModelName_search_view" model="ir.ui.view">-->
+<!--            <field name="name">ProjectName.ModelName.search</field>-->
+<!--            <field name="model">ProjectName.ModelName</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <search string="ModelTitle">-->
+<!--                    <group expand="1" string="Group By">-->
+<!--                        <filter string="Example Field" name="example_field" domain="[]"-->
+<!--                                context="{'group_by':'example_field'}"/>-->
+<!--                    </group>-->
+<!--                </search>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="rolpago.roles_accion" model="ir.actions.act_window">
+            <field name="name">ROLES</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rolpago.roles</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="roles" id="rolpago.roles_menu_principal" />
+        <menuitem name="roles" id="rolpago.roles_menu"  parent="rolpago.roles_menu_principal" action="rolpago.roles_accion"/>
+
+    </data>
+</odoo>

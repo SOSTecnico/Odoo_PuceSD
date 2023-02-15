@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.module.category" id="rolpago.rolpago_category">
+            <field name="name">PERMISOS ROLPAGO</field>
+<!--            <field name="sequence">1</field>-->
+        </record>
+
+        <record id="rolpago.rolpago_usuarios" model="res.groups">
+            <field name="name">USUARIOS</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="rolpago.rolpago_category"/>
+        </record>
+
+        <record id="rolpago.rolpago_gestor" model="res.groups">
+            <field name="name">GESTORES</field>
+            <field name="category_id" ref="rolpago.rolpago_category"/>
+            <field name="implied_ids" eval="[(4, ref('rolpago.rolpago_usuarios'))]"/>
+        </record>
+
+                <record id="rolpago.rolpago_administrador" model="res.groups">
+            <field name="name">ADMINISTRADOR</field>
+            <field name="category_id" ref="rolpago.rolpago_category"/>
+            <field name="implied_ids" eval="[(4, ref('rolpago.rolpago_gestor'))]"/>
+        </record>
+
+    </data>
+</odoo>

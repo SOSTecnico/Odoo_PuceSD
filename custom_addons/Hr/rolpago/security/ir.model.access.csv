@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rolpago_rubros,rolpago.permiso_rubros,model_rolpago_rubros,rolpago.rolpago_administrador,1,1,1,1
+access_rolpago_roles,rolpago.permiso_roles,model_rolpago_roles,rolpago.rolpago_administrador,1,1,1,1
+access_rolpago_descripcion_rubros,rolpago.permiso_descripcion_rubros,model_rolpago_descripcion_rubros,rolpago.rolpago_administrador,1,1,1,1
+
