@@ -23,8 +23,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
             self.fecha_fin = datetime.now()
 
     def calculo_marcaciones(self):
-        # Día:18 - No sé cómo pero ya ha evolucionado esto a tal punto de que ya se puede ver algo en los reportes,
-        # esperamos que siga así y que se termine pronto, no sé cuanto más podré resistir :c.
+        # Día:25 - Ya basta freezeeer, ya manden a las casas...
 
         # Empezamos con la fecha inicio
         fecha_ = self.fecha_inicio
@@ -36,7 +35,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
             raise ValidationError('Para realizar los cálculos por favor debe existir al menos un horario disponible')
 
         for empleado in self.empleados_ids:
-            print("-------------EMPLEADO---------------", empleado.name)
+            print("-------------EMPLEADO---------------")
+            print(empleado.name)
             # Horarios disponibles de cada empleado
             horarios_empleado = horarios.filtered_domain([('empleado_id', '=', empleado.id)])
 
@@ -57,21 +57,36 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
             # PERMISOS
             permisos_del_empleado = self.env['racetime.permisos'].search(
-                [('empleado_id', '=', empleado.id), ('desde', '>=', self.fecha_inicio)])
+                [('empleado_id', '=', empleado.id), ('desde_fecha', '>=', self.fecha_inicio)])
             horario_activo = None
             while fecha_ <= self.fecha_fin:
                 es_feriado = False
+
+                # Calculo de Feriados
                 for fer in feriados:
                     if fecha_ >= fer.desde and fecha_ <= fer.hasta:
                         es_feriado = True
                 if not es_feriado:
+                    # Calculo para los permisos
+                    permiso = permisos_del_empleado.filtered_domain(
+                        [('desde_fecha', '<=', fecha_), ('hasta_fecha', '>=', fecha_)])
+                    if permiso.estado == 'aprobado':
+                        if permiso.todo_el_dia:
+                            marcaciones = self.generar_registros_en_blanco(fecha=fecha_, empleado=empleado,
+                                                                           observacion='permiso', permiso=permiso)
+                            self.registrar_marcaciones(marcaciones=marcaciones)
+                            fecha_ = fecha_ + timedelta(days=1)
+                            continue
+
                     for h in horarios_empleado.horario_id.detalle_horario_id:
                         if fecha_.strftime("%A") in h.dias.mapped('name'):
                             horario_activo = h
-                            marcaciones_del_dia = marcaciones_empleado.filtered(lambda f: f.fecha_hora.date() == fecha_)
+                            marcaciones_del_dia = marcaciones_empleado.filtered(
+                                lambda f: f.fecha_hora.date() == fecha_)
                             registros = self.calcular_marcaciones(marcaciones=marcaciones_del_dia,
                                                                   horario=horario_activo)
-                            marcaciones = self.calcular_tiempos(registros=registros, empleado=empleado, fecha=fecha_,
+                            marcaciones = self.calcular_tiempos(registros=registros, empleado=empleado,
+                                                                fecha=fecha_,
                                                                 permisos=permisos_del_empleado)
 
                             self.registrar_marcaciones(marcaciones=marcaciones)
@@ -81,42 +96,6 @@ class ReporteMarcacionesWizard(models.TransientModel):
                                                                            observacion='no_aplica')
                             self.registrar_marcaciones(marcaciones=marcaciones)
                             break
-
-                        # for dia in detalle_horario.dias:
-                        #     if fecha_.strftime("%A") in detalle_horario.dias.mapped('name'):
-                        #         pass
-                        #     else:
-                        #         print(fecha_)
-                        #         marcaciones = self.generar_registros_en_blanco(fecha=fecha_, empleado=empleado,
-                        #                                                        observacion='no_aplica')
-                        #         self.registrar_marcaciones(marcaciones=marcaciones)
-
-                    # if fecha_.strftime("%A") in horarios_empleado.dias.mapped('name'):
-                    #     marcaciones_del_dia = marcaciones_empleado.filtered(lambda f: f.fecha_hora.date() == fecha_)
-                    #
-                    # else:
-                    #     marcaciones = self.generar_registros_en_blanco(fecha=fecha_, empleado=empleado,
-                    #                                                    observacion='fin_semana')
-                    #     self.registrar_marcaciones(marcaciones=marcaciones)
-
-                    # Variable para guardar el horario activo y hacer comparaciones con las marcaciones
-                    # h_activo = None
-                    # for horario in horarios_empleado:
-                    #     if fecha_ >= horario.fecha_inicio and fecha_ <= horario.fecha_fin:
-                    #         h_activo = horario
-
-                    # if not h_activo.dias:
-                    #     h_activo.dias = []
-
-                    # if fecha_.strftime("%A") in h_activo.dias:
-                    #     marcaciones_del_dia = marcaciones_empleado.filtered(lambda f: f.fecha_hora.date() == fecha_)
-                    #
-                    #     registros = self.calcular_marcaciones(marcaciones=marcaciones_del_dia, horario=h_activo)
-                    #
-                    #     marcaciones = self.calcular_tiempos(registros=registros, empleado=empleado, fecha=fecha_,
-                    #                                         permisos=permisos_del_empleado)
-                    #
-                    #     self.registrar_marcaciones(marcaciones=marcaciones)
                 else:
                     # Aqui toca hacer un metodo para los feriados
                     marcaciones = self.generar_registros_en_blanco(fecha=fecha_, empleado=empleado,
@@ -187,7 +166,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
         return {
             'marcaciones': [marcacion1, marcacion2, marcacion3, marcacion4],
-            'horas': [N1, N2 , N3 , N4],
+            'horas': [N1, N2, N3, N4],
         }
 
     def calcular_tiempos(self, registros, empleado, fecha, permisos):
@@ -302,7 +281,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
         for m in marcaciones:
             self.env['racetime.reporte_marcaciones'].create(m)
 
-    def generar_registros_en_blanco(self, fecha, empleado, observacion):
+    def generar_registros_en_blanco(self, fecha, empleado, observacion, permiso=None):
 
         datos = {
             'marcacion_id': False,
@@ -310,7 +289,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
             'observacion': observacion,
             'fecha': fecha,
             'empleado_id': empleado.id,
-            'diferencia': timedelta(seconds=0).total_seconds() / 60
+            'diferencia': timedelta(seconds=0).total_seconds() / 60,
+            'permiso_id': permiso.id if permiso else None
         }
         return [datos]
 
@@ -325,7 +305,8 @@ class ReporteMarcaciones(models.Model):
     observacion = fields.Selection(string='Observación', required=False,
                                    selection=[('atraso', 'ATRASO'), ('adelanto', 'ADELANTO'), ('exceso', 'EXCESO'),
                                               ('a_tiempo', 'A TIEMPO'), ('sin_marcacion', 'SIN MARCACIÓN'),
-                                              ('feriado', 'FERIADO'), ('no_aplica', 'NO APLICA')], )
+                                              ('feriado', 'FERIADO'), ('no_aplica', 'NO APLICA'),
+                                              ('permiso', 'PERMISO')], )
 
     marcacion_tiempo = fields.Datetime(string='Marcación Empleado', required=False, related='marcacion_id.fecha_hora',
                                        store=True)

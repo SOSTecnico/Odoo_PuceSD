@@ -15,8 +15,8 @@
                             <tree create="false" decoration-success="estado=='aprobado'"
                                   decoration-danger="estado=='pendiente'">
                                 <field name="estado" invisible="1"/>
-                                <field name="desde"/>
-                                <field name="hasta"/>
+                                <field name="desde_fecha"/>
+                                <field name="hasta_fecha"/>
                                 <field name="tipo_permiso_id"/>
                                 <field name="descripcion"/>
                                 <field name="aprobado_por_id" widget="many2many_tags"/>

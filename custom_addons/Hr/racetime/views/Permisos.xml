@@ -12,16 +12,21 @@
                     </header>
                     <sheet>
                         <widget name="web_ribbon" title="Archivado" bg_color="bg-danger"
-                                attrs="{'invisible':[('active','=',True)]}"></widget>
+                                attrs="{'invisible':[('active','=',True)]}"/>
                         <group>
                             <field name="active" invisible="1"/>
                             <field name="empleado_id" options="{'create':false,'m2o_dialog':false}"/>
+                            <field name="desde_fecha"/>
+                            <field name="hasta_fecha"/>
+                            <field name="todo_el_dia" widget="boolean_toggle"/>
+                            <field name="desde_hora" attrs="{'invisible':[('todo_el_dia','=',True)]}"
+                                   widget="float_time" required="1"/>
+                            <field name="hasta_hora" required="1" attrs="{'invisible':[('todo_el_dia','=',True)]}"
+                                   widget="float_time"/>
                             <field name="tipo_permiso_id" options="{'create':false,'create_edit':true}"/>
                             <field name="descripcion"/>
-                            <field name="desde" options="{'datepicker':{'format':'DD/MM/Y HH:mm:00'}}"/>
-                            <field name="hasta" options="{'datepicker':{'format':'DD/MM/Y HH:mm:00'}}"/>
-                            <field name="aprobado_por_id" attrs="{'required':[('estado','=','aprobado')]}"
-                                   options="{'create':false,'m2o_dialog':false}" widget="many2many_tags"/>
+                            <field name="aprobado_por_id" options="{'create':false,'m2o_dialog':false}"
+                                   widget="many2many_tags"/>
                         </group>
                         <notebook>
                             <page string="Documento" name="documento_page">
@@ -44,11 +49,12 @@
             <field name="name">racetime.permisos.tree</field>
             <field name="model">racetime.permisos</field>
             <field name="arch" type="xml">
-                <tree default_order="desde desc" string="Permisos" sample="1" decoration-success="estado=='aprobado'"
+                <tree default_order="desde_fecha desc" string="Permisos" sample="1"
+                      decoration-success="estado=='aprobado'"
                       decoration-danger="estado=='pendiente'">
                     <field name="empleado_id"/>
-                    <field name="desde"/>
-                    <field name="hasta"/>
+                    <field name="desde_fecha"/>
+                    <field name="hasta_fecha"/>
                     <field name="tipo_permiso_id"/>
                     <field name="descripcion"/>
                     <field name="estado" invisible="1"/>
@@ -62,7 +68,7 @@
             <field name="model">racetime.permisos</field>
             <field name="arch" type="xml">
                 <search string="Permisos">
-                    <field name="empleado_id" />
+                    <field name="empleado_id"/>
                     <filter name="permisos_archivados" string="Archivados" domain="[('active','=',False)]"/>
                     <filter name="tipo_permiso" string="Tipo de Permiso" context="{'group_by':'tipo_permiso_id'}"/>
                     <filter name="empleado" string="Empleado" context="{'group_by':'empleado_id'}"/>
@@ -82,7 +88,7 @@
             </field>
         </record>
 
-        <menuitem name="Permisos"  sequence="20" id="racetime.permisos_menu" parent="racetime.main_menu"
+        <menuitem name="Permisos" sequence="20" id="racetime.permisos_menu" parent="racetime.main_menu"
                   action="racetime.permisos_act_window"/>
 
     </data>
