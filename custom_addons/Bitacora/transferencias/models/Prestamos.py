@@ -46,7 +46,5 @@ class Prestamos(models.Model):
 
     def notificar_prestamo(self):
         template = self.env.ref('transferencias.prestamo_email_template')
-        print("ss")
         for rec in self:
-            print("11")
             template.send_mail(rec.id, force_send=True)
