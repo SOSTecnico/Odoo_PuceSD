@@ -21,8 +21,9 @@
                             <group>
                                 <field name="fecha_inicio"/>
                                 <field name="fecha_fin"/>
-                                <field name="evento_id" options="{'create':false,'create_edit':true,'m2o_dialog':false}"></field>
-                                <field name="responsable_id" />
+                                <field name="evento_id"
+                                       options="{'create':false,'create_edit':true,'m2o_dialog':false}"></field>
+                                <field name="responsable_id"/>
                                 <field name="recurso_id"/>
                                 <field name="ambiente"/>
                             </group>
@@ -89,8 +90,10 @@
             </field>
         </record>
 
-        <menuitem sequence="1" name="Reservas" id="reservaciones.reservas_menu" parent="reservaciones.main_menu"
-                  action="reservaciones.reservas_act_window"/>
+        <menuitem sequence="1" name="Reservas" id="reservaciones.reservas_menu" parent="reservaciones.main_menu"/>
+
+        <menuitem sequence="1" name="Reservaciones" id="reservaciones.reservaciones_menu"
+                  parent="reservaciones.reservas_menu" action="reservaciones.reservas_act_window"></menuitem>
 
         <!--DETALLE DE RESERVAS-->
 
@@ -134,7 +137,6 @@
         </record>
 
 
-
         <record id="reservaciones.detalle_reserva_tree_view" model="ir.ui.view">
             <field name="name">reservaciones.detalle_reserva.tree</field>
             <field name="model">reservaciones.detalle_reserva</field>
@@ -175,7 +177,7 @@
         </record>
 
         <menuitem sequence="2" name="Detalle Reservas" id="reservaciones.detalle_reservas_menu"
-                  parent="reservaciones.main_menu"
+                  parent="reservaciones.reservas_menu"
                   action="reservaciones.detalle_reserva_act_window"/>
 
     </data>

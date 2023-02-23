@@ -76,8 +76,11 @@
         </record>
 
         <menuitem name="Requerimientos" id="reservaciones.requerimientos_menu" parent="reservaciones.main_menu"
-                  action="reservaciones.requerimientos_act_window"/>
+        />
+        <menuitem sequence="1" id="reservaciones.requerimientos_lista" name="Requerimientos"
+                  parent="reservaciones.requerimientos_menu" action="reservaciones.requerimientos_act_window">
 
+        </menuitem>
         <!--DETALLE DE REQUERIMIENTOS -->
 
         <record id="reservaciones.detalle_requerimientos_view_form" model="ir.ui.view">
@@ -101,7 +104,8 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="reservaciones.detalle_req_menu" name="Detalle de Requerimientos" parent="reservaciones.main_menu"
+        <menuitem id="reservaciones.detalle_req_menu" name="Detalle de Requerimientos"
+                  parent="reservaciones.requerimientos_menu"
                   action="reservaciones.detalle_req_action"/>
 
     </data>

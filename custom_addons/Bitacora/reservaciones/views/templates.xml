@@ -1,24 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-<!--
-        <template id="listing">
-          <ul>
-            <li t-foreach="objects" t-as="object">
-              <a t-attf-href="#{ root }/objects/#{ object.id }">
-                <t t-esc="object.display_name"/>
-              </a>
-            </li>
-          </ul>
-        </template>
-        <template id="object">
-          <h1><t t-esc="object.display_name"/></h1>
-          <dl>
-            <t t-foreach="object._fields" t-as="field">
-              <dt><t t-esc="field"/></dt>
-              <dd><t t-esc="object[field]"/></dd>
+        <template id="reservaciones.generador_codigo_template">
+            <t t-call="website.layout">
+                <div class="container mt-4">
+                    <div class="row">
+                        <div class="col">
+                            <form action="/laboratorios/generar_codigo" method="POST">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <p>Para generar un código de registro favor ingresar su correo electrónico.</p>
+                                <t t-if="qr">
+                                    <img t-attf-src="data:image/jpeg;base64,{{qr_code}}"/>
+                                </t>
+                                <div class="form-group">
+                                    <label>Correo Electrónico</label>
+                                    <input required="required" name="email" type="email" class="form-control"
+                                           autocomplete="off"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Laboratorio</label>
+                                    <select required="required" class="form-control" name="laboratorio">
+                                        <option disabled="disabled" selected="selected">Seleccione uno...</option>
+                                        <option value="I">Sala de Cómputo I</option>
+                                        <option value="II">Sala de Cómputo II</option>
+                                        <option value="III">Sala de Cómputo III</option>
+                                        <option value="V">Sala de Cómputo V</option>
+                                        <option value="VI">Sala de Cómputo VI</option>
+                                        <option value="VII">Sala de Cómputo VII</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn-block btn btn-primary">GENERAR</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
             </t>
-          </dl>
+
         </template>
--->
+
+        <record id="reservaciones.notificacion_qr_template" model="mail.template">
+            <field name="name">Creación de Código QR: Notificación</field>
+            <field name="model_id" ref="model_reservaciones_codigo_qr"/>
+            <field name="email_to">{{object.usuario_id.email}}</field>
+            <field name="reply_to">cdti@pucesd.edu.ec</field>
+            <field name="subject">Notificación Salas de Cómputo</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <div style="width:50%">
+                    se ha generado codigo qr
+                    <div>
+                         <img t-attf-src="data:image/jpeg;base64,{{object.codigo_qr}}"/>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+
     </data>
 </odoo>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="reservaciones.ingresos_form_view" model="ir.ui.view">
+            <field name="name">reservaciones.ingresos.form</field>
+            <field name="model">reservaciones.ingresos</field>
+            <field name="arch" type="xml">
+                <form string="Ingresos">
+                    <sheet>
+                        <group>
+                            <div>
+                                <label for="usuario_id"></label>
+                                <h1>
+                                    <field name="usuario_id"/>
+                                </h1>
+                            </div>
+                            <newline></newline>
+                            <div>
+                                <label for="fecha"></label>
+                                <h1>
+                                    <field name="fecha"/>
+                                </h1>
+                            </div>
+                            <field name="nombres"/>
+                            <field name="apellidos"/>
+                            <field name="cedula"/>
+                            <field name="email"/>
+                            <field name="carrera"/>
+                            <field name="laboratorio"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="reservaciones.ingresos_tree_view" model="ir.ui.view">
+            <field name="name">reservaciones.ingresos.tree</field>
+            <field name="model">reservaciones.ingresos</field>
+            <field name="arch" type="xml">
+                <tree string="Ingresos" default_order="fecha desc">
+                    <field name="fecha"/>
+                    <field name="usuario_id"/>
+                    <field name="laboratorio"/>
+                    <field name="carrera"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="reservaciones.ingresos_search_view" model="ir.ui.view">
+            <field name="name">reservaciones.ingresos.search</field>
+            <field name="model">reservaciones.ingresos</field>
+            <field name="arch" type="xml">
+                <search string="Ingresos">
+                    <field name="name"/>
+                    <field name="carrera"/>
+                    <field name="carrera" string="Carrera" context="{'group_by':'carrera'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="reservaciones.ingresos_view_graph" model="ir.ui.view">
+            <field name="name">reservaciones.ingresos.graph.view</field>
+            <field name="model">reservaciones.ingresos</field>
+            <field name="arch" type="xml">
+                <graph>
+                    <field name="name"/>
+                    <field name="fecha"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="reservaciones.ingresos_act_window" model="ir.actions.act_window">
+            <field name="name">Ingresos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reservaciones.ingresos</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Ingresos.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Ingresos" id="reservaciones.ingresos_menu" parent="reservaciones.laboratorios_menu"
+                  action="reservaciones.ingresos_act_window"/>
+
+        <record model="ir.actions.act_url" id="reservaciones.action_generar_qr">
+            <field name="name">Enlace a Generar Código QR</field>
+            <field name="url">/laboratorios</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="reservaciones.generar_qr" parent="reservaciones.laboratorios_menu" name="Generar QR"
+                  action="reservaciones.action_generar_qr"></menuitem>
+
+
+    </data>
+</odoo>

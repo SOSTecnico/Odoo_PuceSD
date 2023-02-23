@@ -5,3 +5,5 @@ from . import eventos
 from . import requerimientos
 from . import recursos
 from . import reservas
+from . import QRCodigo
+from . import Laboratorios

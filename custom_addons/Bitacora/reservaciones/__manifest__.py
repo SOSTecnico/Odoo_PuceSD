@@ -38,6 +38,9 @@
         'views/Recursos.xml',
         'views/Requerimientos.xml',
         'views/Reservas.xml',
+        'views/Usuarios.xml',
+        'views/Ingresos.xml',
+        'views/templates.xml',
 
     ],
     # only loaded in demonstration mode
