@@ -182,6 +182,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
         marprevper = [marcacion1, marcacion2, marcacion3, marcacion4, marcacion5, marcacion6]
 
+
         #OPTIMIZACION AGREGAR PERMISOS PORQUE ENTRE PERMISOS NO PODRÍA HABER MARCACIONES
         rangoperini = 0
         rangoperfin = 0
@@ -202,8 +203,18 @@ class ReporteMarcacionesWizard(models.TransientModel):
         vueltas = diccionarioper[str(rangoperfin)] - diccionarioper[str(rangoperini)]
 
         for y in range(vueltas+1):
-            marprevper[diccionarioper[str(rangoperini)]+cont]={"P":marprevper[diccionarioper[str(rangoperini)]+cont]}
-            cont = cont+1
+            if y is not False:
+                marprevper[diccionarioper[str(rangoperini)]+cont]={"P":marprevper[diccionarioper[str(rangoperini)]+cont]}
+                cont = cont+1
+            else:
+                marprevper[diccionarioper[str(rangoperini)] + cont]={"P", False}
+
+        for o in marprevper:
+            if o is not False:
+                if "P" in o:
+                    print(o,"permiso")
+                else:
+                    print(o,"marcacion")
 
         return {
             'marcaciones': [marcacion1, marcacion2, marcacion3, marcacion4, marcacion5, marcacion6],
