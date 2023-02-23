@@ -70,6 +70,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
                     # Calculo para los permisos
                     permiso = permisos_del_empleado.filtered_domain(
                         [('desde_fecha', '<=', fecha_), ('hasta_fecha', '>=', fecha_)])
+
+                    # primer caso dia completo
                     if permiso.estado == 'aprobado':
                         if permiso.todo_el_dia:
                             marcaciones = self.generar_registros_en_blanco(fecha=fecha_, empleado=empleado,
@@ -84,10 +86,12 @@ class ReporteMarcacionesWizard(models.TransientModel):
                             marcaciones_del_dia = marcaciones_empleado.filtered(
                                 lambda f: f.fecha_hora.date() == fecha_)
                             registros = self.calcular_marcaciones(marcaciones=marcaciones_del_dia,
-                                                                  horario=horario_activo)
+                                                                  horario=horario_activo, permisos=permiso)
                             marcaciones = self.calcular_tiempos(registros=registros, empleado=empleado,
                                                                 fecha=fecha_,
                                                                 permisos=permisos_del_empleado)
+                            print(marcaciones)
+                            # permisos por intervalo de hora
 
                             self.registrar_marcaciones(marcaciones=marcaciones)
                             break
@@ -104,7 +108,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
                 fecha_ = fecha_ + timedelta(days=1)
             fecha_ = self.fecha_inicio
 
-        # raise ValidationError('posi')
+        raise ValidationError('posi')
 
         return {
             'type': 'tree',
@@ -118,55 +122,93 @@ class ReporteMarcacionesWizard(models.TransientModel):
         }
 
     # ESTE CÁLCULO LO HIZO MIGUEL PERO EN PHP, se intenta pasarlo a python
-    def calcular_marcaciones(self, marcaciones, horario):
+    # este sistema siempre será NEMESIS
+    def calcular_marcaciones(self, marcaciones, horario, permisos):
         N1 = timedelta(hours=(horario.marcacion_1 + 5))
         N2 = timedelta(hours=(horario.marcacion_2 + 5))
         N3 = timedelta(hours=(horario.marcacion_3 + 5))
         N4 = timedelta(hours=(horario.marcacion_4 + 5))
+        P1 = timedelta(hours=(permisos.desde_hora + 5))
+        P2 = timedelta(hours=(permisos.hasta_hora + 5))
 
-        pint = (N2 - N1) / 2
-        nint1 = N1 + pint
-        nint2 = nint1 + pint
+        horarioypermiso = []
 
-        pint2 = (N3 - N2) / 2
-        nint3 = N2 + pint2
-        nint4 = nint3 + pint2
+        HORARIO = [N1, N2, N3, N4, P1, P2]
+        HORARIO = sorted(HORARIO)
 
-        pint3 = (N4 - N3) / 2
-        nint5 = N3 + pint3
-        nint6 = nint5 + pint3
+        for i in range(len(HORARIO) - 1):
+            pint = (HORARIO[i + 1] - HORARIO[i]) / 2
+            nint1 = HORARIO[i] + pint
+            nint2 = nint1 + pint
+            horarioypermiso.append(nint1)
+            horarioypermiso.append(nint2)
 
+        horarioypermiso.insert(0, N1)
         marcacion1 = False
         marcacion2 = False
         marcacion3 = False
         marcacion4 = False
-
-        interhorarios = [N1, nint1, nint2, nint3, nint4, nint5, nint6]
+        marcacion5 = False
+        marcacion6 = False
 
         for m in marcaciones:
             value = timedelta(hours=m.fecha_hora.time().hour, minutes=m.fecha_hora.time().minute,
                               seconds=m.fecha_hora.time().second)
 
-            if value <= interhorarios[0]:
+            if value <= horarioypermiso[0]:
                 marcacion1 = m
-            elif value > interhorarios[0] and value <= interhorarios[1]:
+            elif value > horarioypermiso[0] and value <= horarioypermiso[1]:
                 marcacion1 = m
-            elif value > interhorarios[1] and value <= interhorarios[2]:
+            elif value > horarioypermiso[1] and value <= horarioypermiso[2]:
                 marcacion2 = m
-            elif value > interhorarios[2] and value <= interhorarios[3]:
+            elif value > horarioypermiso[2] and value <= horarioypermiso[3]:
                 marcacion2 = m
-            elif value > interhorarios[3] and value <= interhorarios[4]:
+            elif value > horarioypermiso[3] and value <= horarioypermiso[4]:
                 marcacion3 = m
-            elif value > interhorarios[4] and value <= interhorarios[5]:
+            elif value > horarioypermiso[4] and value <= horarioypermiso[5]:
                 marcacion3 = m
-            elif value > interhorarios[5] and value <= interhorarios[6]:
+            elif value > horarioypermiso[5] and value <= horarioypermiso[6]:
                 marcacion4 = m
-            elif value > interhorarios[6]:
+            elif value > horarioypermiso[6] and value <= horarioypermiso[7]:
                 marcacion4 = m
+            elif value > horarioypermiso[7] and value <= horarioypermiso[8]:
+                marcacion5 = m
+            elif value > horarioypermiso[8] and value <= horarioypermiso[9]:
+                marcacion5 = m
+            elif value > horarioypermiso[9] and value <= horarioypermiso[10]:
+                marcacion6 = m
+            elif value > horarioypermiso[10]:
+                marcacion6 = m
+
+        marprevper = [marcacion1, marcacion2, marcacion3, marcacion4, marcacion5, marcacion6]
+
+        #OPTIMIZACION AGREGAR PERMISOS PORQUE ENTRE PERMISOS NO PODRÍA HABER MARCACIONES
+        rangoperini = 0
+        rangoperfin = 0
+        for i in range(len(horarioypermiso)):
+            if horarioypermiso[i] == P1:
+                rangoperini = i
+            if horarioypermiso[i] == P2:
+                rangoperfin = i
+
+        diccionarioper={}
+        diccionarioper["0"] =  0 #m1
+        diccionarioper["2"] =  1 #m2
+        diccionarioper["4"] =  2 #m3
+        diccionarioper["6"] =  3 #m4
+        diccionarioper["8"] =  4 #m5
+        diccionarioper["10"] = 5 #m6
+        cont = 0
+        vueltas = diccionarioper[str(rangoperfin)] - diccionarioper[str(rangoperini)]
+
+        for y in range(vueltas+1):
+            marprevper[diccionarioper[str(rangoperini)]+cont]={"P":marprevper[diccionarioper[str(rangoperini)]+cont]}
+            cont = cont+1
 
         return {
-            'marcaciones': [marcacion1, marcacion2, marcacion3, marcacion4],
+            'marcaciones': [marcacion1, marcacion2, marcacion3, marcacion4, marcacion5, marcacion6],
             'horas': [N1, N2, N3, N4],
+            'permisos': marprevper
         }
 
     def calcular_tiempos(self, registros, empleado, fecha, permisos):
