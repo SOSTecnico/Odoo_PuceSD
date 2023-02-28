@@ -1,29 +1,13 @@
-from odoo import fields, models, api
 import requests
-from .empleado import Empleado
-import json
+
+from odoo import fields, models, api
 
 
-class Roles(models.Model):
-    _name = 'rolpago.roles'
-    _description = 'Roles'
+class RolAcciones(models.TransientModel):
+    _name = 'rolpago.acciones'
+    _description = 'Description'
 
     name = fields.Char()
-
-    empleado_id = fields.Many2one(
-        comodel_name='hr.employee',
-        string='Empleado',
-        required=False)
-
-    periodo = fields.Char(
-        string='Periodo',
-        required=False)
-
-    rubros_id = fields.One2many(
-        comodel_name='rolpago.rubros',
-        inverse_name='roles_id',
-        string='Rubros_id',
-        required=False)
 
     def ILG003(self):
         url = "https://pucesapwd.puce.edu.ec:44400/RESTAdapter/personal/?sociedad=6000&areap=0102"
@@ -36,7 +20,6 @@ class Roles(models.Model):
 
         # nuevos_empleados = self.env["hr.employee"].search([("codigo_sap","in",codigo_sap)])
         empleados = self.env["hr.employee"].search([]).mapped("codigo_sap")
-
         for value in personal:
             if str(value["CodSAP"]) not in empleados:
                 self.env["hr.employee"].create(
@@ -46,10 +29,18 @@ class Roles(models.Model):
                         'employee_type': 'employee'
                     })
 
+        return {
+            'type': 'tree',
+            'name': 'Empleados',
+            'view_mode': 'tree,form',
+            'res_model': 'hr.employee',
+            'type': 'ir.actions.act_window',
+            'target': 'main'
+        }
+
     def ILG006(self):
         headers = {'charset': 'UTF-8', 'Content-Type': 'json'}
-        url = "https://pucesapwd.puce.edu.ec:44400/RESTAdapter/RoldePago/1725042871?tipdoc=01&mes=11&ano=2022&socie=6000"
-        # url = "https://POP_WS:Puc3S4p1@pucesapwd.puce.edu.ec:44400/RESTAdapter/personal/?sociedad=6000&areap=0102"
+        url = "https://pucesapwd.puce.edu.ec:44400/RESTAdapter/RoldePago/2300349640?tipdoc=01&mes=11&ano=2022&socie=6000"
 
         response = requests.get(url, headers,
                                 auth=('POP_WS', 'Puc3S4p1'))
@@ -58,14 +49,3 @@ class Roles(models.Model):
         # persona = respuesta['MT_IHR006_RoldePago_Out_Resp']['DatoPersonal']
         rubros = respuesta['MT_IHR006_RoldePago_Out_Resp']['Detalle']
         print(rubros)
-
-    #   print(empleados)
-
-    # for i in personal:
-    #     # print(i['CodSAP'],i['PrimerApellido'],i['SegundoApellido'],i['PrimerNombre'],i['SegundoNombre'],i['AreaPersonal'],i['GrupoPersonal'])
-    #     # print(i)
-    #
-    #     self.env["hr.employee"].create(
-    #         {'name': f"{i['PrimerNombre']} {i['SegundoNombre']} {i['PrimerApellido']} {i['SegundoApellido']}",
-    #          'codigo_sap': i['CodSAP'],
-    #          'employee_type': 'employee'})

@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
-
 from odoo import models, fields, api
+import requests
+import json
 
 
-class rubros(models.Model):
+class Rubros(models.Model):
     _name = "rolpago.rubros"
     _description = "rubros"
 
-
     descripcion_rubros = fields.Many2one(
         comodel_name='rolpago.descripcion_rubros',
-        string='Descripcion_rubros',
+        string='Descripción Rubros',
         required=False)
 
-    roprubrolval=fields.Float(string='Valor del rubro', digits=(6,2))
-    roprubhorlab = fields.Float(
+    valor = fields.Float(string='Valor del rubro', digits=(6, 2))
+    horas_laborables = fields.Float(
         string='Horas laborales',
         required=False)
 

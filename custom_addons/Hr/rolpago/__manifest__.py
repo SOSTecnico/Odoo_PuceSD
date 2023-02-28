@@ -3,15 +3,14 @@
     'name': "rolpago",
 
     'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
+        Módulo que permite llevar el control de los roles de pago""",
 
     'description': """
         Long description of module's purpose
     """,
 
-    'author': "My Company",
-    'website': "http://www.yourcompany.com",
+    'author': "Miguel Villareal, Jonathan Moreno",
+    'website': "",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
@@ -20,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','hr'],
+    'depends': ['base', 'hr'],
 
     # always loaded
     'data': [
@@ -29,6 +28,8 @@
         'views/roles.xml',
         'views/descripcion_rubros.xml',
         'views/rubros.xml',
+        'views/empleado.xml',
+        'views/Acciones.xml',
 
     ],
     # only loaded in demonstration mode

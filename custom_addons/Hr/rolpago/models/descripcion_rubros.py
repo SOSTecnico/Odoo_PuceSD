@@ -1,13 +1,15 @@
 from odoo import fields, models, api
 
-
-class descripcion_rubros(models.Model):
+class DescripcionRubros(models.Model):
     _name = 'rolpago.descripcion_rubros'
     _description = 'Description Rubros'
 
     name = fields.Char()
 
-    roprubroltip = fields.Selection(string="tipo de rubro", selection=[("I", "INGRESO"), ("D", "EGRESO"), ("P", "PATRIMONIO")],
+    tipo_rubro = fields.Selection(string="Tipo de Rubro",
+                                    selection=[("I", "INGRESO"), ("D", "EGRESO"), ("P", "PATRIMONIO")],
                                     required=True)
 
-    
+
+
+

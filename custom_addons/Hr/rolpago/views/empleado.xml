@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="rolpago.empleado_form" model="ir.ui.view">
+            <field name="name">Empleado</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='mobile_phone']" position="after">
+                    <field name="codigo_sap" ></field>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -2,39 +2,29 @@
 <odoo>
     <data>
 
-<!--        <record id="ModelName_form_view" model="ir.ui.view">-->
-<!--            <field name="name">ProjectName.ModelName.form</field>-->
-<!--            <field name="model">ProjectName.ModelName</field>-->
-<!--            <field name="arch" type="xml">-->
-<!--                <form string="ModelTitle">-->
-<!--                    <sheet>-->
-<!--                        <div class="oe_title">-->
-<!--                            <label for="example_title"/>-->
-<!--                            <h1>-->
-<!--                                <field name="example_title" placeholder="Title"/>-->
-<!--                            </h1>-->
-<!--                        </div>-->
-<!--                        <group>-->
-<!--                            <group>-->
-<!--                                <field name="create_date"/>-->
-<!--                            </group>-->
-<!--                            <group>-->
-<!--                                <field name="example_field"/>-->
-<!--                            </group>-->
-<!--                        </group>-->
-<!--                    </sheet>-->
-<!--                </form>-->
-<!--            </field>-->
-<!--        </record>-->
-
+<record id="rolpago.rubros_form" model="ir.ui.view">
+    <field name="name">RUBROS FORM</field>
+    <field name="model">rolpago.rubros</field>
+    <field name="arch" type="xml">
+        <form string="_form">
+            <sheet>
+                <group>
+                    <field name="descripcion_rubros"/>
+                    <field name="valor"/>
+                    <field name="horas_laborables"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
         <record id="rolpago.rubros_tree" model="ir.ui.view">
             <field name="name">rubros tree</field>
             <field name="model">rolpago.rubros</field>
             <field name="arch" type="xml">
                 <tree string="ModelTitle">
                     <field name="descripcion_rubros"/>
-                    <field name="roprubrolval"/>
-                    <field name="roprubhorlab"/>
+                    <field name="valor"/>
+                    <field name="horas_laborables"/>
                 </tree>
             </field>
         </record>
@@ -53,7 +43,7 @@
 <!--        </record>-->
 
         <record id="rolpago.rubros" model="ir.actions.act_window">
-            <field name="name">rubros</field>
+            <field name="name">Rubros</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">rolpago.rubros</field>
             <field name="view_mode">tree,form</field>
@@ -64,7 +54,7 @@
             </field>
         </record>
 
-        <menuitem name="rubros_menu" id="rolpago.rubros_menu" parent="rolpago.roles_menu_principal" action="rolpago.rubros"/>
+        <menuitem sequence="2" name="Rubros" id="rolpago.rubros_menu" parent="rolpago.roles_menu_principal" action="rolpago.rubros"/>
 
     </data>
 </odoo>
