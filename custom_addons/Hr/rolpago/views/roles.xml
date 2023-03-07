@@ -8,16 +8,32 @@
             <field name="arch" type="xml">
                 <form string="rolpago.roles_form_form">
                     <header>
-                        <button type="object" name="ILG003" string="ACTUALIZAR EMPELADOS"></button>
+                        <field name="estado_rol" widget="statusbar" attrs="{'clickable':[('estado_rol','=','publicado')]}"/>
                     </header>
                     <sheet>
                         <group>
                             <field name="periodo"/>
+                            <field name="fecha" invisible="1"/>
                             <field name="empleado_id"/>
-                            <field name="rubros_id"/>
                         </group>
+                        <field nolabel="1" name="rubros_id"/>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
+            </field>
+        </record>
+
+        <record id="rolpago.roles_search_view" model="ir.ui.view">
+            <field name="name">Roles</field>
+            <field name="model">rolpago.roles</field>
+            <field name="arch" type="xml">
+                <search string="">
+                    <filter name="empleados_group" string="Empleados" context="{'group_by':'empleado_id'}"></filter>
+                    <field name="empleado_id"/>
+                </search>
             </field>
         </record>
 
@@ -27,6 +43,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">rolpago.roles</field>
             <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_empleados_group':1}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     There is no examples click here to add new ModelTitle.

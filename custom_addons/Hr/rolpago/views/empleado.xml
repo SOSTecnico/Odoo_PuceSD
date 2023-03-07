@@ -9,11 +9,19 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//field[@name='mobile_phone']" position="after">
-                    <field name="codigo_sap" ></field>
+                    <field name="codigo_sap"></field>
+                </xpath>
+
+                <xpath expr="//header/button" position="after">
+                    <button string="Generar Rol" class="btn btn-primary" type="object" name="generar_rol"></button>
                 </xpath>
 
             </field>
         </record>
+
+        <menuitem sequence="5" name="Empleados" id="rolpago.empleados_menu" parent="rolpago.roles_menu_principal"
+                  action="hr.open_view_employee_list_my"/>
+
 
     </data>
 </odoo>

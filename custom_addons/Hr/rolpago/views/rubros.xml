@@ -2,45 +2,48 @@
 <odoo>
     <data>
 
-<record id="rolpago.rubros_form" model="ir.ui.view">
-    <field name="name">RUBROS FORM</field>
-    <field name="model">rolpago.rubros</field>
-    <field name="arch" type="xml">
-        <form string="_form">
-            <sheet>
-                <group>
-                    <field name="descripcion_rubros"/>
-                    <field name="valor"/>
-                    <field name="horas_laborables"/>
-                </group>
-            </sheet>
-        </form>
-    </field>
-</record>
+        <record id="rolpago.rubros_form" model="ir.ui.view">
+            <field name="name">RUBROS FORM</field>
+            <field name="model">rolpago.rubros</field>
+            <field name="arch" type="xml">
+                <form string="_form">
+                    <sheet>
+                        <group>
+                            <field name="valor"/>
+                            <field name="horas_laborables"/>
+                            <field name="tipo_rubro_id"/>
+                            <field name="roles_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
         <record id="rolpago.rubros_tree" model="ir.ui.view">
             <field name="name">rubros tree</field>
             <field name="model">rolpago.rubros</field>
             <field name="arch" type="xml">
                 <tree string="ModelTitle">
-                    <field name="descripcion_rubros"/>
+                    <field name="tipo_rubro_id"/>
                     <field name="valor"/>
                     <field name="horas_laborables"/>
+                    <field name="roles_id"/>
                 </tree>
             </field>
         </record>
 
-<!--        <record id="ModelName_search_view" model="ir.ui.view">-->
-<!--            <field name="name">ProjectName.ModelName.search</field>-->
-<!--            <field name="model">ProjectName.ModelName</field>-->
-<!--            <field name="arch" type="xml">-->
-<!--                <search string="ModelTitle">-->
-<!--                    <group expand="1" string="Group By">-->
-<!--                        <filter string="Example Field" name="example_field" domain="[]"-->
-<!--                                context="{'group_by':'example_field'}"/>-->
-<!--                    </group>-->
-<!--                </search>-->
-<!--            </field>-->
-<!--        </record>-->
+        <!--        <record id="ModelName_search_view" model="ir.ui.view">-->
+        <!--            <field name="name">ProjectName.ModelName.search</field>-->
+        <!--            <field name="model">ProjectName.ModelName</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <search string="ModelTitle">-->
+        <!--                    <group expand="1" string="Group By">-->
+        <!--                        <filter string="Example Field" name="example_field" domain="[]"-->
+        <!--                                context="{'group_by':'example_field'}"/>-->
+        <!--                    </group>-->
+        <!--                </search>-->
+        <!--            </field>-->
+        <!--        </record>-->
 
         <record id="rolpago.rubros" model="ir.actions.act_window">
             <field name="name">Rubros</field>
@@ -54,7 +57,8 @@
             </field>
         </record>
 
-        <menuitem sequence="2" name="Rubros" id="rolpago.rubros_menu" parent="rolpago.roles_menu_principal" action="rolpago.rubros"/>
+        <menuitem sequence="2" name="Rubros" id="rolpago.rubros_menu" parent="rolpago.roles_menu_principal"
+                  action="rolpago.rubros"/>
 
     </data>
 </odoo>

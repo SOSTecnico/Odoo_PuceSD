@@ -9,11 +9,11 @@
                 <form string="rolpago.acciones_form">
                     <sheet>
                         <group>
-                            <h3>Para actualizar la nómina de empleados favor de click en "ACTUALIZAR"</h3>
+                            <h3>Acciones del Servidor</h3>
                         </group>
                     </sheet>
                     <footer>
-                        <button name="ILG003" string="ACTUALIZAR EMPLEADOS" type="object" class="oe_highlight"/>
+                        <button groups="rolpago.rolpago_administrador" name="ILG003" string="ACTUALIZAR EMPLEADOS" type="object" class="oe_highlight"/>
                         <button name="ILG006" string="GENERAR ROLES" type="object" class="oe_highlight"/>
                         <button string="Cancelar" class="oe_link" special="cancel"/>
                     </footer>
@@ -22,20 +22,15 @@
         </record>
 
         <record id="rolpago.acciones_action" model="ir.actions.act_window">
-            <field name="name">Roles de Pago - Actualizar Empleados</field>
+            <field name="name">Roles de Pago - Actualizar</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">rolpago.acciones</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
 
-        <menuitem name="Acciones" id="rolpago.acciones_menu" parent="rolpago.roles_menu_principal"></menuitem>
+        <menuitem sequence="20" name="Acciones" id="rolpago.acciones_menu" parent="rolpago.roles_menu_principal" action="rolpago.acciones_action"></menuitem>
 
-        <menuitem name="Actualizar Empleados" id="rolpago.actualizar_empleados_menu" parent="rolpago.acciones_menu"
-                  action="rolpago.acciones_action"></menuitem>
-
-        <menuitem name="Generar Roles" id="rolpago.generar_roles" parent="rolpago.acciones_menu"
-                  action="rolpago.acciones_action"></menuitem>
 
     </data>
 </odoo>

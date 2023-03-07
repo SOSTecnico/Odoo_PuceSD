@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="rolpago.action_report_roles" model="ir.actions.report">
+            <field name="name">Rol de Pagos</field>
+            <field name="model">rolpago.roles</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">rolpago.report_roles</field>
+            <field name="report_file">rolpago.report_roles</field>
+            <field name="binding_model_id" ref="rolpago.model_rolpago_roles"></field>
+            <field name="binding_type">report</field>
+            <field name="print_report_name">'%s - %s' % (object.empleado_id.name,object.periodo)</field>
+        </record>
+
+
+        <template id="rolpago.report_roles">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="object">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h3>PLANILLA INDIVIDUAL DE PAGO</h3>
+                            <h5>
+                                <strong>Tipo de Rol:</strong>
+                                TIEMPO COMPLETO
+                            </h5>
+                            <br/>
+                            <div>
+                                <h5>
+                                    <strong>Empleado:</strong>
+                                    <span t-esc="object.empleado_id.codigo_sap"></span>
+                                    -
+                                    <span t-esc="object.empleado_id.identification_id"></span>
+                                    -
+                                    <span t-esc="object.empleado_id.name"></span>
+                                </h5>
+                            </div>
+                            <div>
+                                <table class="table table-sm shadow" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Cargo</th>
+                                            <th>Escuela/Sucursal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <t t-if="object.empleado_id.job_id">
+                                                    <span t-esc="object.empleado_id.job_id.name"></span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span>No Definido</span>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <t t-if="object.empleado_id.department_id">
+                                                    <span t-esc="object.empleado_id.department_id.name"></span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span>No Definido</span>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <table class="table shadow table-sm">
+                                            <thead class="text-center">
+                                                <tr>
+                                                    <th colspan="3">INGRESOS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="font-weight-bold table-active">
+                                                    <td>Ingresos Imponibles</td>
+                                                    <td>Día/Hora</td>
+                                                    <td>Valor</td>
+                                                </tr>
+                                                <t t-foreach="object.rubros_id" t-as="rubro">
+                                                    <t t-if="rubro.tipo_rubro_id.tipo == 'I'">
+                                                        <t t-if="rubro.tipo_rubro_id.imponible == 'S'">
+                                                            <tr>
+                                                                <td>
+                                                                    <span t-esc="rubro.tipo_rubro_id.name"></span>
+                                                                </td>
+                                                                <td>
+                                                                    <span t-esc="rubro.horas_laborables"></span>
+                                                                </td>
+                                                                <td>
+                                                                    <span t-esc="rubro.valor"></span>
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                    </t>
+                                                </t>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>
+                                                        <strong>Subtotal</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="round(object.subtotal_imponibles,2)"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="font-weight-bold  table-active">
+                                                    <td colspan="2">Ingresos No Imponibles</td>
+                                                    <td>Valor</td>
+                                                </tr>
+                                                <t t-foreach="object.rubros_id" t-as="rubro">
+                                                    <t t-if="rubro.tipo_rubro_id.tipo == 'I'">
+                                                        <t t-if="rubro.tipo_rubro_id.imponible == 'N'">
+                                                            <tr>
+                                                                <td colspan="2">
+                                                                    <span t-esc="rubro.tipo_rubro_id.name"></span>
+                                                                </td>
+                                                                <td>
+                                                                    <span t-esc="rubro.valor"></span>
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                    </t>
+                                                </t>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>
+                                                        <strong>Subtotal</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="round(object.subtotal_no_imponibles,2)"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-6">
+                                        <table class="table table-sm shadow">
+                                            <thead class="text-center">
+                                                <th colspan="3">DEDUCCIONES</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="font-weight-bold table-active">
+                                                    <td>Concepto</td>
+                                                    <td>Base Cálculo</td>
+                                                    <td>Valor</td>
+                                                </tr>
+                                                <t t-foreach="object.rubros_id" t-as="rubro">
+                                                    <t t-if="rubro.tipo_rubro_id.tipo == 'D'">
+                                                        <tr>
+                                                            <td>
+                                                                <span t-esc="rubro.tipo_rubro_id.name"></span>
+                                                            </td>
+                                                            <td></td>
+                                                            <td>
+                                                                <span t-esc="rubro.valor"></span>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </t>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>
+                                                        <strong>Subtotal</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="round(object.total_egresos,2)"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <br/>
+                                <table class="table shadow-lg" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Total Ingresos (+)</th>
+                                            <th>
+                                                <span t-esc="round(object.total_ingresos,2)"></span>
+                                            </th>
+                                            <th>Total Egresos (-)</th>
+                                            <th>
+                                                <span t-esc="round(object.total_egresos,2)"></span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>SALDO A PAGARSE</td>
+                                            <td>
+                                                <strong t-esc="round(object.total_ingresos - object.total_egresos,2)"></strong>
+                                            </td>
+                                            <td>
+                                                <span>Saldo de Préstamos</span>
+                                            </td>
+                                            <td>
+                                                <span>0.0</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="container mt-3">
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>OBSERVACIÓN:</strong>
+                                        En caso de inconformidad con los valores detallados en su rol de
+                                        pagos, deberá notificar a la unidad correspondiente dentro de los 15 días
+                                        posteriores a la publicación, caso contrario se considerará conforme con su rol
+                                        de pagos.
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div class="row" t-if="object.estado_rol != 'publicado'">
+                                    <div class="col">
+                                        Yo <span t-esc="object.empleado_id.name.upper()"></span>, con cédula <span
+                                            t-esc="object.empleado_id.identification_id"></span> estoy <span
+                                            t-esc="object.estado_rol"></span> con el rol de pagos.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

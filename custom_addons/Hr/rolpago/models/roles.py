@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from odoo import fields, models, api
 import requests
 from .empleado import Empleado
@@ -7,17 +9,16 @@ import json
 class Roles(models.Model):
     _name = 'rolpago.roles'
     _description = 'Roles'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char()
+    name = fields.Char(compute='compute_name')
 
     empleado_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Empleado',
         required=False)
 
-    periodo = fields.Char(
-        string='Periodo',
-        required=False)
+    periodo = fields.Char(string='Periodo', required=False, compute='generar_periodo')
 
     rubros_id = fields.One2many(
         comodel_name='rolpago.rubros',
@@ -25,47 +26,54 @@ class Roles(models.Model):
         string='Rubros_id',
         required=False)
 
-    def ILG003(self):
-        url = "https://pucesapwd.puce.edu.ec:44400/RESTAdapter/personal/?sociedad=6000&areap=0102"
-        # url = "https://POP_WS:Puc3S4p1@pucesapwd.puce.edu.ec:44400/RESTAdapter/personal/?sociedad=6000&areap=0102"
+    fecha = fields.Date(string='Fecha', required=False)
 
-        response = requests.get(url,
-                                auth=('POP_WS', 'Puc3S4p1'))
-        respuesta = response.json()
-        personal = respuesta['MT_IHR003_ConsultadePersonal_Out_Resp']['DatosPersonales']
+    subtotal_imponibles = fields.Float(
+        string='Subtotal_imponibles',
+        required=False, compute='calcular_totales')
 
-        # nuevos_empleados = self.env["hr.employee"].search([("codigo_sap","in",codigo_sap)])
-        empleados = self.env["hr.employee"].search([]).mapped("codigo_sap")
+    subtotal_no_imponibles = fields.Float(
+        string='Subtotal_imponibles',
+        required=False, compute='calcular_totales')
 
-        for value in personal:
-            if str(value["CodSAP"]) not in empleados:
-                self.env["hr.employee"].create(
-                    {
-                        'name': f"{value['PrimerNombre'].upper()} {value['SegundoNombre'].upper()} {value['PrimerApellido'].upper()} {value['SegundoApellido'].upper()}",
-                        'codigo_sap': str(value['CodSAP']),
-                        'employee_type': 'employee'
-                    })
+    total_ingresos = fields.Float(
+        string='Total_ingresos',
+        required=False, compute='calcular_totales')
 
-    def ILG006(self):
-        headers = {'charset': 'UTF-8', 'Content-Type': 'json'}
-        url = "https://pucesapwd.puce.edu.ec:44400/RESTAdapter/RoldePago/1725042871?tipdoc=01&mes=11&ano=2022&socie=6000"
-        # url = "https://POP_WS:Puc3S4p1@pucesapwd.puce.edu.ec:44400/RESTAdapter/personal/?sociedad=6000&areap=0102"
+    total_egresos = fields.Float(
+        string='Total_descuentos',
+        required=False, compute='calcular_totales')
 
-        response = requests.get(url, headers,
-                                auth=('POP_WS', 'Puc3S4p1'))
-        respuesta = response.json()
+    estado_rol = fields.Selection(string='Estado', default='publicado',
+                                  selection=[('publicado', 'PUBLICADO'), ('conforme', 'CONFORME'),
+                                             ('inconforme', 'INCONFORME'), ],
+                                  required=False, )
 
-        # persona = respuesta['MT_IHR006_RoldePago_Out_Resp']['DatoPersonal']
-        rubros = respuesta['MT_IHR006_RoldePago_Out_Resp']['Detalle']
-        print(rubros)
+    def cambiar_estado_rol(self):
+        for rec in self:
+            if rec.estado_rol == 'publicado' and (datetime.now() - rec.fecha) > timedelta(days=15):
+                rec.estado_rol = 'conforme'
 
-    #   print(empleados)
+    @api.onchange('estado_rol')
+    def onchange_estado(self):
+        print(self.fecha)
 
-    # for i in personal:
-    #     # print(i['CodSAP'],i['PrimerApellido'],i['SegundoApellido'],i['PrimerNombre'],i['SegundoNombre'],i['AreaPersonal'],i['GrupoPersonal'])
-    #     # print(i)
-    #
-    #     self.env["hr.employee"].create(
-    #         {'name': f"{i['PrimerNombre']} {i['SegundoNombre']} {i['PrimerApellido']} {i['SegundoApellido']}",
-    #          'codigo_sap': i['CodSAP'],
-    #          'employee_type': 'employee'})
+    def calcular_totales(self):
+        for rec in self:
+            for rubro in rec.rubros_id:
+                if rubro.tipo_rubro_id.tipo == 'I' and rubro.tipo_rubro_id.imponible == 'S':
+                    rec.subtotal_imponibles = rec.subtotal_imponibles + rubro.valor
+                if rubro.tipo_rubro_id.tipo == 'I' and rubro.tipo_rubro_id.imponible == 'N':
+                    rec.subtotal_no_imponibles = rec.subtotal_no_imponibles + rubro.valor
+                if rubro.tipo_rubro_id.tipo == 'D':
+                    rec.total_egresos = rec.total_egresos + rubro.valor
+            rec.total_ingresos = rec.total_ingresos + rec.subtotal_imponibles + rec.subtotal_no_imponibles
+
+    def compute_name(self):
+        for rec in self:
+            rec.name = rec.periodo
+
+    @api.model
+    def generar_periodo(self):
+        for rec in self:
+            rec.periodo = rec.fecha.strftime("%m-%Y")

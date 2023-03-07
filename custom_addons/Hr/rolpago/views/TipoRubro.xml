@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--        <record id="rolpago.tipo_rubro_form_view" model="ir.ui.view">
+                    <field name="name">rolpago.tipo_rubro.form</field>
+                    <field name="model">rolpago.tipo_rubro</field>
+                    <field name="arch" type="xml">
+                        <form string="Tipo de Rubro">
+                            <sheet>
+                                <div class="oe_title">
+                                    <label for="example_title"/>
+                                    <h1>
+                                        <field name="example_title" placeholder="Title"/>
+                                    </h1>
+                                </div>
+                                <group>
+                                    <group>
+                                        <field name="create_date"/>
+                                    </group>
+                                    <group>
+                                        <field name="example_field"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </record>-->
+
+        <record id="rolpago.tipo_rubro_tree_view" model="ir.ui.view">
+            <field name="name">rolpago.tipo_rubro.tree</field>
+            <field name="model">rolpago.tipo_rubro</field>
+            <field name="arch" type="xml">
+                <tree string="Tipo de Rubro">
+                    <field name="name"/>
+                    <field name="tipo"/>
+                    <field name="aplica"/>
+                    <field name="imponible"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--        <record id="rolpago.tipo_rubro_search_view" model="ir.ui.view">
+                    <field name="name">rolpago.tipo_rubro.search</field>
+                    <field name="model">rolpago.rolpago.tipo_rubro</field>
+                    <field name="arch" type="xml">
+                        <search string="Tipo de Rubro">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>-->
+
+        <record id="rolpago.tipo_rubro_act_window" model="ir.actions.act_window">
+            <field name="name">Tipo de Rubro</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rolpago.tipo_rubro</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Tipo de Rubro.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Tipo de Rubro" id="rolpago.tipo_rubro_menu" parent="rolpago.roles_menu_principal"
+                  action="rolpago.tipo_rubro_act_window"/>
+
+    </data>
+</odoo>
