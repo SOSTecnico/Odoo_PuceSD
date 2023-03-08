@@ -20,6 +20,8 @@ class Empleado(models.Model):
         self.env['rolpago.roles'].sudo().search(
             [('empleado_id', '=', self.id), ('fecha', 'like', f"{fecha.strftime('%Y-%m')}")]).unlink()
 
+        tipos_de_rubros = self.env['rolpago.tipo_rubro'].sudo().search([])
+
         headers = {'charset': 'UTF-8', 'Content-Type': 'json'}
 
         url = f"https://pucesapwd.puce.edu.ec:44400/RESTAdapter/RoldePago/{self.identification_id}?tipdoc=01&mes={fecha.strftime('%m')}&ano={fecha.strftime('%Y')}&socie=6000"
@@ -29,11 +31,13 @@ class Empleado(models.Model):
             rubros = data['MT_IHR006_RoldePago_Out_Resp']['Detalle']
             model_rubros = []
             for rubro in rubros:
+
+                tipo_rubro = tipos_de_rubros.filtered_domain([('name', '=', rubro['TextoConcepto'])])
+
                 model_rubros.append((0, 0, {
-                    'descripcion': rubro['TextoConcepto'],
+                    'tipo_rubro_id': tipo_rubro.id,
                     'valor': rubro['Monto'],
                     'horas_laborables': rubro['Horas'],
-                    'tipo': 'ingreso' if rubro['Signo'] == '+' else 'egreso',
                 }))
 
             self.env['rolpago.roles'].sudo().create({
