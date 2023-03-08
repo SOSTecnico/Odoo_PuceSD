@@ -47,7 +47,7 @@ class RolAcciones(models.TransientModel):
         fecha = datetime.today().replace(day=1) - timedelta(days=1)
 
         # Fecha de prueba para sacar roles de otros meses
-        fecha = datetime(2023, 1, 1)
+        # fecha = datetime(2023, 1, 1)
 
         headers = {'charset': 'UTF-8', 'Content-Type': 'json'}
 
