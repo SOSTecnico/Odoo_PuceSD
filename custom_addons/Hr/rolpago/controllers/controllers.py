@@ -8,7 +8,6 @@ from odoo.addons.portal.controllers.portal import CustomerPortal, pager as porta
 class Rolpago(CustomerPortal):
     @http.route('/rolpago/mis_roles', auth='public', website=True)
     def index(self, **kw):
-        print(request.env.user.employee_id.id)
         roles = request.env['rolpago.roles'].sudo().search(
             [('empleado_id', '=', request.env.user.employee_id.id)])
         return request.render('rolpago.roles_template', {
@@ -27,7 +26,6 @@ class Rolpago(CustomerPortal):
             return self._show_report(model=rol_sudo, report_type=report_type, report_ref='rolpago.action_report_roles',
                                      download=download)
         rol = request.env['rolpago.roles'].browse(rol_id)
-        print(rol)
 
         values = {
             'rol': rol
@@ -50,7 +48,7 @@ class RolesPortal(CustomerPortal):
     def _prepare_home_portal_values(self, counters):
         values = super()._prepare_home_portal_values(counters)
         roles = request.env['rolpago.roles'].sudo().search_count(
-            [('empleado_id', '=', request.env.user.partner_id.employee_ids[0].id)])
+            [('empleado_id', '=', request.env.user.employee_id.id)])
 
         values.update({
             'count_roles': roles
