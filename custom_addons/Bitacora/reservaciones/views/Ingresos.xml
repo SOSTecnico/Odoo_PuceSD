@@ -95,7 +95,7 @@
             <field name="target">new</field>
         </record>
 
-        <menuitem id="reservaciones.generar_qr" parent="reservaciones.laboratorios_menu" name="Generar QR"
+        <menuitem groups="reservaciones.group_reservaciones_admin" id="reservaciones.generar_qr" parent="reservaciones.laboratorios_menu" name="Generar QR"
                   action="reservaciones.action_generar_qr"></menuitem>
 
 
