@@ -9,7 +9,7 @@ import json
 class Roles(models.Model):
     _name = 'rolpago.roles'
     _description = 'Roles'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin','portal.mixin','utm.mixin']
 
     name = fields.Char(compute='compute_name')
 
@@ -47,7 +47,11 @@ class Roles(models.Model):
     estado_rol = fields.Selection(string='Estado', default='publicado',
                                   selection=[('publicado', 'PUBLICADO'), ('conforme', 'CONFORME'),
                                              ('inconforme', 'INCONFORME'), ],
-                                  required=False, )
+                                  required=False, tracking=True )
+
+    def _get_report_base_filename(self):
+        self.ensure_one()
+        return '%s - %s' % (self.empleado_id.name, self.periodo)
 
     def cambiar_estado_rol(self):
         for rec in self:

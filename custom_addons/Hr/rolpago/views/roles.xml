@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <form string="rolpago.roles_form_form">
                     <header>
-                        <field name="estado_rol" widget="statusbar" attrs="{'clickable':[('estado_rol','=','publicado')]}"/>
+                        <field name="estado_rol" widget="statusbar" clickable="1"/>
                     </header>
                     <sheet>
                         <group>

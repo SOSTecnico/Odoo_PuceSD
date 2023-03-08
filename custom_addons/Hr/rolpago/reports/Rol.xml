@@ -25,6 +25,8 @@
                                 TIEMPO COMPLETO
                             </h5>
                             <br/>
+                            <h5><strong>Periodo: </strong><span t-esc="object.periodo"></span></h5>
+                            <br/>
                             <div>
                                 <h5>
                                     <strong>Empleado:</strong>
@@ -191,8 +193,8 @@
                                     <tbody>
                                         <tr>
                                             <td>SALDO A PAGARSE</td>
-                                            <td>
-                                                <strong t-esc="round(object.total_ingresos - object.total_egresos,2)"></strong>
+                                            <td class="text-center">
+                                                <h5>$<strong t-esc="round(object.total_ingresos - object.total_egresos,2)"></strong></h5>
                                             </td>
                                             <td>
                                                 <span>Saldo de Préstamos</span>
