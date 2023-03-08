@@ -8,8 +8,9 @@ from odoo.addons.portal.controllers.portal import CustomerPortal, pager as porta
 class Rolpago(CustomerPortal):
     @http.route('/rolpago/mis_roles', auth='public', website=True)
     def index(self, **kw):
+        print(request.env.user.employee_id.id)
         roles = request.env['rolpago.roles'].sudo().search(
-            [('empleado_id', '=', request.env.user.partner_id.employee_ids[0].id)])
+            [('empleado_id', '=', request.env.user.employee_id.id)])
         return request.render('rolpago.roles_template', {
             'roles': roles
         })
