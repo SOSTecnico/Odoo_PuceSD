@@ -9,7 +9,7 @@ import json
 class Roles(models.Model):
     _name = 'rolpago.roles'
     _description = 'Roles'
-    _inherit = ['mail.thread', 'mail.activity.mixin','portal.mixin','utm.mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin', 'utm.mixin']
 
     name = fields.Char(compute='compute_name')
 
@@ -44,10 +44,11 @@ class Roles(models.Model):
         string='Total_descuentos',
         required=False, compute='calcular_totales')
 
+
     estado_rol = fields.Selection(string='Estado', default='publicado',
                                   selection=[('publicado', 'PUBLICADO'), ('conforme', 'CONFORME'),
-                                             ('inconforme', 'INCONFORME'), ],
-                                  required=False, tracking=True )
+                                             ('no_conforme', 'NO CONFORME'), ],
+                                  required=False, tracking=True)
 
     def _get_report_base_filename(self):
         self.ensure_one()
@@ -81,3 +82,10 @@ class Roles(models.Model):
     def generar_periodo(self):
         for rec in self:
             rec.periodo = rec.fecha.strftime("%m-%Y")
+
+    @api.model
+    def conformidad(self):
+        roles = self.env['rolpago.roles'].search([])
+        for rec in roles:
+            if rec.estado_rol == 'publicado' and (datetime.now() - rec.create_date) > timedelta(days=15):
+                rec.estado_rol = 'conforme'

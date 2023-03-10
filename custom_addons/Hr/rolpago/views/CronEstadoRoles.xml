@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="rolpago.cron_estado_roles" model="ir.cron">
+            <field name="name">Cambiar Estado Roles</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="active" eval="False"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="model_id" ref="model_rolpago_roles"/>
+            <field name="state">code</field>
+            <field name="code">model.conformidad()</field>
+        </record>
+
+    </data>
+</odoo>

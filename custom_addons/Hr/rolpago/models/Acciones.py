@@ -56,7 +56,8 @@ class RolAcciones(models.TransientModel):
         for empleado in empleados:
 
             self.env['rolpago.roles'].sudo().search(
-                [('empleado_id', '=', empleado.id), ('fecha', 'like', f"{fecha.strftime('%Y-%m')}")]).unlink()
+                [('estado_rol', '=', 'publicado'), ('empleado_id', '=', empleado.id),
+                 ('fecha', 'like', f"{fecha.strftime('%Y-%m')}")]).unlink()
 
             url = f"https://pucesapwd.puce.edu.ec:44400/RESTAdapter/RoldePago/{empleado.identification_id}?tipdoc=01&mes={fecha.strftime('%m')}&ano={fecha.strftime('%Y')}&socie=6000"
             data = requests.get(url, headers, auth=('POP_WS', 'Puc3S4p1')).json()
@@ -64,8 +65,7 @@ class RolAcciones(models.TransientModel):
                 rubros = data['MT_IHR006_RoldePago_Out_Resp']['Detalle']
                 model_rubros = []
                 for rubro in rubros:
-
-                    tipo_rubro = tipos_de_rubros.filtered_domain([('name','=',rubro['TextoConcepto'])])
+                    tipo_rubro = tipos_de_rubros.filtered_domain([('name', '=', rubro['TextoConcepto'])])
 
                     model_rubros.append((0, 0, {
                         'valor': rubro['Monto'],
@@ -84,7 +84,7 @@ class RolAcciones(models.TransientModel):
             'name': 'Roles',
             'view_mode': 'tree,form',
             'res_model': 'rolpago.roles',
-            'context': {'search_default_empleados_group': 1},
+            'context': {'search_default_empleados_group': 2, 'search_default_estado_group': 1},
             'type': 'ir.actions.act_window',
             'target': 'main'
         }

@@ -31,6 +31,7 @@
         'views/Acciones.xml',
         'views/TipoRubro.xml',
         'views/Portal.xml',
+        'views/CronEstadoRoles.xml',
         'reports/Rol.xml',
 
 

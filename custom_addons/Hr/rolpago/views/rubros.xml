@@ -12,6 +12,7 @@
                             <field name="valor"/>
                             <field name="horas_laborables"/>
                             <field name="tipo_rubro_id"/>
+                            <field name="empleado_id"/>
                             <field name="roles_id"/>
                         </group>
                     </sheet>
@@ -27,6 +28,7 @@
                     <field name="tipo_rubro_id"/>
                     <field name="valor"/>
                     <field name="horas_laborables"/>
+                    <field name="empleado_id"/>
                     <field name="roles_id"/>
                 </tree>
             </field>
