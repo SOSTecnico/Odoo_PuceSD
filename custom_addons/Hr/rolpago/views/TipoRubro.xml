@@ -65,7 +65,7 @@
             </field>
         </record>
 
-        <menuitem name="Tipo de Rubro" id="rolpago.tipo_rubro_menu" parent="rolpago.roles_menu_principal"
+        <menuitem sequence="4" name="Tipo de Rubro" id="rolpago.tipo_rubro_menu" parent="rolpago.roles_menu_principal"
                   action="rolpago.tipo_rubro_act_window"/>
 
     </data>

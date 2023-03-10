@@ -59,7 +59,7 @@
             </field>
         </record>
 
-        <menuitem sequence="2" name="Rubros" id="rolpago.rubros_menu" parent="rolpago.roles_menu_principal"
+        <menuitem sequence="3" name="Rubros" id="rolpago.rubros_menu" parent="rolpago.roles_menu_principal"
                   action="rolpago.rubros"/>
 
     </data>
