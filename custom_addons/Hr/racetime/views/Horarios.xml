@@ -10,12 +10,6 @@
                     <sheet>
                         <widget name="web_ribbon" title="ARCHIVADO" bg_color="bg-danger"
                                 attrs="{'invisible':[('active','=',True)]}"></widget>
-                        <group col="4">
-                            <field name="name"/>
-<!--                            <newline></newline>-->
-<!--                            <field name="fecha_inicio"/>-->
-<!--                            <field name="fecha_fin"/>-->
-                        </group>
                         <group>
                             <field name="total_horas" invisible="1"/>
                             <div class="text-center">
@@ -95,7 +89,7 @@
                     <field name="marcacion_2" widget="float_time"/>
                     <field name="marcacion_3" widget="float_time"/>
                     <field name="marcacion_4" widget="float_time"/>
-                    <field name="dias" widget="many2many_tags"/>
+                    <field name="dias" widget="many2many_tags" />
                 </tree>
             </field>
         </record>

@@ -97,7 +97,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">racetime.reporte_marcaciones</field>
             <field name="context">
-                {'search_default_group_empleado':1,'search_default_group_horario':2,'search_default_group_observacion':3,'search_default_atrasos':4,'search_default_adelanto':5,'search_default_exceso':6,'search_default_a_tiempo':7}
+                {'search_default_group_empleado':1,'search_default_group_horario':2,'search_default_group_observacion':3}
             </field>
             <field name="view_mode">tree,form,graph,pivot</field>
         </record>

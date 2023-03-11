@@ -8,13 +8,25 @@
             <field name="arch" type="xml">
                 <form string="ModelTitle">
                     <sheet>
-                        <group>
+                        <group col="5">
+                            <field colspan="5" name="empleado_id" string="Empleado" required="1"
+                                   context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"/>
+                            <newline></newline>
                             <field name="fecha_inicio"/>
                             <field name="fecha_fin"/>
-                            <field name="horario_id"/>
-                            <field name="horas" widget="float_time"/>
-                            <field name="empleado_id"
-                                   context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"/>
+                            <field name="marcacion_1" widget="float_time"/>
+                            <field name="marcacion_2" colspan="2" attrs="{'required':[('marcacion_1','>',0)]}"
+                                   widget="float_time"/>
+                            <field name="marcacion_3" widget="float_time"/>
+                            <field name="marcacion_4" attrs="{'required':[('marcacion_3','>',0)]}"
+                                   widget="float_time"/>
+                            <field name="dias" widget="many2many_checkboxes"/>
+                            <div>
+                                <label for="total_horas"></label>
+                                <h2>
+                                    <field readonly="1" force_save="1" name="total_horas" widget="float_time"/>
+                                </h2>
+                            </div>
                         </group>
                     </sheet>
                     <div class="oe_chatter">
@@ -32,8 +44,8 @@
                 <tree string="">
                     <field name="fecha_inicio"/>
                     <field name="fecha_fin"/>
-                    <field name="empleado_id"/>
-                    <field name="horas"/>
+                    <field name="horario"/>
+                    <field name="dias" widget="many2many_tags"/>
                 </tree>
             </field>
         </record>
@@ -67,7 +79,6 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">racetime.asignacion_horario</field>
             <field name="view_mode">form</field>
-            <field name="target">main</field>
         </record>
 
         <menuitem name="Asignación Horario" id="racetime.asigancion_horario_menu" parent="racetime.main_menu"/>
@@ -86,10 +97,22 @@
             <field name="arch" type="xml">
                 <form string="racetime.asignacion_multiple_form">
                     <sheet>
-                        <group>
+                        <group col="5">
                             <field name="fecha_inicio"/>
                             <field name="fecha_fin"/>
-                            <field name="horario_id"/>
+                            <field name="marcacion_1" widget="float_time"/>
+                            <field name="marcacion_2" colspan="2" attrs="{'required':[('marcacion_1','>',0)]}"
+                                   widget="float_time"/>
+                            <field name="marcacion_3" widget="float_time"/>
+                            <field name="marcacion_4" attrs="{'required':[('marcacion_3','>',0)]}"
+                                   widget="float_time"/>
+                            <field name="dias" widget="many2many_checkboxes"/>
+                            <div>
+                                <label for="total_horas"></label>
+                                <h2>
+                                    <field readonly="1" force_save="1" name="total_horas" widget="float_time"/>
+                                </h2>
+                            </div>
                         </group>
                         <field name="empleados_ids"
                                context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"/>
