@@ -29,7 +29,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
         fecha_ = self.fecha_inicio
 
         # Obtenemos los horarios
-        horarios = self.env['racetime.asignacion_horario'].sudo().search([('fecha_fin', '=', False)])
+        horarios = self.env['racetime.asignacion_horario'].sudo().search(
+            [('fecha_fin', '=', False)])
         if not horarios:
             raise ValidationError('Para realizar los cálculos por favor debe existir al menos un horario disponible')
 
@@ -68,7 +69,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
                 if not es_feriado:
                     # Calculo para los permisos
                     permiso = permisos_del_empleado.filtered_domain(
-                        [('desde_fecha', '<=', fecha_), ('hasta_fecha', '>=', fecha_)])
+                        [('desde_fecha', '>=', fecha_), ('hasta_fecha', '<=', fecha_)])
 
                     # primer caso dia completo
                     if permiso.estado == 'aprobado':
@@ -107,7 +108,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
                 fecha_ = fecha_ + timedelta(days=1)
             fecha_ = self.fecha_inicio
 
-        #    raise ValidationError('posi')
+    #    raise ValidationError('posi')
 
         return {
             'type': 'tree',
@@ -124,119 +125,147 @@ class ReporteMarcacionesWizard(models.TransientModel):
     # este sistema siempre será NEMESIS
     def calcular_marcaciones(self, marcaciones, horario, permisos):
         if permisos:
-            N1 = timedelta(hours=(horario.marcacion_1 + 5))
-            N2 = timedelta(hours=(horario.marcacion_2 + 5))
-            N3 = timedelta(hours=(horario.marcacion_3 + 5))
-            N4 = timedelta(hours=(horario.marcacion_4 + 5))
-            P1 = timedelta(hours=(permisos.desde_hora + 5))
-            P2 = timedelta(hours=(permisos.hasta_hora + 5))
+                N1 = timedelta(hours=(horario.marcacion_1 + 5))
+                N2 = timedelta(hours=(horario.marcacion_2 + 5))
+                N3 = timedelta(hours=(horario.marcacion_3 + 5))
+                N4 = timedelta(hours=(horario.marcacion_4 + 5))
+                P1 = timedelta(hours=(permisos.desde_hora + 5))
+                P2 = timedelta(hours=(permisos.hasta_hora + 5))
 
-            horarioypermiso = []
+                horarioypermiso = []
 
-            HORARIO = [N1, N2, N3, N4, P1, P2]
-            HORARIO = sorted(HORARIO)
+                HORARIO = [N1, N2, N3, N4, P1, P2]
+                HORARIO = sorted(HORARIO)
 
-            for i in range(len(HORARIO) - 1):
-                pint = (HORARIO[i + 1] - HORARIO[i]) / 2
-                nint1 = HORARIO[i] + pint
-                nint2 = nint1 + pint
-                horarioypermiso.append(nint1)
-                horarioypermiso.append(nint2)
 
-            horarioypermiso.insert(0, N1)
-            marcacion1 = {"F", False}
-            marcacion2 = {"F", False}
-            marcacion3 = {"F", False}
-            marcacion4 = {"F", False}
-            marcacion5 = {"F", False}
-            marcacion6 = {"F", False}
 
-            for m in marcaciones:
-                value = timedelta(hours=m.fecha_hora.time().hour, minutes=m.fecha_hora.time().minute,
-                                  seconds=m.fecha_hora.time().second)
-                if value <= horarioypermiso[0]:
-                    marcacion1 = m
-                elif value > horarioypermiso[0] and value <= horarioypermiso[1]:
-                    marcacion1 = m
-                elif value > horarioypermiso[1] and value <= horarioypermiso[2]:
-                    marcacion2 = m
-                elif value > horarioypermiso[2] and value <= horarioypermiso[3]:
-                    marcacion2 = m
-                elif value > horarioypermiso[3] and value <= horarioypermiso[4]:
-                    marcacion3 = m
-                elif value > horarioypermiso[4] and value <= horarioypermiso[5]:
-                    marcacion3 = m
-                elif value > horarioypermiso[5] and value <= horarioypermiso[6]:
-                    marcacion4 = m
-                elif value > horarioypermiso[6] and value <= horarioypermiso[7]:
-                    marcacion4 = m
-                elif value > horarioypermiso[7] and value <= horarioypermiso[8]:
-                    marcacion5 = m
-                elif value > horarioypermiso[8] and value <= horarioypermiso[9]:
-                    marcacion5 = m
-                elif value > horarioypermiso[9] and value <= horarioypermiso[10]:
-                    marcacion6 = m
-                elif value > horarioypermiso[10]:
-                    marcacion6 = m
+                for i in range(len(HORARIO) - 1):
+                    pint = (HORARIO[i + 1] - HORARIO[i]) / 2
+                    nint1 = HORARIO[i] + pint
+                    nint2 = nint1 + pint
+                    horarioypermiso.append(nint1)
+                    horarioypermiso.append(nint2)
 
-            marprevper = [marcacion1, marcacion2, marcacion3, marcacion4, marcacion5, marcacion6]
+                horarioypermiso.insert(0, N1)
+                marcacion1 = False
+                marcacion2 = False
+                marcacion3 = False
+                marcacion4 = False
+                marcacion5 = False
+                marcacion6 = False
 
-            # OPTIMIZACION AGREGAR PERMISOS PORQUE ENTRE PERMISOS NO PODRÍA HABER MARCACIONES
-            rangoperini = 0
-            rangoperfin = 0
-            for i in range(len(horarioypermiso)):
-                if horarioypermiso[i] == P1:
-                    rangoperini = i
-                if horarioypermiso[i] == P2:
-                    rangoperfin = i
+                permiso1 = False
+                permiso2 = False
+                permiso3 = False
+                permiso4 = False
+                permiso5 = False
+                permiso6 = False
 
-            diccionarioper = {}
-            diccionarioper["0"] = 0  # m1
-            diccionarioper["2"] = 1  # m2
-            diccionarioper["4"] = 2  # m3
-            diccionarioper["6"] = 3  # m4
-            diccionarioper["8"] = 4  # m5
-            diccionarioper["10"] = 5  # m6
-            cont = 0
-            vueltas = diccionarioper[str(rangoperfin)] - diccionarioper[str(rangoperini)]
+                for m in marcaciones:
+                    value = timedelta(hours=m.fecha_hora.time().hour, minutes=m.fecha_hora.time().minute,
+                                      seconds=m.fecha_hora.time().second)
+                    if value <= horarioypermiso[0]:
+                        marcacion1 = {"M":m}
+                        permiso1 =  m
+                    elif value > horarioypermiso[0] and value <= horarioypermiso[1]:
+                        marcacion1 = {"M":m}
+                        permiso1 = m
+                    elif value > horarioypermiso[1] and value <= horarioypermiso[2]:
+                        marcacion2 = {"M":m}
+                        permiso2 = m
+                    elif value > horarioypermiso[2] and value <= horarioypermiso[3]:
+                        marcacion2 = {"M":m}
+                        permiso2 = m
+                    elif value > horarioypermiso[3] and value <= horarioypermiso[4]:
+                        marcacion3 = {"M":m}
+                        permiso3 = m
+                    elif value > horarioypermiso[4] and value <= horarioypermiso[5]:
+                        marcacion3 = {"M":m}
+                        permiso3 = m
+                    elif value > horarioypermiso[5] and value <= horarioypermiso[6]:
+                        marcacion4 = {"M":m}
+                        permiso4 = m
+                    elif value > horarioypermiso[6] and value <= horarioypermiso[7]:
+                        marcacion4 = {"M":m}
+                        permiso4 = m
+                    elif value > horarioypermiso[7] and value <= horarioypermiso[8]:
+                        marcacion5 = {"M":m}
+                        permiso5 = m
+                    elif value > horarioypermiso[8] and value <= horarioypermiso[9]:
+                        marcacion5 = {"M":m}
+                        permiso5 = m
+                    elif value > horarioypermiso[9] and value <= horarioypermiso[10]:
+                        marcacion6 = {"M":m}
+                        permiso6 = m
+                    elif value > horarioypermiso[10]:
+                        marcacion6 = {"M":m}
+                        permiso6 = m
+                busper = [permiso1, permiso2, permiso3, permiso4, permiso5, permiso6]
+                marprevper = [marcacion1, marcacion2, marcacion3, marcacion4, marcacion5, marcacion6]
 
-            for y in range(vueltas + 1):
-                if y is not False:
-                    marprevper[diccionarioper[str(rangoperini)] + cont] = {
-                        "P": marprevper[diccionarioper[str(rangoperini)] + cont]}
-                    cont = cont + 1
-                else:
-                    marprevper[diccionarioper[str(rangoperini)] + cont] = {"P", False}
+              #se debe buscar un if para remmplazar la m por P antes de mandar el atributo
+              #  print (marprevper)
 
-            ############################################################################################
-            perm = {}
-            marc = {}
-            contadorp = 0
-            contadorm = 0
-            for o in marprevper:
-                if "P" in o:
-                    if "F" in o["P"]:
-                        perm[contadorp] = False
-                        contadorp = contadorp + 1
+                #OPTIMIZACION AGREGAR PERMISOS PORQUE ENTRE PERMISOS NO PODRÍA HABER MARCACIONES
+                rangoperini = 0
+                rangoperfin = 0
+                for i in range(len(horarioypermiso)):
+                    if horarioypermiso[i] == P1:
+                        rangoperini = i
+                    if horarioypermiso[i] == P2:
+                        rangoperfin = i
+
+                diccionarioper={}
+                diccionarioper["0"] =  0 #m1
+                diccionarioper["2"] =  1 #m2
+                diccionarioper["4"] =  2 #m3
+                diccionarioper["6"] =  3 #m4
+                diccionarioper["8"] =  4 #m5
+                diccionarioper["10"] = 5 #m6
+                cont = 0
+                vueltas = diccionarioper[str(rangoperfin)] - diccionarioper[str(rangoperini)]
+
+                for y in range(vueltas+1):
+                    if y is not False:
+                        marprevper[diccionarioper[str(rangoperini)]+cont]={"P":busper[diccionarioper[str(rangoperini)]+cont]}
+                        cont = cont+1
                     else:
-                        perm[contadorp] = o["P"]
-                        contadorp = contadorp + 1
-                else:
-                    if "F" in o:
-                        marc[contadorm] = False
-                        contadorm = contadorm + 1
-                    else:
-                        marc[contadorm] = o
-                        contadorm = contadorm + 1
+                        marprevper[diccionarioper[str(rangoperini)] + cont]={"P": False}
 
-            return {
-                'marcaciones': marc,
-                'horas': [N1, N2, N3, N4],
-                'permisos': perm,
-                'horasP': [P1, P2],
-                'id_permiso': permisos
+                print(marprevper)
 
-            }
+
+               # if P1==N1:
+               #     marprevper.pop(0)
+
+        ############################################################################################
+                perm={}
+                marc={}
+                contadorp=0
+                contadorm=0
+                P3=timedelta(seconds=0)
+                P4=timedelta(seconds=0)
+               # print(marprevper)
+
+
+                for o in marprevper:
+                     if o is False:
+                         marc[contadorp]={'M': False}
+                         contadorp = contadorp + 1
+                     else:
+                         marc[contadorp]=o
+                         contadorp = contadorp + 1
+
+               # print(marc)
+
+                return {
+                    'marcaciones': marc,
+                    'horas': HORARIO,
+                    'permisos': perm,
+                    'horasB': [N1, N2, N3, N4],
+                    'horasP': [P1, P2],
+                    'id_permiso': permisos
+                }
         else:
             N1 = timedelta(hours=(horario.marcacion_1 + 5))
             N2 = timedelta(hours=(horario.marcacion_2 + 5))
@@ -283,150 +312,291 @@ class ReporteMarcacionesWizard(models.TransientModel):
                 elif value > interhorarios[6]:
                     marcacion4 = m
 
+
             return {
                 'marcaciones': [marcacion1, marcacion2, marcacion3, marcacion4],
                 'horas': [N1, N2, N3, N4],
 
             }
 
+
     def calcular_tiempos(self, registros, empleado, fecha, permisos):
-        reglas = self.env['racetime.reglas'].search([])
-        tolerancia = timedelta(hours=reglas.tolerancia)
+        if 'id_permiso' in registros:
+            reglas = self.env['racetime.reglas'].search([])
+            tolerancia = timedelta(hours=reglas.tolerancia)
 
-        if registros['marcaciones'][0]:
-            marcacion = timedelta(hours=registros['marcaciones'][0].fecha_hora.time().hour,
-                                  minutes=registros['marcaciones'][0].fecha_hora.time().minute,
-                                  seconds=registros['marcaciones'][0].fecha_hora.time().second)
+            N1 = registros['horas'].index(registros['horasB'][0])
+            N2 = registros['horas'].index(registros['horasB'][1])
+            N3 = registros['horas'].index(registros['horasB'][2])
+            N4 = registros['horas'].index(registros['horasB'][3])
+            P1 = registros['horas'].index(registros['horasP'][0])
+            P2 = registros['horas'].index(registros['horasP'][1])
 
-            if marcacion > registros['horas'][0]:
-                diferencia_1 = marcacion - registros['horas'][0]
-                if diferencia_1 > tolerancia:
-                    observacion_1 = 'atraso'
-                    diferencia_1 = diferencia_1 - tolerancia
+            print(N1)
+            print(N2)
+            print(N3)
+            print(N4)
+            print(P1)
+            print(P2)
+
+
+
+
+            diccionariohora = {}
+            diccionariohora[N1] = {"I": N1}  # m1 {"I","M"}
+            diccionariohora[N2] = {"S": N2}  # m2 {"S","M"}
+            diccionariohora[N3] = {"I": N3}  # m3 {"I","M"}
+            diccionariohora[N4] = {"S": N4}  # m4 {"S","M"}
+            diccionariohora[P1] = {"I": P1}  # m5 {"I","P"}
+            diccionariohora[P2] = {"S": P2}  # m6 {"S","P"}
+
+
+
+           # son 5 posiciones p1=0 y p2 =4 entomnces solo nos interesa las psoiciones que sobren el resto son permisos y estan a tiempo
+            # solo interesa p1 p2 y lo que sobre
+
+            index=[]
+            indexp=[]
+
+
+            for y in range(len(registros['horas'])):
+
+                if y >= P1  and y <= P2:
+                    indexp.append(y)
                 else:
-                    observacion_1 = 'a_tiempo'
+                    index.append(y)
+            print(registros['marcaciones'])
+            print(index)
+            print(indexp)
 
-            else:
-                diferencia_1 = registros['horas'][0] - marcacion
-                observacion_1 = 'a_tiempo'
-        else:
+            observacion_1 = ""
+            observacion_2 = ""
+            observacion_3 = ""
+            observacion_4 = ""
+            observacion_5 = ""
+            observacion_6 = ""
+            observacion_7 = ""
+            observacion_8 = ""
+
             diferencia_1 = timedelta(seconds=0)
-            observacion_1 = 'sin_marcacion'
-
-        if registros['marcaciones'][1]:
-            marcacion = timedelta(hours=registros['marcaciones'][1].fecha_hora.time().hour,
-                                  minutes=registros['marcaciones'][1].fecha_hora.time().minute,
-                                  seconds=registros['marcaciones'][1].fecha_hora.time().second)
-
-            if marcacion > registros['horas'][1]:
-                diferencia_2 = marcacion - registros['horas'][1]
-                observacion_2 = 'exceso'
-            else:
-                diferencia_2 = registros['horas'][1] - marcacion
-                observacion_2 = 'adelanto'
-        else:
             diferencia_2 = timedelta(seconds=0)
-            observacion_2 = 'sin_marcacion'
-
-        if registros['marcaciones'][2]:
-            marcacion = timedelta(hours=registros['marcaciones'][2].fecha_hora.time().hour,
-                                  minutes=registros['marcaciones'][2].fecha_hora.time().minute,
-                                  seconds=registros['marcaciones'][2].fecha_hora.time().second)
-
-            if marcacion > registros['horas'][2]:
-                diferencia_3 = marcacion - registros['horas'][2]
-                if diferencia_3 > tolerancia:
-                    observacion_3 = 'atraso'
-                    diferencia_3 = diferencia_3 - tolerancia
-                else:
-                    observacion_3 = "a_tiempo"
-            else:
-                diferencia_3 = registros['horas'][2] - marcacion
-                observacion_3 = 'a_tiempo'
-        else:
             diferencia_3 = timedelta(seconds=0)
-            observacion_3 = 'sin_marcacion'
-
-        if registros['marcaciones'][3]:
-            marcacion = timedelta(hours=registros['marcaciones'][3].fecha_hora.time().hour,
-                                  minutes=registros['marcaciones'][3].fecha_hora.time().minute,
-                                  seconds=registros['marcaciones'][3].fecha_hora.time().second)
-
-            if marcacion > registros['horas'][3]:
-                diferencia_4 = marcacion - registros['horas'][3]
-                observacion_4 = 'exceso'
-            else:
-                diferencia_4 = registros['horas'][3] - marcacion
-                observacion_4 = 'adelanto'
-        else:
             diferencia_4 = timedelta(seconds=0)
-            observacion_4 = 'sin_marcacion'
+            diferencia_5 = timedelta(seconds=0)
+            diferencia_6 = timedelta(seconds=0)
+            diferencia_7 = timedelta(seconds=0)
+            diferencia_8 = timedelta(seconds=0)
 
-        if "permisos" in registros:
+            observaciones = {}
+            diferencias = {}
+            observacionesp = {}
+            diferenciasp = {}
 
-            # -----------------permiso-----------------------
-            if registros['permisos'][0]:
-                marcacion = timedelta(hours=registros['marcaciones'][3].fecha_hora.time().hour,
-                                      minutes=registros['marcaciones'][3].fecha_hora.time().minute,
-                                      seconds=registros['marcaciones'][3].fecha_hora.time().second)
+            for z in range(len(index)):
+                if "I" in diccionariohora[index[z]]:
+                    if "M" in registros['marcaciones'][index[z]] and registros['marcaciones'][index[z]]["M"] is not False:
 
-                if marcacion > registros['horasP'][0]:
-                    diferencia_5 = marcacion - registros['horasP'][0]
-                    observacion_5 = 'a_tiempo'
-                else:
-                    diferencia_5 = registros['horasP'][0] - marcacion
-                    observacion_5 = 'a_tiempo'
-            else:
-                diferencia_5 = timedelta(seconds=0)
-                observacion_5 = 'a_tiempo'
+                        marcacion = timedelta(hours=registros['marcaciones'][index[z]]["M"].fecha_hora.time().hour,
+                                              minutes=registros['marcaciones'][index[z]]["M"].fecha_hora.time().minute,
+                                              seconds=registros['marcaciones'][index[z]]["M"].fecha_hora.time().second)
+                        if marcacion > registros['horas'][index[z]]:
+                            diferencia_1 = marcacion - registros['horas'][index[z]]
+                            if diferencia_1 > tolerancia:
+                                observacion_1 = 'atraso'
+                                diferencia_1 = diferencia_1 - tolerancia
+                            else:
+                                observacion_1 = 'a_tiempo'
 
-            # -------------------permiso------------------------
-            if registros['permisos'][1]:
-                marcacion = timedelta(hours=registros['marcaciones'][3].fecha_hora.time().hour,
-                                      minutes=registros['marcaciones'][3].fecha_hora.time().minute,
-                                      seconds=registros['marcaciones'][3].fecha_hora.time().second)
+                        else:
+                            diferencia_1 = registros['horas'][index[z]] - marcacion
+                            observacion_1 = 'a_tiempo'
+                    else:
+                        diferencia_1 = timedelta(seconds=0)
+                        observacion_1 = 'sin_marcacion'
 
-                if marcacion > registros['horasP'][1]:
-                    diferencia_6 = marcacion - registros['horasP'][1]
-                    observacion_6 = 'a_tiempo'
-                else:
-                    diferencia_6 = registros['horasP'][1] - marcacion
-                    observacion_6 = 'a_tiempo'
-            else:
-                diferencia_6 = timedelta(seconds=0)
-                observacion_6 = 'a_tiempo'
+                    observaciones[index[z]] = observacion_1
+                    diferencias[index[z]] = diferencia_1
 
-            observaciones = [observacion_1, observacion_2, observacion_3, observacion_4]
-            observaciones_per = [observacion_5, observacion_6]
-            diferencia = [diferencia_1, diferencia_2, diferencia_3, diferencia_4]
-            diferencia_per = [diferencia_5, diferencia_6]
-            respuesta_marc = []
-            respuesta_perm = []
+                if "S" in diccionariohora[index[z]]:
+                    if "M" in registros['marcaciones'][index[z]] and registros['marcaciones'][index[z]]["M"] is not False:
+                        marcacion = timedelta(hours=registros['marcaciones'][index[z]]["M"].fecha_hora.time().hour,
+                                              minutes=registros['marcaciones'][index[z]]["M"].fecha_hora.time().minute,
+                                              seconds=registros['marcaciones'][index[z]]["M"].fecha_hora.time().second)
 
-            for i in range(len(registros['marcaciones'])):
-                respuesta_marc.insert(i, {
-                    'marcacion_id': registros['marcaciones'][i].id if registros['marcaciones'][i] else False,
-                    'horario': datetime.combine(fecha, (datetime.min + registros['horas'][i]).time()),
-                    'observacion': observaciones[i],
-                    'empleado_id': empleado.id,
-                    'diferencia': diferencia[i].total_seconds() / 60,
-                    'fecha': fecha
-                })
-            for j in range(len(registros['permisos'])):
-                respuesta_perm.insert(j, {
-                    'marcacion_id': registros['permisos'][j].id if registros['permisos'][j] else False,
-                    'horario': datetime.combine(fecha, (datetime.min + registros['horasP'][j]).time()),
-                    'observacion': observaciones_per[j],
-                    'empleado_id': empleado.id,
-                    'diferencia': diferencia_per[j].total_seconds() / 60,
-                    'fecha': fecha,
-                    'permiso_id': registros["id_permiso"].id
-                })
-            respuesta = respuesta_marc + respuesta_perm
-            print(respuesta_perm)
-            return [respuesta]
+                        if marcacion > registros['horas'][index[z]]:
+                            diferencia_1 = marcacion - registros['horas'][index[z]]
+                            observacion_1 = 'exceso'
 
+
+                        else:
+                            diferencia_1 = registros['horas'][index[z]] - marcacion
+                            observacion_1 = 'adelanto'
+                    else:
+                        diferencia_1 = timedelta(seconds=0)
+                        observacion_1 = 'sin_marcacion'
+
+                    observaciones[index[z]] = observacion_1
+                    diferencias[index[z]] = diferencia_1
+
+            for x in range(len(indexp)):
+                if x in diccionariohora :
+                    if "I" in diccionariohora[indexp[x]]:
+                        if "P" in registros['marcaciones'][indexp[x]] and registros['marcaciones'][indexp[x]]["P"] is not False:
+
+                            marcacion = timedelta(hours=registros['marcaciones'][indexp[x]]["P"].fecha_hora.time().hour,
+                                                  minutes=registros['marcaciones'][indexp[x]]["P"].fecha_hora.time().minute,
+                                                  seconds=registros['marcaciones'][indexp[x]]["P"].fecha_hora.time().second)
+
+                            if marcacion > registros['horas'][indexp[x]]:
+                                diferencia_1 = marcacion - registros['horas'][indexp[x]]
+                                if diferencia_1 > tolerancia:
+                                    observacion_1 = 'atraso'
+                                    diferencia_1 = diferencia_1 - tolerancia
+                                else:
+                                    observacion_1 = 'a_tiempo'
+
+                            else:
+                                diferencia_1 = registros['horas'][index[x]] - marcacion
+                                observacion_1 = 'a_tiempo'
+                        else:
+                            diferencia_1 = timedelta(seconds=0)
+                            observacion_1 = 'sin_marcacion'
+
+                        observacionesp[indexp[x]] = observacion_1
+                        diferenciasp[indexp[x]] = diferencia_1
+
+                    if "S" in diccionariohora[indexp[x]]:
+                        if "P" in registros['marcaciones'][indexp[x]] and registros['marcaciones'][indexp[x]]["P"] is not False:
+                            marcacion = timedelta(hours=registros['marcaciones'][indexp[x]]["P"].fecha_hora.time().hour,
+                                                  minutes=registros['marcaciones'][indexp[x]]["P"].fecha_hora.time().minute,
+                                                  seconds=registros['marcaciones'][indexp[x]]["P"].fecha_hora.time().second)
+                            if marcacion > registros['horas'][indexp[x]]:
+                                diferencia_1 = marcacion - registros['horas'][indexp[x]]
+                                observacion_1 = 'exceso'
+
+                            else:
+                                diferencia_1 = registros['horas'][indexp[x]] - marcacion
+                                observacion_1 = 'adelanto'
+                        else:
+                            diferencia_1 = timedelta(seconds=0)
+                            observacion_1 = 'sin_marcacion'
+
+                        observacionesp[indexp[x]] = observacion_1
+                        diferenciasp[indexp[x]] = diferencia_1
+
+            respuesta_marc=[]
+            respuesta_perm=[]
+
+    ###################################RESPUESTAS###############################################
+            for i in range(len(index)):
+                if "M" in registros['marcaciones'][index[i]]:
+                     respuesta_marc.insert(index[i], {
+                         'marcacion_id': registros['marcaciones'][index[i]]["M"].id if registros['marcaciones'][index[i]]["M"] else False,
+                         'horario': datetime.combine(fecha, (datetime.min + registros['horas'][index[i]]).time()),
+                         'observacion': observaciones[index[i]],
+                         'empleado_id': empleado.id,
+                         'diferencia': diferencias[index[i]].total_seconds() / 60,
+                         'fecha': fecha
+                     })
+
+            for j in range(len(indexp)):
+
+                if "P" in registros['marcaciones'][indexp[j]] and indexp[j] in observacionesp:
+                    respuesta_perm.insert(indexp[j], {
+                        'marcacion_id': registros['marcaciones'][indexp[j]]["P"].id if
+                        registros['marcaciones'][indexp[j]]["P"] else False,
+                        'horario': datetime.combine(fecha, (datetime.min + registros['horas'][indexp[j]]).time()),
+                        'observacion': observacionesp[indexp[j]],
+                        'empleado_id': empleado.id,
+                        'diferencia': diferenciasp[indexp[j]].total_seconds() / 60,
+                        'fecha': fecha,
+                        'permiso_id': registros['id_permiso'].id
+                    })
+                if "M" in registros['marcaciones'][indexp[j]] and indexp[j] in observacionesp:
+                    respuesta_perm.insert(indexp[j], {
+                        'marcacion_id': registros['marcaciones'][indexp[j]]["M"].id if
+                        registros['marcaciones'][indexp[j]]["M"] else False,
+                        'horario': datetime.combine(fecha, (datetime.min + registros['horas'][indexp[j]]).time()),
+                        'observacion': observacionesp[indexp[j]],
+                        'empleado_id': empleado.id,
+                        'diferencia': diferenciasp[indexp[j]].total_seconds() / 60,
+                        'fecha': fecha,
+                        'permiso_id': registros['id_permiso'].id
+                    })
+            return [respuesta_marc + respuesta_perm]
         else:
+            reglas = self.env['racetime.reglas'].search([])
+            tolerancia = timedelta(hours=reglas.tolerancia)
+
+            if registros['marcaciones'][0]:
+                marcacion = timedelta(hours=registros['marcaciones'][0].fecha_hora.time().hour,
+                                      minutes=registros['marcaciones'][0].fecha_hora.time().minute,
+                                      seconds=registros['marcaciones'][0].fecha_hora.time().second)
+
+                if marcacion > registros['horas'][0]:
+                    diferencia_1 = marcacion - registros['horas'][0]
+                    if diferencia_1 > tolerancia:
+                        observacion_1 = 'atraso'
+                        diferencia_1 = diferencia_1 - tolerancia
+                    else:
+                        observacion_1 = 'a_tiempo'
+
+                else:
+                    diferencia_1 = registros['horas'][0] - marcacion
+                    observacion_1 = 'a_tiempo'
+            else:
+                diferencia_1 = timedelta(seconds=0)
+                observacion_1 = 'sin_marcacion'
+
+            if registros['marcaciones'][1]:
+                marcacion = timedelta(hours=registros['marcaciones'][1].fecha_hora.time().hour,
+                                      minutes=registros['marcaciones'][1].fecha_hora.time().minute,
+                                      seconds=registros['marcaciones'][1].fecha_hora.time().second)
+
+                if marcacion > registros['horas'][1]:
+                    diferencia_2 = marcacion - registros['horas'][1]
+                    observacion_2 = 'exceso'
+                else:
+                    diferencia_2 = registros['horas'][1] - marcacion
+                    observacion_2 = 'adelanto'
+            else:
+                diferencia_2 = timedelta(seconds=0)
+                observacion_2 = 'sin_marcacion'
+
+            if registros['marcaciones'][2]:
+                marcacion = timedelta(hours=registros['marcaciones'][2].fecha_hora.time().hour,
+                                      minutes=registros['marcaciones'][2].fecha_hora.time().minute,
+                                      seconds=registros['marcaciones'][2].fecha_hora.time().second)
+
+                if marcacion > registros['horas'][2]:
+                    diferencia_3 = marcacion - registros['horas'][2]
+                    if diferencia_3 > tolerancia:
+                        observacion_3 = 'atraso'
+                        diferencia_3 = diferencia_3 - tolerancia
+                    else:
+                        observacion_3 = "a_tiempo"
+                else:
+                    diferencia_3 = registros['horas'][2] - marcacion
+                    observacion_3 = 'a_tiempo'
+            else:
+                diferencia_3 = timedelta(seconds=0)
+                observacion_3 = 'sin_marcacion'
+
+            if registros['marcaciones'][3]:
+                marcacion = timedelta(hours=registros['marcaciones'][3].fecha_hora.time().hour,
+                                      minutes=registros['marcaciones'][3].fecha_hora.time().minute,
+                                      seconds=registros['marcaciones'][3].fecha_hora.time().second)
+
+                if marcacion > registros['horas'][3]:
+                    diferencia_4 = marcacion - registros['horas'][3]
+                    observacion_4 = 'exceso'
+                else:
+                    diferencia_4 = registros['horas'][3] - marcacion
+                    observacion_4 = 'adelanto'
+            else:
+                diferencia_4 = timedelta(seconds=0)
+                observacion_4 = 'sin_marcacion'
+
             observaciones = [observacion_1, observacion_2, observacion_3, observacion_4]
             diferencia = [diferencia_1, diferencia_2, diferencia_3, diferencia_4]
             respuesta = []
@@ -441,13 +611,13 @@ class ReporteMarcacionesWizard(models.TransientModel):
                     'fecha': fecha
                 })
 
-            return [
-                respuesta
-            ]
+            return [respuesta]
+
 
     def registrar_marcaciones(self, marcaciones):
         for m in marcaciones:
             self.env['racetime.reporte_marcaciones'].create(m)
+
 
     def generar_registros_en_blanco(self, fecha, empleado, observacion, permiso=None):
 
@@ -486,16 +656,3 @@ class ReporteMarcaciones(models.Model):
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False)
 
     permiso_id = fields.Many2one(comodel_name='racetime.permisos', string='Permiso', required=False)
-
-
-
-    hora = fields.Char(string='Hora', required=False, compute='_hora')
-    marcacion = fields.Char(string='Hora Marcación', required=False, compute='_hora')
-
-    @api.depends('horario','marcacion')
-    def _hora(self):
-        for rec in self:
-            rec.hora = (rec.horario - timedelta(hours=5)).strftime("%H:%M")
-            rec.marcacion =  (rec.marcacion_tiempo - timedelta(hours=5)).strftime("%H:%M") if rec.marcacion_tiempo else None
-
-
