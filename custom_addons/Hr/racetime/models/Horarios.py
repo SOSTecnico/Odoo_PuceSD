@@ -157,28 +157,31 @@ class AsignacionHorario(models.Model):
     @api.model
     def create(self, values):
 
-        horarios = self.env['racetime.asignacion_horario'].sudo().search([('empleado_id', '=', values['empleado_id'])],
-                                                                         limit=50, order='fecha_fin desc')
 
-        for h in horarios:
+        if not 'empleados_ids' in values:
 
-            if not h.fecha_fin:
-                continue
+            horarios = self.env['racetime.asignacion_horario'].sudo().search([('empleado_id', '=', values['empleado_id'])],
+                                                                             limit=50, order='fecha_fin desc')
 
-            if (h.fecha_inicio <= datetime.strptime(values['fecha_inicio'],
-                                                    "%Y-%m-%d").date() and h.fecha_fin >= datetime.strptime(
-                values['fecha_inicio'], "%Y-%m-%d").date()):
+            for h in horarios:
+
+                if not h.fecha_fin:
+                    continue
+
+                if (h.fecha_inicio <= datetime.strptime(values['fecha_inicio'],
+                                                        "%Y-%m-%d").date() and h.fecha_fin >= datetime.strptime(
+                    values['fecha_inicio'], "%Y-%m-%d").date()):
+                    raise ValidationError(
+                        f"Existe un conflicto con el horario: \nFECHA INICIO: {h.fecha_inicio} \nFECHA FIN: {h.fecha_fin} \nHORARIO: {html2plaintext(h.horario_)}")
+
+            horario_activo = horarios.filtered_domain([('fecha_fin', '=', False)])
+
+            if horario_activo.fecha_inicio == datetime.strptime(values['fecha_inicio'], "%Y-%m-%d").date():
                 raise ValidationError(
-                    f"Existe un conflicto con el horario: \nFECHA INICIO: {h.fecha_inicio} \nFECHA FIN: {h.fecha_fin} \nHORARIO: {html2plaintext(h.horario_)}")
+                    f"Existe un conflicto con el horario: \nFECHA INICIO: {horario_activo.fecha_inicio} \nFECHA FIN: {horario_activo.fecha_fin} \nHORARIO: {html2plaintext(horario_activo.horario_)}")
 
-        horario_activo = horarios.filtered_domain([('fecha_fin', '=', False)])
-
-        if horario_activo.fecha_inicio == datetime.strptime(values['fecha_inicio'], "%Y-%m-%d").date():
-            raise ValidationError(
-                f"Existe un conflicto con el horario: \nFECHA INICIO: {horario_activo.fecha_inicio} \nFECHA FIN: {horario_activo.fecha_fin} \nHORARIO: {html2plaintext(horario_activo.horario_)}")
-
-        else:
-            horario_activo.fecha_fin = datetime.strptime(values['fecha_inicio'], "%Y-%m-%d") - timedelta(days=1)
+            else:
+                horario_activo.fecha_fin = datetime.strptime(values['fecha_inicio'], "%Y-%m-%d") - timedelta(days=1)
 
         res = super(AsignacionHorario, self).create(values)
 
@@ -228,8 +231,8 @@ class AsignacionHorarioMultiple(models.TransientModel):
                 }))
             values.append({
                 'empleado_id': empleado.id,
-                'fecha_inicio': self.fecha_inicio,
-                'fecha_fin': self.fecha_fin,
+                'fecha_inicio': self.fecha_inicio.strftime("%Y-%m-%d"),
+                'fecha_fin': self.fecha_fin.strftime("%Y-%m-%d") if self.fecha_fin else False,
                 'horario': horarios,
                 'total_horas': self.total_horas
             })
