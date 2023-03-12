@@ -486,3 +486,16 @@ class ReporteMarcaciones(models.Model):
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False)
 
     permiso_id = fields.Many2one(comodel_name='racetime.permisos', string='Permiso', required=False)
+
+
+
+    hora = fields.Char(string='Hora', required=False, compute='_hora')
+    marcacion = fields.Char(string='Hora Marcación', required=False, compute='_hora')
+
+    @api.depends('horario','marcacion')
+    def _hora(self):
+        for rec in self:
+            rec.hora = (rec.horario - timedelta(hours=5)).strftime("%H:%M")
+            rec.marcacion =  (rec.marcacion_tiempo - timedelta(hours=5)).strftime("%H:%M") if rec.marcacion_tiempo else None
+
+

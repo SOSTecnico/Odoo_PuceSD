@@ -14,19 +14,14 @@
                             <newline></newline>
                             <field name="fecha_inicio"/>
                             <field name="fecha_fin"/>
-                            <field name="marcacion_1" widget="float_time"/>
-                            <field name="marcacion_2" colspan="2" attrs="{'required':[('marcacion_1','>',0)]}"
-                                   widget="float_time"/>
-                            <field name="marcacion_3" widget="float_time"/>
-                            <field name="marcacion_4" attrs="{'required':[('marcacion_3','>',0)]}"
-                                   widget="float_time"/>
-                            <field name="dias" widget="many2many_checkboxes"/>
+                            <newline/>
                             <div>
                                 <label for="total_horas"></label>
                                 <h2>
                                     <field readonly="1" force_save="1" name="total_horas" widget="float_time"/>
                                 </h2>
                             </div>
+                            <field name="horario" colspan="5" nolabel="1"/>
                         </group>
                     </sheet>
                     <div class="oe_chatter">
@@ -44,8 +39,8 @@
                 <tree string="">
                     <field name="fecha_inicio"/>
                     <field name="fecha_fin"/>
-                    <field name="horario"/>
-                    <field name="dias" widget="many2many_tags"/>
+                    <field name="horario_"/>
+                    <!--                    <field name="dias" widget="many2many_tags"/>-->
                 </tree>
             </field>
         </record>
@@ -100,19 +95,16 @@
                         <group col="5">
                             <field name="fecha_inicio"/>
                             <field name="fecha_fin"/>
-                            <field name="marcacion_1" widget="float_time"/>
-                            <field name="marcacion_2" colspan="2" attrs="{'required':[('marcacion_1','>',0)]}"
-                                   widget="float_time"/>
-                            <field name="marcacion_3" widget="float_time"/>
-                            <field name="marcacion_4" attrs="{'required':[('marcacion_3','>',0)]}"
-                                   widget="float_time"/>
-                            <field name="dias" widget="many2many_checkboxes"/>
                             <div>
                                 <label for="total_horas"></label>
                                 <h2>
                                     <field readonly="1" force_save="1" name="total_horas" widget="float_time"/>
                                 </h2>
                             </div>
+                            <field name="horario_multiple"/>
+                        </group>
+                        <group>
+                            <field name="horario_multiple_" readonly="1"/>
                         </group>
                         <field name="empleados_ids"
                                context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"/>

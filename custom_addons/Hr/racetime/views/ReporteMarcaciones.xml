@@ -61,9 +61,11 @@
                 <tree string="racetime.reporte_marcaciones_tree" default_order="fecha desc, horario asc"
                       decoration-success="observacion == 'a_tiempo'" decoration-danger="observacion == 'atraso'"
                       decoration-warning="observacion == 'exceso'" decoration-info="observacion == 'adelanto'">
-                    <field name="fecha" invisible="1"/>
-                    <field name="horario"/>
-                    <field name="marcacion_tiempo"/>
+                    <field name="fecha" optional="show" />
+<!--                    <field name="horario"/>-->
+                    <field name="hora"/>
+<!--                    <field name="marcacion_tiempo"/>-->
+                    <field name="marcacion"/>
                     <field name="diferencia" widget="float_time"/>
                     <field name="observacion"/>
                     <field name="permiso_id"/>
@@ -82,8 +84,9 @@
                     <filter name="exceso" string="EXCESO" domain="[('observacion','=','exceso')]"/>
                     <filter name="a_tiempo" string="A TIEMPO" domain="[('observacion','=','a_tiempo')]"/>
                     <filter name="no_aplica" string="NO APLICA" domain="[('observacion','=','no_aplica')]"/>
+                    <filter name="fds" string="FDS" domain="[('observacion','!=','no_aplica')]"/>
                     <filter name="group_empleado" context="{'group_by':'empleado_id'}"/>
-                    <filter name="group_horario" context="{'group_by':'horario:month'}"/>
+                    <filter name="group_horario" context="{'group_by':'horario:month:day'}"/>
                     <filter name="group_observacion" context="{'group_by':'observacion'}"
                             domain="[('observacion','!=','feriado')]"/>
                 </search>
@@ -96,7 +99,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">racetime.reporte_marcaciones</field>
             <field name="context">
-                {'search_default_group_empleado':1,'search_default_group_horario':2,'search_default_group_observacion':3}
+                {'search_default_group_empleado':1,'search_default_group_horario':2,'search_default_fds':3}
             </field>
             <field name="view_mode">tree,form,graph,pivot</field>
         </record>
