@@ -81,8 +81,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
                             continue
 
                     for h in horarios_empleado:
-                        if fecha_.strftime("%A") in h.dias.mapped('name'):
-                            horario_activo = h
+                        if fecha_.strftime("%A") in h.horario.dias.mapped('name'):
+                            horario_activo = h.horario
                             marcaciones_del_dia = marcaciones_empleado.filtered(
                                 lambda f: f.fecha_hora.date() == fecha_)
                             registros = self.calcular_marcaciones(marcaciones=marcaciones_del_dia,
