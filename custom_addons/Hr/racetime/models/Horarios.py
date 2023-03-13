@@ -119,7 +119,7 @@ class AsignacionHorario(models.Model):
                 m2 = (datetime.min + timedelta(hours=h.marcacion_2)).strftime("%H:%M")
                 m3 = (datetime.min + timedelta(hours=h.marcacion_3)).strftime("%H:%M")
                 m4 = (datetime.min + timedelta(hours=h.marcacion_4)).strftime("%H:%M")
-                horario = f"{m1} - {m2} || {m3} - {m4} => {h.dias.mapped('name')}"
+                horario = f"{m1} - {m2} || {m3} - {m4} => {h.dias.mapped('name')} "
                 rec.horario_ = rec.horario_ + horario
 
     @api.constrains('total_horas')
@@ -157,11 +157,11 @@ class AsignacionHorario(models.Model):
     @api.model
     def create(self, values):
 
-
         if not 'empleados_ids' in values:
 
-            horarios = self.env['racetime.asignacion_horario'].sudo().search([('empleado_id', '=', values['empleado_id'])],
-                                                                             limit=50, order='fecha_fin desc')
+            horarios = self.env['racetime.asignacion_horario'].sudo().search(
+                [('empleado_id', '=', values['empleado_id'])],
+                limit=50, order='fecha_fin desc')
 
             for h in horarios:
 

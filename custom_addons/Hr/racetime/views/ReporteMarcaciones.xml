@@ -15,7 +15,7 @@
                                context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"></field>
                     </group>
                     <footer>
-                        <button name="calculo_marcaciones" string="GENERAR" type="object" class="oe_highlight"/>
+                        <button name="generar_marcaciones" string="GENERAR" type="object" class="oe_highlight"/>
                         <button string="Cancelar" class="oe_link" special="cancel"/>
                     </footer>
                 </form>
@@ -58,14 +58,12 @@
             <field name="name">racetime.reporte_marcaciones_view_tree</field>
             <field name="model">racetime.reporte_marcaciones</field>
             <field name="arch" type="xml">
-                <tree string="racetime.reporte_marcaciones_tree" default_order="fecha desc, horario asc"
+                <tree string="racetime.reporte_marcaciones_tree" default_order="horario asc"
                       decoration-success="observacion == 'a_tiempo'" decoration-danger="observacion == 'atraso'"
                       decoration-warning="observacion == 'exceso'" decoration-info="observacion == 'adelanto'">
-                    <field name="fecha" optional="show" />
-<!--                    <field name="horario"/>-->
-                    <field name="hora"/>
-<!--                    <field name="marcacion_tiempo"/>-->
-                    <field name="marcacion"/>
+                    <field name="fecha" optional="hide" />
+                    <field name="horario"/>
+                    <field name="marcacion_tiempo"/>
                     <field name="diferencia" widget="float_time"/>
                     <field name="observacion"/>
                     <field name="permiso_id"/>
@@ -86,7 +84,7 @@
                     <filter name="no_aplica" string="NO APLICA" domain="[('observacion','=','no_aplica')]"/>
                     <filter name="fds" string="FDS" domain="[('observacion','!=','no_aplica')]"/>
                     <filter name="group_empleado" context="{'group_by':'empleado_id'}"/>
-                    <filter name="group_horario" context="{'group_by':'horario:month:day'}"/>
+                    <filter name="group_horario" context="{'group_by':'fecha:month:day'}"/>
                     <filter name="group_observacion" context="{'group_by':'observacion'}"
                             domain="[('observacion','!=','feriado')]"/>
                 </search>
