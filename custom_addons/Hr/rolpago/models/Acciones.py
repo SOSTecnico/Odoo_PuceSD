@@ -11,6 +11,9 @@ class RolAcciones(models.TransientModel):
     _description = 'Description'
 
     name = fields.Char()
+    fecha_inicio = fields.Date(string='Fecha Inicio', required=True, default=lambda self: datetime.now().replace(day=1))
+    fecha_fin = fields.Date(string='Fecha Fin', required=False, default=lambda self: datetime.now().replace(day=1))
+    empleados_ids = fields.Many2many(comodel_name='hr.employee', string='Empleados_ids', required=True)
 
     def ILG003(self):
         url = "https://pucesapwd.puce.edu.ec:44400/RESTAdapter/personal/?sociedad=6000&areap=0102"
@@ -44,40 +47,49 @@ class RolAcciones(models.TransientModel):
 
     def ILG006(self):
 
-        fecha = datetime.today().replace(day=1) - timedelta(days=1)
+        fecha_inicio = self.fecha_inicio
+        fechas = []
+        while fecha_inicio <= self.fecha_fin:
+            fechas.append(fecha_inicio.replace(day=1))
+            fecha_inicio = fecha_inicio + timedelta(days=30)
 
-        # Fecha de prueba para sacar roles de otros meses
-        # fecha = datetime(2023, 1, 1)
-
+        tipos_de_rubros = self.env['rolpago.tipo_rubro'].sudo().search([])
         headers = {'charset': 'UTF-8', 'Content-Type': 'json'}
 
-        empleados = self.env['hr.employee'].sudo().search([])
-        tipos_de_rubros = self.env['rolpago.tipo_rubro'].sudo().search([])
-        for empleado in empleados:
+        for fecha in fechas:
+            for empleado in self.empleados_ids:
+                self.env['rolpago.roles'].search([('estado_rol', '=', 'publicado'), ('empleado_id', '=', empleado.id),
+                                                  ('fecha', 'like', f"{fecha.strftime('%Y-%m')}")]).unlink()
 
-            self.env['rolpago.roles'].sudo().search(
-                [('estado_rol', '=', 'publicado'), ('empleado_id', '=', empleado.id),
-                 ('fecha', 'like', f"{fecha.strftime('%Y-%m')}")]).unlink()
+                url = f"https://pucesapwd.puce.edu.ec:44400/RESTAdapter/RoldePago/{empleado.identification_id}" \
+                      f"?tipdoc=01&mes={fecha.strftime('%m')}&ano={fecha.strftime('%Y')}&socie=6000"
 
-            url = f"https://pucesapwd.puce.edu.ec:44400/RESTAdapter/RoldePago/{empleado.identification_id}?tipdoc=01&mes={fecha.strftime('%m')}&ano={fecha.strftime('%Y')}&socie=6000"
-            data = requests.get(url, headers, auth=('POP_WS', 'Puc3S4p1')).json()
-            if data['MT_IHR006_RoldePago_Out_Resp']['Log']['TipoMensaje'] != 'E':
-                rubros = data['MT_IHR006_RoldePago_Out_Resp']['Detalle']
-                model_rubros = []
-                for rubro in rubros:
-                    tipo_rubro = tipos_de_rubros.filtered_domain([('name', '=', rubro['TextoConcepto'])])
+                data = requests.get(url, headers, auth=('POP_WS', 'Puc3S4p1')).json()
 
-                    model_rubros.append((0, 0, {
-                        'valor': rubro['Monto'],
-                        'horas_laborables': rubro['Horas'],
-                        'tipo_rubro_id': tipo_rubro.id,
-                    }))
+                if data['MT_IHR006_RoldePago_Out_Resp']['Log']['TipoMensaje'] != 'E':
+                    rubros = data['MT_IHR006_RoldePago_Out_Resp']['Detalle']
+                    model_rubros = []
+                    for rubro in rubros:
+                        tipo_rubro = tipos_de_rubros.filtered_domain([('name', '=', rubro['TextoConcepto'])])
 
-                self.env['rolpago.roles'].sudo().create({
-                    'empleado_id': empleado.id,
-                    'fecha': fecha.strftime("%Y-%m-%d"),
-                    'rubros_id': model_rubros
-                })
+                        if not tipo_rubro:
+                            tipo_rubro = self.env['rolpago.tipo_rubro'].create({
+                                'name': rubro['TextoConcepto'],
+                                'tipo': 'I' if rubro['Signo'] == '+' else 'D',
+                            })
+                            print(tipo_rubro)
+
+                        model_rubros.append((0, 0, {
+                            'valor': rubro['Monto'],
+                            'horas_laborables': rubro['Horas'],
+                            'tipo_rubro_id': tipo_rubro.id,
+                        }))
+
+                    self.env['rolpago.roles'].sudo().create({
+                        'empleado_id': empleado.id,
+                        'fecha': fecha.strftime("%Y-%m-%d"),
+                        'rubros_id': model_rubros
+                    })
 
         return {
             'type': 'tree',

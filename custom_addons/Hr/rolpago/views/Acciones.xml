@@ -9,11 +9,13 @@
                 <form string="rolpago.acciones_form">
                     <sheet>
                         <group>
-                            <h3>Acciones del Servidor</h3>
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_fin"/>
                         </group>
+                        <field name="empleados_ids" nolabel="1"
+                               context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"/>
                     </sheet>
                     <footer>
-                        <button groups="rolpago.rolpago_administrador" name="ILG003" string="ACTUALIZAR EMPLEADOS" type="object" class="oe_highlight"/>
                         <button name="ILG006" string="GENERAR ROLES" type="object" class="oe_highlight"/>
                         <button string="Cancelar" class="oe_link" special="cancel"/>
                     </footer>
@@ -29,7 +31,8 @@
             <field name="target">new</field>
         </record>
 
-        <menuitem sequence="20" name="Acciones" id="rolpago.acciones_menu" parent="rolpago.roles_menu_principal" action="rolpago.acciones_action"></menuitem>
+        <menuitem sequence="20" name="Acciones" id="rolpago.acciones_menu" parent="rolpago.roles_menu_principal"
+                  action="rolpago.acciones_action"></menuitem>
 
 
     </data>
