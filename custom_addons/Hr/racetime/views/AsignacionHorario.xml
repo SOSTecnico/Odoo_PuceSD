@@ -12,7 +12,7 @@
                             <field colspan="5" name="empleado_id" string="Empleado" required="1"
                                    context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"/>
                             <newline></newline>
-                            <field name="fecha_inicio"/>
+                            <field name="fecha_inicio" required="1" force_save="1"/>
                             <field name="fecha_fin"/>
                             <newline/>
                             <div>

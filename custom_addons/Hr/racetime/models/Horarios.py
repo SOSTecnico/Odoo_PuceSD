@@ -1,7 +1,7 @@
 import json
 
 from odoo import fields, models, api
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date
 
 from odoo.exceptions import ValidationError
 from odoo.tools import html2plaintext
@@ -101,8 +101,8 @@ class AsignacionHorario(models.Model):
 
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleados', tracking=True)
 
-    fecha_inicio = fields.Date(string='Fecha Inicio', required=True, tracking=True)
-    fecha_fin = fields.Date(string='Fecha Fin', required=False, tracking=True)
+    fecha_inicio = fields.Date(string='Fecha Inicio', required=False, tracking=True, copy=False)
+    fecha_fin = fields.Date(string='Fecha Fin', required=False, tracking=True, copy=False)
 
     horario_id = fields.Many2one(comodel_name='racetime.horarios', string='Horario', required=False)
 
@@ -154,38 +154,21 @@ class AsignacionHorario(models.Model):
 
         self.total_horas = res
 
-    @api.model
-    def create(self, values):
+    def copy(self, default=None):
+        horario = self.horario.copy()
+        default = {
+            'horario': horario
+        }
+        return super(AsignacionHorario, self).copy(default)
 
-        if not 'empleados_ids' in values:
-
-            horarios = self.env['racetime.asignacion_horario'].sudo().search(
-                [('empleado_id', '=', values['empleado_id'])],
-                limit=50, order='fecha_fin desc')
-
-            for h in horarios:
-
-                if not h.fecha_fin:
-                    continue
-
-                if (h.fecha_inicio <= datetime.strptime(values['fecha_inicio'],
-                                                        "%Y-%m-%d").date() and h.fecha_fin >= datetime.strptime(
-                    values['fecha_inicio'], "%Y-%m-%d").date()):
-                    raise ValidationError(
-                        f"Existe un conflicto con el horario: \nFECHA INICIO: {h.fecha_inicio} \nFECHA FIN: {h.fecha_fin} \nHORARIO: {html2plaintext(h.horario_)}")
-
-            horario_activo = horarios.filtered_domain([('fecha_fin', '=', False)])
-
-            if horario_activo.fecha_inicio == datetime.strptime(values['fecha_inicio'], "%Y-%m-%d").date():
+    @api.constrains('fecha_inicio')
+    def check_horario(self):
+        horarios = self.env['racetime.asignacion_horario'].search(
+            [('id', '!=', self.id), ('fecha_fin', '>=', self.fecha_inicio)])
+        for record in horarios:
+            if record.fecha_inicio <= self.fecha_inicio and record.fecha_fin >= self.fecha_inicio:
                 raise ValidationError(
-                    f"Existe un conflicto con el horario: \nFECHA INICIO: {horario_activo.fecha_inicio} \nFECHA FIN: {horario_activo.fecha_fin} \nHORARIO: {html2plaintext(horario_activo.horario_)}")
-
-            else:
-                horario_activo.fecha_fin = datetime.strptime(values['fecha_inicio'], "%Y-%m-%d") - timedelta(days=1)
-
-        res = super(AsignacionHorario, self).create(values)
-
-        return res
+                    f"Existe un conflicto con el horario: \nFECHA INICIO: {record.fecha_inicio} \nFECHA FIN: {record.fecha_fin} \nHORARIO: {html2plaintext(record.horario_)}")
 
 
 class AsignacionHorarioMultiple(models.TransientModel):

@@ -59,7 +59,7 @@
             <field name="name">racetime.reporte_marcaciones_view_tree</field>
             <field name="model">racetime.reporte_marcaciones</field>
             <field name="arch" type="xml">
-                <tree string="racetime.reporte_marcaciones_tree" default_order="horario asc"
+                <tree expand="1" string="racetime.reporte_marcaciones_tree" default_order="horario asc"
                       decoration-success="observacion == 'a_tiempo'" decoration-danger="observacion == 'atraso'"
                       decoration-warning="observacion == 'exceso'" decoration-info="observacion == 'adelanto'">
                     <field name="fecha" optional="hide" />
@@ -100,7 +100,7 @@
             <field name="context">
                 {'search_default_group_empleado':1,'search_default_group_horario':2}
             </field>
-            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="view_mode">tree,form,kanban,graph,pivot</field>
         </record>
 
         <menuitem sequence="1" name="Reporte de Marcaciones" id="racetime.reporte_marcaciones_menu"
