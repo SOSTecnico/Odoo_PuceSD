@@ -73,11 +73,14 @@ class RolAcciones(models.TransientModel):
                         tipo_rubro = tipos_de_rubros.filtered_domain([('name', '=', rubro['TextoConcepto'])])
 
                         if not tipo_rubro:
+
                             tipo_rubro = self.env['rolpago.tipo_rubro'].create({
                                 'name': rubro['TextoConcepto'],
                                 'tipo': 'I' if rubro['Signo'] == '+' else 'D',
                             })
-                            print(tipo_rubro)
+
+                            tipos_de_rubros = self.env['rolpago.tipo_rubro'].sudo().search([])
+
 
                         model_rubros.append((0, 0, {
                             'valor': rubro['Monto'],
@@ -96,7 +99,7 @@ class RolAcciones(models.TransientModel):
             'name': 'Roles',
             'view_mode': 'tree,form',
             'res_model': 'rolpago.roles',
-            'context': {'search_default_empleados_group': 2, 'search_default_estado_group': 1},
+            'context': {'search_default_fecha':1,'search_default_empleados_group':2},
             'type': 'ir.actions.act_window',
             'target': 'main'
         }

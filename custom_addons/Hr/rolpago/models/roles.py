@@ -10,6 +10,7 @@ class Roles(models.Model):
     _name = 'rolpago.roles'
     _description = 'Roles'
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin', 'utm.mixin']
+    _order = 'fecha desc'
 
     name = fields.Char(compute='compute_name')
 
@@ -43,7 +44,6 @@ class Roles(models.Model):
     total_egresos = fields.Float(
         string='Total_descuentos',
         required=False, compute='calcular_totales')
-
 
     estado_rol = fields.Selection(string='Estado', default='publicado',
                                   selection=[('publicado', 'PUBLICADO'), ('conforme', 'CONFORME'),

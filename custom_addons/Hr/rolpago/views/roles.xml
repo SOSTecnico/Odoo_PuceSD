@@ -52,6 +52,7 @@
                 <search string="">
                     <filter name="empleados_group" string="Empleados" context="{'group_by':'empleado_id'}"/>
                     <filter name="estado_group" string="Estado Rol" context="{'group_by':'estado_rol'}"/>
+                    <filter name="fecha" string="Fecha" context="{'group_by':'fecha:month'}"/>
                     <field name="empleado_id"/>
                 </search>
             </field>
@@ -62,7 +63,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">rolpago.roles</field>
             <field name="view_mode">tree,form</field>
-            <field name="context">{'search_default_empleados_group':2,'search_default_estado_group':1}</field>
+            <field name="context">{'search_default_fecha':1,'search_default_empleados_group':2}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     There is no examples click here to add new ModelTitle.
