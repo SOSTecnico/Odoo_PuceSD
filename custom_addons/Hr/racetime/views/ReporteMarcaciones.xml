@@ -15,6 +15,7 @@
                                context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"></field>
                     </group>
                     <footer>
+<!--                        <button name="calculo_marcaciones" string="GENERAR" type="object" class="oe_highlight"/>-->
                         <button name="generar_marcaciones" string="GENERAR" type="object" class="oe_highlight"/>
                         <button string="Cancelar" class="oe_link" special="cancel"/>
                     </footer>
@@ -84,7 +85,7 @@
                     <filter name="no_aplica" string="NO APLICA" domain="[('observacion','=','no_aplica')]"/>
                     <filter name="fds" string="FDS" domain="[('observacion','!=','no_aplica')]"/>
                     <filter name="group_empleado" context="{'group_by':'empleado_id'}"/>
-                    <filter name="group_horario" context="{'group_by':'fecha:month:day'}"/>
+                    <filter name="group_horario" context="{'group_by':'horario:month:day'}"/>
                     <filter name="group_observacion" context="{'group_by':'observacion'}"
                             domain="[('observacion','!=','feriado')]"/>
                 </search>
@@ -97,7 +98,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">racetime.reporte_marcaciones</field>
             <field name="context">
-                {'search_default_group_empleado':1,'search_default_group_horario':2,'search_default_fds':3}
+                {'search_default_group_empleado':1,'search_default_group_horario':2}
             </field>
             <field name="view_mode">tree,form,graph,pivot</field>
         </record>
