@@ -715,7 +715,6 @@ class ReporteMarcacionesWizard(models.TransientModel):
         marcaciones_del_dia = marcaciones.filtered_domain([('fecha_hora', '>=', f_inicio), ('fecha_hora', '<=', f_fin)])
         horario_marcaciones = []
 
-        # print(horario)
         for h in horario.horario:
             if fecha.strftime("%A") in h.dias.mapped('name'):
 
@@ -737,9 +736,9 @@ class ReporteMarcacionesWizard(models.TransientModel):
         tolerancia = timedelta(minutes=reglas.tolerancia)
 
         for h in horario_marcaciones:
-
             reporte.append({
                 'horario': h,
+                'fecha': fecha,
                 'empleado_id': empleado.id,
                 'marcacion_id': False,
                 'observacion': 'sin_marcacion',
@@ -766,10 +765,11 @@ class ReporteMarcacionesWizard(models.TransientModel):
                             diferencia = marcacion - h
                             observacion = 'exceso'
 
-                    if diferencia > timedelta(hours=1):
+                    if diferencia > timedelta(hours=2):
                         raise ValueError("")
 
                 except Exception as e:
+                    print(e)
                     continue
 
                 val.update({
@@ -787,6 +787,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
 class ReporteMarcaciones(models.Model):
     _name = 'racetime.reporte_marcaciones'
     _description = 'Reporte Marcaciones'
+    _order = 'fecha desc, hora asc'
 
     name = fields.Char()
     marcacion_id = fields.Many2one(comodel_name='racetime.detalle_marcacion', string='ID Marcación', required=False)
@@ -797,10 +798,10 @@ class ReporteMarcaciones(models.Model):
                                               ('feriado', 'FERIADO'), ('no_aplica', 'NO APLICA'),
                                               ('permiso', 'PERMISO')], )
 
-    marcacion_tiempo = fields.Datetime(string='Marcación Empleado', required=False, related='marcacion_id.fecha_hora',
+    marcacion_tiempo = fields.Datetime(string='Marcación', required=False, related='marcacion_id.fecha_hora',
                                        store=True)
 
-    horario = fields.Datetime(string='Horario', required=False)
+    horario = fields.Datetime(string='Horario Empleado', required=False)
 
     fecha = fields.Date(string='Fecha', required=False)
 
@@ -808,12 +809,12 @@ class ReporteMarcaciones(models.Model):
 
     permiso_id = fields.Many2one(comodel_name='racetime.permisos', string='Permiso', required=False)
 
-    hora = fields.Char(string='Hora', required=False, )
-    marcacion = fields.Char(string='Hora Marcación', required=False, )
+    hora = fields.Char(string='Horario', required=False, compute='_hora', store=True)
+    marcacion = fields.Char(string='Marcación Empleado', required=False, )
 
-    # @api.depends('horario', 'marcacion')
-    # def _hora(self):
-    #     for rec in self:
-    #         rec.hora = (rec.horario - timedelta(hours=5)).strftime("%H:%M")
-    #         rec.marcacion = (rec.marcacion_tiempo - timedelta(hours=5)).strftime(
-    #             "%H:%M") if rec.marcacion_tiempo else None
+    @api.depends('horario', 'marcacion')
+    def _hora(self):
+        for rec in self:
+            rec.hora = (rec.horario - timedelta(hours=5)).strftime("%H:%M")
+            rec.marcacion = (rec.marcacion_tiempo - timedelta(hours=5)).strftime(
+                "%H:%M") if rec.marcacion_tiempo else None
