@@ -11,6 +11,7 @@
                         <widget name="web_ribbon" title="ARCHIVADO" bg_color="bg-danger"
                                 attrs="{'invisible':[('active','=',True)]}"></widget>
                         <group>
+                            <field name="name"/>
                             <field name="total_horas" invisible="1"/>
                             <div class="text-center">
                                 <label for="horas"></label>
@@ -85,6 +86,9 @@
             <field name="model">racetime.detalle_horarios</field>
             <field name="arch" type="xml">
                 <tree string="racetime.detalle_horarios_tree" editable="bottom">
+                    <field name="empleado_id"/>
+                    <field name="fecha_inicio"/>
+                    <field name="fecha_fin"/>
                     <field name="marcacion_1" widget="float_time"/>
                     <field name="marcacion_2" widget="float_time"/>
                     <field name="marcacion_3" widget="float_time"/>
@@ -94,6 +98,16 @@
             </field>
         </record>
 
+        <record id="racetime.detalle_horarios_action" model="ir.actions.act_window">
+            <field name="name">Detalle de Horarios</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.detalle_horarios</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <menuitem sequence="7" name="Detalle de Horarios" id="racetime.detalle_horarios_menu"
+                  parent="racetime.asigancion_horario_menu" action="racetime.detalle_horarios_action"/>
 
     </data>
 </odoo>

@@ -69,14 +69,19 @@ class DetalleHorarios(models.Model):
     name = fields.Char()
     dias = fields.Many2many(comodel_name='racetime.dias', string='Dias')
     marcacion_1 = fields.Float(string='Entrada', required=False)
-    marcacion_2 = fields.Float(string='Salida', required=False)
-    marcacion_3 = fields.Float(string='Entrada', required=False)
+    marcacion_2 = fields.Float(string='Salida D', required=False)
+    marcacion_3 = fields.Float(string='Entrada D', required=False)
     marcacion_4 = fields.Float(string='Salida', required=False)
     horario_id = fields.Many2one(comodel_name='racetime.horarios', string='Horario', required=False)
     total_horas = fields.Float(string='Total Horas', required=False)
 
+    empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False,
+                                  related='asignacion_horario_id.empleado_id')
+    fecha_inicio = fields.Date(string='Fecha Inicio', required=False, related='asignacion_horario_id.fecha_inicio')
+    fecha_fin = fields.Date(string='Fecha Inicio', required=False, related='asignacion_horario_id.fecha_fin')
+
     asignacion_horario_id = fields.Many2one(comodel_name='racetime.asignacion_horario', string='Asignacion_horario_id',
-                                            required=False)
+                                            required=False, ondelete='cascade')
 
     @api.constrains('marcacion_1', 'marcacion_2', 'marcacion_3', 'marcacion_4')
     def check_marcaciones(self):
@@ -95,11 +100,12 @@ class AsignacionHorario(models.Model):
     _name = 'racetime.asignacion_horario'
     _description = 'Asignación Horario'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'fecha_fin desc'
 
     name = fields.Char()
-    horario_ = fields.Html(string='Horario', required=False, compute='_set_name_horario')
+    horario_ = fields.Text(string='Horario', required=False, compute='_set_name_horario')
 
-    empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleados', tracking=True)
+    empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', tracking=True)
 
     fecha_inicio = fields.Date(string='Fecha Inicio', required=False, tracking=True, copy=False)
     fecha_fin = fields.Date(string='Fecha Fin', required=False, tracking=True, copy=False)
@@ -107,7 +113,7 @@ class AsignacionHorario(models.Model):
     horario_id = fields.Many2one(comodel_name='racetime.horarios', string='Horario', required=False)
 
     horario = fields.One2many(comodel_name='racetime.detalle_horarios', inverse_name='asignacion_horario_id',
-                              string='Horario', required=False)
+                              string='Horarios del Empleado', required=False)
     total_horas = fields.Float(string='Total Horas', required=False)
 
     @api.depends('horario')
@@ -119,7 +125,7 @@ class AsignacionHorario(models.Model):
                 m2 = (datetime.min + timedelta(hours=h.marcacion_2)).strftime("%H:%M")
                 m3 = (datetime.min + timedelta(hours=h.marcacion_3)).strftime("%H:%M")
                 m4 = (datetime.min + timedelta(hours=h.marcacion_4)).strftime("%H:%M")
-                horario = f"{m1} - {m2} || {m3} - {m4} => {h.dias.mapped('name')} "
+                horario = f"{m1} - {m2} || {m3} - {m4} => {h.dias.mapped('name')}\n"
                 rec.horario_ = rec.horario_ + horario
 
     @api.constrains('total_horas')
@@ -155,20 +161,34 @@ class AsignacionHorario(models.Model):
         self.total_horas = res
 
     def copy(self, default=None):
-        horario = self.horario.copy()
+        horarios = []
+        for h in self.horario:
+            horarios.append((0, 0, {
+                'marcacion_1': h.marcacion_1,
+                'marcacion_2': h.marcacion_2,
+                'marcacion_3': h.marcacion_3,
+                'marcacion_4': h.marcacion_4,
+                'dias': h.dias
+            }))
         default = {
-            'horario': horario
+            'horario': horarios
         }
         return super(AsignacionHorario, self).copy(default)
 
     @api.constrains('fecha_inicio')
     def check_horario(self):
-        horarios = self.env['racetime.asignacion_horario'].search(
-            [('id', '!=', self.id), ('fecha_fin', '>=', self.fecha_inicio)])
-        for record in horarios:
-            if record.fecha_inicio <= self.fecha_inicio and record.fecha_fin >= self.fecha_inicio:
-                raise ValidationError(
-                    f"Existe un conflicto con el horario: \nFECHA INICIO: {record.fecha_inicio} \nFECHA FIN: {record.fecha_fin} \nHORARIO: {html2plaintext(record.horario_)}")
+        if not len(self) > 1:
+            horarios = self.env['racetime.asignacion_horario'].search(
+                [('id', '!=', self.id), ('empleado_id', '=', self.empleado_id.id),
+                 ('fecha_fin', '>=', self.fecha_inicio)])
+            for record in horarios:
+                if record.fecha_inicio <= self.fecha_inicio and record.fecha_fin >= self.fecha_inicio:
+                    raise ValidationError(
+                        f"Existe un conflicto con el horario:\n"
+                        f"{self.empleado_id.name}\n\n"
+                        f"FECHA INICIO: {record.fecha_inicio}\n"
+                        f"FECHA FIN: {record.fecha_fin}\n\n"
+                        f"HORARIO: {html2plaintext(record.horario_)}")
 
 
 class AsignacionHorarioMultiple(models.TransientModel):

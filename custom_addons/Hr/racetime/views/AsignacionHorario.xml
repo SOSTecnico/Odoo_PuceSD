@@ -21,7 +21,15 @@
                                     <field readonly="1" force_save="1" name="total_horas" widget="float_time"/>
                                 </h2>
                             </div>
-                            <field name="horario" colspan="5" nolabel="1"/>
+                            <field name="horario" colspan="5" nolabel="1">
+                                <tree string="racetime.detalle_horarios_tree" editable="bottom">
+                                    <field name="marcacion_1" widget="float_time"/>
+                                    <field name="marcacion_2" widget="float_time"/>
+                                    <field name="marcacion_3" widget="float_time"/>
+                                    <field name="marcacion_4" widget="float_time"/>
+                                    <field name="dias" widget="many2many_tags"/>
+                                </tree>
+                            </field>
                         </group>
                     </sheet>
                     <div class="oe_chatter">
@@ -40,7 +48,6 @@
                     <field name="fecha_inicio"/>
                     <field name="fecha_fin"/>
                     <field name="horario_"/>
-                    <!--                    <field name="dias" widget="many2many_tags"/>-->
                 </tree>
             </field>
         </record>
@@ -76,7 +83,7 @@
             <field name="view_mode">form</field>
         </record>
 
-        <menuitem name="Asignación Horario" id="racetime.asigancion_horario_menu" parent="racetime.main_menu"/>
+        <menuitem name="Asignación Horarios" id="racetime.asigancion_horario_menu" parent="racetime.main_menu"/>
 
         <menuitem sequence="3" name="Horarios Asignados" id="racetime.asignacion_horario_lista"
                   parent="racetime.asigancion_horario_menu" action="racetime.asigancion_horario_act_window"/>
