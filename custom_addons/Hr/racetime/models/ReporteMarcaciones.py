@@ -783,7 +783,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
                 'diferencia': timedelta(hours=0).total_seconds() / 60,
                 'permiso_id': False
             })
-            if permisos:
+            if permisos and permisos.estado == 'aprobado':
                 if permisos.todo_el_dia:
                     reporte[i].update({
                         'horario': datetime.combine(fecha, (datetime.min + timedelta(hours=5)).time()),
@@ -823,29 +823,33 @@ class ReporteMarcacionesWizard(models.TransientModel):
                             diferencia = marcacion - h
                             observacion = 'exceso'
 
+                    if observacion == 'atraso':
+                        diferencia = diferencia - tolerancia
+
                     if diferencia > timedelta(hours=1):
-                        raise ValueError("")
+                        continue
 
-                    hora_inicio_permiso = datetime.combine(fecha,
-                                                           (datetime.min + timedelta(
-                                                               hours=(val['permiso_id'].desde_hora + 5))).time())
-                    hora_fin_permiso = datetime.combine(fecha,
-                                                        (datetime.min + timedelta(
-                                                            hours=(val['permiso_id'].hasta_hora + 5))).time())
+                    if val['permiso_id']:
+                        hora_inicio_permiso = datetime.combine(fecha,
+                                                               (datetime.min + timedelta(
+                                                                   hours=(val['permiso_id'].desde_hora + 5))).time())
+                        hora_fin_permiso = datetime.combine(fecha,
+                                                            (datetime.min + timedelta(
+                                                                hours=(val['permiso_id'].hasta_hora + 5))).time())
 
-                    if marcacion >= hora_inicio_permiso and marcacion <= hora_fin_permiso:
-                        val.update({
-                            'permiso_id': val['permiso_id'].id
-                        })
-                    else:
-                        val.update({
-                            'permiso_id': False
-                        })
+                        if marcacion >= hora_inicio_permiso and marcacion <= hora_fin_permiso:
+                            val.update({
+                                'permiso_id': val['permiso_id'].id,
+                            })
+                        else:
+                            val.update({
+                                'permiso_id': False
+                            })
+
 
                 except Exception as e:
                     continue
 
-                print(permisos)
                 val.update({
                     'marcacion_id': m.id,
                     'observacion': observacion,

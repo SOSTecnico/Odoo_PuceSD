@@ -1,4 +1,4 @@
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 
 from psycopg2 import Error
 
@@ -16,7 +16,8 @@ class DetalleMarcacion(models.Model):
     id_marcacion = fields.Integer(string='ID Marcación', required=False)
     fecha_hora = fields.Datetime(string='Fecha y Hora', required=False)
     emp_code = fields.Integer(string='Código Empleado', required=False)
-    empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False, compute='empleado')
+    empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False, compute='empleado',
+                                  store=True)
 
     def empleado(self):
         for rec in self:
@@ -48,11 +49,10 @@ class DetalleMarcacion(models.Model):
         query = f"""select * from iclock_transaction where convert(DATE,punch_time,105) = '{datetime.now().strftime('%Y-%m-%d')}'"""
         self.obtener_marcaciones(sql=query)
 
-
     def obtener_parametros_conexion_biotime(self):
 
         configuracion = self.env['racetime.config'].sudo().search_read([('key', 'like', 'biotime')],
-                                                                          fields=['key', 'value'])
+                                                                       fields=['key', 'value'])
         config = {}
         for c in configuracion:
             if c['key'] == 'biotime_host':
@@ -67,7 +67,7 @@ class DetalleMarcacion(models.Model):
                 config['db_password'] = c['value']
         return config
 
-    def conexionBiotime(self,sql):
+    def conexionBiotime(self, sql):
         try:
             config = self.obtener_parametros_conexion_biotime()
             conexion = pyodbc.connect(
