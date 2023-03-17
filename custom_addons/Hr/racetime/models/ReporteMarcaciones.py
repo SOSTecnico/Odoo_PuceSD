@@ -781,7 +781,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
                 'marcacion_id': False,
                 'observacion': 'sin_marcacion',
                 'diferencia': timedelta(hours=0).total_seconds() / 60,
-                'permiso_id': False
+                'permiso_id': False,
+                'marcacion_tiempo': False
             })
             if permisos and permisos.estado == 'aprobado':
                 if permisos.todo_el_dia:
@@ -811,20 +812,13 @@ class ReporteMarcacionesWizard(models.TransientModel):
                     if i % 2 == 0:
                         if h > marcacion:
                             diferencia = h - marcacion
-                            observacion = 'a_tiempo'
                         else:
                             diferencia = marcacion - h
-                            observacion = 'atraso' if diferencia > tolerancia else 'a_tiempo'
                     else:
                         if h > marcacion:
                             diferencia = h - marcacion
-                            observacion = 'adelanto'
                         else:
                             diferencia = marcacion - h
-                            observacion = 'exceso'
-
-                    if observacion == 'atraso':
-                        diferencia = diferencia - tolerancia
 
                     if diferencia > timedelta(hours=1):
                         continue
@@ -839,11 +833,13 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
                         if marcacion >= hora_inicio_permiso and marcacion <= hora_fin_permiso:
                             val.update({
+                                'marcacion_tiempo': marcacion,
                                 'permiso_id': val['permiso_id'].id,
                             })
                         else:
                             val.update({
-                                'permiso_id': False
+                                'permiso_id': False,
+                                'marcacion_tiempo': marcacion
                             })
 
 
@@ -852,12 +848,41 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
                 val.update({
                     'marcacion_id': m.id,
-                    'observacion': observacion,
                     'diferencia': diferencia.total_seconds() / 60,
+                    'marcacion_tiempo': marcacion
                 })
 
         for v in reporte:
             generar_reporte_marcacion(v)
+
+        for i, r in enumerate(reporte):
+
+            h = r['horario']
+            marcacion = r['marcacion_tiempo']
+
+            if not marcacion:
+                continue
+
+            if i % 2 == 0:
+                if h > marcacion:
+                    r.update({
+                        'observacion': 'a_tiempo'
+                    })
+                else:
+                    diferencia = marcacion - h
+                    if diferencia > tolerancia:
+                        r.update({
+                            'observacion': 'atraso'
+                        })
+            else:
+                if h > marcacion:
+                    r.update({
+                        'observacion': 'adelanto'
+                    })
+                else:
+                    r.update({
+                        'observacion': 'exceso'
+                    })
 
         self.env['racetime.reporte_marcaciones'].create(reporte)
 
@@ -876,8 +901,7 @@ class ReporteMarcaciones(models.Model):
                                               ('feriado', 'FERIADO'), ('no_aplica', 'NO APLICA'),
                                               ('permiso', 'PERMISO')], )
 
-    marcacion_tiempo = fields.Datetime(string='Marcación', required=False, related='marcacion_id.fecha_hora',
-                                       store=True)
+    marcacion_tiempo = fields.Datetime(string='Marcación', required=False, )
 
     horario = fields.Datetime(string='Horario Empleado', required=False)
 
@@ -896,3 +920,8 @@ class ReporteMarcaciones(models.Model):
             rec.hora = (rec.horario - timedelta(hours=5)).strftime("%H:%M")
             rec.marcacion = (rec.marcacion_tiempo - timedelta(hours=5)).strftime(
                 "%H:%M") if rec.marcacion_tiempo else None
+            rec.marcacion_tiempo = rec.marcacion_id.fecha_hora
+
+    @api.onchange('horario')
+    def onchange_marcacion(self):
+        self.marcacion_tiempo = self.horario
