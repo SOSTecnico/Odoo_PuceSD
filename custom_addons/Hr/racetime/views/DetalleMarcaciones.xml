@@ -33,24 +33,24 @@
             </field>
         </record>
 
-        <!--        <record id="racetime.detalle_marcaciones_search_view" model="ir.ui.view">
-                    <field name="name">racetime.racetime.detalle_marcaciones.search</field>
-                    <field name="model">racetime.racetime.detalle_marcaciones</field>
-                    <field name="arch" type="xml">
-                        <search string="Detalle Marcaciones">
-                            <group expand="1" string="Group By">
-                                <filter string="Example Field" name="example_field" domain="[]"
-                                        context="{'group_by':'example_field'}"/>
-                            </group>
-                        </search>
-                    </field>
-                </record>-->
+        <record id="racetime.detalle_marcaciones_search_view" model="ir.ui.view">
+            <field name="name">racetime.detalle_marcaciones.search</field>
+            <field name="model">racetime.detalle_marcacion</field>
+            <field name="arch" type="xml">
+                <search string="Detalle Marcaciones">
+                    <field name="empleado_id"/>
+                    <filter name="group_empleado" string="Empleados" context="{'group_by':'empleado_id'}"/>
+                    <filter name="group_fecha" string="Fecha" context="{'group_by':'fecha_hora'}"/>
+                </search>
+            </field>
+        </record>
 
         <record id="racetime.detalle_marcaciones_act_window" model="ir.actions.act_window">
             <field name="name">Detalle Marcaciones</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">racetime.detalle_marcacion</field>
             <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_empleado':1,'search_default_group_fecha':2}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     There is no examples click here to add new Detalle Marcaciones.
@@ -60,9 +60,6 @@
 
         <menuitem name="Detalle Marcaciones" sequence="11" id="racetime.detalle_marcaciones_menu"
                   parent="racetime.marcaciones_menu" action="racetime.detalle_marcaciones_act_window"/>
-
-
-
 
 
     </data>

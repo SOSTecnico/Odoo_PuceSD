@@ -820,7 +820,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
                         else:
                             diferencia = marcacion - h
 
-                    if diferencia > timedelta(hours=1):
+                    if diferencia > timedelta(hours=3):
                         continue
 
                     if val['permiso_id']:
@@ -870,10 +870,11 @@ class ReporteMarcacionesWizard(models.TransientModel):
                     })
                 else:
                     diferencia = marcacion - h
-                    if diferencia > tolerancia:
-                        r.update({
-                            'observacion': 'atraso'
-                        })
+
+                    r.update({
+                        'observacion': 'atraso' if diferencia > tolerancia else 'a_tiempo'
+                    })
+
             else:
                 if h > marcacion:
                     r.update({
