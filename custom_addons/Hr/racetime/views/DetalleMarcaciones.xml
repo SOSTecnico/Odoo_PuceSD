@@ -38,8 +38,8 @@
             <field name="model">racetime.detalle_marcacion</field>
             <field name="arch" type="xml">
                 <search string="Detalle Marcaciones">
-                    <field name="empleado_id"/>
-                    <filter name="group_empleado" string="Empleados" context="{'group_by':'empleado_id'}"/>
+                    <field name="nombre_empleado"/>
+                    <filter name="group_empleado" string="Empleados" context="{'group_by':'nombre_empleado'}"/>
                     <filter name="group_fecha" string="Fecha" context="{'group_by':'fecha_hora'}"/>
                 </search>
             </field>

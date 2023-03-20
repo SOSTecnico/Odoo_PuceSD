@@ -38,6 +38,12 @@
                     <field name="emp_code"/>
                 </xpath>
 
+
+                <xpath expr="//header/button" position="after">
+                    <button groups="racetime.group_admin" string="Actualizar Código" class="btn btn-info" type="object"
+                            name="actualizar_codigo_biotime"></button>
+                </xpath>
+
             </field>
         </record>
 
@@ -46,7 +52,7 @@
             <field name="name">Listado de Empleados</field>
             <field name="model">hr.employee</field>
             <field name="mode">primary</field>
-            <field name="priority" eval="20" />
+            <field name="priority" eval="20"/>
             <field name="inherit_id" ref="hr.view_employee_tree"/>
             <field name="arch" type="xml">
                 <xpath expr="//tree" position="replace">

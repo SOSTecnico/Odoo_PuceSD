@@ -17,8 +17,9 @@ class DetalleMarcacion(models.Model):
     fecha_hora = fields.Datetime(string='Fecha y Hora', required=False)
     emp_code = fields.Integer(string='Código Empleado', required=False)
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False,
-                                  compute='_establecer_empleado', store=True)
+                                  compute='_establecer_empleado')
 
+    nombre_empleado = fields.Char(string='Nombre Empleado', required=False)
 
     @api.depends('emp_code')
     def _establecer_empleado(self):
@@ -26,6 +27,7 @@ class DetalleMarcacion(models.Model):
         for rec in self:
             empleado = empleados.filtered_domain([('emp_code', '=', rec.emp_code)])
             rec.empleado_id = empleado
+            rec.nombre_empleado = empleado.name
 
     @api.model
     def obtener_marcaciones(self, sql=False):
