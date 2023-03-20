@@ -29,11 +29,12 @@ class Horarios(models.Model):
     total_horas = fields.Float(string='Total Horas', required=False, default=0)
     horas = fields.Float(string='Total Horas', required=False, related='total_horas', readonly=True)
 
-    @api.constrains('total_horas')
-    def check_total_horas(self):
-        for rec in self:
-            if rec.total_horas < 40 or rec.total_horas > 40:
-                raise ValidationError('Favor de revisar el total de horas')
+    # Se comenta la funcion de checar total de horas para docentes que no necesariamente cumplen con las 40 horas semanales
+    # @api.constrains('total_horas')
+    # def check_total_horas(self):
+    #     for rec in self:
+    #         if rec.total_horas < 40 or rec.total_horas > 40:
+    #             raise ValidationError('Favor de revisar el total de horas')
 
     @api.onchange('detalle_horario_id')
     def onchange_detalle_horario(self):
@@ -128,11 +129,12 @@ class AsignacionHorario(models.Model):
                 horario = f"{m1} - {m2} || {m3} - {m4} => {h.dias.mapped('name')}\n"
                 rec.horario_ = rec.horario_ + horario
 
-    @api.constrains('total_horas')
-    def check_total_horas(self):
-        for rec in self:
-            if rec.total_horas < 40 or rec.total_horas > 40:
-                raise ValidationError('Favor de revisar el total de horas')
+    # Se comenta la funcion de checar total de horas para docentes que no necesariamente cumplen con las 40 horas semanales
+    # @api.constrains('total_horas')
+    # def check_total_horas(self):
+    #     for rec in self:
+    #         if rec.total_horas < 40 or rec.total_horas > 40:
+    #             raise ValidationError('Favor de revisar el total de horas')
 
     @api.onchange('horario')
     def onchange_horario(self):
@@ -201,11 +203,12 @@ class AsignacionHorarioMultiple(models.TransientModel):
     horario_multiple_ = fields.Html(string='Horario', required=False, store=False)
     total_horas = fields.Float(string='Total Horas', required=False, related='horario_multiple.total_horas')
 
-    @api.constrains('total_horas')
-    def check_total_horas(self):
-        for rec in self.horario_multiple:
-            if rec.total_horas < 40 or rec.total_horas > 40:
-                raise ValidationError('Favor de revisar el total de horas')
+    # Se comenta la funcion de checar total de horas para docentes que no necesariamente cumplen con las 40 horas semanales
+    # @api.constrains('total_horas')
+    # def check_total_horas(self):
+    #     for rec in self.horario_multiple:
+    #         if rec.total_horas < 40 or rec.total_horas > 40:
+    #             raise ValidationError('Favor de revisar el total de horas')
 
     @api.onchange('horario_multiple')
     def _set_name_horario_multiple(self):
