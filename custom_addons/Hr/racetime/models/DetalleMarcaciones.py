@@ -16,30 +16,43 @@ class DetalleMarcacion(models.Model):
     id_marcacion = fields.Integer(string='ID Marcación', required=False)
     fecha_hora = fields.Datetime(string='Fecha y Hora', required=False)
     emp_code = fields.Integer(string='Código Empleado', required=False)
-    empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False, compute='empleado',
-                                  store=True)
+    empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False,
+                                  compute='_establecer_empleado', store=True)
 
-    def empleado(self):
+
+    @api.depends('emp_code')
+    def _establecer_empleado(self):
+        empleados = self.env['hr.employee'].search([])
         for rec in self:
-            rec.empleado_id = self.env['hr.employee'].search([('emp_code', '=', rec.emp_code)])
+            empleado = empleados.filtered_domain([('emp_code', '=', rec.emp_code)])
+            rec.empleado_id = empleado
 
     @api.model
     def obtener_marcaciones(self, sql=False):
-        if not sql:
-            sql = """SELECT * from iclock_transaction it;"""
+        try:
 
-        result = self.conexionBiotime(sql)
+            self.unlink()
 
-        marcaciones = self.sudo().search([]).mapped('id_marcacion')
+            if not sql:
+                sql = """SELECT * from iclock_transaction it;"""
 
-        for row in result:
-            if row['id'] not in marcaciones:
-                self.create({
-                    'fecha_hora': row['punch_time'] + timedelta(hours=5),
-                    'id_marcacion': row['id'],
-                    'emp_code': row['emp_code'],
-                })
-        print("ObteniendoMarcaciones")
+            result = self.conexionBiotime(sql)
+
+            marcaciones = self.sudo().search([]).mapped('id_marcacion')
+
+            values = []
+
+            for row in result:
+                if row['id'] not in marcaciones:
+                    values.append({
+                        'fecha_hora': row['punch_time'] + timedelta(hours=5),
+                        'id_marcacion': row['id'],
+                        'emp_code': row['emp_code'],
+                    })
+            self.create(values)
+            print("ObteniendoMarcaciones")
+        except Exception as e:
+            raise ValidationError(f"Ocurrió un error: {e}")
 
     @api.model
     def obtener_marcaciones_diarias(self):

@@ -24,7 +24,7 @@
             <field name="name">racetime.detalle_marcacion.tree</field>
             <field name="model">racetime.detalle_marcacion</field>
             <field name="arch" type="xml">
-                <tree string="Detalle Marcaciones" js_class="marcaciones_buttons_tree">
+                <tree expand="1" string="Detalle Marcaciones" js_class="marcaciones_buttons_tree">
                     <field name="id_marcacion"/>
                     <field name="emp_code"/>
                     <field name="fecha_hora"/>
