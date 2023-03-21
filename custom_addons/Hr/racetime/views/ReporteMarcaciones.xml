@@ -15,7 +15,7 @@
                                context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"></field>
                     </group>
                     <footer>
-<!--                        <button name="calculo_marcaciones" string="GENERAR" type="object" class="oe_highlight"/>-->
+                        <!--                        <button name="calculo_marcaciones" string="GENERAR" type="object" class="oe_highlight"/>-->
                         <button name="generar_marcaciones" string="GENERAR" type="object" class="oe_highlight"/>
                         <button string="Cancelar" class="oe_link" special="cancel"/>
                     </footer>
@@ -43,7 +43,8 @@
                 <form string="racetime.reporte_marcaciones_form">
                     <sheet>
                         <group>
-                            <field name="horario"/>
+                            <field name="ver_horario"/>
+                            <field name="horario" string="Hora"/>
                             <field name="marcacion_tiempo"/>
                             <field name="diferencia" widget="float_time"/>
                             <field name="observacion"/>
@@ -62,7 +63,7 @@
                 <tree expand="1" limit="100" string="racetime.reporte_marcaciones_tree"
                       decoration-success="observacion == 'a_tiempo'" decoration-danger="observacion == 'atraso'"
                       decoration-warning="observacion == 'exceso'" decoration-info="observacion == 'adelanto'">
-                    <field name="fecha" optional="show" />
+                    <field name="fecha" optional="show"/>
                     <field name="horario" invisible="1"/>
                     <field name="marcacion_tiempo" invisible="1"/>
                     <field name="hora"/>
@@ -70,6 +71,7 @@
                     <field name="diferencia" widget="float_time"/>
                     <field name="observacion"/>
                     <field name="permiso_id"/>
+                    <field name="ver_horario" optional="hide"/>
                 </tree>
             </field>
         </record>

@@ -739,26 +739,14 @@ class ReporteMarcacionesWizard(models.TransientModel):
         for h in horario.horario:
             if fecha.strftime("%A") in h.dias.mapped('name'):
                 # Según su horario se generan 4 marcaciones
-                # horario_marcaciones = [
-                #     datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_1 + 5))).time()),
-                #     datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_2 + 5))).time()),
-                #     datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_3 + 5))).time()), ]
-
                 horario_marcaciones = [
-                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_1))).time()),
-                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_2))).time()),
-                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_3))).time()),
-                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_4))).time()),
+                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=h.marcacion_1)).time()),
+                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=h.marcacion_2)).time()),
+                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=h.marcacion_3)).time()),
+                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=h.marcacion_4)).time()),
                 ]
-                # Esta comparativa se realiza para obtener la última marcación del día ya que si sobrepasa las 19 horas
-                # Entonces se estaría tomando la madrugada del día siguiente.
-                # if timedelta(hours=(h.marcacion_4 + 5)) >= timedelta(days=1):
-                #
-                #     horario_marcaciones.append(datetime.combine((fecha + timedelta(days=1)), (
-                #             datetime.min + timedelta(hours=(h.marcacion_4 + 5))).time()))
-                # else:
-                #     horario_marcaciones.append(datetime.combine(fecha, (
-                #             datetime.min + timedelta(hours=(h.marcacion_4 + 5))).time()))
+
+                break
 
         # Variable que almacenará el registro final que aparecerá en la vista
         reporte = []
@@ -782,6 +770,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
         for i, h in enumerate(horario_marcaciones):
             reporte.append({
                 'fecha': fecha,
+                'horario_id': horario.id,
                 'horario': h + timedelta(hours=5),
                 'empleado_id': empleado.id,
                 'permiso_id': permisos.id or False,
@@ -879,6 +868,9 @@ class ReporteMarcaciones(models.Model):
 
     hora = fields.Char(string='Horario', required=False, compute='_hora', store=True)
     marcacion = fields.Char(string='Marcación Empleado', required=False, )
+
+    horario_id = fields.Many2one(comodel_name='racetime.asignacion_horario', string='Horario ID')
+    ver_horario = fields.Text(string="Horario Detallado", required=False, related='horario_id.horario_')
 
     @api.depends('horario', 'marcacion')
     def _hora(self):
