@@ -70,6 +70,7 @@
                     <field name="marcacion"/>
                     <field name="diferencia" widget="float_time"/>
                     <field name="observacion"/>
+                    <field name="detalle"/>
                     <field name="permiso_id"/>
                     <field name="ver_horario" optional="hide"/>
                 </tree>
