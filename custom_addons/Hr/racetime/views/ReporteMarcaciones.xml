@@ -87,7 +87,7 @@
                     <filter name="no_aplica" string="NO APLICA" domain="[('observacion','=','no_aplica')]"/>
                     <filter name="fds" string="FDS" domain="[('observacion','!=','no_aplica')]"/>
                     <filter name="group_empleado" context="{'group_by':'empleado_id'}"/>
-                    <filter name="group_horario" context="{'group_by':'horario:month:day'}"/>
+                    <filter name="group_horario" string="Fecha" context="{'group_by':'fecha:month:day'}"/>
                     <filter name="group_observacion" context="{'group_by':'observacion'}"
                             domain="[('observacion','!=','feriado')]"/>
                 </search>

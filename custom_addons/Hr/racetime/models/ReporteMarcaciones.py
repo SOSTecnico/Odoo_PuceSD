@@ -739,20 +739,26 @@ class ReporteMarcacionesWizard(models.TransientModel):
         for h in horario.horario:
             if fecha.strftime("%A") in h.dias.mapped('name'):
                 # Según su horario se generan 4 marcaciones
-                horario_marcaciones = [
-                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_1 + 5))).time()),
-                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_2 + 5))).time()),
-                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_3 + 5))).time()), ]
+                # horario_marcaciones = [
+                #     datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_1 + 5))).time()),
+                #     datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_2 + 5))).time()),
+                #     datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_3 + 5))).time()), ]
 
+                horario_marcaciones = [
+                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_1))).time()),
+                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_2))).time()),
+                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_3))).time()),
+                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=(h.marcacion_4))).time()),
+                ]
                 # Esta comparativa se realiza para obtener la última marcación del día ya que si sobrepasa las 19 horas
                 # Entonces se estaría tomando la madrugada del día siguiente.
-                if timedelta(hours=(h.marcacion_4 + 5)) >= timedelta(days=1):
-
-                    horario_marcaciones.append(datetime.combine((fecha + timedelta(days=1)), (
-                            datetime.min + timedelta(hours=(h.marcacion_4 + 5))).time()))
-                else:
-                    horario_marcaciones.append(datetime.combine(fecha, (
-                            datetime.min + timedelta(hours=(h.marcacion_4 + 5))).time()))
+                # if timedelta(hours=(h.marcacion_4 + 5)) >= timedelta(days=1):
+                #
+                #     horario_marcaciones.append(datetime.combine((fecha + timedelta(days=1)), (
+                #             datetime.min + timedelta(hours=(h.marcacion_4 + 5))).time()))
+                # else:
+                #     horario_marcaciones.append(datetime.combine(fecha, (
+                #             datetime.min + timedelta(hours=(h.marcacion_4 + 5))).time()))
 
         # Variable que almacenará el registro final que aparecerá en la vista
         reporte = []
@@ -776,23 +782,24 @@ class ReporteMarcacionesWizard(models.TransientModel):
         for i, h in enumerate(horario_marcaciones):
             reporte.append({
                 'fecha': fecha,
-                'horario': h,
+                'horario': h + timedelta(hours=5),
                 'empleado_id': empleado.id,
                 'permiso_id': permisos.id or False,
                 'marcacion_tiempo': False,
-                'marcacion_id': False
+                'marcacion_id': False,
+                'observacion': 'sin_marcacion'
             })
             if permisos and permisos.estado == 'aprobado':
                 if permisos.todo_el_dia:
                     break
 
         if horario_marcaciones:
-
             for i, m in enumerate(marcaciones_del_dia):
-                marcacion = m.fecha_hora
+                marcacion = m.fecha_hora - timedelta(hours=5)
                 diferencias = []
+
                 for r in reporte:
-                    h = r['horario']
+                    h = r['horario'] - timedelta(hours=5)
                     diff = abs(h - marcacion)
                     if diff > timedelta(hours=3):
                         diferencias.append(timedelta(hours=20))
@@ -801,141 +808,49 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
                 index = diferencias.index(min(diferencias))
 
-                mm = marcaciones_del_dia[index]
+                try:
+                    reporte[index].update({
+                        'marcacion_id': m.id,
+                        'marcacion_tiempo': m.fecha_hora,
+                        'diferencia': min(diferencias).total_seconds() / 60
+                    })
+                except Exception as e:
+                    print(e)
+                    reporte.append({
+                        'fecha': fecha,
+                        'horario': datetime.combine(fecha, (datetime.min + timedelta(hours=5)).time()),
+                        'empleado_id': empleado.id,
+                        'permiso_id': False,
+                        'marcacion_tiempo': m.fecha_hora,
+                        'marcacion_id': m.id
+                    })
 
-                reporte[i].update({
-                    'marcacion_id': m.id,
-                    'marcacion_tiempo': m.fecha_hora
+            for i, r in enumerate(reporte):
+                h = r['horario']
+                m = r['marcacion_tiempo']
+
+                if not m:
+                    continue
+
+                diff = abs(h - m)
+                if i % 2 == 0:
+                    if h > m:
+                        observacion = 'a_tiempo'
+                    else:
+                        observacion = 'atraso' if diff > tolerancia else 'a_tiempo'
+                        diff = abs(diff - tolerancia)
+                else:
+                    if h > m:
+                        observacion = 'adelanto'
+                    else:
+                        observacion = 'exceso'
+
+                r.update({
+                    'observacion': observacion,
+                    'diferencia': diff.total_seconds() / 60
                 })
 
             self.env['racetime.reporte_marcaciones'].create(reporte)
-
-        # for r in reporte:
-        #     print(r)
-
-        # for m in marcaciones_del_dia:
-        #     reporte.append({
-        #         'fecha': fecha,
-        #         'horario': m.fecha_hora,
-        #         'empleado_id': empleado.id,
-        #         'marcacion_id': m.id,
-        #         'permiso_id': permisos.id or False,
-        #         'marcacion_tiempo': m.fecha_hora
-        #     })
-        #
-        # for i, h in enumerate(horario_marcaciones):
-        #     reporte.append({
-        #         'horario': h,
-        #         'fecha': fecha,
-        #         'empleado_id': empleado.id,
-        #         'marcacion_id': False,
-        #         'observacion': 'sin_marcacion',
-        #         'diferencia': timedelta(hours=0).total_seconds() / 60,
-        #         'permiso_id': False,
-        #         'marcacion_tiempo': False
-        #     })
-        #     if permisos and permisos.estado == 'aprobado':
-        #         if permisos.todo_el_dia:
-        #             reporte[i].update({
-        #                 'horario': datetime.combine(fecha, (datetime.min + timedelta(hours=5)).time()),
-        #                 'observacion': 'permiso',
-        #                 'permiso_id': permisos.id
-        #             })
-        #             self.env['racetime.reporte_marcaciones'].create(reporte)
-        #             return
-        #         else:
-        #             reporte[i].update({
-        #                 'observacion': 'permiso',
-        #                 'permiso_id': permisos
-        #             })
-        #
-        # def generar_reporte_marcacion(val):
-        #     # Se realiza un registro por cada marcación con base a la posición del horario
-        #     for i, m in enumerate(marcaciones_del_dia):
-        #         try:
-        #             # En h guardamos la hora según el horario activo
-        #             h = val['horario']
-        #             marcacion = m.fecha_hora
-        #             # Si la posición de la marcacion del día es la primera (0 - par) entonces se trata de una entrada
-        #             # Y continua con la siguiente impar demostrando ser una salida
-        #             # Se realizan las comparaciones respectivas y se guarda la diferencia tanto como la observación en diferentes escenrario
-        #             if i % 2 == 0:
-        #                 if h > marcacion:
-        #                     diferencia = h - marcacion
-        #                 else:
-        #                     diferencia = marcacion - h
-        #             else:
-        #                 if h > marcacion:
-        #                     diferencia = h - marcacion
-        #                 else:
-        #                     diferencia = marcacion - h
-        #
-        #             if diferencia > timedelta(hours=3):
-        #                 continue
-        #
-        #             if val['permiso_id']:
-        #                 hora_inicio_permiso = datetime.combine(fecha,
-        #                                                        (datetime.min + timedelta(
-        #                                                            hours=(val['permiso_id'].desde_hora + 5))).time())
-        #                 hora_fin_permiso = datetime.combine(fecha,
-        #                                                     (datetime.min + timedelta(
-        #                                                         hours=(val['permiso_id'].hasta_hora + 5))).time())
-        #
-        #                 if marcacion >= hora_inicio_permiso and marcacion <= hora_fin_permiso:
-        #                     val.update({
-        #                         'marcacion_tiempo': marcacion,
-        #                         'permiso_id': val['permiso_id'].id,
-        #                     })
-        #                 else:
-        #                     val.update({
-        #                         'permiso_id': False,
-        #                         'marcacion_tiempo': marcacion
-        #                     })
-        #
-        #
-        #         except Exception as e:
-        #             continue
-        #
-        #         val.update({
-        #             'marcacion_id': m.id,
-        #             'diferencia': diferencia.total_seconds() / 60,
-        #             'marcacion_tiempo': marcacion
-        #         })
-        #
-        # for v in reporte:
-        #     generar_reporte_marcacion(v)
-        #
-        # for i, r in enumerate(reporte):
-        #
-        #     h = r['horario']
-        #     marcacion = r['marcacion_tiempo']
-        #
-        #     if not marcacion:
-        #         continue
-        #
-        #     if i % 2 == 0:
-        #         if h > marcacion:
-        #             r.update({
-        #                 'observacion': 'a_tiempo'
-        #             })
-        #         else:
-        #             diferencia = marcacion - h
-        #
-        #             r.update({
-        #                 'observacion': 'atraso' if diferencia > tolerancia else 'a_tiempo'
-        #             })
-        #
-        #     else:
-        #         if h > marcacion:
-        #             r.update({
-        #                 'observacion': 'adelanto'
-        #             })
-        #         else:
-        #             r.update({
-        #                 'observacion': 'exceso'
-        #             })
-
-        # self.env['racetime.reporte_marcaciones'].create(reporte)
 
 
 class ReporteMarcaciones(models.Model):
