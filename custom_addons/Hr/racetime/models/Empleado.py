@@ -13,10 +13,10 @@ class Empleado(models.Model):
     emp_code = fields.Integer(string='Código Empleado', required=False, help="Código de Biométrico")
 
     def actualizar_codigo_biotime(self):
-        for rec in self:
-            if rec.emp_code != 0:
-                marcaciones_en_bruto = self.env['racetime.detalle_marcacion'].search([('emp_code', '=', rec.emp_code)])
+        empleados = self.env['hr.employee'].search([('emp_code', '!=', 0)])
+        for rec in empleados:
+            marcaciones_en_bruto = self.env['racetime.detalle_marcacion'].search([('emp_code', '=', rec.emp_code)])
 
-                marcaciones_en_bruto.update({
-                    'nombre_empleado': rec.name
-                })
+            marcaciones_en_bruto.update({
+                'nombre_empleado': rec.name
+            })

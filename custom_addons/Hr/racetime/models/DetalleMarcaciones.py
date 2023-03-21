@@ -33,9 +33,8 @@ class DetalleMarcacion(models.Model):
     def obtener_marcaciones(self, sql=False):
         try:
 
-            self.unlink()
-
             if not sql:
+                self.unlink()
                 sql = """SELECT * from iclock_transaction it;"""
 
             result = self.conexionBiotime(sql)
