@@ -32,7 +32,7 @@ class DetalleMarcacion(models.Model):
     @api.model
     def obtener_marcaciones(self, sql=False):
         try:
-
+            empleados = self.env['hr.employee'].sudo().search([('emp_code', '!=', 0)])
             if not sql:
                 self.unlink()
                 sql = """SELECT * from iclock_transaction it;"""
@@ -45,10 +45,12 @@ class DetalleMarcacion(models.Model):
 
             for row in result:
                 if row['id'] not in marcaciones:
+                    empleado = empleados.filtered_domain([('emp_code', '=', row['emp_code'])])
                     values.append({
                         'fecha_hora': row['punch_time'] + timedelta(hours=5),
                         'id_marcacion': row['id'],
                         'emp_code': row['emp_code'],
+                        'nombre_empleado': empleado.name
                     })
             self.create(values)
             print("ObteniendoMarcaciones")
