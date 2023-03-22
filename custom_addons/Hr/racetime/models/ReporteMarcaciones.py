@@ -872,11 +872,9 @@ class ReporteMarcaciones(models.Model):
     horario_id = fields.Many2one(comodel_name='racetime.asignacion_horario', string='Horario ID')
     ver_horario = fields.Text(string="Horario Detallado", required=False, related='horario_id.horario_')
 
-    detalle = fields.Selection(
-        string='Detalle',
-        selection=[('ed', 'ED'),
-                   ('dr', 'DR'), ],
-        required=False, )
+    detalle = fields.Selection(string='Detalle', selection=[('ed', 'ED'), ('dr', 'DR'), ], required=False, )
+
+    comentarios = fields.Text(string="Comentarios", required=False)
 
     @api.depends('horario', 'marcacion')
     def _hora(self):
@@ -886,6 +884,9 @@ class ReporteMarcaciones(models.Model):
                 "%H:%M") if rec.marcacion_tiempo else None
             rec.marcacion_tiempo = rec.marcacion_id.fecha_hora
 
-    @api.onchange('horario')
-    def onchange_marcacion(self):
-        self.marcacion_tiempo = self.horario
+    def autorizar_marcacion(self):
+        for rec in self:
+            rec.marcacion_tiempo = rec.horario
+            rec.observacion = 'a_tiempo'
+            rec.marcacion = "SSSS"
+            print(rec)

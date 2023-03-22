@@ -41,6 +41,11 @@
             <field name="model">racetime.reporte_marcaciones</field>
             <field name="arch" type="xml">
                 <form string="racetime.reporte_marcaciones_form">
+                    <header>
+                        <button name="autorizar_marcacion" class="btn btn-lg btn-success shadow-lg"
+                                string="Autorizar Marcación"
+                                confirm="¿Seguro de Autorizar la marcación?" type="object"/>
+                    </header>
                     <sheet>
                         <group>
                             <field name="ver_horario"/>
