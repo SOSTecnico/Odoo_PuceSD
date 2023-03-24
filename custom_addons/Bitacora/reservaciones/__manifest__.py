@@ -40,6 +40,7 @@
         'views/Reservas.xml',
         'views/Usuarios.xml',
         'views/Ingresos.xml',
+        'views/LabControl.xml',
         'views/templates.xml',
 
     ],

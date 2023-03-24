@@ -7,3 +7,4 @@ from . import recursos
 from . import reservas
 from . import QRCodigo
 from . import Laboratorios
+from . import labcontrol
