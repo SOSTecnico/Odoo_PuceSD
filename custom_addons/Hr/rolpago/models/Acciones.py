@@ -58,7 +58,7 @@ class RolAcciones(models.TransientModel):
         headers = {'charset': 'UTF-8', 'Content-Type': 'json'}
 
         empleados = self.empleados_ids or self.env['hr.employee'].search([])
-        print(fechas)
+
         for fecha in fechas:
             for empleado in empleados:
                 self.env['rolpago.roles'].search([('estado_rol', '=', 'publicado'), ('empleado_id', '=', empleado.id),
