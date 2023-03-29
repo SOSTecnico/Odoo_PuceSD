@@ -47,17 +47,20 @@ class RolAcciones(models.TransientModel):
 
     def ILG006(self):
 
-        fecha_inicio = self.fecha_inicio
+        fecha_inicio = self.fecha_inicio or datetime.now()
+        fecha_fin = self.fecha_fin or datetime.now()
         fechas = []
-        while fecha_inicio <= self.fecha_fin:
+        while fecha_inicio <= fecha_fin:
             fechas.append(fecha_inicio.replace(day=1))
             fecha_inicio = fecha_inicio + timedelta(days=30)
 
         tipos_de_rubros = self.env['rolpago.tipo_rubro'].sudo().search([])
         headers = {'charset': 'UTF-8', 'Content-Type': 'json'}
 
+        empleados = self.empleados_ids or self.env['hr.employee'].search([])
+        print(fechas)
         for fecha in fechas:
-            for empleado in self.empleados_ids:
+            for empleado in empleados:
                 self.env['rolpago.roles'].search([('estado_rol', '=', 'publicado'), ('empleado_id', '=', empleado.id),
                                                   ('fecha', 'like', f"{fecha.strftime('%Y-%m')}")]).unlink()
 
