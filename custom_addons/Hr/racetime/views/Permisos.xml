@@ -49,7 +49,7 @@
             <field name="name">racetime.permisos.tree</field>
             <field name="model">racetime.permisos</field>
             <field name="arch" type="xml">
-                <tree default_order="desde_fecha desc" string="Permisos" sample="1"
+                <tree expand="1" default_order="desde_fecha desc" string="Permisos" sample="1"
                       decoration-success="estado=='aprobado'"
                       decoration-danger="estado=='pendiente'">
                     <field name="empleado_id"/>
@@ -81,6 +81,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">racetime.permisos</field>
             <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="context">{'search_default_empleado':1}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     Permisos.

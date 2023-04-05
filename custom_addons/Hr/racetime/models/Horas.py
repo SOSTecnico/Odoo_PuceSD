@@ -9,13 +9,63 @@ class Horas(models.Model):
 
     name = fields.Char(related='empleado_id.name')
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=True, tracking=True)
-    inicio = fields.Datetime(string='Inicio', required=True, tracking=True)
-    fin = fields.Datetime(string='Fin', required=True, tracking=True)
-    descripcion = fields.Text(string="Descripción", required=True, tracking=True)
+    fecha_desde = fields.Date(string='Fecha Inicio', required=True, tracking=True)
+    fecha_hasta = fields.Date(string='Fecha Hasta', required=True, tracking=True)
+    hora_desde = fields.Float(string='Hora Inicio', required=True, tracking=True)
+    hora_hasta = fields.Float(string='Hora Fin', required=True, tracking=True)
+    descripcion = fields.Text(string="Descripción", required=False, tracking=True)
     tipo = fields.Selection(string='Tipo', required=True, selection=[('a_favor', 'A FAVOR'), ('extras', 'EXTRAS')],
                             tracking=True)
     estado = fields.Selection(string='Estado', selection=[('pendiente', 'PENDIENTE'), ('aprobado', 'APROBADO'), ],
-                              required=False, )
+                              required=False, default='aprobado')
 
     aprobado_por_id = fields.Many2many(comodel_name='hr.employee', string='Aprobado por', required=False, tracking=True)
     active = fields.Boolean(string='Active', required=False, default=True, tracking=True)
+
+    @api.onchange('fecha_desde')
+    def onchange_fecha_desde(self):
+        if self.fecha_desde:
+            self.fecha_hasta = self.fecha_desde
+
+    @api.model
+    def create(self, values):
+        # Add code here
+        res = super(Horas, self).create(values)
+        self.calcular_saldos(res)
+        return res
+
+    def calcular_saldos(self, values=None):
+        hora = self if self else values
+
+        horas = (hora.hora_hasta - hora.hora_desde) * 3600
+
+        saldo = self.env['racetime.saldos'].search([('empleado_id', '=', hora.empleado_id.id)])
+
+        detalle_saldo = self.env['racetime.detalle_saldos'].search([('horas_id', '=', hora.id)])
+        if hora.tipo == 'a_favor':
+            if not detalle_saldo:
+                saldo.write({
+                    'detalle_saldos': [(0, 0, {
+                        'horas': horas,
+                        'horas_id': hora.id,
+                        'name': 'HORAS INGRESADAS',
+                        'tipo': 'H',
+                        'fecha': hora.fecha_desde
+                    })]
+                })
+            else:
+                detalle_saldo.update({
+                    'horas': horas,
+                    'fecha': hora.fecha_desde
+                })
+        else:
+            detalle_saldo = self.env['racetime.detalle_saldos'].search([('horas_id', '=', hora.id)])
+            saldo.write({
+                'detalle_saldos': [(2, detalle_saldo.id)]
+            })
+
+    def write(self, values):
+        # Add code here
+        res = super(Horas, self).write(values)
+        self.calcular_saldos()
+        return res

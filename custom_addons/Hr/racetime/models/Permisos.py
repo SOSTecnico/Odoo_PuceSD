@@ -1,6 +1,7 @@
 from odoo import fields, models, api
 from odoo.exceptions import ValidationError
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
+
 
 class TipoPermiso(models.Model):
     _name = 'racetime.tipos_permiso'
@@ -50,3 +51,44 @@ class Permisos(models.Model):
                 rec.name = f"Desde: {rec.desde_fecha} || Hasta {rec.hasta_fecha} TIPO: {rec.tipo_permiso_id.name}"
             else:
                 rec.name = f"Desde: {h_1} || Hasta {h_2} TIPO: {rec.tipo_permiso_id.name}"
+
+    def calcular_saldos(self, values=None):
+        permiso = self if self else values
+
+        if permiso.tipo_permiso_id.name == 'PERSONAL':
+
+            horas = (permiso.hasta_hora - permiso.desde_hora)*3600
+
+            saldo = self.env['racetime.saldos'].search([('empleado_id', '=', permiso.empleado_id.id)])
+
+            detalle_saldo = self.env['racetime.detalle_saldos'].search([('permiso_id', '=', permiso.id)])
+
+            if not detalle_saldo:
+                saldo.write({
+                    'detalle_saldos': [(0, 0, {
+                        'horas': horas,
+                        'permiso_id': permiso.id,
+                        'name': 'PERMISO APROBADO',
+                        'tipo': 'P',
+                        'fecha': permiso.desde_fecha
+                    })]
+                })
+            else:
+                detalle_saldo.update({
+                    'horas': horas,
+                    'fecha': permiso.desde_fecha
+                })
+
+
+    @api.model
+    def create(self, values):
+        # Add code here
+        res = super(Permisos, self).create(values)
+        self.calcular_saldos(res)
+        return res
+
+    def write(self, values):
+        # Add code here
+        res = super(Permisos, self).write(values)
+        self.calcular_saldos()
+        return res

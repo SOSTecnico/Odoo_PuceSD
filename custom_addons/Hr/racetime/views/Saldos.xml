@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ************* SALDOS ******************-->
+        <record id="racetime.saldos_form_view" model="ir.ui.view">
+            <field name="name">racetime.saldos.form</field>
+            <field name="model">racetime.saldos</field>
+            <field name="arch" type="xml">
+                <form string="Saldos">
+                    <header>
+                        <button class="btn btn-info" string="Calcular Saldos" type="object"
+                                name="calcular_saldos_manual"></button>
+                    </header>
+                    <sheet>
+                        <group>
+                            <div class="mx-5">
+                                <label for="empleado_id"></label>
+                                <h2>
+                                    <field name="empleado_id" options="{'create':false}"/>
+                                </h2>
+                            </div>
+                            <div>
+                                <label for="saldo_total"></label>
+                                <h1>
+                                    <field name="saldo_total" widget="float_time_duration"
+                                           options="{'round_off': True,}"/>
+                                </h1>
+                            </div>
+                        </group>
+                        <field nolabel="1" name="detalle_saldos"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="racetime.saldos_tree_view" model="ir.ui.view">
+            <field name="name">racetime.saldos.tree</field>
+            <field name="model">racetime.saldos</field>
+            <field name="arch" type="xml">
+                <tree string="Saldos">
+                    <field name="empleado_id"/>
+                    <field name="saldo_total" widget="float_time_duration"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--
+                <record id="racetime.saldos_search_view" model="ir.ui.view">
+                    <field name="name">racetime.racetime.saldos.search</field>
+                    <field name="model">racetime.racetime.saldos</field>
+                    <field name="arch" type="xml">
+                        <search string="Saldos">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>
+        -->
+
+        <record id="racetime.saldos_act_window" model="ir.actions.act_window">
+            <field name="name">Saldos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.saldos</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Saldos.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Saldos" id="racetime.saldos_menu" parent="racetime.main_menu"
+                  action="racetime.saldos_act_window"/>
+
+
+        <!-- ********************** DETALLE SALDOS *****************************-->
+
+        <record id="racetime.detalle_saldos_view_form" model="ir.ui.view">
+            <field name="name">racetime.detalle_saldos_view_form</field>
+            <field name="model">racetime.detalle_saldos</field>
+            <field name="arch" type="xml">
+                <form string="racetime.detalle_saldos_form">
+                    <sheet>
+                        <group>
+                            <field name="tipo"/>
+                            <field name="horas" widget="float_time_duration" options="{'round_off':True}"/>
+                            <field name="fecha" required="1"/>
+                            <field name="horas_id" readonly="1"/>
+                            <field name="permiso_id" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="racetime.detalle_saldos_view_tree" model="ir.ui.view">
+            <field name="name">racetime.detalle_saldos_view_tree</field>
+            <field name="model">racetime.detalle_saldos</field>
+            <field name="arch" type="xml">
+                <tree string="racetime.detalle_saldos_tree">
+                    <field name="tipo"/>
+                    <field name="horas" widget="float_time_duration" options="{'round_off':True}"/>
+                    <field name="fecha"/>
+                    <field name="permiso_id" string="Permiso" widget="many2onebutton"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

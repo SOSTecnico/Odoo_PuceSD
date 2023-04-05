@@ -10,3 +10,4 @@ from . import DetalleMarcaciones
 from . import ReporteMarcaciones
 from . import Horarios
 from . import ReglasTiempo
+from . import Saldos

@@ -23,12 +23,13 @@
                         </group>
                         <group string="Detalle de Horas">
                             <field name="active" invisible="1"/>
-                            <field name="inicio"/>
-                            <field name="fin"/>
+                            <field name="fecha_desde"/>
+                            <field name="fecha_hasta"/>
+                            <field name="hora_desde" widget="float_time"/>
+                            <field name="hora_hasta" widget="float_time"/>
                             <field name="tipo"/>
                             <field name="descripcion"/>
                             <field name="aprobado_por_id" widget="many2many_tags"
-                                   attrs="{'required':[('estado','=','aprobado')]}"
                                    options="{'create':false, 'm2o_dialog':false}"/>
                         </group>
                     </sheet>
@@ -46,8 +47,10 @@
             <field name="arch" type="xml">
                 <tree string="Horas">
                     <field name="empleado_id"/>
-                    <field name="inicio"/>
-                    <field name="fin"/>
+                    <field name="fecha_desde"/>
+                    <field name="fecha_hasta"/>
+                    <field name="hora_desde" widget="float_time"/>
+                    <field name="hora_hasta" widget="float_time"/>
                     <field name="tipo"/>
                     <field name="descripcion"/>
                     <field name="aprobado_por_id" widget="many2many_tags"/>

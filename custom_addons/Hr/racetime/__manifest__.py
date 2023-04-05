@@ -48,6 +48,7 @@
         'views/DetalleMarcaciones.xml',
         'views/CronMarcaciones.xml',
         'views/ReglasDeTiempo.xml',
+        'views/Saldos.xml',
         'data/ReglasDeTiempo.xml',
         'data/Permisos.xml',
         'data/Dias.xml',
