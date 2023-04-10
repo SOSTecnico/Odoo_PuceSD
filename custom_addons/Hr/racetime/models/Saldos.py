@@ -32,23 +32,24 @@ class Saldos(models.Model):
 
         data = []
         for permiso in permisos_del_empleado:
-            detalle_saldo = saldos.detalle_saldos.filtered_domain([('permiso_id', '=', permiso.id)])
-            if not detalle_saldo:
-                data.append((0, 0, {
-                    'horas': (permiso.hasta_hora - permiso.desde_hora) * 3600,
-                    'fecha': permiso.desde_fecha,
-                    'tipo': 'P',
-                    'permiso_id': permiso.id,
-                    'name': 'PERMISO APROBADO'
-                }))
-            else:
-                data.append((1, detalle_saldo.id, {
-                    'horas': (permiso.hasta_hora - permiso.desde_hora) * 3600,
-                    'fecha': permiso.desde_fecha,
-                    'tipo': 'P',
-                    'permiso_id': permiso.id,
-                    'name': 'PERMISO APROBADO'
-                }))
+            if permiso.tipo_permiso_id.name == 'PERSONAL':
+                detalle_saldo = saldos.detalle_saldos.filtered_domain([('permiso_id', '=', permiso.id)])
+                if not detalle_saldo:
+                    data.append((0, 0, {
+                        'horas': (permiso.hasta_hora - permiso.desde_hora) * 3600,
+                        'fecha': permiso.desde_fecha,
+                        'tipo': 'P',
+                        'permiso_id': permiso.id,
+                        'name': 'PERMISO APROBADO'
+                    }))
+                else:
+                    data.append((1, detalle_saldo.id, {
+                        'horas': (permiso.hasta_hora - permiso.desde_hora) * 3600,
+                        'fecha': permiso.desde_fecha,
+                        'tipo': 'P',
+                        'permiso_id': permiso.id,
+                        'name': 'PERMISO APROBADO'
+                    }))
 
         for hora in horas_del_empleado:
             hora_emp = saldos.detalle_saldos.filtered_domain([('horas_id', '=', hora.id)])
@@ -82,7 +83,7 @@ class DetalleSaldos(models.Model):
     saldo_id = fields.Many2one(comodel_name='racetime.saldos', string='Saldo', required=False, ondelete='cascade')
     permiso_id = fields.Many2one(comodel_name='racetime.permisos', string='Permisos ID', required=False,
                                  ondelete='cascade')
-    horas_id = fields.Many2one(comodel_name='racetime.horas', string='Horas ID', required=False)
+    horas_id = fields.Many2one(comodel_name='racetime.horas', string='Horas ID', required=False, ondelete='cascade')
     fecha = fields.Date(string='Fecha', required=False)
     tipo = fields.Selection(string='Tipo', selection=[('P', 'Permiso'), ('H', 'Horas a Favor'), ('I', 'Saldo Inicial'),
                                                       ('VA', 'Vacaciones Antiguedad'), ('BA', 'Beneficios Antiguedad')],
