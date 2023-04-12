@@ -129,31 +129,31 @@ class Permisos(models.Model):
         return super(Permisos, self).copy(default)
 
 
-# class PermisosReport(models.AbstractModel):
-#     _name = 'report.racetime.permisos'
-#     _inherit = 'report.report_xlsx.abstract'
-#     _description = 'PermisosReport'
-#
-#     def generate_xlsx_report(self, workbook, data, models):
-#         sheet_names = self.env['racetime.tipos_permiso'].search([]).mapped("name")
-#         sheets = {}
-#         sheets.update({
-#             'GENERAL': workbook.add_worksheet("GENERAL")
-#         })
-#         for sheet in sheet_names:
-#             sheets.update({
-#                 sheet: workbook.add_worksheet(sheet)
-#             })
-#
-#         bold = workbook.add_format({'bold': True})
-#
-#         desde = models.sorted(lambda p: p.desde_fecha).mapped("desde_fecha")
-#         hasta = models.sorted(lambda p: p.hasta_fecha).mapped("hasta_fecha")
-#
-#         sheets["GENERAL"].write(0, 0, "Reporte General De Permisos", bold)
-#         sheets["GENERAL"].write(2, 0, f"Desde: {desde[0]}", bold)
-#         sheets["GENERAL"].write(2, 1, f"Hasta: {hasta[-1]}", bold)
-#         # raise ValidationError("posi")
-#         # for rec in models:
-#         #     sheets["GENERAL"].write(0, 0, "Reporte General De Permisos")
-#         #     sheets["GENERAL"].write(3, 0, f"Desde: {desde[0]}")
+class PermisosReport(models.AbstractModel):
+    _name = 'report.racetime.permisos'
+    _inherit = 'report.report_xlsx.abstract'
+    _description = 'PermisosReport'
+
+    def generate_xlsx_report(self, workbook, data, models):
+        sheet_names = self.env['racetime.tipos_permiso'].search([]).mapped("name")
+        sheets = {}
+        sheets.update({
+            'GENERAL': workbook.add_worksheet("GENERAL")
+        })
+        for sheet in sheet_names:
+            sheets.update({
+                sheet: workbook.add_worksheet(sheet)
+            })
+
+        bold = workbook.add_format({'bold': True})
+
+        desde = models.sorted(lambda p: p.desde_fecha).mapped("desde_fecha")
+        hasta = models.sorted(lambda p: p.hasta_fecha).mapped("hasta_fecha")
+
+        sheets["GENERAL"].write(0, 0, "Reporte General De Permisos", bold)
+        sheets["GENERAL"].write(2, 0, f"Desde: {desde[0]}", bold)
+        sheets["GENERAL"].write(2, 1, f"Hasta: {hasta[-1]}", bold)
+        # raise ValidationError("posi")
+        # for rec in models:
+        #     sheets["GENERAL"].write(0, 0, "Reporte General De Permisos")
+        #     sheets["GENERAL"].write(3, 0, f"Desde: {desde[0]}")
