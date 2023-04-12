@@ -52,6 +52,7 @@
         'data/ReglasDeTiempo.xml',
         'data/Permisos.xml',
         'data/Dias.xml',
+        'report/PermisosReport.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

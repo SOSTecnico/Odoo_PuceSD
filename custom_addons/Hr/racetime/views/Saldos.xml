@@ -2,6 +2,18 @@
 <odoo>
     <data>
         <!-- ************* SALDOS ******************-->
+
+        <record id="racetime.calcular_saldos_action" model="ir.actions.server">
+            <field name="name">Calcular Saldos</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_racetime_saldos"/>
+            <field name="binding_model_id" ref="model_racetime_saldos"/>
+            <field name="state">code</field>
+            <field name="code">
+                records.calcular_saldos_manual()
+            </field>
+        </record>
+
         <record id="racetime.saldos_form_view" model="ir.ui.view">
             <field name="name">racetime.saldos.form</field>
             <field name="model">racetime.saldos</field>
@@ -37,27 +49,23 @@
             <field name="name">racetime.saldos.tree</field>
             <field name="model">racetime.saldos</field>
             <field name="arch" type="xml">
-                <tree string="Saldos">
+                <tree string="Saldos" default_order="empleado_id asc">
                     <field name="empleado_id"/>
                     <field name="saldo_total" widget="float_time_duration"/>
                 </tree>
             </field>
         </record>
 
-        <!--
-                <record id="racetime.saldos_search_view" model="ir.ui.view">
-                    <field name="name">racetime.racetime.saldos.search</field>
-                    <field name="model">racetime.racetime.saldos</field>
-                    <field name="arch" type="xml">
-                        <search string="Saldos">
-                            <group expand="1" string="Group By">
-                                <filter string="Example Field" name="example_field" domain="[]"
-                                        context="{'group_by':'example_field'}"/>
-                            </group>
-                        </search>
-                    </field>
-                </record>
-        -->
+        <record id="racetime.saldos_search_view" model="ir.ui.view">
+            <field name="name">racetime.saldos.search</field>
+            <field name="model">racetime.saldos</field>
+            <field name="arch" type="xml">
+                <search string="Saldos">
+                    <filter name="group_empleado" string="Empleados" context="{'group_by':'empleado_id'}"/>
+                    <field name="empleado_id"/>
+                </search>
+            </field>
+        </record>
 
         <record id="racetime.saldos_act_window" model="ir.actions.act_window">
             <field name="name">Saldos</field>

@@ -15,8 +15,8 @@
                                 attrs="{'invisible':[('active','=',True)]}"/>
                         <group>
                             <field name="active" invisible="1"/>
-                            <field name="empleado_id" options="{'create':false,'m2o_dialog':false}"/>
-                            <field name="desde_fecha"/>
+                            <field name="empleado_id" required="1" options="{'create':false,'m2o_dialog':false}"/>
+                            <field name="desde_fecha" required="1"/>
                             <field name="hasta_fecha"/>
                             <field name="todo_el_dia" widget="boolean_toggle"/>
                             <field name="desde_hora" attrs="{'invisible':[('todo_el_dia','=',True)]}"
@@ -72,6 +72,8 @@
                     <filter name="permisos_archivados" string="Archivados" domain="[('active','=',False)]"/>
                     <filter name="tipo_permiso" string="Tipo de Permiso" context="{'group_by':'tipo_permiso_id'}"/>
                     <filter name="empleado" string="Empleado" context="{'group_by':'empleado_id'}"/>
+                    <filter name="pendientes" string="PENDIENTES" domain="[('estado','=','pendiente')]"/>
+                    <filter name="aprobados" string="APROBADOS" domain="[('estado','=','aprobado')]"/>
                 </search>
             </field>
         </record>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="racetime.permisos_report_xlsx" model="ir.actions.report">
+            <field name="name">Reporte de Permisos</field>
+            <field name="model">racetime.permisos</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">racetime.permisos</field>
+            <field name="report_file">permisos_report</field>
+            <field name="binding_type">report</field>
+            <field name="print_report_name">'Reporte Permisos'</field>
+        </record>
+
+    </data>
+</odoo>
