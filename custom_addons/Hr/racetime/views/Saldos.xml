@@ -81,6 +81,9 @@
 
         <menuitem name="Saldos" id="racetime.saldos_menu" parent="racetime.main_menu"
                   action="racetime.saldos_act_window"/>
+        <!--        <menuitem name="Saldos" id="racetime.saldos_menu" parent="racetime.main_menu"/>-->
+        <!--        <menuitem name="Saldos del Personal" id="racetime.saldos_main_menu" parent="racetime.saldos_menu"-->
+        <!--                  action="racetime.saldos_act_window"/>-->
 
 
         <!-- ********************** DETALLE SALDOS *****************************-->
@@ -115,6 +118,16 @@
                 </tree>
             </field>
         </record>
+
+        <record id="racetime.detalle_saldos_action" model="ir.actions.act_window">
+            <field name="name">Detalle de Saldos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.detalle_saldos</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--        <menuitem name="Detalle Saldos " id="racetime.detalle_saldos_menu" parent="racetime.saldos_menu"-->
+        <!--                  action="racetime.detalle_saldos_action"/>-->
 
     </data>
 </odoo>

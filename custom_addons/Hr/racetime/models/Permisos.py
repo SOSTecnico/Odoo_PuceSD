@@ -31,32 +31,32 @@ class Permisos(models.Model):
                               selection=[('pendiente', 'PENDIENTE'),
                                          ('aprobado', 'APROBADO'), ])
 
-    @api.constrains('desde_fecha', 'hasta_fecha', 'desde_hora', 'hasta_hora')
-    def _check_permisos_choques(self):
-        permisos_del_empleado = self.env['racetime.permisos'].search(
-            [('id', '!=', self.id), ('empleado_id', '=', self.empleado_id.id), ('desde_fecha', '>=', self.desde_fecha)])
-
-        for rec in permisos_del_empleado:
-
-            if isinstance(self.desde_fecha, bool):
-                continue
-            if self.desde_fecha >= rec.desde_fecha and self.hasta_fecha <= rec.hasta_fecha:
-                if rec.todo_el_dia:
-                    raise ValidationError(
-                        f"Existe un conflicto con el permiso:\n"
-                        f"{self.empleado_id.name}\n\n"
-                        f"FECHA INICIO: {rec.desde_fecha}\n"
-                        f"FECHA FIN: {rec.hasta_fecha}\n\n"
-                        f"HORARIO: {rec.desde_hora} || {rec.hasta_hora}")
-                if self.desde_hora >= rec.desde_hora and self.hasta_hora <= rec.hasta_hora \
-                        or self.desde_hora <= rec.desde_hora and self.hasta_hora >= rec.desde_hora \
-                        or self.desde_hora >= rec.desde_hora:
-                    raise ValidationError(
-                        f"Existe un conflicto con el permiso:\n"
-                        f"{self.empleado_id.name}\n\n"
-                        f"FECHA INICIO: {rec.desde_fecha}\n"
-                        f"FECHA FIN: {rec.hasta_fecha}\n\n"
-                        f"HORARIO: {timedelta(hours=rec.desde_hora)} || {timedelta(hours=rec.hasta_hora)}")
+    # @api.constrains('desde_fecha', 'hasta_fecha', 'desde_hora', 'hasta_hora')
+    # def _check_permisos_choques(self):
+    #     permisos_del_empleado = self.env['racetime.permisos'].search(
+    #         [('id', '!=', self.id), ('empleado_id', '=', self.empleado_id.id), ('desde_fecha', '>=', self.desde_fecha)])
+    #
+    #     for rec in permisos_del_empleado:
+    #
+    #         if isinstance(self.desde_fecha, bool):
+    #             continue
+    #         if self.desde_fecha >= rec.desde_fecha and self.hasta_fecha <= rec.hasta_fecha:
+    #             if rec.todo_el_dia:
+    #                 raise ValidationError(
+    #                     f"Existe un conflicto con el permiso:\n"
+    #                     f"{self.empleado_id.name}\n\n"
+    #                     f"FECHA INICIO: {rec.desde_fecha}\n"
+    #                     f"FECHA FIN: {rec.hasta_fecha}\n\n"
+    #                     f"HORARIO: {rec.desde_hora} || {rec.hasta_hora}")
+    #             if self.desde_hora >= rec.desde_hora and self.hasta_hora <= rec.hasta_hora \
+    #                     or self.desde_hora <= rec.desde_hora and self.hasta_hora >= rec.desde_hora \
+    #                     or self.desde_hora >= rec.desde_hora:
+    #                 raise ValidationError(
+    #                     f"Existe un conflicto con el permiso:\n"
+    #                     f"{self.empleado_id.name}\n\n"
+    #                     f"FECHA INICIO: {rec.desde_fecha}\n"
+    #                     f"FECHA FIN: {rec.hasta_fecha}\n\n"
+    #                     f"HORARIO: {timedelta(hours=rec.desde_hora)} || {timedelta(hours=rec.hasta_hora)}")
 
     @api.constrains('desde_fecha', 'hasta_fecha')
     def verificar_fechas_permiso(self):
@@ -153,7 +153,15 @@ class PermisosReport(models.AbstractModel):
         sheets["GENERAL"].write(0, 0, "Reporte General De Permisos", bold)
         sheets["GENERAL"].write(2, 0, f"Desde: {desde[0]}", bold)
         sheets["GENERAL"].write(2, 1, f"Hasta: {hasta[-1]}", bold)
-        # raise ValidationError("posi")
+
+        empleados = models.mapped("empleado_id.name")
+        print(empleados)
+
+        for i, empleado in enumerate(empleados):
+            record = models.filtered_domain()
+            sheets['GENERAL'].write(i + 4, 0, empleado)
+
         # for rec in models:
         #     sheets["GENERAL"].write(0, 0, "Reporte General De Permisos")
         #     sheets["GENERAL"].write(3, 0, f"Desde: {desde[0]}")
+        # raise ValidationError("sss")
