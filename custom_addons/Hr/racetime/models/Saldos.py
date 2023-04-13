@@ -1,12 +1,16 @@
 from odoo import fields, models, api
+from datetime import timedelta
+from math import ceil, floor
 
 
 class Saldos(models.Model):
     _name = 'racetime.saldos'
     _description = 'Saldos'
+    _rec_name = 'empleado_id'
 
     name = fields.Char()
     saldo_total = fields.Float(string='Saldo Total', required=False, compute='_compute_saldo_total')
+    saldo_en_dias = fields.Char(string='Saldo en Días', required=False, compute='_compute_saldo_en_dias')
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=True)
     detalle_saldos = fields.One2many(comodel_name='racetime.detalle_saldos', inverse_name='saldo_id',
                                      string='Detalle de Saldos', required=False)
@@ -16,12 +20,19 @@ class Saldos(models.Model):
         for rec in self:
             total = 0
             for saldo in rec.detalle_saldos:
-                if saldo.tipo == 'P':
-                    total = total - saldo.horas
-                if saldo.tipo == 'H' or saldo.tipo == 'I' or saldo.tipo == 'VA' or saldo.tipo == 'BA':
-                    total = total + saldo.horas
+                total = total + saldo.horas
 
             rec.saldo_total = total
+
+    @api.depends('saldo_total')
+    def _compute_saldo_en_dias(self):
+        for rec in self:
+            dias = abs(int(rec.saldo_total / 8))
+            horas = int(abs(rec.saldo_total) - (dias * 8))
+            minutos = int(((abs(rec.saldo_total) - (dias * 8)) - horas) * 60)
+            tiempo = abs(timedelta(days=dias, hours=horas, minutes=minutos))
+
+            rec.saldo_en_dias = f"-{tiempo}" if rec.saldo_total < 0 else tiempo
 
     def calcular_saldos_manual(self):
 
@@ -36,17 +47,26 @@ class Saldos(models.Model):
                 if permiso.tipo_permiso_id.name == 'PERSONAL':
                     detalle_saldo = saldos.detalle_saldos.filtered_domain([('permiso_id', '=', permiso.id)])
                     if not detalle_saldo:
-                        total = 8 * 3600 if permiso.todo_el_dia else (permiso.hasta_hora - permiso.desde_hora) * 3600
+                        if permiso.todo_el_dia:
+                            res = (permiso.hasta_fecha - permiso.desde_fecha) + timedelta(days=1)
+                            total = res.days * 8
+                        else:
+                            total = permiso.hasta_hora - permiso.desde_hora
                         data.append((0, 0, {
-                            'horas': total,
+                            'horas': -total,
                             'fecha': permiso.desde_fecha,
                             'tipo': 'P',
                             'permiso_id': permiso.id,
                             'name': 'PERMISO APROBADO'
                         }))
                     else:
+                        if permiso.todo_el_dia:
+                            res = (permiso.hasta_fecha - permiso.desde_fecha) + timedelta(days=1)
+                            total = res.days * 8
+                        else:
+                            total = permiso.hasta_hora - permiso.desde_hora
                         data.append((1, detalle_saldo.id, {
-                            'horas': (permiso.hasta_hora - permiso.desde_hora) * 3600,
+                            'horas': -total,
                             'fecha': permiso.desde_fecha,
                             'tipo': 'P',
                             'permiso_id': permiso.id,
@@ -79,16 +99,29 @@ class Saldos(models.Model):
 class DetalleSaldos(models.Model):
     _name = 'racetime.detalle_saldos'
     _description = 'DetalleSaldos'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'fecha desc'
 
     name = fields.Char(string="Concepto")
-    saldo_id = fields.Many2one(comodel_name='racetime.saldos', string='Saldo', required=False, ondelete='cascade')
+    saldo_id = fields.Many2one(comodel_name='racetime.saldos', string='Saldo', required=False, ondelete='cascade',
+                               tracking=True)
     permiso_id = fields.Many2one(comodel_name='racetime.permisos', string='Permisos ID', required=False,
-                                 ondelete='cascade')
-    horas_id = fields.Many2one(comodel_name='racetime.horas', string='Horas ID', required=False, ondelete='cascade')
-    fecha = fields.Date(string='Fecha', required=False)
+                                 ondelete='cascade', tracking=True)
+    horas_id = fields.Many2one(comodel_name='racetime.horas', string='Horas ID', required=False, ondelete='cascade',
+                               tracking=True)
+    fecha = fields.Date(string='Fecha', required=False, tracking=True)
     tipo = fields.Selection(string='Tipo', selection=[('P', 'Permiso'), ('H', 'Horas a Favor'), ('I', 'Saldo Inicial'),
                                                       ('VA', 'Vacaciones Antiguedad'), ('BA', 'Beneficios Antiguedad')],
-                            required=True, )
+                            required=True, tracking=True)
 
-    horas = fields.Float(string='Horas', required=False)
+    empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False,
+                                  related='saldo_id.empleado_id')
+    horas = fields.Float(string='Horas', required=False, tracking=True)
+
+    @api.onchange('horas')
+    def onchange_horas(self):
+        if self.horas:
+            if self.tipo == 'P':
+                self.horas = f"-{self.horas}"
+
+

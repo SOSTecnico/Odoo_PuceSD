@@ -19,27 +19,35 @@
             <field name="model">racetime.saldos</field>
             <field name="arch" type="xml">
                 <form string="Saldos">
-                    <header>
-                        <button class="btn btn-info" string="Calcular Saldos" type="object"
-                                name="calcular_saldos_manual"></button>
-                    </header>
                     <sheet>
-                        <group>
+                        <group col="4">
                             <div class="mx-5">
-                                <label for="empleado_id"></label>
+                                <label for="empleado_id"/>
                                 <h2>
                                     <field name="empleado_id" options="{'create':false}"/>
                                 </h2>
                             </div>
                             <div>
-                                <label for="saldo_total"></label>
+                                <label for="saldo_total"/>
                                 <h1>
-                                    <field name="saldo_total" widget="float_time_duration"
-                                           options="{'round_off': True,}"/>
+                                    <field name="saldo_total" widget="float_time"/>
+                                </h1>
+                            </div>
+                            <div>
+                                <label for="saldo_en_dias"/>
+                                <h1>
+                                    <field name="saldo_en_dias"/>
                                 </h1>
                             </div>
                         </group>
-                        <field nolabel="1" name="detalle_saldos"/>
+                        <field nolabel="1" name="detalle_saldos">
+                            <tree>
+                                <field name="tipo"/>
+                                <field name="horas" widget="float_time"/>
+                                <field name="fecha"/>
+                                <field name="permiso_id" string="Permiso" widget="many2onebutton"/>
+                            </tree>
+                        </field>
                     </sheet>
                 </form>
             </field>
@@ -51,7 +59,8 @@
             <field name="arch" type="xml">
                 <tree string="Saldos" default_order="empleado_id asc">
                     <field name="empleado_id"/>
-                    <field name="saldo_total" widget="float_time_duration"/>
+                    <field name="saldo_en_dias"/>
+                    <field name="saldo_total" widget="float_time"/>
                 </tree>
             </field>
         </record>
@@ -79,11 +88,11 @@
             </field>
         </record>
 
-        <menuitem name="Saldos" id="racetime.saldos_menu" parent="racetime.main_menu"
-                  action="racetime.saldos_act_window"/>
-        <!--        <menuitem name="Saldos" id="racetime.saldos_menu" parent="racetime.main_menu"/>-->
-        <!--        <menuitem name="Saldos del Personal" id="racetime.saldos_main_menu" parent="racetime.saldos_menu"-->
+        <!--        <menuitem name="Saldos" id="racetime.saldos_menu" parent="racetime.main_menu"-->
         <!--                  action="racetime.saldos_act_window"/>-->
+        <menuitem name="Saldos" id="racetime.saldos_menu" parent="racetime.main_menu"/>
+        <menuitem name="Saldos del Personal" id="racetime.saldos_main_menu" parent="racetime.saldos_menu"
+                  action="racetime.saldos_act_window"/>
 
 
         <!-- ********************** DETALLE SALDOS *****************************-->
@@ -96,12 +105,16 @@
                     <sheet>
                         <group>
                             <field name="tipo"/>
-                            <field name="horas" widget="float_time_duration" options="{'round_off':True}"/>
+                            <field name="horas" widget="float_time"/>
                             <field name="fecha" required="1"/>
                             <field name="horas_id" readonly="1"/>
                             <field name="permiso_id" readonly="1"/>
                         </group>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -111,8 +124,9 @@
             <field name="model">racetime.detalle_saldos</field>
             <field name="arch" type="xml">
                 <tree string="racetime.detalle_saldos_tree">
+                    <field name="empleado_id"/>
                     <field name="tipo"/>
-                    <field name="horas" widget="float_time_duration" options="{'round_off':True}"/>
+                    <field name="horas" widget="float_time"/>
                     <field name="fecha"/>
                     <field name="permiso_id" string="Permiso" widget="many2onebutton"/>
                 </tree>
@@ -126,8 +140,8 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <!--        <menuitem name="Detalle Saldos " id="racetime.detalle_saldos_menu" parent="racetime.saldos_menu"-->
-        <!--                  action="racetime.detalle_saldos_action"/>-->
+        <menuitem name="Detalle Saldos " id="racetime.detalle_saldos_menu" parent="racetime.saldos_menu"
+                  action="racetime.detalle_saldos_action"/>
 
     </data>
 </odoo>

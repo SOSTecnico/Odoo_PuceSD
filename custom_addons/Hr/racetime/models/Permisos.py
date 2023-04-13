@@ -86,7 +86,11 @@ class Permisos(models.Model):
 
         if permiso.tipo_permiso_id.name == 'PERSONAL':
 
-            horas = 8 * 3600 if permiso.todo_el_dia else (permiso.hasta_hora - permiso.desde_hora) * 3600
+            if permiso.todo_el_dia:
+                res = (permiso.hasta_fecha - permiso.desde_fecha) + timedelta(days=1)
+                horas = res.days * 8
+            else:
+                horas = permiso.hasta_hora - permiso.desde_hora
 
             saldo = self.env['racetime.saldos'].search([('empleado_id', '=', permiso.empleado_id.id)])
 
@@ -95,7 +99,7 @@ class Permisos(models.Model):
             if not detalle_saldo:
                 saldo.write({
                     'detalle_saldos': [(0, 0, {
-                        'horas': horas,
+                        'horas': -horas,
                         'permiso_id': permiso.id,
                         'name': 'PERMISO APROBADO',
                         'tipo': 'P',
@@ -104,7 +108,7 @@ class Permisos(models.Model):
                 })
             else:
                 detalle_saldo.update({
-                    'horas': horas,
+                    'horas': -horas,
                     'fecha': permiso.desde_fecha
                 })
 
