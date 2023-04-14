@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <!-- ************* SALDOS ******************-->
-
+                <!--Acciones Servidor-->
         <record id="racetime.calcular_saldos_action" model="ir.actions.server">
             <field name="name">Calcular Saldos</field>
             <field name="type">ir.actions.server</field>
@@ -13,6 +13,19 @@
                 records.calcular_saldos_manual()
             </field>
         </record>
+
+        <record id="racetime.reestablecer_saldos_action" model="ir.actions.server">
+            <field name="name">Reestablecer Saldos</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_racetime_saldos"/>
+            <field name="binding_model_id" ref="model_racetime_saldos"/>
+            <field name="state">code</field>
+            <field name="code">
+                records.reestablecer_saldos()
+            </field>
+        </record>
+
+        <!--********************-->
 
         <record id="racetime.saldos_form_view" model="ir.ui.view">
             <field name="name">racetime.saldos.form</field>

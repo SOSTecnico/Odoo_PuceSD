@@ -155,17 +155,22 @@ class PermisosReport(models.AbstractModel):
         hasta = models.sorted(lambda p: p.hasta_fecha).mapped("hasta_fecha")
 
         sheets["GENERAL"].write(0, 0, "Reporte General De Permisos", bold)
-        sheets["GENERAL"].write(2, 0, f"Desde: {desde[0]}", bold)
-        sheets["GENERAL"].write(2, 1, f"Hasta: {hasta[-1]}", bold)
+        sheets["GENERAL"].write(2, 0, f"Desde: {desde[0]} || Hasta: {hasta[-1]} ", bold)
+        sheets["GENERAL"].write(4, 0, "EMPLEADO", bold)
+        sheets["GENERAL"].write(4, 1, "FECHA", bold)
+        sheets["GENERAL"].write(4, 2, "HORAS", bold)
 
         empleados = models.mapped("empleado_id.name")
-        print(empleados)
-
-        for i, empleado in enumerate(empleados):
-            record = models.filtered_domain()
-            sheets['GENERAL'].write(i + 4, 0, empleado)
-
-        # for rec in models:
-        #     sheets["GENERAL"].write(0, 0, "Reporte General De Permisos")
-        #     sheets["GENERAL"].write(3, 0, f"Desde: {desde[0]}")
-        # raise ValidationError("sss")
+        empleados.sort()
+        fila_empleado = 5
+        for empleado in empleados:
+            permisos_del_empleado = models.filtered(lambda e: e.empleado_id.name == empleado)
+            if len(permisos_del_empleado) > 1:
+                sheets['GENERAL'].merge_range(f"A{fila_empleado+1}:A{len(permisos_del_empleado) + fila_empleado}",
+                                              empleado)
+                fila_empleado = len(permisos_del_empleado) + fila_empleado
+            else:
+                sheets['GENERAL'].write(fila_empleado, 0, empleado)
+                fila_empleado = fila_empleado + 1
+            for permiso in permisos_del_empleado:
+                pass

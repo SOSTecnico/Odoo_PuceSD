@@ -95,6 +95,11 @@ class Saldos(models.Model):
                 'detalle_saldos': data
             })
 
+    def reestablecer_saldos(self):
+        for rec in self:
+            detalle_saldos = rec.detalle_saldos.filtered_domain([('tipo', '!=', 'SC')])
+            detalle_saldos.unlink()
+
 
 class DetalleSaldos(models.Model):
     _name = 'racetime.detalle_saldos'
@@ -110,8 +115,9 @@ class DetalleSaldos(models.Model):
     horas_id = fields.Many2one(comodel_name='racetime.horas', string='Horas ID', required=False, ondelete='cascade',
                                tracking=True)
     fecha = fields.Date(string='Fecha', required=False, tracking=True)
-    tipo = fields.Selection(string='Tipo', selection=[('P', 'Permiso'), ('H', 'Horas a Favor'), ('I', 'Saldo Inicial'),
-                                                      ('VA', 'Vacaciones Antiguedad'), ('BA', 'Beneficios Antiguedad')],
+    tipo = fields.Selection(string='Tipo',
+                            selection=[('P', 'Permiso'), ('H', 'Horas a Favor'), ('SC', 'Saldo al Corte'),
+                                       ('DA', 'Días Antiguedad'), ('DB', 'Días Beneficio')],
                             required=True, tracking=True)
 
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False,
@@ -123,5 +129,3 @@ class DetalleSaldos(models.Model):
         if self.horas:
             if self.tipo == 'P':
                 self.horas = f"-{self.horas}"
-
-

@@ -8,6 +8,7 @@
             <field name="report_type">xlsx</field>
             <field name="report_name">racetime.permisos</field>
             <field name="report_file">permisos_report</field>
+            <field name="binding_model_id" ref="racetime.model_racetime_permisos"/>
             <field name="binding_type">report</field>
             <field name="print_report_name">'Reporte Permisos'</field>
         </record>
