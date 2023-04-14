@@ -8,6 +8,7 @@ class Saldos(models.Model):
     _description = 'Saldos'
     _rec_name = 'empleado_id'
 
+    active = fields.Boolean(string='Active', required=False, default=True)
     name = fields.Char()
     saldo_total = fields.Float(string='Saldo Total', required=False, compute='_compute_saldo_total')
     saldo_en_dias = fields.Char(string='Saldo en Días', required=False, compute='_compute_saldo_en_dias')
@@ -27,6 +28,17 @@ class Saldos(models.Model):
     @api.depends('saldo_total')
     def _compute_saldo_en_dias(self):
         for rec in self:
+
+            # Este código pertener al empleado ILDA ELIZALDE ella solo debe hacerce el cálculo por 6 horas
+            if rec.empleado_id.identification_id == '1713007910':
+                dias = abs(int(rec.saldo_total / 6))
+                horas = int(abs(rec.saldo_total) - (dias * 6))
+                minutos = int(((abs(rec.saldo_total) - (dias * 6)) - horas) * 60)
+                tiempo = abs(timedelta(days=dias, hours=horas, minutes=minutos))
+
+                rec.saldo_en_dias = f"-{tiempo}" if rec.saldo_total < 0 else tiempo
+                continue
+
             dias = abs(int(rec.saldo_total / 8))
             horas = int(abs(rec.saldo_total) - (dias * 8))
             minutos = int(((abs(rec.saldo_total) - (dias * 8)) - horas) * 60)
@@ -50,6 +62,11 @@ class Saldos(models.Model):
                         if permiso.todo_el_dia:
                             res = (permiso.hasta_fecha - permiso.desde_fecha) + timedelta(days=1)
                             total = res.days * 8
+
+                            # Este código pertener al empleado ILDA ELIZALDE ella solo debe hacerce el cálculo por 6 horas
+                            if rec.empleado_id.identification_id == '1713007910':
+                                total = res.days * 6
+
                         else:
                             total = permiso.hasta_hora - permiso.desde_hora
                         data.append((0, 0, {
@@ -63,6 +80,10 @@ class Saldos(models.Model):
                         if permiso.todo_el_dia:
                             res = (permiso.hasta_fecha - permiso.desde_fecha) + timedelta(days=1)
                             total = res.days * 8
+
+                            # Este código pertener al empleado ILDA ELIZALDE ella solo debe hacerce el cálculo por 6 horas
+                            if rec.empleado_id.identification_id == '1713007910':
+                                total = res.days * 6
                         else:
                             total = permiso.hasta_hora - permiso.desde_hora
                         data.append((1, detalle_saldo.id, {
@@ -77,7 +98,7 @@ class Saldos(models.Model):
                 hora_emp = saldos.detalle_saldos.filtered_domain([('horas_id', '=', hora.id)])
                 if not hora_emp:
                     data.append((0, 0, {
-                        'horas': (hora.hora_hasta - hora.hora_desde) * 3600,
+                        'horas': hora.hora_hasta - hora.hora_desde,
                         'fecha': hora.fecha_desde,
                         'tipo': 'H',
                         'horas_id': hora.id,
@@ -85,7 +106,7 @@ class Saldos(models.Model):
                     }))
                 else:
                     data.append((1, hora_emp.id, {
-                        'horas': (hora.hora_hasta - hora.hora_desde) * 3600,
+                        'horas': hora.hora_hasta - hora.hora_desde,
                         'fecha': hora.fecha_desde,
                         'tipo': 'H',
                         'horas_id': hora.id,

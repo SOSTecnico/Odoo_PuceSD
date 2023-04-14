@@ -37,7 +37,7 @@ class Horas(models.Model):
     def calcular_saldos(self, values=None):
         hora = self if self else values
 
-        horas = (hora.hora_hasta - hora.hora_desde) * 3600
+        horas = hora.hora_hasta - hora.hora_desde
 
         saldo = self.env['racetime.saldos'].search([('empleado_id', '=', hora.empleado_id.id)])
 
