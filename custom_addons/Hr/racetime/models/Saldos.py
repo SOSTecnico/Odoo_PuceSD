@@ -1,8 +1,9 @@
 from odoo import fields, models, api
 from datetime import timedelta, datetime
 
-
 from odoo.exceptions import ValidationError
+
+import xlsxwriter
 
 
 class Saldos(models.Model):
@@ -154,29 +155,47 @@ class DetalleSaldos(models.Model):
                 self.horas = f"-{self.horas}"
 
 
-class SaldosReport(models.TransientModel):
+class SaldosWizard(models.TransientModel):
+    _name = 'racetime.saldos_wizard'
+    _description = 'SaldosWizard'
+
+    name = fields.Char()
+
+    fecha_inicio = fields.Date(string='Fecha Inicio', required=True)
+    fecha_fin = fields.Date(string='Fecha Fin', required=True)
+    empleados = fields.Many2many(comodel_name='hr.employee', string='Empleados')
+
+    def generar_reporte(self):
+        data = {
+            'fecha_inicio': self.fecha_inicio,
+            'fecha_fin': self.fecha_fin,
+            'empleados': self.empleados.ids
+        }
+        return self.env.ref('racetime.saldos_report_xlsx').report_action(self, data=data)
+
+
+class SaldosReport(models.AbstractModel):
     _name = 'report.racetime.saldos'
     _inherit = 'report.report_xlsx.abstract'
     _description = 'SaldosReport'
 
-    fecha_inicio = fields.Date(string='Fecha Inicio', required=True)
-    fecha_fin = fields.Date(string='Fecha Fin', required=True)
-    empleados_ids = fields.Many2many(comodel_name='hr.employee', string='Empleados')
-
-    def generar_reporte(self):
-        self.env.ref('racetime.reporte_saldos_action').run(5)
-
     def generate_xlsx_report(self, workbook, data, records):
-        print(self)
-        print(data)
-        print(records)
-        nombres_empleados = records.mapped("empleado_id.name")
+        empleados = self.env['hr.employee'].search([('id', 'in', data['empleados'])])
+        detalle_de_saldos = self.env['racetime.detalle_saldos'].search(
+            [('empleado_id', 'in', data['empleados']), ('fecha', '>=', data['fecha_inicio']),
+             ('fecha', '<=', data['fecha_fin'])])
+
         bold = workbook.add_format({'bold': True})
-        # detalle_saldos = self.env['racetime.detalle_saldos'].search([('')])
-        # desde = records.sorted(lambda p: p.desde_fecha).mapped("desde_fecha")
-        # hasta = records.sorted(lambda p: p.hasta_fecha).mapped("hasta_fecha")
         sheet = workbook.add_worksheet("Reporte de Saldos")
-        sheet.write("A0", "Reporte General De Saldos", bold)
+        sheet.write("B1", "Reporte General De Saldos", bold)
+        sheet.write("B2", f"Desde: {data['fecha_inicio']} || Hasta: {data['fecha_fin']}", bold)
+        sheet.write("A4", "Cédula", bold)
+        sheet.write("B4", "Empleados", bold)
+        # print(data)
+        celda_inicio = 5
+        for i, empleado in enumerate(empleados):
+            sheet.write(f"A{i + celda_inicio}", empleado.identification_id)
+            sheet.write(f"B{i + celda_inicio}", empleado.name)
         # sheet.write(2, 0, f"Desde: {desde[0]} || Hasta: {hasta[-1]} ", bold)
         # sheet.write(4, 0, "CÉDULA", bold)
         # sheet.write(4, 1, "EMPLEADO", bold)
@@ -188,8 +207,6 @@ class SaldosReport(models.TransientModel):
         # sheet.write(4, 7, "DESCUENTO HORAS", bold)
         # sheet.write(4, 8, "SALDO EN HORAS", bold)
         # sheet.write(4, 9, "SALDO EN DÍAS", bold)
-        for e in nombres_empleados:
-            rec = records.filtered_domain([('empleado_id.name', '=', e)])
 
         # raise ValidationError("posi")
 
