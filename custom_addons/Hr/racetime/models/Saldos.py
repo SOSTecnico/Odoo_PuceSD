@@ -132,7 +132,7 @@ class DetalleSaldos(models.Model):
     _order = 'fecha desc'
 
     name = fields.Char(string="Concepto")
-    saldo_id = fields.Many2one(comodel_name='racetime.saldos', string='Saldo', required=False, ondelete='cascade',
+    saldo_id = fields.Many2one(comodel_name='racetime.saldos', string='Saldo ID', required=False, ondelete='cascade',
                                tracking=True)
     permiso_id = fields.Many2one(comodel_name='racetime.permisos', string='Permisos ID', required=False,
                                  ondelete='cascade', tracking=True)
@@ -148,11 +148,19 @@ class DetalleSaldos(models.Model):
                                   related='saldo_id.empleado_id')
     horas = fields.Float(string='Horas', required=False, tracking=True)
 
+    saldo = fields.Float(string='Saldo', required=False, compute='_compute_calcular_saldo')
+
     @api.onchange('horas')
     def onchange_horas(self):
         if self.horas:
-            if self.tipo == 'P':
+            if self.tipo == 'P' or self.tipo == 'DH':
                 self.horas = f"-{self.horas}"
+
+    @api.depends('horas')
+    def _compute_calcular_saldo(self):
+        for rec in self:
+            print(rec.horas)
+            rec.saldo = 0
 
 
 class SaldosWizard(models.TransientModel):
@@ -191,57 +199,17 @@ class SaldosReport(models.AbstractModel):
         sheet.write("B2", f"Desde: {data['fecha_inicio']} || Hasta: {data['fecha_fin']}", bold)
         sheet.write("A4", "Cédula", bold)
         sheet.write("B4", "Empleados", bold)
+        sheet.write("B4", "Empleados", bold)
+        sheet.write("C4", "Saldo Anterior", bold)
+        sheet.write("D4", "Vacaciones Antiguedad", bold)
+        sheet.write("E4", "Beneficios Antiguedad", bold)
+        sheet.write("F4", "H. Adicionales", bold)
+        sheet.write("G4", "Permisos", bold)
+        sheet.write("H4", "Descuento Horas", bold)
+        sheet.write("I4", "Saldo en Horas", bold)
+        sheet.write("J4", "Saldo en Días", bold)
         # print(data)
         celda_inicio = 5
         for i, empleado in enumerate(empleados):
             sheet.write(f"A{i + celda_inicio}", empleado.identification_id)
             sheet.write(f"B{i + celda_inicio}", empleado.name)
-        # sheet.write(2, 0, f"Desde: {desde[0]} || Hasta: {hasta[-1]} ", bold)
-        # sheet.write(4, 0, "CÉDULA", bold)
-        # sheet.write(4, 1, "EMPLEADO", bold)
-        # sheet.write(4, 2, "SALDO ANTERIOR", bold)
-        # sheet.write(4, 3, "VACACIONES ANTIGUEDAD", bold)
-        # sheet.write(4, 4, "BENEFICIOS ANTIGUEDAD", bold)
-        # sheet.write(4, 5, "HORAS ADICIONALES", bold)
-        # sheet.write(4, 6, "PERMISOS", bold)
-        # sheet.write(4, 7, "DESCUENTO HORAS", bold)
-        # sheet.write(4, 8, "SALDO EN HORAS", bold)
-        # sheet.write(4, 9, "SALDO EN DÍAS", bold)
-
-        # raise ValidationError("posi")
-
-        # sheet_names = self.env['racetime.tipos_permiso'].search([]).mapped("name")
-        # sheets = {}
-        # sheets.update({
-        #     'GENERAL': workbook.add_worksheet("GENERAL")
-        # })
-        # for sheet in sheet_names:
-        #     sheets.update({
-        #         sheet: workbook.add_worksheet(sheet)
-        #     })
-        #
-        # bold = workbook.add_format({'bold': True})
-        #
-        # desde = models.sorted(lambda p: p.desde_fecha).mapped("desde_fecha")
-        # hasta = models.sorted(lambda p: p.hasta_fecha).mapped("hasta_fecha")
-        #
-        # sheets["GENERAL"].write(0, 0, "Reporte General De Permisos", bold)
-        # sheets["GENERAL"].write(2, 0, f"Desde: {desde[0]} || Hasta: {hasta[-1]} ", bold)
-        # sheets["GENERAL"].write(4, 0, "EMPLEADO", bold)
-        # sheets["GENERAL"].write(4, 1, "FECHA", bold)
-        # sheets["GENERAL"].write(4, 2, "HORAS", bold)
-        #
-        # empleados = models.mapped("empleado_id.name")
-        # empleados.sort()
-        # fila_empleado = 5
-        # for empleado in empleados:
-        #     permisos_del_empleado = models.filtered(lambda e: e.empleado_id.name == empleado)
-        #     if len(permisos_del_empleado) > 1:
-        #         sheets['GENERAL'].merge_range(f"A{fila_empleado+1}:A{len(permisos_del_empleado) + fila_empleado}",
-        #                                       empleado)
-        #         fila_empleado = len(permisos_del_empleado) + fila_empleado
-        #     else:
-        #         sheets['GENERAL'].write(fila_empleado, 0, empleado)
-        #         fila_empleado = fila_empleado + 1
-        #     for permiso in permisos_del_empleado:
-        #         pass

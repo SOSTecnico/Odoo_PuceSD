@@ -60,6 +60,7 @@
                                 <field name="tipo"/>
                                 <field name="horas" widget="float_time"/>
                                 <field name="fecha"/>
+                                <field name="saldo"/>
                                 <field name="permiso_id" string="Permiso" widget="many2onebutton"/>
                             </tree>
                         </field>
