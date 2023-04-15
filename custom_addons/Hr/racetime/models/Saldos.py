@@ -1,6 +1,8 @@
 from odoo import fields, models, api
-from datetime import timedelta
-from math import ceil, floor
+from datetime import timedelta, datetime
+
+
+from odoo.exceptions import ValidationError
 
 
 class Saldos(models.Model):
@@ -138,7 +140,7 @@ class DetalleSaldos(models.Model):
     fecha = fields.Date(string='Fecha', required=False, tracking=True)
     tipo = fields.Selection(string='Tipo',
                             selection=[('P', 'Permiso'), ('H', 'Horas a Favor'), ('SC', 'Saldo al Corte'),
-                                       ('DA', 'Días Antiguedad'), ('DB', 'Días Beneficio')],
+                                       ('DA', 'Días Antiguedad'), ('DB', 'Días Beneficio'), ('DH', 'Descuento Horas')],
                             required=True, tracking=True)
 
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False,
@@ -150,3 +152,79 @@ class DetalleSaldos(models.Model):
         if self.horas:
             if self.tipo == 'P':
                 self.horas = f"-{self.horas}"
+
+
+class SaldosReport(models.TransientModel):
+    _name = 'report.racetime.saldos'
+    _inherit = 'report.report_xlsx.abstract'
+    _description = 'SaldosReport'
+
+    fecha_inicio = fields.Date(string='Fecha Inicio', required=True)
+    fecha_fin = fields.Date(string='Fecha Fin', required=True)
+    empleados_ids = fields.Many2many(comodel_name='hr.employee', string='Empleados')
+
+    def generar_reporte(self):
+        self.env.ref('racetime.reporte_saldos_action').run(5)
+
+    def generate_xlsx_report(self, workbook, data, records):
+        print(self)
+        print(data)
+        print(records)
+        nombres_empleados = records.mapped("empleado_id.name")
+        bold = workbook.add_format({'bold': True})
+        # detalle_saldos = self.env['racetime.detalle_saldos'].search([('')])
+        # desde = records.sorted(lambda p: p.desde_fecha).mapped("desde_fecha")
+        # hasta = records.sorted(lambda p: p.hasta_fecha).mapped("hasta_fecha")
+        sheet = workbook.add_worksheet("Reporte de Saldos")
+        sheet.write("A0", "Reporte General De Saldos", bold)
+        # sheet.write(2, 0, f"Desde: {desde[0]} || Hasta: {hasta[-1]} ", bold)
+        # sheet.write(4, 0, "CÉDULA", bold)
+        # sheet.write(4, 1, "EMPLEADO", bold)
+        # sheet.write(4, 2, "SALDO ANTERIOR", bold)
+        # sheet.write(4, 3, "VACACIONES ANTIGUEDAD", bold)
+        # sheet.write(4, 4, "BENEFICIOS ANTIGUEDAD", bold)
+        # sheet.write(4, 5, "HORAS ADICIONALES", bold)
+        # sheet.write(4, 6, "PERMISOS", bold)
+        # sheet.write(4, 7, "DESCUENTO HORAS", bold)
+        # sheet.write(4, 8, "SALDO EN HORAS", bold)
+        # sheet.write(4, 9, "SALDO EN DÍAS", bold)
+        for e in nombres_empleados:
+            rec = records.filtered_domain([('empleado_id.name', '=', e)])
+
+        # raise ValidationError("posi")
+
+        # sheet_names = self.env['racetime.tipos_permiso'].search([]).mapped("name")
+        # sheets = {}
+        # sheets.update({
+        #     'GENERAL': workbook.add_worksheet("GENERAL")
+        # })
+        # for sheet in sheet_names:
+        #     sheets.update({
+        #         sheet: workbook.add_worksheet(sheet)
+        #     })
+        #
+        # bold = workbook.add_format({'bold': True})
+        #
+        # desde = models.sorted(lambda p: p.desde_fecha).mapped("desde_fecha")
+        # hasta = models.sorted(lambda p: p.hasta_fecha).mapped("hasta_fecha")
+        #
+        # sheets["GENERAL"].write(0, 0, "Reporte General De Permisos", bold)
+        # sheets["GENERAL"].write(2, 0, f"Desde: {desde[0]} || Hasta: {hasta[-1]} ", bold)
+        # sheets["GENERAL"].write(4, 0, "EMPLEADO", bold)
+        # sheets["GENERAL"].write(4, 1, "FECHA", bold)
+        # sheets["GENERAL"].write(4, 2, "HORAS", bold)
+        #
+        # empleados = models.mapped("empleado_id.name")
+        # empleados.sort()
+        # fila_empleado = 5
+        # for empleado in empleados:
+        #     permisos_del_empleado = models.filtered(lambda e: e.empleado_id.name == empleado)
+        #     if len(permisos_del_empleado) > 1:
+        #         sheets['GENERAL'].merge_range(f"A{fila_empleado+1}:A{len(permisos_del_empleado) + fila_empleado}",
+        #                                       empleado)
+        #         fila_empleado = len(permisos_del_empleado) + fila_empleado
+        #     else:
+        #         sheets['GENERAL'].write(fila_empleado, 0, empleado)
+        #         fila_empleado = fila_empleado + 1
+        #     for permiso in permisos_del_empleado:
+        #         pass

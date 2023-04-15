@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="racetime.saldos_report_xlsx" model="ir.actions.report">
+            <field name="name">Reporte de Saldos</field>
+            <field name="model">racetime.saldos</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">racetime.saldos</field>
+            <field name="report_file">saldos_report</field>
+            <field name="binding_model_id" ref="racetime.model_racetime_saldos"/>
+            <field name="binding_type">report</field>
+            <field name="print_report_name">'Reporte Saldos'</field>
+        </record>
+
+    </data>
+</odoo>

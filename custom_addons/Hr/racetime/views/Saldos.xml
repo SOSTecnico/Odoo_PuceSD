@@ -110,6 +110,38 @@
         <menuitem name="Saldos del Personal" id="racetime.saldos_main_menu" parent="racetime.saldos_menu"
                   action="racetime.saldos_act_window"/>
 
+        <!--REPORTE DE SALDOS WIZARD-->
+
+        <record id="racetime.reporte_saldos_action" model="ir.actions.act_window">
+            <field name="name">Reporte Saldos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">report.racetime.saldos</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="racetime.reporte_saldos_view_form" model="ir.ui.view">
+            <field name="name">report.racetime.reporte_saldos_view_form</field>
+            <field name="model">report.racetime.saldos</field>
+            <field name="arch" type="xml">
+                <form string="racetime.reporte_saldos_form">
+                    <sheet>
+                        <group>
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_fin"/>
+                        </group>
+                        <field name="empleados_ids" context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"/>
+                    </sheet>
+                    <footer>
+                        <button string="GENERAR REPORTE" class="btn-primary" type="object" name="generar_reporte"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <menuitem name="Reporte de Saldos" id="racetime.reporte_saldos_menu" parent="racetime.saldos_menu"
+                  action="racetime.reporte_saldos_action"/>
+
 
         <!-- ********************** DETALLE SALDOS *****************************-->
 
