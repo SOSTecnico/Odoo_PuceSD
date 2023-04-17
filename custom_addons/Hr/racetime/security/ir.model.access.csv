@@ -16,4 +16,5 @@ access_racetime_asignacion_horario,racetime.asignacion_horario,model_racetime_as
 access_racetime_asignacion_horario_multiple,racetime.asignacion_horario_multiple,model_racetime_asignacion_horario_multiple,racetime.group_admin,1,1,1,1
 access_racetime_saldos,racetime.saldos,model_racetime_saldos,racetime.group_admin,1,1,1,1
 access_racetime_detalle_saldos,racetime.detalle_saldos,model_racetime_detalle_saldos,racetime.group_admin,1,1,1,1
+access_racetime_saldos_reporte_wizard,racetime.saldos_reporte_wizard,model_racetime_saldos_reporte_wizard,racetime.group_admin,1,1,1,1
 

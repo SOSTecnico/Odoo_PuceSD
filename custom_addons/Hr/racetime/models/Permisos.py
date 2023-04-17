@@ -133,44 +133,57 @@ class Permisos(models.Model):
         return super(Permisos, self).copy(default)
 
 
+class PermisosReportWizard(models.TransientModel):
+    _name = 'racetime.permisos_report_wizard'
+    _description = 'PermisosReportWizard'
+
+    name = fields.Char()
+    fecha_inicio = fields.Date(string='Fecha Inicio', required=True)
+    fecha_fin = fields.Date(string='Fecha_fin', required=True)
+    empleados = fields.Many2many(comodel_name='hr.employee', string='Empleados')
+
+
+
+
 class PermisosReport(models.AbstractModel):
     _name = 'report.racetime.permisos'
     _inherit = 'report.report_xlsx.abstract'
     _description = 'PermisosReport'
 
-    def generate_xlsx_report(self, workbook, data, models):
-        sheet_names = self.env['racetime.tipos_permiso'].search([]).mapped("name")
-        sheets = {}
-        sheets.update({
-            'GENERAL': workbook.add_worksheet("GENERAL")
-        })
-        for sheet in sheet_names:
-            sheets.update({
-                sheet: workbook.add_worksheet(sheet)
-            })
-
-        bold = workbook.add_format({'bold': True})
-
-        desde = models.sorted(lambda p: p.desde_fecha).mapped("desde_fecha")
-        hasta = models.sorted(lambda p: p.hasta_fecha).mapped("hasta_fecha")
-
-        sheets["GENERAL"].write(0, 0, "Reporte General De Permisos", bold)
-        sheets["GENERAL"].write(2, 0, f"Desde: {desde[0]} || Hasta: {hasta[-1]} ", bold)
-        sheets["GENERAL"].write(4, 0, "EMPLEADO", bold)
-        sheets["GENERAL"].write(4, 1, "FECHA", bold)
-        sheets["GENERAL"].write(4, 2, "HORAS", bold)
-
-        empleados = models.mapped("empleado_id.name")
-        empleados.sort()
-        fila_empleado = 5
-        for empleado in empleados:
-            permisos_del_empleado = models.filtered(lambda e: e.empleado_id.name == empleado)
-            if len(permisos_del_empleado) > 1:
-                sheets['GENERAL'].merge_range(f"A{fila_empleado+1}:A{len(permisos_del_empleado) + fila_empleado}",
-                                              empleado)
-                fila_empleado = len(permisos_del_empleado) + fila_empleado
-            else:
-                sheets['GENERAL'].write(fila_empleado, 0, empleado)
-                fila_empleado = fila_empleado + 1
-            for permiso in permisos_del_empleado:
-                pass
+    def generate_xlsx_report(self, workbook, data, records):
+        pass
+        # sheet_names = self.env['racetime.tipos_permiso'].search([]).mapped("name")
+        # sheets = {}
+        # sheets.update({
+        #     'GENERAL': workbook.add_worksheet("GENERAL")
+        # })
+        # for sheet in sheet_names:
+        #     sheets.update({
+        #         sheet: workbook.add_worksheet(sheet)
+        #     })
+        #
+        # bold = workbook.add_format({'bold': True})
+        #
+        # desde = models.sorted(lambda p: p.desde_fecha).mapped("desde_fecha")
+        # hasta = models.sorted(lambda p: p.hasta_fecha).mapped("hasta_fecha")
+        #
+        # sheets["GENERAL"].write(0, 0, "Reporte General De Permisos", bold)
+        # sheets["GENERAL"].write(2, 0, f"Desde: {desde[0]} || Hasta: {hasta[-1]} ", bold)
+        # sheets["GENERAL"].write(4, 0, "EMPLEADO", bold)
+        # sheets["GENERAL"].write(4, 1, "FECHA", bold)
+        # sheets["GENERAL"].write(4, 2, "HORAS", bold)
+        #
+        # empleados = models.mapped("empleado_id.name")
+        # empleados.sort()
+        # fila_empleado = 5
+        # for empleado in empleados:
+        #     permisos_del_empleado = models.filtered(lambda e: e.empleado_id.name == empleado)
+        #     if len(permisos_del_empleado) > 1:
+        #         sheets['GENERAL'].merge_range(f"A{fila_empleado+1}:A{len(permisos_del_empleado) + fila_empleado}",
+        #                                       empleado)
+        #         fila_empleado = len(permisos_del_empleado) + fila_empleado
+        #     else:
+        #         sheets['GENERAL'].write(fila_empleado, 0, empleado)
+        #         fila_empleado = fila_empleado + 1
+        #     for permiso in permisos_del_empleado:
+        #         pass

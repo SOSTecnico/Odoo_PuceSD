@@ -168,5 +168,37 @@
         <menuitem name="Detalle Saldos " id="racetime.detalle_saldos_menu" parent="racetime.saldos_menu"
                   action="racetime.detalle_saldos_action"/>
 
+
+        <!--SALDOS REPORT WIZARD -->
+        <record id="racetime.saldos_report_wizard_action" model="ir.actions.act_window">
+            <field name="name">Saldos Report Wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.saldos_reporte_wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="racetime.saldos_report_wizard_view_form" model="ir.ui.view">
+            <field name="name">racetime.saldos_report_wizard_view_form</field>
+            <field name="model">racetime.saldos_reporte_wizard</field>
+            <field name="arch" type="xml">
+                <form string="racetime.saldos_report_wizard_form">
+                    <sheet>
+                        <group>
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_fin"/>
+                        </group>
+                        <field name="empleados"/>
+                    </sheet>
+                    <footer>
+                        <button name="generar_reporte" class="btn-primary" string="GENERAR REPORTE" type="object"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <menuitem name="Reporte Saldos" id="racetime.saldos_report_wizard"
+                  action="racetime.saldos_report_wizard_action" parent="racetime.saldos_menu"/>
+
     </data>
 </odoo>

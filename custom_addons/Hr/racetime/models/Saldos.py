@@ -1,6 +1,7 @@
 from odoo import fields, models, api
 from datetime import timedelta, datetime
 
+
 class Saldos(models.Model):
     _name = 'racetime.saldos'
     _description = 'Saldos'
@@ -179,20 +180,59 @@ class DetalleSaldos(models.Model):
                 self.horas = abs(self.horas)
 
 
+class SaldosReportWizard(models.TransientModel):
+    _name = 'racetime.saldos_reporte_wizard'
+    _description = 'SaldosReportWizard'
+
+    name = fields.Char()
+    fecha_inicio = fields.Datetime(string='Fecha Inicio', required=True)
+    fecha_fin = fields.Datetime(string='Fecha Fin', required=True)
+    empleados = fields.Many2many(comodel_name='hr.employee', string='Empleados', required=True)
+
+    def generar_reporte(self):
+        data = {
+            'fecha_inicio': self.fecha_inicio - timedelta(hours=5),
+            'fecha_fin': self.fecha_fin - timedelta(hours=5),
+            'empleados_ids': self.empleados.mapped('id')
+        }
+        return self.env.ref("racetime.saldos_report_xlsx").report_action(self, data=data)
+
+
 class SaldosReport(models.AbstractModel):
     _name = 'report.racetime.saldos'
     _inherit = 'report.report_xlsx.abstract'
     _description = 'SaldosReport'
 
-    def generate_xlsx_report(self, workbook, data, records):
+    def compute_saldo_en_dias(self, empleado, saldo_total):
 
-        fecha_inicio = self.obtener_detalle_de_saldo_al_corte(records[0], field='fecha')
+        # Este código pertener al empleado ILDA ELIZALDE ella solo debe hacerce el cálculo por 6 horas
+        if empleado.identification_id == '1713007910':
+            dias = abs(int(saldo_total / 6))
+            horas = int(abs(saldo_total) - (dias * 6))
+            minutos = int(((abs(saldo_total) - (dias * 6)) - horas) * 60)
+            tiempo = abs(timedelta(days=dias, hours=horas, minutes=minutos))
+
+            saldo_en_dias = f"-{tiempo}" if saldo_total < 0 else tiempo
+            return saldo_en_dias
+
+        dias = abs(int(saldo_total / 8))
+        horas = int(abs(saldo_total) - (dias * 8))
+        minutos = int(((abs(saldo_total) - (dias * 8)) - horas) * 60)
+        tiempo = abs(timedelta(days=dias, hours=horas, minutes=minutos))
+
+        saldo_en_dias = f"-{tiempo}" if saldo_total < 0 else tiempo
+        return saldo_en_dias
+
+    def generate_xlsx_report(self, workbook, data, records):
+        fecha_inicio = data['fecha_inicio']
+        fecha_fin = data['fecha_fin']
+        empleados = self.env['hr.employee'].search([('id', 'in', data['empleados_ids'])])
 
         # Configuración inicial de la plantilla de Excel
         bold = workbook.add_format({'bold': True})
         sheet = workbook.add_worksheet("Reporte de Saldos")
         sheet.write("B1", "Reporte General De Saldos", bold)
-        sheet.write("B2", f"Desde: {fecha_inicio} || Hasta: {datetime.now().strftime('%Y-%m-%d')}", bold)
+        sheet.write("B2", f"Desde: {fecha_inicio} || Hasta: {fecha_fin}", bold)
         sheet.write("A4", "Cédula", bold)
         sheet.write("B4", "Empleados", bold)
         sheet.write("B4", "Empleados", bold)
@@ -205,57 +245,133 @@ class SaldosReport(models.AbstractModel):
         sheet.write("I4", "Saldo en Horas", bold)
         sheet.write("J4", "Saldo en Días", bold)
 
-        nombres_empleados = records.mapped('empleado_id.name')
-        empleados = self.env['hr.employee'].search([('name', 'in', nombres_empleados)])
-
         celda_inicio = 5
+
+        detalle_saldos = self.env['racetime.detalle_saldos'].search(
+            [('empleado_id', 'in', data['empleados_ids']), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin)])
+
+        saldos = self.env['racetime.saldos'].search([('empleado_id', 'in', data['empleados_ids'])])
+        permisos = self.env['racetime.permisos'].search(
+            [('desde_fecha', '>=', fecha_inicio), ('hasta_fecha', '<=', fecha_fin)])
         for i, empleado in enumerate(empleados):
+            sheet.write(f"A{i + celda_inicio}", empleado.identification_id)
+            sheet.write(f"B{i + celda_inicio}", empleado.name)
+
             try:
-                sheet.write(f"A{i + celda_inicio}", empleado.identification_id)
-                sheet.write(f"B{i + celda_inicio}", empleado.name)
+                saldo_al_corte = detalle_saldos.filtered_domain(
+                    [('empleado_id', '=', empleado.id), ('tipo', '=', 'SC')])
+                sheet.write(f"C{i + celda_inicio}", saldo_al_corte.horas)
 
-                saldo = records.filtered_domain([('empleado_id', '=', empleado.id)])
-                fecha_al_corte = self.obtener_detalle_de_saldo_al_corte(saldo=saldo, field='fecha')
+                dias_antiguedad = detalle_saldos.filtered_domain(
+                    [('empleado_id', '=', empleado.id), ('tipo', '=', 'DA')])
+                sheet.write(f"D{i + celda_inicio}", dias_antiguedad.horas)
 
-                sheet.write(f"C{i + celda_inicio}", self.obtener_detalle_de_saldo_al_corte(saldo=saldo, field='horas'))
+                dias_beneficio = detalle_saldos.filtered_domain(
+                    [('empleado_id', '=', empleado.id), ('tipo', '=', 'DB')])
+                sheet.write(f"E{i + celda_inicio}", dias_beneficio.horas)
 
-                dias_antiguedad = sum(
-                    saldo.detalle_saldos.filtered_domain(
-                        [('fecha', '>=', fecha_al_corte), ('tipo', '=', 'DA'), ]).mapped(
-                        'horas'))
-                sheet.write(f"D{i + celda_inicio}", round(dias_antiguedad, 2))
+                horas = detalle_saldos.filtered_domain(
+                    [('empleado_id', '=', empleado.id), ('tipo', '=', 'H')])
+                sheet.write(f"F{i + celda_inicio}", round(sum(horas.mapped('horas')), 2))
 
-                dias_beneficio = sum(
-                    saldo.detalle_saldos.filtered_domain([('fecha', '>=', fecha_al_corte), ('tipo', '=', 'DB')]).mapped(
-                        'horas'))
-                sheet.write(f"E{i + celda_inicio}", round(dias_beneficio, 2))
+                total_permisos = 0
+                permisos_empleado = permisos.filtered_domain([('empleado_id', '=', empleado.id)])
+                print(permisos_empleado.ids)
+                if permisos_empleado:
+                    permisos_calculo = detalle_saldos.filtered_domain([('permiso_id', 'in', permisos_empleado.ids)])
 
-                horas_adicionales = sum(
-                    saldo.detalle_saldos.filtered_domain([('fecha', '>=', fecha_al_corte), ('tipo', '=', 'H')]).mapped(
-                        'horas'))
-                sheet.write(f"F{i + celda_inicio}", round(horas_adicionales, 2))
+                    print(permisos_calculo)
 
-                permisos = sum(
-                    saldo.detalle_saldos.filtered_domain([('fecha', '>=', fecha_al_corte), ('tipo', '=', 'P')]).mapped(
-                        'horas'))
-                sheet.write(f"G{i + celda_inicio}", round(permisos, 2))
+                #
+                # sheet.write(f"G{i + celda_inicio}", abs(round(total_permisos, 2)))
+                #
+                # descuento_horas = detalle_saldos.filtered_domain(
+                #     [('empleado_id', '=', empleado.id), ('tipo', '=', 'DH')])
+                # sheet.write(f"H{i + celda_inicio}", round(sum(descuento_horas.mapped('horas')), 2))
+                #
+                # saldo_total = saldo_al_corte.horas + dias_antiguedad.horas + dias_beneficio.horas + sum(
+                #     horas.mapped('horas')) + total_permisos + sum(descuento_horas.mapped('horas'))
+                #
+                # sheet.write(f"I{i + celda_inicio}", saldo_total)
+                #
+                # saldo_en_dias = self.compute_saldo_en_dias(empleado=empleado, saldo_total=saldo_total)
+                # sheet.write(f"J{i + celda_inicio}", saldo_en_dias)
 
-                descuento_horas = sum(
-                    saldo.detalle_saldos.filtered_domain([('fecha', '>=', fecha_al_corte), ('tipo', '=', 'DH')]).mapped(
-                        'horas'))
-                sheet.write(f"H{i + celda_inicio}", round(descuento_horas, 2))
 
-                saldo_total_en_horas = sum(
-                    saldo.detalle_saldos.filtered_domain([('fecha', '>=', fecha_al_corte)]).mapped(
-                        'horas'))
-                sheet.write(f"I{i + celda_inicio}", round(saldo_total_en_horas, 2))
-                sheet.write(f"J{i + celda_inicio}", saldo.saldo_en_dias)
-            except:
+
+            except Exception as e:
+                print(e)
                 continue
-
-    def obtener_detalle_de_saldo_al_corte(self, saldo, field):
-        rec = saldo.detalle_saldos.filtered_domain([('tipo', '=', 'SC')]).sorted(lambda s: s.fecha)
-        try:
-            return rec[-1].read()[0][field]
-        except:
-            return 0
+    #     fecha_inicio = self.obtener_detalle_de_saldo_al_corte(records[0], field='fecha')
+    #
+    #     # Configuración inicial de la plantilla de Excel
+    #     bold = workbook.add_format({'bold': True})
+    #     sheet = workbook.add_worksheet("Reporte de Saldos")
+    #     sheet.write("B1", "Reporte General De Saldos", bold)
+    #     sheet.write("B2", f"Desde: {fecha_inicio} || Hasta: {datetime.now().strftime('%Y-%m-%d')}", bold)
+    #     sheet.write("A4", "Cédula", bold)
+    #     sheet.write("B4", "Empleados", bold)
+    #     sheet.write("B4", "Empleados", bold)
+    #     sheet.write("C4", "Saldo Anterior", bold)
+    #     sheet.write("D4", "Vacaciones Antiguedad", bold)
+    #     sheet.write("E4", "Beneficios Antiguedad", bold)
+    #     sheet.write("F4", "H. Adicionales", bold)
+    #     sheet.write("G4", "Permisos", bold)
+    #     sheet.write("H4", "Descuento Horas", bold)
+    #     sheet.write("I4", "Saldo en Horas", bold)
+    #     sheet.write("J4", "Saldo en Días", bold)
+    #
+    #     nombres_empleados = records.mapped('empleado_id.name')
+    #     empleados = self.env['hr.employee'].search([('name', 'in', nombres_empleados)])
+    #
+    #     celda_inicio = 5
+    #     for i, empleado in enumerate(empleados):
+    #         try:
+    #             sheet.write(f"A{i + celda_inicio}", empleado.identification_id)
+    #             sheet.write(f"B{i + celda_inicio}", empleado.name)
+    #
+    #             saldo = records.filtered_domain([('empleado_id', '=', empleado.id)])
+    #             fecha_al_corte = self.obtener_detalle_de_saldo_al_corte(saldo=saldo, field='fecha')
+    #
+    #             sheet.write(f"C{i + celda_inicio}", self.obtener_detalle_de_saldo_al_corte(saldo=saldo, field='horas'))
+    #
+    #             dias_antiguedad = sum(
+    #                 saldo.detalle_saldos.filtered_domain(
+    #                     [('fecha', '>=', fecha_al_corte), ('tipo', '=', 'DA'), ]).mapped(
+    #                     'horas'))
+    #             sheet.write(f"D{i + celda_inicio}", round(dias_antiguedad, 2))
+    #
+    #             dias_beneficio = sum(
+    #                 saldo.detalle_saldos.filtered_domain([('fecha', '>=', fecha_al_corte), ('tipo', '=', 'DB')]).mapped(
+    #                     'horas'))
+    #             sheet.write(f"E{i + celda_inicio}", round(dias_beneficio, 2))
+    #
+    #             horas_adicionales = sum(
+    #                 saldo.detalle_saldos.filtered_domain([('fecha', '>=', fecha_al_corte), ('tipo', '=', 'H')]).mapped(
+    #                     'horas'))
+    #             sheet.write(f"F{i + celda_inicio}", round(horas_adicionales, 2))
+    #
+    #             permisos = sum(
+    #                 saldo.detalle_saldos.filtered_domain([('fecha', '>=', fecha_al_corte), ('tipo', '=', 'P')]).mapped(
+    #                     'horas'))
+    #             sheet.write(f"G{i + celda_inicio}", abs(round(permisos, 2)))
+    #
+    #             descuento_horas = sum(
+    #                 saldo.detalle_saldos.filtered_domain([('fecha', '>=', fecha_al_corte), ('tipo', '=', 'DH')]).mapped(
+    #                     'horas'))
+    #             sheet.write(f"H{i + celda_inicio}", round(descuento_horas, 2))
+    #
+    #             saldo_total_en_horas = sum(
+    #                 saldo.detalle_saldos.filtered_domain([('fecha', '>=', fecha_al_corte)]).mapped(
+    #                     'horas'))
+    #             sheet.write(f"I{i + celda_inicio}", round(saldo_total_en_horas, 2))
+    #             sheet.write(f"J{i + celda_inicio}", saldo.saldo_en_dias)
+    #         except:
+    #             continue
+    #
+    # def obtener_detalle_de_saldo_al_corte(self, saldo, field):
+    #     rec = saldo.detalle_saldos.filtered_domain([('tipo', '=', 'SC')]).sorted(lambda s: s.fecha)
+    #     try:
+    #         return rec[-1].read()[0][field]
+    #     except:
+    #         return 0
