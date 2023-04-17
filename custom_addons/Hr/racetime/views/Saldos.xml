@@ -121,6 +121,7 @@
 
         <!--REPORTE DE SALDOS WIZARD-->
 
+<!--
         <record id="racetime.reporte_saldos_action" model="ir.actions.act_window">
             <field name="name">Reporte Saldos</field>
             <field name="type">ir.actions.act_window</field>
@@ -150,6 +151,7 @@
 
         <menuitem name="Reporte de Saldos" id="racetime.reporte_saldos_menu" parent="racetime.saldos_menu"
                   action="racetime.reporte_saldos_action"/>
+-->
 
 
         <!-- ********************** DETALLE SALDOS *****************************-->

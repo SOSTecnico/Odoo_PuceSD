@@ -1,11 +1,6 @@
 from odoo import fields, models, api
 from datetime import timedelta, datetime
 
-from odoo.exceptions import ValidationError
-
-import xlsxwriter
-
-
 class Saldos(models.Model):
     _name = 'racetime.saldos'
     _description = 'Saldos'
@@ -184,23 +179,23 @@ class DetalleSaldos(models.Model):
                 self.horas = abs(self.horas)
 
 
-class SaldosWizard(models.TransientModel):
-    _name = 'racetime.saldos_wizard'
-    _description = 'SaldosWizard'
-
-    name = fields.Char()
-
-    fecha_inicio = fields.Date(string='Fecha Inicio', required=True)
-    fecha_fin = fields.Date(string='Fecha Fin', required=True)
-    empleados = fields.Many2many(comodel_name='hr.employee', string='Empleados')
-
-    def generar_reporte(self):
-        data = {
-            'fecha_inicio': self.fecha_inicio,
-            'fecha_fin': self.fecha_fin,
-            'empleados': self.empleados.ids
-        }
-        return self.env.ref('racetime.saldos_report_xlsx').report_action(self, data=data)
+# class SaldosWizard(models.TransientModel):
+#     _name = 'racetime.saldos_wizard'
+#     _description = 'SaldosWizard'
+#
+#     name = fields.Char()
+#
+#     fecha_inicio = fields.Date(string='Fecha Inicio', required=True)
+#     fecha_fin = fields.Date(string='Fecha Fin', required=True)
+#     empleados = fields.Many2many(comodel_name='hr.employee', string='Empleados')
+#
+#     def generar_reporte(self):
+#         data = {
+#             'fecha_inicio': self.fecha_inicio,
+#             'fecha_fin': self.fecha_fin,
+#             'empleados': self.empleados.ids
+#         }
+#         return self.env.ref('racetime.saldos_report_xlsx').report_action(self, data=data)
 
 
 class SaldosReport(models.AbstractModel):
