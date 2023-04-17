@@ -9,6 +9,7 @@
             <field name="report_name">racetime.saldos</field>
             <field name="report_file">saldos_report</field>
             <field name="binding_type">report</field>
+            <field name="binding_model_id" ref="model_racetime_saldos"/>
             <field name="print_report_name">'Reporte Saldos'</field>
         </record>
 
