@@ -1,6 +1,8 @@
 from odoo import fields, models, api
 from datetime import timedelta, datetime
 
+from odoo.exceptions import ValidationError
+
 
 class Saldos(models.Model):
     _name = 'racetime.saldos'
@@ -185,9 +187,20 @@ class SaldosReportWizard(models.TransientModel):
     _description = 'SaldosReportWizard'
 
     name = fields.Char()
-    fecha_inicio = fields.Datetime(string='Fecha Inicio', required=True)
-    fecha_fin = fields.Datetime(string='Fecha Fin', required=True)
-    empleados = fields.Many2many(comodel_name='hr.employee', string='Empleados', required=True)
+    fecha_inicio = fields.Datetime(string='Fecha Inicio', required=False)
+    fecha_fin = fields.Datetime(string='Fecha Fin', required=False)
+    empleados = fields.Many2many(comodel_name='hr.employee', string='Empleados', required=False)
+    fecha_corte = fields.Date(string='Fecha de Corte', required=False)
+
+    @api.onchange('fecha_inicio')
+    def onchange_fecha_inicio(self):
+        if not self.fecha_inicio:
+            self.fecha_inicio = datetime.now().replace(hour=5, minute=0, second=0)
+
+    @api.onchange('fecha_fin')
+    def onchange_fecha_fin(self):
+        if not self.fecha_fin:
+            self.fecha_fin = datetime.now().replace(hour=23, minute=59, second=0) + timedelta(hours=5)
 
     def generar_reporte(self):
         data = {
@@ -197,6 +210,62 @@ class SaldosReportWizard(models.TransientModel):
         }
         return self.env.ref("racetime.saldos_report_xlsx").report_action(self, data=data)
 
+    def generar_corte(self):
+        saldos = self.env['racetime.saldos'].search([('empleado_id', 'in', self.empleados.ids)])
+        for empleado in self.empleados:
+            saldo_empleado = saldos.filtered_domain([('empleado_id', '=', empleado.id)])
+            detalle_saldos = saldo_empleado.detalle_saldos.filtered_domain(
+                [('fecha', '=', self.fecha_corte), ('tipo', '=', 'SC')])
+
+            corte = saldo_empleado.detalle_saldos.filtered_domain([('tipo', '=', 'SC')]).sorted(lambda c: c.fecha)
+            if len(corte) > 0:
+                corte = corte[0]
+
+            ds = saldo_empleado.detalle_saldos.filtered_domain(
+                [('fecha', '<=', self.fecha_corte), ('fecha', '>=', corte.fecha)])
+
+            horas = sum(ds.mapped('horas'))
+
+            if not detalle_saldos:
+                saldo_empleado.write({
+                    'detalle_saldos': [(0, 0, {
+                        'tipo': 'SC',
+                        'fecha': self.fecha_corte,
+                        'horas': horas,
+                    })]
+                })
+            else:
+                detalle_saldos.write({
+                    'horas': horas
+                })
+        return {
+            'type': 'tree',
+            'name': 'Saldos',
+            'view_mode': 'tree,form',
+            'res_model': 'racetime.saldos',
+            'type': 'ir.actions.act_window',
+            'target': 'main'
+        }
+
+    def eliminar_corte(self):
+        if not self.fecha_corte:
+            raise ValidationError("Por favor para eliminar la fecha corte debe seleccionar una fecha")
+
+        saldos = self.env['racetime.saldos'].search([('empleado_id', 'in', self.empleados.ids)])
+
+        detalle_saldos = self.env['racetime.detalle_saldos'].search(
+            [('saldo_id', 'in', saldos.ids), ('fecha', '=', self.fecha_corte), ('tipo', '=', 'SC')])
+
+        detalle_saldos.unlink()
+        return {
+            'type': 'tree',
+            'name': 'Saldos',
+            'view_mode': 'tree,form',
+            'res_model': 'racetime.saldos',
+            'type': 'ir.actions.act_window',
+            'target': 'main'
+        }
+
 
 class SaldosReport(models.AbstractModel):
     _name = 'report.racetime.saldos'
@@ -204,7 +273,6 @@ class SaldosReport(models.AbstractModel):
     _description = 'SaldosReport'
 
     def compute_saldo_en_dias(self, empleado, saldo_total):
-
         # Este código pertener al empleado ILDA ELIZALDE ella solo debe hacerce el cálculo por 6 horas
         if empleado.identification_id == '1713007910':
             dias = abs(int(saldo_total / 6))
@@ -235,7 +303,6 @@ class SaldosReport(models.AbstractModel):
         sheet.write("B2", f"Desde: {fecha_inicio} || Hasta: {fecha_fin}", bold)
         sheet.write("A4", "Cédula", bold)
         sheet.write("B4", "Empleados", bold)
-        sheet.write("B4", "Empleados", bold)
         sheet.write("C4", "Saldo Anterior", bold)
         sheet.write("D4", "Vacaciones Antiguedad", bold)
         sheet.write("E4", "Beneficios Antiguedad", bold)
@@ -247,61 +314,129 @@ class SaldosReport(models.AbstractModel):
 
         celda_inicio = 5
 
-        detalle_saldos = self.env['racetime.detalle_saldos'].search(
-            [('empleado_id', 'in', data['empleados_ids']), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin)])
+        dias_antiguedad = self.env['racetime.detalle_saldos'].search(
+            [('empleado_id', 'in', empleados.ids), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin),
+             ('tipo', '=', 'DA')])
 
-        saldos = self.env['racetime.saldos'].search([('empleado_id', 'in', data['empleados_ids'])])
-        permisos = self.env['racetime.permisos'].search(
-            [('desde_fecha', '>=', fecha_inicio), ('hasta_fecha', '<=', fecha_fin)])
+        dias_beneficio = self.env['racetime.detalle_saldos'].search(
+            [('empleado_id', 'in', empleados.ids), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin),
+             ('tipo', '=', 'DB')])
+
+        saldos_al_corte = self.env['racetime.detalle_saldos'].search(
+            [('empleado_id', 'in', empleados.ids), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin),
+             ('tipo', '=', 'SC')], order='fecha asc')
+
+        horas = self.env['racetime.detalle_saldos'].search(
+            [('empleado_id', 'in', empleados.ids), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin),
+             ('tipo', '=', 'H')])
+
+        permisos = self.env['racetime.detalle_saldos'].search(
+            [('empleado_id', 'in', empleados.ids), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin),
+             ('tipo', '=', 'P')])
+
+        descuentos_horas = self.env['racetime.detalle_saldos'].search(
+            [('empleado_id', 'in', empleados.ids), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin),
+             ('tipo', '=', 'DH')])
+
         for i, empleado in enumerate(empleados):
-            sheet.write(f"A{i + celda_inicio}", empleado.identification_id)
-            sheet.write(f"B{i + celda_inicio}", empleado.name)
-
             try:
-                saldo_al_corte = detalle_saldos.filtered_domain(
-                    [('empleado_id', '=', empleado.id), ('tipo', '=', 'SC')])
-                sheet.write(f"C{i + celda_inicio}", saldo_al_corte.horas)
+                sheet.write(f"A{celda_inicio + i}", empleado.identification_id)
+                sheet.write(f"B{celda_inicio + i}", empleado.name)
 
-                dias_antiguedad = detalle_saldos.filtered_domain(
+                saldo_empleado = saldos_al_corte.filtered_domain([('empleado_id', '=', empleado.id)])
+                total_saldo_al_corte = round(saldo_empleado[0].horas, 2)
+                sheet.write(f"C{celda_inicio + i}", total_saldo_al_corte)
+
+                dias_antiguedad_records = dias_antiguedad.filtered_domain(
                     [('empleado_id', '=', empleado.id), ('tipo', '=', 'DA')])
-                sheet.write(f"D{i + celda_inicio}", dias_antiguedad.horas)
+                total_dias_antiguedad = sum(dias_antiguedad_records.mapped('horas'))
+                sheet.write(f"D{celda_inicio + i}", round(total_dias_antiguedad, 2))
 
-                dias_beneficio = detalle_saldos.filtered_domain(
+                dias_beneficio_records = dias_beneficio.filtered_domain(
                     [('empleado_id', '=', empleado.id), ('tipo', '=', 'DB')])
-                sheet.write(f"E{i + celda_inicio}", dias_beneficio.horas)
+                total_dias_beneficio = sum(dias_beneficio_records.mapped('horas'))
+                sheet.write(f"E{celda_inicio + i}", round(total_dias_beneficio, 2))
 
-                horas = detalle_saldos.filtered_domain(
-                    [('empleado_id', '=', empleado.id), ('tipo', '=', 'H')])
-                sheet.write(f"F{i + celda_inicio}", round(sum(horas.mapped('horas')), 2))
+                horas_records = horas.filtered_domain([('empleado_id', '=', empleado.id), ('tipo', '=', 'H')])
+                total_horas = sum(horas_records.mapped('horas'))
+                sheet.write(f"F{celda_inicio + i}", round(total_horas, 2))
 
-                total_permisos = 0
-                permisos_empleado = permisos.filtered_domain([('empleado_id', '=', empleado.id)])
-                print(permisos_empleado.ids)
-                if permisos_empleado:
-                    permisos_calculo = detalle_saldos.filtered_domain([('permiso_id', 'in', permisos_empleado.ids)])
+                permisos_records = permisos.filtered_domain([('empleado_id', '=', empleado.id), ('tipo', '=', 'P')])
+                total_permisos = sum(permisos_records.mapped('horas'))
+                sheet.write(f"G{celda_inicio + i}", round(abs(total_permisos), 2))
 
-                    print(permisos_calculo)
+                descuentos_horas_records = descuentos_horas.filtered_domain(
+                    [('empleado_id', '=', empleado.id), ('tipo', '=', 'DH')])
+                total_descuento_horas = sum(descuentos_horas_records.mapped('horas'))
+                sheet.write(f"H{celda_inicio + i}", round(abs(total_descuento_horas), 2))
+                saldo_total = sum([total_saldo_al_corte, total_dias_antiguedad, total_permisos, total_descuento_horas,
+                                   total_dias_beneficio, total_horas])
+                sheet.write(f"I{celda_inicio + i}", round(saldo_total, 2))
 
-                #
-                # sheet.write(f"G{i + celda_inicio}", abs(round(total_permisos, 2)))
-                #
-                # descuento_horas = detalle_saldos.filtered_domain(
-                #     [('empleado_id', '=', empleado.id), ('tipo', '=', 'DH')])
-                # sheet.write(f"H{i + celda_inicio}", round(sum(descuento_horas.mapped('horas')), 2))
-                #
-                # saldo_total = saldo_al_corte.horas + dias_antiguedad.horas + dias_beneficio.horas + sum(
-                #     horas.mapped('horas')) + total_permisos + sum(descuento_horas.mapped('horas'))
-                #
-                # sheet.write(f"I{i + celda_inicio}", saldo_total)
-                #
-                # saldo_en_dias = self.compute_saldo_en_dias(empleado=empleado, saldo_total=saldo_total)
-                # sheet.write(f"J{i + celda_inicio}", saldo_en_dias)
-
-
+                saldo_en_dias = self.compute_saldo_en_dias(saldo_total=saldo_total, empleado=empleado)
+                sheet.write(f"J{celda_inicio + i}", f"{saldo_en_dias}")
 
             except Exception as e:
+                print(empleado.name)
                 print(e)
                 continue
+
+        # raise ValidationError("Posi")
+        # detalle_saldos = self.env['racetime.detalle_saldos'].search(
+        #     [('empleado_id', 'in', data['empleados_ids']), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin)])
+        #
+        # saldos = self.env['racetime.saldos'].search([('empleado_id', 'in', data['empleados_ids'])])
+        # permisos = self.env['racetime.permisos'].search(
+        #     [('desde_fecha', '>=', fecha_inicio), ('hasta_fecha', '<=', fecha_fin)])
+        # for i, empleado in enumerate(empleados):
+        #     sheet.write(f"A{i + celda_inicio}", empleado.identification_id)
+        #     sheet.write(f"B{i + celda_inicio}", empleado.name)
+        #
+        #     try:
+        #         saldo_al_corte = detalle_saldos.filtered_domain(
+        #             [('empleado_id', '=', empleado.id), ('tipo', '=', 'SC')])
+        #         sheet.write(f"C{i + celda_inicio}", saldo_al_corte.horas)
+        #
+        #         dias_antiguedad = detalle_saldos.filtered_domain(
+        #             [('empleado_id', '=', empleado.id), ('tipo', '=', 'DA')])
+        #         sheet.write(f"D{i + celda_inicio}", dias_antiguedad.horas)
+        #
+        #         dias_beneficio = detalle_saldos.filtered_domain(
+        #             [('empleado_id', '=', empleado.id), ('tipo', '=', 'DB')])
+        #         sheet.write(f"E{i + celda_inicio}", dias_beneficio.horas)
+        #
+        #         horas = detalle_saldos.filtered_domain(
+        #             [('empleado_id', '=', empleado.id), ('tipo', '=', 'H')])
+        #         sheet.write(f"F{i + celda_inicio}", round(sum(horas.mapped('horas')), 2))
+        #
+        #         total_permisos = 0
+        #         permisos_empleado = permisos.filtered_domain([('empleado_id', '=', empleado.id)])
+        #         print(permisos_empleado.ids)
+        #         if permisos_empleado:
+        #             permisos_calculo = detalle_saldos.filtered_domain([('permiso_id', 'in', permisos_empleado.ids)])
+        #
+        #             print(permisos_calculo)
+        #
+        #
+        #         sheet.write(f"G{i + celda_inicio}", abs(round(total_permisos, 2)))
+        #
+        #         descuento_horas = detalle_saldos.filtered_domain(
+        #             [('empleado_id', '=', empleado.id), ('tipo', '=', 'DH')])
+        #         sheet.write(f"H{i + celda_inicio}", round(sum(descuento_horas.mapped('horas')), 2))
+        #
+        #         saldo_total = saldo_al_corte.horas + dias_antiguedad.horas + dias_beneficio.horas + sum(
+        #             horas.mapped('horas')) + total_permisos + sum(descuento_horas.mapped('horas'))
+        #
+        #         sheet.write(f"I{i + celda_inicio}", saldo_total)
+        #
+        #         saldo_en_dias = self.compute_saldo_en_dias(empleado=empleado, saldo_total=saldo_total)
+        #         sheet.write(f"J{i + celda_inicio}", saldo_en_dias)
+        #
+        #
+        #
+        #     except Exception as e:
+        #         print(e)
+        #         continue
     #     fecha_inicio = self.obtener_detalle_de_saldo_al_corte(records[0], field='fecha')
     #
     #     # Configuración inicial de la plantilla de Excel

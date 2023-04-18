@@ -32,10 +32,6 @@
             <field name="model">racetime.saldos</field>
             <field name="arch" type="xml">
                 <form string="Saldos">
-                    <header>
-                        <button name="generar_corte" string="GENERAR CORTE" type="object" class="btn-success btn-lg"
-                                confirm="¿Está seguro de generar el corte de Saldos?"/>
-                    </header>
                     <sheet>
                         <widget name="web_ribbon" title="ARCHIVADO" bg_color="bg-danger"
                                 attrs="{'invisible':[('active','=',True)]}"/>
@@ -79,10 +75,6 @@
             <field name="model">racetime.saldos</field>
             <field name="arch" type="xml">
                 <tree string="Saldos" default_order="empleado_id asc">
-                    <header>
-                        <button name="generar_corte" string="GENERAR CORTE" type="object" class="btn-success mx-2"
-                                confirm="¿Está seguro de generar el corte de Saldos?"/>
-                    </header>
                     <field name="empleado_id"/>
                     <field name="saldo_en_dias"/>
                     <field name="saldo_total" widget="float_time"/>
@@ -187,11 +179,14 @@
                         <group>
                             <field name="fecha_inicio"/>
                             <field name="fecha_fin"/>
+                            <field name="fecha_corte"/>
                         </group>
                         <field name="empleados"/>
                     </sheet>
                     <footer>
                         <button name="generar_reporte" class="btn-primary" string="GENERAR REPORTE" type="object"/>
+                        <button name="generar_corte" class="btn-info" string="GENERAR CORTE" type="object"/>
+                        <button name="eliminar_corte" class="btn-danger" string="ELIMINAR CORTE" type="object"/>
                     </footer>
                 </form>
             </field>
