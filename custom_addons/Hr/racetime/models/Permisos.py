@@ -143,12 +143,29 @@ class PermisosReportWizard(models.TransientModel):
     empleados = fields.Many2many(comodel_name='hr.employee', string='Empleados')
 
 
-
-
 class PermisosReport(models.AbstractModel):
     _name = 'report.racetime.permisos'
     _inherit = 'report.report_xlsx.abstract'
     _description = 'PermisosReport'
+
+    def compute_saldo_en_dias(self, empleado, saldo_total):
+        # Este código pertener al empleado ILDA ELIZALDE ella solo debe hacerce el cálculo por 6 horas
+        if empleado.identification_id == '1713007910':
+            dias = abs(int(saldo_total / 6))
+            horas = int(abs(saldo_total) - (dias * 6))
+            minutos = int(((abs(saldo_total) - (dias * 6)) - horas) * 60)
+            tiempo = abs(timedelta(days=dias, hours=horas, minutes=minutos))
+
+            saldo_en_dias = f"-{tiempo}" if saldo_total < 0 else tiempo
+            return saldo_en_dias
+
+        dias = abs(int(saldo_total / 8))
+        horas = int(abs(saldo_total) - (dias * 8))
+        minutos = int(((abs(saldo_total) - (dias * 8)) - horas) * 60)
+        tiempo = abs(timedelta(days=dias, hours=horas, minutes=minutos))
+
+        saldo_en_dias = f"-{tiempo}" if saldo_total < 0 else tiempo
+        return saldo_en_dias
 
     def generate_xlsx_report(self, workbook, data, models):
 
@@ -167,44 +184,123 @@ class PermisosReport(models.AbstractModel):
         desde = models.sorted(lambda p: p.desde_fecha).mapped("desde_fecha")
         hasta = models.sorted(lambda p: p.hasta_fecha).mapped("hasta_fecha")
 
-        sheets["GENERAL"].write(0, 0, "Reporte General De Permisos", bold)
-        sheets["GENERAL"].write(2, 0, f"Desde: {desde[0]} || Hasta: {hasta[-1]} ", bold)
-        sheets["GENERAL"].write(4, 0, "EMPLEADO", bold)
-        sheets["GENERAL"].write(4, 1, "FECHA INICIO", bold)
-        sheets["GENERAL"].write(4, 2, "FECHA FIN", bold)
-        sheets["GENERAL"].write(4, 3, "HORA INICIO", bold)
-        sheets["GENERAL"].write(4, 4, "HORA FIN", bold)
+        sheets["GENERAL"].write("A1", "Reporte General De Permisos", bold)
+        sheets["GENERAL"].write("A3", f"Desde: {desde[0]} || Hasta: {hasta[-1]} ", bold)
+        sheets["GENERAL"].write("A5", "EMPLEADO", bold)
+        sheets["GENERAL"].write("B5", "FECHA INICIO", bold)
+        sheets["GENERAL"].write("C5", "FECHA FIN", bold)
+        sheets["GENERAL"].write("D5", "HORA INICIO", bold)
+        sheets["GENERAL"].write("E5", "HORA FIN", bold)
+        sheets["GENERAL"].write("F5", "TOTAL HORAS", bold)
+        sheets["GENERAL"].write("G5", "TIPO", bold)
+        sheets["GENERAL"].write("H5", "DESCRIPCIÓN", bold)
 
         empleados = models.mapped("empleado_id.name")
         empleados.sort()
         fila_empleado = 5
         for empleado in empleados:
-            permisos_del_empleado = models.filtered(lambda e: e.empleado_id.name == empleado)
-            if len(permisos_del_empleado) > 1:
-                sheets['GENERAL'].merge_range(f"A{fila_empleado+1}:A{len(permisos_del_empleado) + fila_empleado}",
-                                              empleado)
-                for  index,value_permiso in enumerate(permisos_del_empleado):
+            emp = models.filtered(lambda e: e.empleado_id.name == empleado)
+            try:
+                permisos_del_empleado = models.filtered(lambda e: e.empleado_id.name == empleado).sorted(
+                    lambda s: s.desde_fecha)
+
+                if len(permisos_del_empleado) > 1:
+                    sheets['GENERAL'].merge_range(
+                        f"A{fila_empleado + 1}:A{len(permisos_del_empleado) + fila_empleado + 1}",
+                        empleado)
+                    total_horas = 0
+                    for index, value_permiso in enumerate(permisos_del_empleado):
+                        try:
+                            sheets['GENERAL'].write(f"B{fila_empleado + index + 1}",
+                                                    value_permiso.desde_fecha.strftime("%d-%m-%Y"))
+                            sheets['GENERAL'].write(f"C{fila_empleado + index + 1}",
+                                                    value_permiso.hasta_fecha.strftime("%d-%m-%Y"))
+
+                            hora_inicio = timedelta(hours=value_permiso.desde_hora) + datetime.min
+                            hora_fin = timedelta(hours=value_permiso.hasta_hora) + datetime.min
+
+                            sheets['GENERAL'].write(f"D{fila_empleado + index + 1}",
+                                                    f"{hora_inicio.strftime('%H:%M')}")
+
+                            sheets['GENERAL'].write(f"E{fila_empleado + index + 1}",
+                                                    f"{hora_fin.strftime('%H:%M')}")
+
+                            if value_permiso.todo_el_dia:
+                                dias = value_permiso.hasta_fecha - value_permiso.desde_fecha
+
+                                if emp.empleado_id.identification_id == '1713007910':
+                                    horas = (dias.days + 1) * 6
+                                else:
+                                    horas = (dias.days + 1) * 8
+
+                                total_horas = horas + total_horas
+                                horas = (timedelta(hours=horas) + datetime.min).strftime("%H:%M")
 
 
-                    sheets['GENERAL'].write(f"B{fila_empleado + index +1}",
-                                                value_permiso.desde_fecha.strftime("%d-%m-%Y"))
-                    sheets['GENERAL'].write(f"B{fila_empleado + index + 1}",
-                                                value_permiso.hasta_fecha.strftime("%d-%m-%Y"))
+                            else:
+                                total_horas = (value_permiso.hasta_hora - value_permiso.desde_hora) + total_horas
+                                horas = ((hora_fin - hora_inicio) + datetime.min).strftime("%H:%M")
 
-                    hora_inicio = timedelta(hours=value_permiso.desde_hora) + datetime.min
-                    hora_fin = timedelta(hours=value_permiso.hasta_hora) + datetime.min
+                            sheets['GENERAL'].write(f"F{fila_empleado + index + 1}",
+                                                    f"{horas}")
 
-                    sheets['GENERAL'].write(f"C{fila_empleado + index + 1}",
+                            sheets['GENERAL'].write(f"G{fila_empleado + index + 1}",
+                                                    f"{value_permiso.tipo_permiso_id.name}")
+                            sheets['GENERAL'].write(f"H{fila_empleado + index + 1}",
+                                                    f"{value_permiso.descripcion or ''}")
+
+                        except Exception as e:
+                            print(e)
+                            continue
+                    sheets['GENERAL'].write(f"E{fila_empleado + len(permisos_del_empleado) + 1}",
+                                            "Total", bold)
+                    sheets['GENERAL'].write(f"F{fila_empleado + len(permisos_del_empleado) + 1}",
+                                            f"{round(total_horas, 2)}", bold)
+                    fila_empleado = len(permisos_del_empleado) + fila_empleado + 1
+
+                else:
+                    sheets['GENERAL'].merge_range(f"A{fila_empleado + 1}:A{fila_empleado + 2}", empleado)
+
+                    sheets['GENERAL'].write(f"B{fila_empleado + 1}",
+                                            permisos_del_empleado.desde_fecha.strftime("%d-%m-%Y"))
+                    sheets['GENERAL'].write(f"C{fila_empleado + 1}",
+                                            permisos_del_empleado.hasta_fecha.strftime("%d-%m-%Y"))
+
+                    hora_inicio = timedelta(hours=permisos_del_empleado.desde_hora) + datetime.min
+                    hora_fin = timedelta(hours=permisos_del_empleado.hasta_hora) + datetime.min
+
+                    sheets['GENERAL'].write(f"D{fila_empleado + 1}",
                                             f"{hora_inicio.strftime('%H:%M')}")
 
-                    sheets['GENERAL'].write(f"D{fila_empleado + index + 1}",
+                    sheets['GENERAL'].write(f"E{fila_empleado + 1}",
                                             f"{hora_fin.strftime('%H:%M')}")
+                    sheets['GENERAL'].write(f"E{fila_empleado + 2}",
+                                            "Total", bold)
+                    total_horas = 0
+                    if permisos_del_empleado.todo_el_dia:
 
-                fila_empleado = len(permisos_del_empleado) + fila_empleado
+                        dias = permisos_del_empleado.hasta_fecha - permisos_del_empleado.desde_fecha
 
-            else:
-                
-                sheets['GENERAL'].write(fila_empleado, 0, empleado)
-                fila_empleado = fila_empleado + 1
-            for permiso in permisos_del_empleado:
-                pass
+                        if emp.empleado_id.identification_id == '1713007910':
+                            horas = (dias.days + 1) * 6
+                        else:
+                            horas = (dias.days + 1) * 8
+                        total_horas = horas
+                    else:
+                        horas = ((hora_fin - hora_inicio) + datetime.min).strftime("%H:%M")
+                        total_horas = round((hora_fin - hora_inicio).total_seconds() / 3600,2)
+
+                    sheets['GENERAL'].write(f"F{fila_empleado + 1}",
+                                            f"{horas}")
+                    sheets['GENERAL'].write(f"F{fila_empleado + 2}",
+                                            f"{total_horas}", bold)
+                    sheets['GENERAL'].write(f"G{fila_empleado + 1}",
+                                            f"{permisos_del_empleado.tipo_permiso_id.name}")
+                    sheets['GENERAL'].write(f"H{fila_empleado + 1}",
+                                            f"{permisos_del_empleado.descripcion or ''}")
+
+                    fila_empleado = fila_empleado + 2
+            except Exception as e:
+                print(empleado)
+                print(e)
+                continue

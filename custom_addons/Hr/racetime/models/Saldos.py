@@ -299,18 +299,21 @@ class SaldosReport(models.AbstractModel):
         # Configuración inicial de la plantilla de Excel
         bold = workbook.add_format({'bold': True})
         sheet = workbook.add_worksheet("Reporte de Saldos")
-        sheet.write("B1", "Reporte General De Saldos", bold)
-        sheet.write("B2", f"Desde: {fecha_inicio} || Hasta: {fecha_fin}", bold)
-        sheet.write("A4", "Cédula", bold)
-        sheet.write("B4", "Empleados", bold)
-        sheet.write("C4", "Saldo Anterior", bold)
-        sheet.write("D4", "Vacaciones Antiguedad", bold)
-        sheet.write("E4", "Beneficios Antiguedad", bold)
-        sheet.write("F4", "H. Adicionales", bold)
-        sheet.write("G4", "Permisos", bold)
-        sheet.write("H4", "Descuento Horas", bold)
-        sheet.write("I4", "Saldo en Horas", bold)
-        sheet.write("J4", "Saldo en Días", bold)
+        sheet.merge_range("A1:B1", "Reporte General De Saldos", bold)
+        sheet.merge_range("A2:B2", f"Desde: {fecha_inicio} || Hasta: {fecha_fin}", bold)
+
+        header = workbook.add_format({'bold': True, 'border': 1, 'bg_color': '#92CDDC'})
+
+        sheet.write("A4", "Cédula", header)
+        sheet.write("B4", "Empleados", header)
+        sheet.write("C4", "Saldo Anterior", header)
+        sheet.write("D4", "Vacaciones Antiguedad", header)
+        sheet.write("E4", "Beneficios Antiguedad", header)
+        sheet.write("F4", "H. Adicionales", header)
+        sheet.write("G4", "Permisos", header)
+        sheet.write("H4", "Descuento Horas", header)
+        sheet.write("I4", "Saldo en Horas", header)
+        sheet.write("J4", "Saldo en Días", header)
 
         celda_inicio = 5
 
@@ -338,43 +341,46 @@ class SaldosReport(models.AbstractModel):
             [('empleado_id', 'in', empleados.ids), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin),
              ('tipo', '=', 'DH')])
 
+        estilos_table = workbook.add_format({'border': 1})
+        estilos_saldo_en_dias = workbook.add_format({'border': 1, 'bold': True, 'bg_color': 'yellow'})
+
         for i, empleado in enumerate(empleados):
             try:
-                sheet.write(f"A{celda_inicio + i}", empleado.identification_id)
-                sheet.write(f"B{celda_inicio + i}", empleado.name)
+                sheet.write(f"A{celda_inicio + i}", empleado.identification_id, estilos_table)
+                sheet.write(f"B{celda_inicio + i}", empleado.name, estilos_table)
 
                 saldo_empleado = saldos_al_corte.filtered_domain([('empleado_id', '=', empleado.id)])
                 total_saldo_al_corte = round(saldo_empleado[0].horas, 2)
-                sheet.write(f"C{celda_inicio + i}", total_saldo_al_corte)
+                sheet.write(f"C{celda_inicio + i}", total_saldo_al_corte, estilos_table)
 
                 dias_antiguedad_records = dias_antiguedad.filtered_domain(
                     [('empleado_id', '=', empleado.id), ('tipo', '=', 'DA')])
                 total_dias_antiguedad = sum(dias_antiguedad_records.mapped('horas'))
-                sheet.write(f"D{celda_inicio + i}", round(total_dias_antiguedad, 2))
+                sheet.write(f"D{celda_inicio + i}", round(total_dias_antiguedad, 2), estilos_table)
 
                 dias_beneficio_records = dias_beneficio.filtered_domain(
                     [('empleado_id', '=', empleado.id), ('tipo', '=', 'DB')])
                 total_dias_beneficio = sum(dias_beneficio_records.mapped('horas'))
-                sheet.write(f"E{celda_inicio + i}", round(total_dias_beneficio, 2))
+                sheet.write(f"E{celda_inicio + i}", round(total_dias_beneficio, 2), estilos_table)
 
                 horas_records = horas.filtered_domain([('empleado_id', '=', empleado.id), ('tipo', '=', 'H')])
                 total_horas = sum(horas_records.mapped('horas'))
-                sheet.write(f"F{celda_inicio + i}", round(total_horas, 2))
+                sheet.write(f"F{celda_inicio + i}", round(total_horas, 2), estilos_table)
 
                 permisos_records = permisos.filtered_domain([('empleado_id', '=', empleado.id), ('tipo', '=', 'P')])
                 total_permisos = sum(permisos_records.mapped('horas'))
-                sheet.write(f"G{celda_inicio + i}", round(abs(total_permisos), 2))
+                sheet.write(f"G{celda_inicio + i}", round(abs(total_permisos), 2), estilos_table)
 
                 descuentos_horas_records = descuentos_horas.filtered_domain(
                     [('empleado_id', '=', empleado.id), ('tipo', '=', 'DH')])
                 total_descuento_horas = sum(descuentos_horas_records.mapped('horas'))
-                sheet.write(f"H{celda_inicio + i}", round(abs(total_descuento_horas), 2))
+                sheet.write(f"H{celda_inicio + i}", round(abs(total_descuento_horas), 2), estilos_table)
                 saldo_total = sum([total_saldo_al_corte, total_dias_antiguedad, total_permisos, total_descuento_horas,
                                    total_dias_beneficio, total_horas])
-                sheet.write(f"I{celda_inicio + i}", round(saldo_total, 2))
+                sheet.write(f"I{celda_inicio + i}", round(saldo_total, 2), estilos_table)
 
                 saldo_en_dias = self.compute_saldo_en_dias(saldo_total=saldo_total, empleado=empleado)
-                sheet.write(f"J{celda_inicio + i}", f"{saldo_en_dias}")
+                sheet.write(f"J{celda_inicio + i}", f"{saldo_en_dias}", estilos_saldo_en_dias)
 
             except Exception as e:
                 print(empleado.name)
