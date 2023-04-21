@@ -184,22 +184,11 @@ class PermisosReport(models.AbstractModel):
                 sheets['GENERAL'].merge_range(f"A{fila_empleado+1}:A{len(permisos_del_empleado) + fila_empleado}",
                                               empleado)
                 for  index,value_permiso in enumerate(permisos_del_empleado):
-                    indice = value_permiso.desde_hora
-                    for key, dato in enumerate(permisos_del_empleado):
-                        if dato.desde_hora == indice:
-                            ind=key
-                    print(ind[0])
-                    if(index+1 <= len(permisos_del_empleado)):
-                        if permisos_del_empleado[index].desde_fecha == permisos_del_empleado[index+1].desde_fecha :
 
-                            sheets['GENERAL'].merge_range(f"B{fila_empleado + index + 1}:B{fila_empleado + index +2}",
-                                                          value_permiso.desde_fecha.strftime("%d-%m-%Y"))
-                            sheets['GENERAL'].merge_range(f"B{fila_empleado + index + 1}:B{fila_empleado + index + 2}",
-                                                          value_permiso.hasta_fecha.strftime("%d-%m-%Y"))
-                        else:
-                            sheets['GENERAL'].write(f"B{fila_empleado + index +1}",
+
+                    sheets['GENERAL'].write(f"B{fila_empleado + index +1}",
                                                 value_permiso.desde_fecha.strftime("%d-%m-%Y"))
-                            sheets['GENERAL'].write(f"B{fila_empleado + index + 1}",
+                    sheets['GENERAL'].write(f"B{fila_empleado + index + 1}",
                                                 value_permiso.hasta_fecha.strftime("%d-%m-%Y"))
 
                     hora_inicio = timedelta(hours=value_permiso.desde_hora) + datetime.min
@@ -214,6 +203,7 @@ class PermisosReport(models.AbstractModel):
                 fila_empleado = len(permisos_del_empleado) + fila_empleado
 
             else:
+                
                 sheets['GENERAL'].write(fila_empleado, 0, empleado)
                 fila_empleado = fila_empleado + 1
             for permiso in permisos_del_empleado:
