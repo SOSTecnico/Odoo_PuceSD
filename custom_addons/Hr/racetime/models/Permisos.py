@@ -150,40 +150,71 @@ class PermisosReport(models.AbstractModel):
     _inherit = 'report.report_xlsx.abstract'
     _description = 'PermisosReport'
 
-    def generate_xlsx_report(self, workbook, data, records):
-        pass
-        # sheet_names = self.env['racetime.tipos_permiso'].search([]).mapped("name")
-        # sheets = {}
-        # sheets.update({
-        #     'GENERAL': workbook.add_worksheet("GENERAL")
-        # })
-        # for sheet in sheet_names:
-        #     sheets.update({
-        #         sheet: workbook.add_worksheet(sheet)
-        #     })
-        #
-        # bold = workbook.add_format({'bold': True})
-        #
-        # desde = models.sorted(lambda p: p.desde_fecha).mapped("desde_fecha")
-        # hasta = models.sorted(lambda p: p.hasta_fecha).mapped("hasta_fecha")
-        #
-        # sheets["GENERAL"].write(0, 0, "Reporte General De Permisos", bold)
-        # sheets["GENERAL"].write(2, 0, f"Desde: {desde[0]} || Hasta: {hasta[-1]} ", bold)
-        # sheets["GENERAL"].write(4, 0, "EMPLEADO", bold)
-        # sheets["GENERAL"].write(4, 1, "FECHA", bold)
-        # sheets["GENERAL"].write(4, 2, "HORAS", bold)
-        #
-        # empleados = models.mapped("empleado_id.name")
-        # empleados.sort()
-        # fila_empleado = 5
-        # for empleado in empleados:
-        #     permisos_del_empleado = models.filtered(lambda e: e.empleado_id.name == empleado)
-        #     if len(permisos_del_empleado) > 1:
-        #         sheets['GENERAL'].merge_range(f"A{fila_empleado+1}:A{len(permisos_del_empleado) + fila_empleado}",
-        #                                       empleado)
-        #         fila_empleado = len(permisos_del_empleado) + fila_empleado
-        #     else:
-        #         sheets['GENERAL'].write(fila_empleado, 0, empleado)
-        #         fila_empleado = fila_empleado + 1
-        #     for permiso in permisos_del_empleado:
-        #         pass
+    def generate_xlsx_report(self, workbook, data, models):
+
+        sheet_names = self.env['racetime.tipos_permiso'].search([]).mapped("name")
+        sheets = {}
+        sheets.update({
+            'GENERAL': workbook.add_worksheet("GENERAL")
+        })
+        for sheet in sheet_names:
+            sheets.update({
+                sheet: workbook.add_worksheet(sheet)
+            })
+
+        bold = workbook.add_format({'bold': True})
+
+        desde = models.sorted(lambda p: p.desde_fecha).mapped("desde_fecha")
+        hasta = models.sorted(lambda p: p.hasta_fecha).mapped("hasta_fecha")
+
+        sheets["GENERAL"].write(0, 0, "Reporte General De Permisos", bold)
+        sheets["GENERAL"].write(2, 0, f"Desde: {desde[0]} || Hasta: {hasta[-1]} ", bold)
+        sheets["GENERAL"].write(4, 0, "EMPLEADO", bold)
+        sheets["GENERAL"].write(4, 1, "FECHA INICIO", bold)
+        sheets["GENERAL"].write(4, 2, "FECHA FIN", bold)
+        sheets["GENERAL"].write(4, 3, "HORA INICIO", bold)
+        sheets["GENERAL"].write(4, 4, "HORA FIN", bold)
+
+        empleados = models.mapped("empleado_id.name")
+        empleados.sort()
+        fila_empleado = 5
+        for empleado in empleados:
+            permisos_del_empleado = models.filtered(lambda e: e.empleado_id.name == empleado)
+            if len(permisos_del_empleado) > 1:
+                sheets['GENERAL'].merge_range(f"A{fila_empleado+1}:A{len(permisos_del_empleado) + fila_empleado}",
+                                              empleado)
+                for  index,value_permiso in enumerate(permisos_del_empleado):
+                    indice = value_permiso.desde_hora
+                    for key, dato in enumerate(permisos_del_empleado):
+                        if dato.desde_hora == indice:
+                            ind=key
+                    print(ind[0])
+                    if(index+1 <= len(permisos_del_empleado)):
+                        if permisos_del_empleado[index].desde_fecha == permisos_del_empleado[index+1].desde_fecha :
+
+                            sheets['GENERAL'].merge_range(f"B{fila_empleado + index + 1}:B{fila_empleado + index +2}",
+                                                          value_permiso.desde_fecha.strftime("%d-%m-%Y"))
+                            sheets['GENERAL'].merge_range(f"B{fila_empleado + index + 1}:B{fila_empleado + index + 2}",
+                                                          value_permiso.hasta_fecha.strftime("%d-%m-%Y"))
+                        else:
+                            sheets['GENERAL'].write(f"B{fila_empleado + index +1}",
+                                                value_permiso.desde_fecha.strftime("%d-%m-%Y"))
+                            sheets['GENERAL'].write(f"B{fila_empleado + index + 1}",
+                                                value_permiso.hasta_fecha.strftime("%d-%m-%Y"))
+
+                    hora_inicio = timedelta(hours=value_permiso.desde_hora) + datetime.min
+                    hora_fin = timedelta(hours=value_permiso.hasta_hora) + datetime.min
+
+                    sheets['GENERAL'].write(f"C{fila_empleado + index + 1}",
+                                            f"{hora_inicio.strftime('%H:%M')}")
+
+                    sheets['GENERAL'].write(f"D{fila_empleado + index + 1}",
+                                            f"{hora_fin.strftime('%H:%M')}")
+
+                fila_empleado = len(permisos_del_empleado) + fila_empleado
+
+            else:
+                sheets['GENERAL'].write(fila_empleado, 0, empleado)
+                fila_empleado = fila_empleado + 1
+            for permiso in permisos_del_empleado:
+                pass
