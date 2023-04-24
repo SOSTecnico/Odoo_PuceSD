@@ -767,19 +767,21 @@ class ReporteMarcacionesWizard(models.TransientModel):
             self.env['racetime.reporte_marcaciones'].create(reporte)
             return
 
+        p = permisos[0] if len(permisos) > 1 else permisos
+
         for i, h in enumerate(horario_marcaciones):
             reporte.append({
                 'fecha': fecha,
                 'horario_id': horario.id,
                 'horario': h + timedelta(hours=5),
                 'empleado_id': empleado.id,
-                'permiso_id': permisos.id or False,
+                'permiso_id': p.id or False,
                 'marcacion_tiempo': False,
                 'marcacion_id': False,
                 'observacion': 'sin_marcacion'
             })
-            if permisos and permisos.estado == 'aprobado':
-                if permisos.todo_el_dia:
+            if p and p.estado == 'aprobado':
+                if p.todo_el_dia:
                     break
 
         if horario_marcaciones:
