@@ -1,20 +1,32 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_racetime_feriados,racetime.feriados,model_racetime_feriados,racetime.group_admin,1,1,1,1
+access_racetime_feriados_user,racetime.feriados Usuario,model_racetime_feriados,racetime.group_user,1,0,0,0
 access_racetime_tipos_permiso,racetime.tipos_permiso,model_racetime_tipos_permiso,racetime.group_admin,1,1,1,1
 access_racetime_permisos,racetime.permisos,model_racetime_permisos,racetime.group_admin,1,1,1,1
+access_racetime_permisos_user,racetime.permisos Usuario,model_racetime_permisos,racetime.group_user,1,0,0,0
 access_racetime_vacaciones,racetime.vacaciones,model_racetime_vacaciones,racetime.group_admin,1,1,1,1
 access_racetime_horas,racetime.horas,model_racetime_horas,racetime.group_admin,1,1,1,1
+access_racetime_horas_user,racetime.horas Usuario,model_racetime_horas,racetime.group_user,1,0,0,0
 access_racetime_config,racetime.config,model_racetime_config,racetime.group_admin,1,1,1,1
 access_racetime_horarios,racetime.horarios,model_racetime_horarios,racetime.group_admin,1,1,1,1
+access_racetime_detalle_marcacion_user,racetime.detalle_marcacion Usuario,model_racetime_detalle_marcacion,racetime.group_user,1,0,0,0
 access_racetime_detalle_marcacion,racetime.detalle_marcacion,model_racetime_detalle_marcacion,racetime.group_admin,1,1,1,1
 access_racetime_calculo_marcaciones,racetime.calculo_marcaciones,model_racetime_calculo_marcaciones,racetime.group_admin,1,1,1,1
 access_racetime_reporte_marcaciones,racetime.reporte_marcaciones,model_racetime_reporte_marcaciones,racetime.group_admin,1,1,1,1
+access_racetime_reporte_marcaciones_user,racetime.reporte_marcaciones Usuario,model_racetime_reporte_marcaciones,racetime.group_user,1,0,0,0
+access_racetime_reporte_marcaciones_responsable,racetime.reporte_marcaciones Responsable,model_racetime_reporte_marcaciones,racetime.group_responsable,1,1,1,1
 access_racetime_reglas,racetime.reglas,model_racetime_reglas,racetime.group_admin,1,1,0,1
 access_racetime_detalle_horarios,racetime.detalle_horarios,model_racetime_detalle_horarios,racetime.group_admin,1,1,1,1
+access_racetime_detalle_horarios_user,racetime.detalle_horarios Usuario,model_racetime_detalle_horarios,racetime.group_user,1,0,0,0
 access_racetime_dias,racetime.dias,model_racetime_dias,racetime.group_admin,1,0,0,0
+access_racetime_dias_user,racetime.dias Usuario,model_racetime_dias,racetime.group_user,1,0,0,0
 access_racetime_asignacion_horario,racetime.asignacion_horario,model_racetime_asignacion_horario,racetime.group_admin,1,1,1,1
+access_racetime_asignacion_horario_user,racetime.asignacion_horario Usuario,model_racetime_asignacion_horario,racetime.group_user,1,0,0,0
 access_racetime_asignacion_horario_multiple,racetime.asignacion_horario_multiple,model_racetime_asignacion_horario_multiple,racetime.group_admin,1,1,1,1
 access_racetime_saldos,racetime.saldos,model_racetime_saldos,racetime.group_admin,1,1,1,1
+access_racetime_saldos_user,racetime.saldos Usuario,model_racetime_saldos,racetime.group_user,1,0,0,0
 access_racetime_detalle_saldos,racetime.detalle_saldos,model_racetime_detalle_saldos,racetime.group_admin,1,1,1,1
+access_racetime_detalle_saldos_user,racetime.detalle_saldos Usuario,model_racetime_detalle_saldos,racetime.group_user,1,0,0,0
 access_racetime_saldos_reporte_wizard,racetime.saldos_reporte_wizard,model_racetime_saldos_reporte_wizard,racetime.group_admin,1,1,1,1
+access_racetime_saldos_reporte_wizard_user,racetime.saldos_reporte_wizard Usuario,model_racetime_saldos_reporte_wizard,racetime.group_user,1,1,1,0
 

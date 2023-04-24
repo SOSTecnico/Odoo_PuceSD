@@ -63,7 +63,7 @@
             </field>
         </record>
 
-        <menuitem sequence="100" name="Tipos Permiso" groups="racetime.group_admin" id="racetime.tipos_permiso_menu" parent="racetime.config_menu" action="racetime.tipos_permiso_act_window"/>
+        <menuitem name="Tipos Permiso" groups="racetime.group_admin" id="racetime.tipos_permiso_menu" parent="racetime.config_menu" action="racetime.tipos_permiso_act_window"/>
 
     </data>
 </odoo>

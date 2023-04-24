@@ -89,8 +89,8 @@
         <menuitem sequence="3" name="Horarios Asignados" id="racetime.asignacion_horario_lista"
                   parent="racetime.asigancion_horario_menu" action="racetime.asigancion_horario_act_window"/>
 
-        <menuitem sequence="1" name="Individual" id="racetime.asignacion_horarios_individual_menu"
-                  parent="racetime.asigancion_horario_menu" action="racetime.asignar_horario_inidividual_action"/>
+<!--        <menuitem sequence="1" name="Individual" id="racetime.asignacion_horarios_individual_menu"-->
+<!--                  parent="racetime.asigancion_horario_menu" action="racetime.asignar_horario_inidividual_action"/>-->
 
         <!--***************************************************************************-->
         <!--ASIGNACION MÚLTIPLE-->

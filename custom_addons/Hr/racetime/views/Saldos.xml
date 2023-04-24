@@ -157,7 +157,8 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem name="Detalle Saldos " id="racetime.detalle_saldos_menu" parent="racetime.saldos_menu"
+        <menuitem groups="racetime.group_admin" name="Detalle Saldos " id="racetime.detalle_saldos_menu"
+                  parent="racetime.saldos_menu"
                   action="racetime.detalle_saldos_action"/>
 
 
@@ -185,8 +186,12 @@
                     </sheet>
                     <footer>
                         <button name="generar_reporte" class="btn-primary" string="GENERAR REPORTE" type="object"/>
-                        <button name="generar_corte" class="btn-info" string="GENERAR CORTE" type="object"/>
-                        <button name="eliminar_corte" class="btn-danger" string="ELIMINAR CORTE" type="object"/>
+                        <button groups="racetime.group_admin"
+                                confirm="¿Seguro de Generar el corte en la fecha seleccionada?"
+                                name="generar_corte" class="btn-info" string="GENERAR CORTE" type="object"/>
+                        <button groups="racetime.group_admin"
+                                confirm="¿Seguro de ELIMINAR el corte en la fecha seleccionada?" name="eliminar_corte"
+                                class="btn-danger" string="ELIMINAR CORTE" type="object"/>
                     </footer>
                 </form>
             </field>

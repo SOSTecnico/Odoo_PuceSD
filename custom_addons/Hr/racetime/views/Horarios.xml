@@ -56,8 +56,8 @@
             </field>
         </record>
 
-        <menuitem name="Horarios" id="racetime.horarios_menu" parent="racetime.config_menu"
-                  action="racetime.horarios_act_window"/>
+<!--        <menuitem name="Horarios" id="racetime.horarios_menu" parent="racetime.config_menu"-->
+<!--                  action="racetime.horarios_act_window"/>-->
 
 
         <!-- ******************************DETALLE DE HORARIOS VISTAS**********************-->
@@ -106,7 +106,7 @@
         </record>
 
 
-        <menuitem sequence="7" name="Detalle de Horarios" id="racetime.detalle_horarios_menu"
+        <menuitem groups="racetime.group_admin" name="Detalle de Horarios" id="racetime.detalle_horarios_menu"
                   parent="racetime.asigancion_horario_menu" action="racetime.detalle_horarios_action"/>
 
     </data>

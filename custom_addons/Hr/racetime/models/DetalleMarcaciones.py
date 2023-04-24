@@ -17,7 +17,7 @@ class DetalleMarcacion(models.Model):
     fecha_hora = fields.Datetime(string='Fecha y Hora', required=False)
     emp_code = fields.Integer(string='Código Empleado', required=False)
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False,
-                                  compute='_establecer_empleado')
+                                  compute='_establecer_empleado', store=True)
 
     nombre_empleado = fields.Char(string='Nombre Empleado', required=False)
 

@@ -67,7 +67,7 @@
         </record>
 
         <menuitem name="Parámetros" id="racetime.parametros_menu" parent="racetime.config_menu"
-                  action="racetime.config_act_window" sequence="300" groups="racetime.group_admin"/>
+                  action="racetime.config_act_window"  groups="racetime.group_admin"/>
 
     </data>
 </odoo>

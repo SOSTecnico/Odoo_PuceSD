@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <menuitem id="racetime.main_menu" name="Asistencias" web_icon="racetime,static/description/icon.png"></menuitem>
+        <menuitem id="racetime.main_menu" name="Asistencias" web_icon="racetime,static/description/icon.png"/>
 
-        <menuitem sequence="100" groups="racetime.group_responsable" id="racetime.config_menu" name="Configuraciones"
-                  parent="racetime.main_menu"></menuitem>
+        <menuitem id="racetime.config_menu" name="Configuraciones" parent="racetime.main_menu"/>
 
-        <menuitem name="Marcaciones" id="racetime.marcaciones_menu" parent="racetime.main_menu"></menuitem>
+        <menuitem name="Marcaciones" id="racetime.marcaciones_menu" parent="racetime.main_menu"/>
 
     </data>
 </odoo>
