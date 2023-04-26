@@ -23,11 +23,16 @@
                         </group>
                         <group string="Detalle de Horas">
                             <field name="active" invisible="1"/>
-                            <field name="fecha_desde"/>
-                            <field name="fecha_hasta"/>
-                            <field name="hora_desde" widget="float_time"/>
-                            <field name="hora_hasta" widget="float_time"/>
+                            <field name="fecha_desde"
+                                   attrs="{'invisible':[('tipo','=','otros')],'required':[('tipo','!=','otros')]}"/>
+                            <field name="fecha_hasta"
+                                   attrs="{'invisible':[('tipo','=','otros')],'required':[('tipo','!=','otros')]}"/>
+                            <field name="hora_desde" widget="float_time"
+                                   attrs="{'invisible':[('tipo','=','otros')],'required':[('tipo','!=','otros')]}"/>
+                            <field name="hora_hasta" widget="float_time"
+                                   attrs="{'invisible':[('tipo','=','otros')],'required':[('tipo','!=','otros')]}"/>
                             <field name="tipo"/>
+                            <field name="total_horas" widget="float_time" attrs="{'invisible':[('tipo','!=','otros')]}"/>
                             <field name="descripcion"/>
                             <field name="aprobado_por_id" widget="many2many_tags"
                                    options="{'create':false, 'm2o_dialog':false}"/>
