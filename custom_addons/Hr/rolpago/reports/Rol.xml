@@ -8,7 +8,19 @@
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">rolpago.report_roles</field>
             <field name="report_file">rolpago.report_roles</field>
-            <field name="binding_model_id" ref="rolpago.model_rolpago_roles"></field>
+            <field name="binding_model_id" ref="rolpago.model_rolpago_roles"/>
+            <field name="binding_type">report</field>
+            <field name="print_report_name">'%s - %s' % (object.empleado_id.name,object.periodo)</field>
+        </record>
+
+
+        <record id="rolpago.action_report_roles_preview" model="ir.actions.report">
+            <field name="name">Previsualización del Rol</field>
+            <field name="model">rolpago.roles</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">rolpago.report_roles</field>
+            <field name="report_file">rolpago.report_roles</field>
+            <field name="binding_model_id" ref="rolpago.model_rolpago_roles"/>
             <field name="binding_type">report</field>
             <field name="print_report_name">'%s - %s' % (object.empleado_id.name,object.periodo)</field>
         </record>

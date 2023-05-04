@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from odoo import fields, models, api
 
 
@@ -54,13 +56,13 @@ class Horas(models.Model):
                         'horas_id': hora.id,
                         'name': 'HORAS INGRESADAS',
                         'tipo': 'H',
-                        'fecha': hora.fecha_desde
+                        'fecha': hora.fecha_desde or datetime.now()
                     })]
                 })
             else:
                 detalle_saldo.update({
                     'horas': horas,
-                    'fecha': hora.fecha_desde
+                    'fecha': hora.fecha_desde or datetime.now()
                 })
         else:
             detalle_saldo = self.env['racetime.detalle_saldos'].search([('horas_id', '=', hora.id)])
