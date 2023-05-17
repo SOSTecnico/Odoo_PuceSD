@@ -71,9 +71,10 @@
             </field>
         </record>
 
-        <menuitem name="Roles de Pago" id="rolpago.roles_menu_principal"
+        <menuitem name="Roles de Pago" groups="rolpago.rolpago_usuarios" id="rolpago.roles_menu_principal"
                   web_icon="rolpago,static/description/icon.png"/>
-        <menuitem sequence="1" groups="rolpago.rolpago_administrador" name="Roles" id="rolpago.roles_menu" parent="rolpago.roles_menu_principal"
+        <menuitem sequence="1" groups="rolpago.rolpago_administrador" name="Roles" id="rolpago.roles_menu"
+                  parent="rolpago.roles_menu_principal"
                   action="rolpago.roles_accion"/>
 
     </data>
