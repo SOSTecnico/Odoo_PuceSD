@@ -218,8 +218,9 @@ class SaldosReportWizard(models.TransientModel):
                 [('fecha', '=', self.fecha_corte), ('tipo', '=', 'SC')])
 
             corte = saldo_empleado.detalle_saldos.filtered_domain([('tipo', '=', 'SC')]).sorted(lambda c: c.fecha)
+            print(corte)
             if len(corte) > 0:
-                corte = corte[0]
+                corte = corte[-1]
 
             ds = saldo_empleado.detalle_saldos.filtered_domain(
                 [('fecha', '<=', self.fecha_corte), ('fecha', '>=', corte.fecha)])
