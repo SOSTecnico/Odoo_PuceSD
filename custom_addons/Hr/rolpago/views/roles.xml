@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
                 <form string="rolpago.roles_form_form">
                     <header>
+                        <button confirm="¿SEGURO? " type="object" name="cargar_cargos_temp" string="Cargos"></button>
                         <field name="estado_rol" widget="statusbar" clickable="1"/>
                     </header>
                     <sheet>
@@ -16,6 +17,7 @@
                             <field name="periodo"/>
                             <field name="fecha" invisible="1"/>
                             <field name="empleado_id"/>
+                            <field name="cargo"/>
                         </group>
                         <field nolabel="1" name="rubros_id">
                             <tree>
@@ -38,8 +40,9 @@
             <field name="name">rolpago.roles_view_tree</field>
             <field name="model">rolpago.roles</field>
             <field name="arch" type="xml">
-                <tree string="rolpago.roles_tree">
+                <tree string="rolpago.roles_tree" default_order="fecha desc">
                     <field name="periodo"/>
+                     <field name="fecha" invisible="1"/>
                     <field name="estado_rol"/>
                 </tree>
             </field>

@@ -60,8 +60,8 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <t t-if="object.empleado_id.job_id">
-                                                    <span t-esc="object.empleado_id.job_id.name"></span>
+                                                <t t-if="object.cargo">
+                                                    <span t-esc="object.cargo"></span>
                                                 </t>
                                                 <t t-else="">
                                                     <span>No Definido</span>

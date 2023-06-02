@@ -94,7 +94,8 @@ class RolAcciones(models.TransientModel):
                     self.env['rolpago.roles'].sudo().create({
                         'empleado_id': empleado.id,
                         'fecha': fecha.strftime("%Y-%m-%d"),
-                        'rubros_id': model_rubros
+                        'rubros_id': model_rubros,
+                        'cargo': empleado.job_id.name
                     })
 
         return {

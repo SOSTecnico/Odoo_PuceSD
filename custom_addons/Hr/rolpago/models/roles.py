@@ -50,6 +50,8 @@ class Roles(models.Model):
                                              ('no_conforme', 'NO CONFORME'), ],
                                   required=False, tracking=True)
 
+    cargo = fields.Char(string='Cargo', required=False,)
+
     def _get_report_base_filename(self):
         self.ensure_one()
         return '%s - %s' % (self.empleado_id.name, self.periodo)
@@ -77,6 +79,13 @@ class Roles(models.Model):
     def compute_name(self):
         for rec in self:
             rec.name = rec.periodo
+
+
+    def cargar_cargos_temp(self):
+        roles = self.env['rolpago.roles'].search([])
+        for rec in roles:
+            rec.cargo = rec.empleado_id.job_id.name
+
 
     @api.model
     def generar_periodo(self):
