@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <form string="rolpago.roles_form_form">
                     <header>
-                        <button confirm="¿SEGURO? " type="object" name="cargar_cargos_temp" string="Cargos"></button>
+                        <button confirm="¿SEGURO? " invisible="1" type="object" name="cargar_cargos_temp" string="Cargos"></button>
                         <field name="estado_rol" widget="statusbar" clickable="1"/>
                     </header>
                     <sheet>
