@@ -179,7 +179,7 @@ class DetalleSaldos(models.Model):
             if self.tipo == 'P' or self.tipo == 'DH':
                 self.horas = f"-{abs(self.horas)}"
             else:
-                self.horas = abs(self.horas)
+                self.horas = self.horas
 
 
 class SaldosReportWizard(models.TransientModel):
