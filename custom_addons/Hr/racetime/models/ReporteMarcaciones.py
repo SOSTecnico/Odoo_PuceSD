@@ -740,10 +740,10 @@ class ReporteMarcacionesWizard(models.TransientModel):
             if fecha.strftime("%A") in h.dias.mapped('name'):
                 # Según su horario se generan 4 marcaciones
                 horario_marcaciones = [
-                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=h.marcacion_1)).time()),
-                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=h.marcacion_2)).time()),
-                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=h.marcacion_3)).time()),
-                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=h.marcacion_4)).time()),
+                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=h.marcacion_1 + 5)).time()),
+                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=h.marcacion_2 + 5)).time()),
+                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=h.marcacion_3 + 5)).time()),
+                    datetime.combine(f_inicio, (datetime.min + timedelta(hours=h.marcacion_4 + 5)).time()),
                 ]
 
                 break
@@ -757,7 +757,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
         # Si existe un feriado, genera un solo registro y continua la siguiente fecha
         if horario_marcaciones and feriados:
             reporte.append({
-                'horario': datetime.combine(fecha, (datetime.min + timedelta(hours=5)).time()),
+                'horario': datetime.combine(fecha, (datetime.min).time()),
                 'fecha': fecha,
                 'empleado_id': empleado.id,
                 'marcacion_id': False,
@@ -773,7 +773,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
             reporte.append({
                 'fecha': fecha,
                 'horario_id': horario.id,
-                'horario': h + timedelta(hours=5),
+                'horario': h ,
                 'empleado_id': empleado.id,
                 'permiso_id': p.id or False,
                 'marcacion_tiempo': False,
@@ -786,13 +786,13 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
         if horario_marcaciones:
             for i, m in enumerate(marcaciones_del_dia):
-                marcacion = m.fecha_hora - timedelta(hours=5)
+                marcacion = m.fecha_hora
                 diferencias = []
 
                 for r in reporte:
-                    h = r['horario'] - timedelta(hours=5)
+                    h = r['horario']
                     diff = abs(h - marcacion)
-                    if diff > timedelta(hours=3):
+                    if diff > timedelta(hours=4):
                         diferencias.append(timedelta(hours=20))
                     else:
                         diferencias.append(diff)
@@ -809,7 +809,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
                     print(e)
                     reporte.append({
                         'fecha': fecha,
-                        'horario': datetime.combine(fecha, (datetime.min + timedelta(hours=5)).time()),
+                        'horario': datetime.combine(fecha, (datetime.min).time()),
                         'empleado_id': empleado.id,
                         'permiso_id': False,
                         'marcacion_tiempo': m.fecha_hora,
@@ -834,6 +834,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
                     if h > m:
                         observacion = 'adelanto'
                     else:
+
                         observacion = 'exceso'
 
                 r.update({
