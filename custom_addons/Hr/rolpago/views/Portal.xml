@@ -101,7 +101,7 @@
                                                 </div>
                                                 <div>
                                                     <form action="/rolpago/cambiar_estado" method="post">
-                                                        <input type="hidden" value="inconforme" name="estado"/>
+                                                        <input type="hidden" value="no_conforme" name="estado"/>
                                                         <input hidden="rol_id" t-att-value="rol.id" name="rol_id"/>
                                                         <input type="hidden" name="csrf_token"
                                                                t-att-value="request.csrf_token()"/>
