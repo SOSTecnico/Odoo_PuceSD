@@ -73,7 +73,8 @@
                     <field name="marcacion_tiempo" invisible="1"/>
                     <field name="hora"/>
                     <field name="marcacion"/>
-                    <field name="diferencia" widget="float_time"/>
+                    <field name="diferencia" invisible="1" widget="float_time"/>
+                    <field name="diferencia_en_minutos"/>
                     <field name="observacion"/>
                     <field name="detalle"/>
                     <field name="permiso_id"/>

@@ -773,7 +773,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
             reporte.append({
                 'fecha': fecha,
                 'horario_id': horario.id,
-                'horario': h ,
+                'horario': h,
                 'empleado_id': empleado.id,
                 'permiso_id': p.id or False,
                 'marcacion_tiempo': False,
@@ -853,6 +853,17 @@ class ReporteMarcaciones(models.Model):
     name = fields.Char()
     marcacion_id = fields.Many2one(comodel_name='racetime.detalle_marcacion', string='ID Marcación', required=False)
     diferencia = fields.Float(string='Diferencia', required=False)
+
+    # Se agrega campo para mostrar la informacion de la diferencia de tiempo en minutos
+    diferencia_en_minutos = fields.Char(compute='_diferencia_en_minutos')
+
+    def _diferencia_en_minutos(self):
+
+        for rec in self:
+            print(rec.diferencia)
+            rec.diferencia_en_minutos = (datetime.min + timedelta(minutes=rec.diferencia)).strftime("%H:%M:%S")
+
+
     observacion = fields.Selection(string='Observación', required=False,
                                    selection=[('atraso', 'ATRASO'), ('adelanto', 'ADELANTO'), ('exceso', 'EXCESO'),
                                               ('a_tiempo', 'A TIEMPO'), ('sin_marcacion', 'SIN MARCACIÓN'),
@@ -884,7 +895,7 @@ class ReporteMarcaciones(models.Model):
         for rec in self:
             rec.hora = (rec.horario - timedelta(hours=5)).strftime("%H:%M")
             rec.marcacion = (rec.marcacion_tiempo - timedelta(hours=5)).strftime(
-                "%H:%M") if rec.marcacion_tiempo else None
+                "%H:%M:%S") if rec.marcacion_tiempo else None
             rec.marcacion_tiempo = rec.marcacion_id.fecha_hora
 
     def autorizar_marcacion(self):
