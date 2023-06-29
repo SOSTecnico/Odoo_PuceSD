@@ -34,6 +34,7 @@
             <field name="model">biometricos.biometricos</field>
             <field name="arch" type="xml">
                 <tree string="Biometricos">
+                    <button confirm="¿Seguro de Abrir?" name="open" class="btn btn-info" type="object" string="Abrir"/>
                     <field name="name"/>
                     <field name="ip_address"/>
                 </tree>
