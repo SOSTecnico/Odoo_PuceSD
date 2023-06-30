@@ -845,6 +845,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
                         else:
                             observacion = 'atraso'
                             detalle = 'dr'
+                            diff = abs(diff - tolerancia)
                 else:
                     if h > m:
                         observacion = 'adelanto'
