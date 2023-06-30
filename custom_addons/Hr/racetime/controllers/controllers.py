@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
-# from odoo import http
+from odoo import http
+from odoo.http import request
 
+class Racetime(http.Controller):
+    @http.route('/solicitud-permiso', auth='public', website=True)
+    def index(self, **kw):
 
-# class Racetime(http.Controller):
-#     @http.route('/racetime/racetime', auth='public')
-#     def index(self, **kw):
-#         return "Hello, world"
+        return request.render('racetime.solicitud_permiso_template',{
+            'user':request.env.user
+        })
 
 #     @http.route('/racetime/racetime/objects', auth='public')
 #     def list(self, **kw):

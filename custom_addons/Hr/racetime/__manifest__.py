@@ -53,7 +53,9 @@
         'data/Permisos.xml',
         'data/Dias.xml',
         'report/PermisosReport.xml',
-        'report/SaldosReport.xml'
+        'report/SaldosReport.xml',
+    #     Templates
+        'views/SolicitudPermisos.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

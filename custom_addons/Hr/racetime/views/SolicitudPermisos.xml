@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="racetime.solicitud_permiso_template" name="Solicitud de Permiso">
+            <t t-call="website.layout">
+                <div class="oe_structure">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-6 mx-auto">
+                                <h2>Solicitud de Permiso</h2>
+                                <form>
+                                    <div class="form-group">
+                                        <label for="user">Solicitante</label>
+                                        <input class="form-control" readonly="1" t-att-value="user.name"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control"/>
+                                    </div>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch1"/>
+                                        <label class="custom-control-label" for="customSwitch1">Toggle this switch
+                                            element
+                                        </label>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>

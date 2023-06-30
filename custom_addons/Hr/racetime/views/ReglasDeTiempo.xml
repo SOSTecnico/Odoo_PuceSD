@@ -12,8 +12,9 @@
                             <h1>Reglas de Tiempo</h1>
                         </div>
                         <group>
-
                             <field name="tolerancia" widget="float_time"/>
+                            <field name="evaluacion_desemp" widget="float_time"/>
+                            <field name="descuento_rol" widget="float_time"/>
                             <field name="sin_marcacion" widget="float_time"/>
                         </group>
                     </sheet>
@@ -56,7 +57,7 @@
             </field>
         </record>
 
-        <menuitem groups="racetime.group_admin" name="Reglas de Tiempo" id="racetime.reglas_menu" parent="racetime.config_menu"
+        <menuitem groups="racetime.group_responsable" name="Reglas de Tiempo" id="racetime.reglas_menu" parent="racetime.config_menu"
                   action="racetime.reglas_act_window"/>
 
     </data>

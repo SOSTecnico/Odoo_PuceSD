@@ -1,7 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_racetime_feriados,racetime.feriados,model_racetime_feriados,racetime.group_admin,1,1,1,1
 access_racetime_feriados_user,racetime.feriados Usuario,model_racetime_feriados,racetime.group_user,1,0,0,0
-access_racetime_tipos_permiso,racetime.tipos_permiso,model_racetime_tipos_permiso,racetime.group_admin,1,1,1,1
+access_racetime_tipos_permiso_user,racetime.tipos_permiso User,model_racetime_tipos_permiso,racetime.group_user,1,0,0,0
+access_racetime_tipos_permiso_responsible,racetime.tipos_permiso Responsable,model_racetime_tipos_permiso,racetime.group_responsable,1,1,1,1
 access_racetime_permisos,racetime.permisos,model_racetime_permisos,racetime.group_admin,1,1,1,1
 access_racetime_permisos_user,racetime.permisos Usuario,model_racetime_permisos,racetime.group_user,1,0,0,0
 access_racetime_vacaciones,racetime.vacaciones,model_racetime_vacaciones,racetime.group_admin,1,1,1,1
@@ -15,7 +16,7 @@ access_racetime_calculo_marcaciones,racetime.calculo_marcaciones,model_racetime_
 access_racetime_reporte_marcaciones,racetime.reporte_marcaciones,model_racetime_reporte_marcaciones,racetime.group_admin,1,1,1,1
 access_racetime_reporte_marcaciones_user,racetime.reporte_marcaciones Usuario,model_racetime_reporte_marcaciones,racetime.group_user,1,0,0,0
 access_racetime_reporte_marcaciones_responsable,racetime.reporte_marcaciones Responsable,model_racetime_reporte_marcaciones,racetime.group_responsable,1,1,1,1
-access_racetime_reglas,racetime.reglas,model_racetime_reglas,racetime.group_admin,1,1,0,1
+access_racetime_reglas,racetime.reglas Responsable,model_racetime_reglas,racetime.group_responsable,1,1,0,1
 access_racetime_detalle_horarios,racetime.detalle_horarios,model_racetime_detalle_horarios,racetime.group_admin,1,1,1,1
 access_racetime_detalle_horarios_user,racetime.detalle_horarios Usuario,model_racetime_detalle_horarios,racetime.group_user,1,0,0,0
 access_racetime_dias,racetime.dias,model_racetime_dias,racetime.group_admin,1,0,0,0

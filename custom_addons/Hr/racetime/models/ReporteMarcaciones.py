@@ -754,6 +754,12 @@ class ReporteMarcacionesWizard(models.TransientModel):
         # La tolerancia indica qué tiempo pueden llegar a marcar sin que se considere atraso
         tolerancia = timedelta(minutes=reglas.tolerancia)
 
+        # Tiempo que se considera para EVALUACION DE DESEMPEÑO
+        evaluacion_desemp = timedelta(minutes=reglas.evaluacion_desemp)
+
+        # Tiempo que se considera para DESCUENTO A ROL
+        descuento_rol = timedelta(minutes=reglas.descuento_rol)
+
         # Si existe un feriado, genera un solo registro y continua la siguiente fecha
         if horario_marcaciones and feriados:
             reporte.append({
@@ -819,6 +825,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
             for i, r in enumerate(reporte):
                 h = r['horario']
                 m = r['marcacion_tiempo']
+                # Campo para guardar la evaluacion de desempeño o descuento al rol
+                detalle = ''
 
                 if not m:
                     continue
@@ -828,18 +836,25 @@ class ReporteMarcacionesWizard(models.TransientModel):
                     if h > m:
                         observacion = 'a_tiempo'
                     else:
-                        observacion = 'atraso' if diff > tolerancia else 'a_tiempo'
-                        diff = abs(diff - tolerancia)
+
+                        if diff <= tolerancia:
+                            observacion = 'a_tiempo'
+                        elif diff <= evaluacion_desemp:
+                            observacion = 'atraso'
+                            detalle = 'ed'
+                        else:
+                            observacion = 'atraso'
+                            detalle = 'dr'
                 else:
                     if h > m:
                         observacion = 'adelanto'
                     else:
-
                         observacion = 'exceso'
 
                 r.update({
                     'observacion': observacion,
-                    'diferencia': diff.total_seconds() / 60
+                    'diferencia': diff.total_seconds() / 60,
+                    'detalle': detalle
                 })
 
             self.env['racetime.reporte_marcaciones'].create(reporte)
@@ -860,7 +875,6 @@ class ReporteMarcaciones(models.Model):
     def _diferencia_en_minutos(self):
 
         for rec in self:
-            print(rec.diferencia)
             rec.diferencia_en_minutos = (datetime.min + timedelta(minutes=rec.diferencia)).strftime("%H:%M:%S")
 
 
