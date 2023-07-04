@@ -27,6 +27,9 @@
         },
         'web.assets_qweb': {
             'racetime/static/src/xml/marcaciones.xml',
+        },
+        'web.assets_frontend': {
+            'racetime/static/src/js/SolicitudPermiso.js',
         }
     },
     # always loaded
@@ -54,8 +57,11 @@
         'data/Dias.xml',
         'report/PermisosReport.xml',
         'report/SaldosReport.xml',
-    #     Templates
-        'views/SolicitudPermisos.xml'
+        #     Templates
+        'views/SolicitudPermisos.xml',
+        'views/EmailTemplates/SolicitudPermiso.xml',
+        'views/Portal/SolicitudPermisos.xml',
+
     ],
     # only loaded in demonstration mode
     'demo': [

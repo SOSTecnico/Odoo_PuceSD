@@ -1,7 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_racetime_feriados,racetime.feriados,model_racetime_feriados,racetime.group_admin,1,1,1,1
 access_racetime_feriados_user,racetime.feriados Usuario,model_racetime_feriados,racetime.group_user,1,0,0,0
-access_racetime_tipos_permiso_user,racetime.tipos_permiso User,model_racetime_tipos_permiso,racetime.group_user,1,0,0,0
+access_racetime_tipos_permiso_user,racetime.tipos_permiso User,model_racetime_tipos_permiso,base.group_user,1,0,0,0
 access_racetime_tipos_permiso_responsible,racetime.tipos_permiso Responsable,model_racetime_tipos_permiso,racetime.group_responsable,1,1,1,1
 access_racetime_permisos,racetime.permisos,model_racetime_permisos,racetime.group_admin,1,1,1,1
 access_racetime_permisos_user,racetime.permisos Usuario,model_racetime_permisos,racetime.group_user,1,0,0,0

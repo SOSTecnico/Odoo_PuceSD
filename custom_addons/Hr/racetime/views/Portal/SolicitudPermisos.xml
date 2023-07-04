@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="racetime.permisos_portal_template" name="Portal: Permisos"
+                  inherit_id="portal.portal_my_home">
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Mis Permisos</t>
+                    <t t-set="url" t-value="'/mis-permisos'"/>
+                    <t t-set="placeholder_count" t-value="'count_permisos'"/>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="racetime.permisos_breadcrumbs" name="Portal: Permisos Breadcrumbs"
+                  inherit_id="portal.portal_breadcrumbs">
+            <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+                <li t-if="page_name == 'mis-permisos'"
+                    t-attf-class="breadcrumb-item #{'active ' if not permiso else ''}">
+                    <a t-if="permiso" t-attf-href="/mis-permisos?{{ keep_query() }}">Mis Permisos</a>
+                    <t t-else="">Mis Permisos</t>
+                </li>
+            </xpath>
+
+        </template>
+
+
+        <template id="racetime.lista_permisos_template" name="Portal: Listado de Permisos">
+            <t t-call="portal.portal_layout">
+
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Permisos</t>
+                </t>
+                <t t-if="not permisos">
+                    <p>No existen permisos generados.</p>
+                </t>
+                <t t-if="permisos" t-call="portal.portal_table">
+                    <t t-set="classes" t-value="'table-hover'"></t>
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Tipo de Permiso</th>
+                            <th>Todo el Dia</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
+                            <th>Hora Inicio</th>
+                            <th>Hora Fin</th>
+                            <th>Descripcion</th>
+                            <!--                            <th></th>-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="permisos" t-as="permiso">
+                            <tr>
+                                <td class="text-center">
+                                    <span t-out="permiso_index+1"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="permiso.tipo_permiso_id.name"/>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="permiso.todo_el_dia">Si</t>
+                                    <t t-else="">No</t>
+                                </td>
+                                <td class="text-center">
+                                    <span t-out="permiso.desde_fecha"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-out="permiso.hasta_fecha"/>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="permiso.todo_el_dia" t-out="'-'"/>
+                                    <t t-else="">
+                                        <span t-out="'{0:02.0f}:{1:02.0f}'.format(*divmod(permiso.desde_hora * 60, 60))"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="permiso.todo_el_dia" t-out="'-'"/>
+                                    <t t-else="">
+                                        <span t-out="'{0:02.0f}:{1:02.0f}'.format(*divmod(permiso.hasta_hora * 60, 60)) "/>
+                                    </t>
+                                </td>
+                                <td>
+                                    <a href="#" t-out="permiso.descripcion"/>
+                                </td>
+                                <!--                            <td>-->
+                                <!--                                <t t-if="permiso.estado == 'pendiente'">-->
+                                <!--                                    <button class="btn btn-primary btn-sm">Editar</button>-->
+                                <!--                                    <button class="btn btn-danger btn-sm btn_eliminar_permiso"-->
+                                <!--                                            t-attf-permiso_id="{{permiso.id}}">Eliminar-->
+                                <!--                                    </button>-->
+                                <!--                                </t>-->
+                                <!--                            </td>-->
+                            </tr>
+                        </t>
+                    </tbody>
+
+                </t>
+            </t>
+
+        </template>
+
+    </data>
+</odoo>

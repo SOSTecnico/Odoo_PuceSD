@@ -4,26 +4,128 @@
 
         <template id="racetime.solicitud_permiso_template" name="Solicitud de Permiso">
             <t t-call="website.layout">
+                <div class="">
+                    <div class="container mb-5">
+                        <div class="row">
+                            <div class="col col-md-6 mx-auto">
+                                <h2 class="my-3 font-weight-bold">Solicitud de Permiso</h2>
+                                <form action="/agendar-permiso" method="POST">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="user">Solicitante</label>
+                                                <input class="form-control" readonly="1" t-att-value="user.name"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="">Email Jefe Inmediato</label>
+                                                <input class="form-control" name="email_jefe" required="required"
+                                                       type="email"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="">Fecha Inicio</label>
+                                                <input type="date" id="fecha_inicio" name="fecha_inicio"
+                                                       required="required"
+                                                       class="form-control"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="">Fecha Fin</label>
+                                                <input type="date" id="fecha_fin" name="fecha_fin" required="1"
+                                                       class="form-control"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4 my-auto text-center">
+                                            <div class="custom-control custom-switch mx-auto">
+                                                <input type="checkbox" name="todo_el_dia" class="custom-control-input"
+                                                       id="sw_todo_el_dia"/>
+                                                <label class="custom-control-label" for="sw_todo_el_dia">Todo el dia
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row horas-container mt-2">
+                                        <div class="col col-md-6">
+                                            <div class="form-group">
+                                                <label for="">Hora Inicio</label>
+                                                <input type="time" name="hora_inicio"
+                                                       class="form-control"/>
+                                            </div>
+                                        </div>
+                                        <div class="col col-md-6">
+                                            <div class="form-group">
+                                                <label for="">Hora Fin</label>
+                                                <input type="time" name="hora_fin" class="form-control"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Tipo de Permiso</label>
+                                            <select name="tipo_permiso_id" class="form-control" required="required">
+                                                <option selected="selected" value="">Seleccione...</option>
+                                                <t t-foreach="tipos_permiso" t-as="tp">
+                                                    <option t-att-value="tp.id">
+                                                        <span t-out="tp.name"></span>
+                                                    </option>
+                                                </t>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="descripcion">Descripcion Detalla del Permiso</label>
+                                                <textarea class="form-control" name="descripcion" id="descripcion"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary btn-block shadow">
+                                                    SOLICITAR
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+
+        <!--Solicitud Registrada-->
+        <template id="racetime.solicitud_permiso_registrada_template" name="Solicitud de Permiso Registrado">
+            <t t-call="website.layout">
                 <div class="oe_structure">
                     <div class="container">
                         <div class="row">
-                            <div class="col-6 mx-auto">
-                                <h2>Solicitud de Permiso</h2>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="user">Solicitante</label>
-                                        <input class="form-control" readonly="1" t-att-value="user.name"/>
+                            <div class="col-md-6 offset-md-3">
+                                <div class="card mt-5">
+                                    <div class="card-header">
+                                        <h3 class="text-center">Solicitud Registrada</h3>
                                     </div>
-                                    <div class="form-group">
-                                        <input class="form-control"/>
+                                    <div class="card-body">
+                                        <p class="text-center">¡Tu solicitud ha sido registrada correctamente!</p>
+                                        <p class="text-center">Nuestro equipo se pondrá en contacto contigo pronto.</p>
                                     </div>
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="customSwitch1"/>
-                                        <label class="custom-control-label" for="customSwitch1">Toggle this switch
-                                            element
-                                        </label>
+                                    <div class="card-footer text-center">
+                                        <a href="/" class="btn btn-primary">Volver al inicio</a>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
