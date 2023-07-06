@@ -59,6 +59,15 @@ class RolAcciones(models.TransientModel):
 
         empleados = self.empleados_ids or self.env['hr.employee'].search([])
 
+        # Agregar Notificaciones de correo
+        # Se busca a todos los usuarios pertenecientes al grupo 'Administrador' del Modulo rolpago
+        users = self.env['res.users'].search([])
+        admins = []
+        for u in users:
+            if u.has_group('rolpago.rolpago_administrador'):
+                admins.append(u.partner_id.id)
+
+        print(admins)
         for fecha in fechas:
             for empleado in empleados:
                 self.env['rolpago.roles'].search([('estado_rol', '=', 'publicado'), ('empleado_id', '=', empleado.id),
@@ -76,7 +85,6 @@ class RolAcciones(models.TransientModel):
                         tipo_rubro = tipos_de_rubros.filtered_domain([('name', '=', rubro['TextoConcepto'])])
 
                         if not tipo_rubro:
-
                             tipo_rubro = self.env['rolpago.tipo_rubro'].create({
                                 'name': rubro['TextoConcepto'],
                                 'tipo': 'I' if rubro['Signo'] == '+' else 'D',
@@ -84,26 +92,29 @@ class RolAcciones(models.TransientModel):
 
                             tipos_de_rubros = self.env['rolpago.tipo_rubro'].sudo().search([])
 
-
                         model_rubros.append((0, 0, {
                             'valor': rubro['Monto'],
                             'horas_laborables': rubro['Horas'],
                             'tipo_rubro_id': tipo_rubro.id,
                         }))
 
-                    self.env['rolpago.roles'].sudo().create({
+                    res = self.env['rolpago.roles'].sudo().create({
                         'empleado_id': empleado.id,
                         'fecha': fecha.strftime("%Y-%m-%d"),
                         'rubros_id': model_rubros,
-                        'cargo': empleado.job_id.name
+                        'cargo': empleado.job_id.name,
+                        'message_follower_ids': [admins]
                     })
+
+                    # Se agrega a los followers para que reciban notificaciones
+                    res.message_subscribe(admins, None)
 
         return {
             'type': 'tree',
             'name': 'Roles',
             'view_mode': 'tree,form',
             'res_model': 'rolpago.roles',
-            'context': {'search_default_fecha':1,'search_default_empleados_group':2},
+            'context': {'search_default_fecha': 1, 'search_default_empleados_group': 2},
             'type': 'ir.actions.act_window',
             'target': 'main'
         }
