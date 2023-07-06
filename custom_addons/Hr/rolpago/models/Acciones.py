@@ -110,7 +110,6 @@ class RolAcciones(models.TransientModel):
                     res.message_subscribe(admins, None)
 
         return {
-            'type': 'tree',
             'name': 'Roles',
             'view_mode': 'tree,form',
             'res_model': 'rolpago.roles',
