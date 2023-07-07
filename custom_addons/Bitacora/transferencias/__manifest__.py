@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','hr','mail','web_m2x_options'],
+    'depends': ['base', 'hr', 'mail', 'web_m2x_options'],
 
     # always loaded
     'data': [
@@ -36,6 +36,8 @@
         'views/TipoTransferencias.xml',
         'views/Prestamos.xml',
         'reports/Transferencias.xml',
+        #PORTAL
+        'views/Portal/Transferencias.xml'
 
     ],
     # only loaded in demonstration mode

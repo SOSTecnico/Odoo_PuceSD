@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="transferencias.activos_portal_template" name="Portal: Activos Fijos"
+                  inherit_id="portal.portal_my_home">
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Activos Fijos</t>
+                    <t t-set="url" t-value="'/mis-activos'"/>
+                    <t t-set="placeholder_count" t-value="'count_activos'"/>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="transferencias.activos_breadcrumbs" name="Portal: Activos Breadcrumbs"
+                  inherit_id="portal.portal_breadcrumbs">
+            <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+                <li t-if="page_name == 'activos-fijos'"
+                    t-attf-class="breadcrumb-item #{'active ' if not activo else ''}">
+                    <a t-if="transferencia" t-attf-href="/mis-activos?{{ keep_query() }}">Activos Fijos</a>
+                    <t t-else="">Activos Fijos</t>
+                </li>
+            </xpath>
+        </template>
+
+
+        <template id="transferencias.lista_activos_template" name="Portal: Listado de Activos">
+            <t t-call="portal.portal_layout">
+
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Activos Fijos</t>
+                </t>
+                <t t-if="not transferencias">
+                    <p>No existen Activos Fijos.</p>
+                </t>
+                <t t-if="transferencias" t-call="portal.portal_table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Transferencia</th>
+                            <th>Código</th>
+                            <th>Referencia</th>
+                            <th>Serie</th>
+                            <th>Marca</th>
+                            <th>Tipo de Activo</th>
+                            <th>Ubicación</th>
+                            <th>Estado</th>
+                            <th>Descripción Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="counter" t-value="0"/>
+                        <t t-foreach="transferencias" t-as="transferencia">
+                            <t t-set="counter" t-value="1"/>
+                            <t t-foreach="transferencia.activos_ids" t-as="activo">
+                                <tr>
+                                    <td class="text-center" t-if="counter == 1"
+                                        t-attf-rowspan="{{len(transferencia.activos_ids)}}">
+                                        <span t-out="transferencia.codigo"/>
+                                    </td>
+                                    <td>
+                                        <span t-out="activo.codigo"/>
+                                    </td>
+                                    <td>
+                                        <span t-out="activo.referencia"/>
+                                    </td>
+                                    <td>
+                                        <span t-out="activo.serie"/>
+                                    </td>
+                                    <td>
+                                        <span t-out="activo.marca_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-out="activo.tipo_activo_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-out="activo.ubicacion_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-out="activo.estado"/>
+                                    </td>
+                                    <td>
+                                        <span t-out="activo.descripcion_estado"/>
+                                    </td>
+                                </tr>
+                                <t t-set="counter" t-value="0"/>
+                            </t>
+                        </t>
+                    </tbody>
+                </t>
+            </t>
+        </template>
+
+
+
+    </data>
+</odoo>

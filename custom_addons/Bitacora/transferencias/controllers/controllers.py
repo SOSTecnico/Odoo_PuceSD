@@ -1,21 +1,30 @@
 # -*- coding: utf-8 -*-
-# from odoo import http
+from odoo import http
+from odoo.http import request
+from odoo.addons.portal.controllers.portal import CustomerPortal
 
 
-# class Transferencias(http.Controller):
-#     @http.route('/transferencias/transferencias', auth='public')
-#     def index(self, **kw):
-#         return "Hello, world"
+class TransferenciasWeb(http.Controller):
+    @http.route('/mis-activos', auth='user', website=True)
+    def lista_activos_fijos(self, **kw):
+        transferencias = request.env["transferencias.transferencias"].sudo().search(
+            [('custodio_destino_id', '=', request.env.user.employee_id.id)], order='codigo desc')
 
-#     @http.route('/transferencias/transferencias/objects', auth='public')
-#     def list(self, **kw):
-#         return http.request.render('transferencias.listing', {
-#             'root': '/transferencias/transferencias',
-#             'objects': http.request.env['transferencias.transferencias'].search([]),
-#         })
+        return request.render('transferencias.lista_activos_template', {
+            'page_name': 'activos-fijos',
+            'transferencias': transferencias,
+            # 'files': files
+        })
 
-#     @http.route('/transferencias/transferencias/objects/<model("transferencias.transferencias"):obj>', auth='public')
-#     def object(self, obj, **kw):
-#         return http.request.render('transferencias.object', {
-#             'object': obj
-#         })
+
+class ActivosPortal(CustomerPortal):
+    def _prepare_home_portal_values(self, counters):
+        values = super()._prepare_home_portal_values(counters)
+        activos = request.env['transferencias.activos'].sudo().search_count(
+            [('responsable_id', '=', request.env.user.employee_id.id)])
+
+        values.update({
+            'count_activos': activos
+        })
+
+        return values
