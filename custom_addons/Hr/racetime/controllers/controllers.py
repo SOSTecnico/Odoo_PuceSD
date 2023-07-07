@@ -66,5 +66,5 @@ class PermisosPortal(CustomerPortal):
         values.update({
             'count_permisos': permisos
         })
-        print("Sss")
+
         return values
