@@ -22,7 +22,6 @@
                     <t t-else="">Mis Permisos</t>
                 </li>
             </xpath>
-
         </template>
 
 

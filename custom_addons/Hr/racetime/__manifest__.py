@@ -61,6 +61,7 @@
         'views/SolicitudPermisos.xml',
         'views/EmailTemplates/SolicitudPermiso.xml',
         'views/Portal/SolicitudPermisos.xml',
+        'views/Portal/Marcaciones.xml',
 
     ],
     # only loaded in demonstration mode

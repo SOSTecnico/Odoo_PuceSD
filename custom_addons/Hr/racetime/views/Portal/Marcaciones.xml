@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="racetime.marcaciones_portal_template" name="Portal: Marcaciones"
+                  inherit_id="portal.portal_my_home">
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Mis Marcaciones</t>
+                    <t t-set="url" t-value="'/mis-marcaciones'"/>
+                    <t t-set="placeholder_count" t-value="'count_marcaciones'"/>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="racetime.marcaciones_breadcrumbs" name="Portal: Marcaciones Breadcrumbs"
+                  inherit_id="portal.portal_breadcrumbs">
+            <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+                <li t-if="page_name == 'mis-marcaciones'"
+                    t-attf-class="breadcrumb-item #{'active ' if not marcacion else ''}">
+                    <a t-if="marcacion" t-attf-href="/mis-marcaciones?{{ keep_query() }}">Mis Marcaciones</a>
+                    <t t-else="">Mis marcaciones</t>
+                </li>
+            </xpath>
+        </template>
+
+
+          <template id="racetime.lista_marcaciones_template" name="Portal: Listado de Marcaciones">
+            <t t-call="portal.portal_layout">
+
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Marcaciones</t>
+                </t>
+                <t t-if="not marcaciones">
+                    <p>No existen Marcaciones generadas.</p>
+                </t>
+                <t t-if="marcaciones" t-call="portal.portal_table">
+                    <t t-set="classes" t-value="'table-hover'"></t>
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="marcaciones" t-as="marcacion">
+                            <tr>
+                                <td>
+                                    <span t-out="marcacion.fecha_hora.strftime('%Y-%m-%d')"/>
+                                </td>
+                                <td>
+                                    <span t-out="marcacion.fecha_hora.strftime('%H:%M:%S')"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+
+                </t>
+            </t>
+
+        </template>
+
+
+    </data>
+</odoo>

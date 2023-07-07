@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo.addons.portal.controllers.portal import CustomerPortal
+from odoo.addons.portal.controllers.portal import CustomerPortal, pager
 from odoo import http
 from odoo.http import request
 
@@ -50,21 +50,70 @@ class Racetime(http.Controller):
         permisos = request.env["racetime.permisos"].sudo().search(
             [("empleado_id", "=", request.env.user.employee_id.id)], order="desde_fecha desc")
 
-        return request.render("racetime.lista_permisos_template", {"permisos": permisos, 'page_name':'mis-permisos'})
+        return request.render("racetime.lista_permisos_template", {"permisos": permisos, 'page_name': 'mis-permisos'})
 
     @http.route("/solicitud-registrada", auth="user", website=True)
     def solicitud_registrada(self):
         return request.render("racetime.solicitud_permiso_registrada_template")
 
+    # Marcaciones
+    @http.route(['/mis-marcaciones', '/mis-marcaciones/page/<int:page>'], auth='user', website=True)
+    def marcaciones(self, page=1, sortby='fecha', search='', search_in='all', **kw):
+        obj_m = request.env["racetime.detalle_marcacion"].sudo()
+        total = obj_m.search_count([])
+
+        page_detail = pager(url='/mis-marcaciones',
+                            total=total,
+                            page=page,
+                            url_args={'sortby': sortby, 'search_in': search_in, 'search': search},
+                            step=10)
+
+        sorted_list = {
+            'fecha': {
+                'label': 'Fecha',
+                'order': 'fecha_hora desc'
+            },
+        }
+
+        search_list = {
+            'all': {'label': 'Todo', 'input': 'all', 'domain': [("empleado_id", "=", request.env.user.employee_id.id)]},
+            'fecha_hora': {'label': 'Fecha', 'input': 'fecha_hora',
+                           'domain': [("empleado_id", "=", request.env.user.employee_id.id),
+                                      ('fecha_hora', '>=', search), ('fecha_hora', '<=', search)]}
+        }
+
+        search_domain = search_list[search_in]['domain']
+
+        # default_order_by = sorted_list[sortby]['order']
+
+        marcaciones = obj_m.search(search_domain, order='fecha_hora desc', limit=10, offset=page_detail['offset'])
+
+        values = {
+            'marcaciones': marcaciones,
+            'page_name': 'mis-marcaciones',
+            'pager': page_detail,
+            'sortby': sortby,
+            # 'searchbar_sortings': sorted_list,
+            'search': search,
+            'searchbar_inputs': search_list,
+            'search_in': search_in
+        }
+        return request.render("racetime.lista_marcaciones_template", values)
+
 
 class PermisosPortal(CustomerPortal):
     def _prepare_home_portal_values(self, counters):
         values = super()._prepare_home_portal_values(counters)
+        user = request.env.user
         permisos = request.env['racetime.permisos'].sudo().search_count(
-            [('empleado_id', '=', request.env.user.employee_id.id)])
+            [('empleado_id', '=', user.employee_id.id)])
+
+        marcaciones = request.env['racetime.detalle_marcacion'].sudo().search_count(
+            [('empleado_id', '=', user.employee_id.id)])
 
         values.update({
-            'count_permisos': permisos
+            'count_permisos': permisos,
+            'count_marcaciones': marcaciones
         })
 
         return values
