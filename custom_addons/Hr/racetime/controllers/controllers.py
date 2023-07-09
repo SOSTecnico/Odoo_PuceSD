@@ -60,13 +60,13 @@ class Racetime(http.Controller):
     @http.route(['/mis-marcaciones', '/mis-marcaciones/page/<int:page>'], auth='user', website=True)
     def marcaciones(self, page=1, sortby='fecha', search='', search_in='all', **kw):
         obj_m = request.env["racetime.detalle_marcacion"].sudo()
-        total = obj_m.search_count([])
+        total = obj_m.search_count([("empleado_id", "=", request.env.user.employee_id.id)])
 
         page_detail = pager(url='/mis-marcaciones',
                             total=total,
                             page=page,
                             url_args={'sortby': sortby, 'search_in': search_in, 'search': search},
-                            step=10)
+                            step=15)
 
         sorted_list = {
             'fecha': {
@@ -86,10 +86,18 @@ class Racetime(http.Controller):
 
         # default_order_by = sorted_list[sortby]['order']
 
-        marcaciones = obj_m.search(search_domain, order='fecha_hora desc', limit=10, offset=page_detail['offset'])
+        marcaciones = obj_m.search(search_domain, order='fecha_hora desc', limit=15, offset=page_detail['offset'])
+
+        marc = []
+
+        for m in marcaciones:
+            marc.append({
+                'fecha': m.fecha_hora.strftime('%Y-%m-%d'),
+                'hora': (m.fecha_hora - timedelta(hours=5)).strftime("%H:%M:%S")
+            })
 
         values = {
-            'marcaciones': marcaciones,
+            'marcaciones': marc,
             'page_name': 'mis-marcaciones',
             'pager': page_detail,
             'sortby': sortby,

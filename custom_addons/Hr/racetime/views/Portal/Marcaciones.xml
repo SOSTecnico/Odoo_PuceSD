@@ -36,7 +36,7 @@
                     <p>No existen Marcaciones generadas.</p>
                 </t>
                 <t t-if="marcaciones" t-call="portal.portal_table">
-                    <t t-set="classes" t-value="'table-hover'"></t>
+                    <t t-set="classes" t-value="'table-hover table-sm'"></t>
                     <thead class="thead-dark">
                         <tr>
                             <th>Fecha</th>
@@ -47,10 +47,10 @@
                         <t t-foreach="marcaciones" t-as="marcacion">
                             <tr>
                                 <td>
-                                    <span t-out="marcacion.fecha_hora.strftime('%Y-%m-%d')"/>
+                                    <span t-out="marcacion['fecha']"/>
                                 </td>
                                 <td>
-                                    <span t-out="marcacion.fecha_hora.strftime('%H:%M:%S')"/>
+                                    <span t-out="marcacion['hora']"/>
                                 </td>
                             </tr>
                         </t>
