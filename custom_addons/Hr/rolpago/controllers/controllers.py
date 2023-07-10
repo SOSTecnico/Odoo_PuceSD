@@ -25,7 +25,11 @@ class Rolpago(CustomerPortal):
         if report_type in ('html', 'pdf', 'text'):
             return self._show_report(model=rol_sudo, report_type=report_type, report_ref='rolpago.action_report_roles',
                                      download=download)
-        rol = request.env['rolpago.roles'].browse(rol_id)
+        rol = request.env['rolpago.roles'].search(
+            [('id', '=', rol_id), ('empleado_id', '=', request.env.user.employee_id.id)])
+
+        if not rol:
+            return request.redirect('/rolpago/mis_roles')
 
         values = {
             'rol': rol
