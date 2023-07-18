@@ -4,6 +4,7 @@ from odoo import http
 from odoo.http import request
 
 from datetime import datetime, timedelta
+import itertools
 
 
 class Racetime(http.Controller):
@@ -107,6 +108,27 @@ class Racetime(http.Controller):
             'search_in': search_in
         }
         return request.render("racetime.lista_marcaciones_template", values)
+
+        # API
+
+    @http.route('/racetime/api/marcaciones', auth='user', type='json')
+    def api_marcaciones(self, **data):
+        fecha_inicio = data['dates']['startDate']
+        fecha_fin = data['dates']['endDate']
+
+        marcaciones = request.env['racetime.detalle_marcacion'].sudo().search_read(
+            [('empleado_id', '=', request.env.user.employee_id.id), ('fecha_hora', '>=', fecha_inicio),
+             ('fecha_hora', '<=', fecha_fin)], order='fecha_hora desc')
+
+        key_func = lambda self: self['fecha_hora'].strftime('%Y-%m-%d')
+        marcaciones_agrupadas = []
+        for key, group in itertools.groupby(marcaciones, key_func):
+            marcaciones_agrupadas.append({
+                'fecha': key,
+                'records': list(group)[::-1]
+            })
+
+        return marcaciones_agrupadas
 
 
 class PermisosPortal(CustomerPortal):
