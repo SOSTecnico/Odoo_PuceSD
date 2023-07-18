@@ -115,14 +115,18 @@ class Racetime(http.Controller):
     def api_marcaciones(self, **data):
         fecha_inicio = data['dates']['startDate']
         fecha_fin = data['dates']['endDate']
+        empleado_code = request.env.user.employee_id.emp_code
+        sql = f"""select punch_time, emp_code, id 
+                    from iclock_transaction 
+                    where emp_code = {empleado_code}
+                    AND (convert(DATE,punch_time,105) >= '{fecha_inicio}' and convert(DATE,punch_time,105) <= '{fecha_fin}')
+                    ORDER BY punch_time DESC
+                    """
+        result = request.env['racetime.detalle_marcacion'].conexionBiotime(sql)
 
-        marcaciones = request.env['racetime.detalle_marcacion'].sudo().search_read(
-            [('empleado_id', '=', request.env.user.employee_id.id), ('fecha_hora', '>=', fecha_inicio),
-             ('fecha_hora', '<=', fecha_fin)], order='fecha_hora desc')
-
-        key_func = lambda self: self['fecha_hora'].strftime('%Y-%m-%d')
+        key_func = lambda self: self['punch_time'].strftime('%Y-%m-%d')
         marcaciones_agrupadas = []
-        for key, group in itertools.groupby(marcaciones, key_func):
+        for key, group in itertools.groupby(result, key_func):
             marcaciones_agrupadas.append({
                 'fecha': key,
                 'records': list(group)[::-1]
