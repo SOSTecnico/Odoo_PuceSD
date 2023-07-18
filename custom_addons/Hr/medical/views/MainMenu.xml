@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem groups="medical.user_group" name="Centro Médico" id="medical.main_menu" web_icon="medical,static/description/icon.png"/>
+
+    </data>
+</odoo>

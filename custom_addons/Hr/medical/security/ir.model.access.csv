@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_medical_alergias,medical.medical_alergias,model_medical_alergias,medical.user_group,1,0,0,0
+access_medical_alergias_responsable,medical.medical_alergias_responsable,model_medical_alergias,medical.responsable_group,1,1,1,1
+access_medical_historia_clinica,medical.medical_historia_clinica,model_medical_historia,medical.user_group,1,0,0,0
+access_medical_historia_clinica_responsable,medical.medical_historia_clinica_responsable,model_medical_historia,medical.responsable_group,1,1,1,1
+access_medical_consulta,medical.medical_consulta,model_medical_consulta,medical.user_group,1,0,0,0
+access_medical_consulta_responsable,medical.medical_consulta_responsable,model_medical_consulta,medical.responsable_group,1,1,1,1
+access_medical_paciente,medical.medical_paciente,model_medical_paciente,medical.user_group,1,0,0,0
+access_medical_paciente_responsable,medical.medical_paciente_responsable,model_medical_paciente,medical.responsable_group,1,1,1,1

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="medical.historia_clinica_form_view" model="ir.ui.view">
+            <field name="name">medical.historia_clinica.form</field>
+            <field name="model">medical.historia</field>
+            <field name="arch" type="xml">
+                <form string="Historia Clinica">
+                    <sheet>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="paciente_id" options="{'create':false,'create_edit':true}"/>
+                            <field name="antecedentes" />
+                            <field name="alergias_id" widget="many2many_tags" options="{'create':false,'create_edit':true}"/>
+                            <label for="consultas"><h2>COnsultas</h2></label>
+                            <field name="consultas" nolabel="1" colspan="2"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="medical.historia_clinica_tree_view" model="ir.ui.view">
+            <field name="name">medical.historia_clinica.tree</field>
+            <field name="model">medical.historia</field>
+            <field name="arch" type="xml">
+                <tree string="Historia Clinica">
+                    <field name="name"/>
+                    <field name="paciente_id"/>
+                    <field name="antecedentes"/>
+                    <field name="alergias_id"/>
+                    <field name="consultas"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--        <record id="medical.historia_clinica_search_view" model="ir.ui.view">
+                    <field name="name">.medical.historia_clinica.search</field>
+                    <field name="model">.medical.historia_clinica</field>
+                    <field name="arch" type="xml">
+                        <search string="Historia Clinica">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>-->
+
+        <record id="medical.historia_clinica_act_window" model="ir.actions.act_window">
+            <field name="name">Historias Clínicas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">medical.historia</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Aún no hay historias clínicas
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="1" name="Historias Clínicas" id="medical.historia_clinica_menu" parent="medical.main_menu"
+                  action="medical.historia_clinica_act_window"/>
+
+    </data>
+</odoo>

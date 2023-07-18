@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="medical.paciente_form_view" model="ir.ui.view">
+            <field name="name">medical.paciente.form</field>
+            <field name="model">medical.paciente</field>
+            <field name="arch" type="xml">
+                <form string="Pacientes">
+                    <sheet>
+                        <group>
+                            <field name="nombres"/>
+                            <field name="apellidos"/>
+                            <field name="cedula"/>
+                            <field name="celular"/>
+                            <field name="email"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="medical.paciente_tree_view" model="ir.ui.view">
+            <field name="name">medical.paciente.tree</field>
+            <field name="model">medical.paciente</field>
+            <field name="arch" type="xml">
+                <tree string="Pacientes">
+                    <field name="name"/>
+                    <field name="cedula"/>
+                    <field name="celular"/>
+                    <field name="email"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--
+                <record id="medical.paciente_search_view" model="ir.ui.view">
+                    <field name="name">medical.paciente.search</field>
+                    <field name="model">medical.paciente</field>
+                    <field name="arch" type="xml">
+                        <search string="Pacientes">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>
+        -->
+
+        <record id="medical.paciente_act_window" model="ir.actions.act_window">
+            <field name="name">Pacientes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">medical.paciente</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Aún no tiene Pacientes
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="25" name="Pacientes" id="medical.paciente_menu" parent="medical.main_menu"
+                  action="medical.paciente_act_window"/>
+
+    </data>
+</odoo>

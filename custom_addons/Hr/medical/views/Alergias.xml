@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--        <record id="medical.alergias_form_view" model="ir.ui.view">
+                    <field name="name">medicla.alergias.form</field>
+                    <field name="model">medicla.alergias</field>
+                    <field name="arch" type="xml">
+                        <form string="Alergias">
+                            <sheet>
+                                <div class="oe_title">
+                                    <label for="example_title"/>
+                                    <h1>
+                                        <field name="example_title" placeholder="Title"/>
+                                    </h1>
+                                </div>
+                                <group>
+                                    <group>
+                                        <field name="create_date"/>
+                                    </group>
+                                    <group>
+                                        <field name="example_field"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </record>-->
+
+        <!--<record id="medical.alergias_tree_view" model="ir.ui.view">
+            <field name="name">medicla.alergias.medical.alergias.tree</field>
+            <field name="model">medicla.alergias.medical.alergias</field>
+            <field name="arch" type="xml">
+                <tree string="Alergias">
+                    <field name="create_date"/>
+                    <field name="example_field"/>
+                </tree>
+            </field>
+        </record>-->
+
+        <!--<record id="medical.alergias_search_view" model="ir.ui.view">
+            <field name="name">medicla.alergias.medical.alergias.search</field>
+            <field name="model">medicla.alergias.medical.alergias</field>
+            <field name="arch" type="xml">
+                <search string="Alergias">
+                    <group expand="1" string="Group By">
+                        <filter string="Example Field" name="example_field" domain="[]"
+                                context="{'group_by':'example_field'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>-->
+
+        <record id="medical.alergias_act_window" model="ir.actions.act_window">
+            <field name="name">Alergias</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">medical.alergias</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    No hay registros de alergias
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="100" name="Alergias" id="medical.alergias_menu" parent="medical.main_menu"
+                  action="medical.alergias_act_window"/>
+
+    </data>
+</odoo>
