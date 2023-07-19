@@ -8,12 +8,27 @@
             <field name="arch" type="xml">
                 <form string="Pacientes">
                     <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
                         <group>
-                            <field name="nombres"/>
-                            <field name="apellidos"/>
-                            <field name="cedula"/>
-                            <field name="celular"/>
-                            <field name="email"/>
+                            <group string="Datos Personales">
+                                <field name="nombres"/>
+                                <field name="apellidos"/>
+                                <field name="cedula"/>
+                                <field name="fecha_nacimiento"/>
+                                <field name="edad"/>
+                                <field name="celular"/>
+                                <field name="email"/>
+                            </group>
+
+                            <group string="Datos Clinicos">
+                                <field name="genero"/>
+                                <field name="tipo_sangre"/>
+                            </group>
                         </group>
                     </sheet>
                     <div class="oe_chatter">

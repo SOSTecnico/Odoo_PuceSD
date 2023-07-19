@@ -2,30 +2,19 @@
 <odoo>
     <data>
 
-        <!--        <record id="medical.alergias_form_view" model="ir.ui.view">
-                    <field name="name">medicla.alergias.form</field>
-                    <field name="model">medicla.alergias</field>
-                    <field name="arch" type="xml">
-                        <form string="Alergias">
-                            <sheet>
-                                <div class="oe_title">
-                                    <label for="example_title"/>
-                                    <h1>
-                                        <field name="example_title" placeholder="Title"/>
-                                    </h1>
-                                </div>
-                                <group>
-                                    <group>
-                                        <field name="create_date"/>
-                                    </group>
-                                    <group>
-                                        <field name="example_field"/>
-                                    </group>
-                                </group>
-                            </sheet>
-                        </form>
-                    </field>
-                </record>-->
+        <record id="medical.alergias_form_view" model="ir.ui.view">
+            <field name="name">medical.alergias.form</field>
+            <field name="model">medical.alergias</field>
+            <field name="arch" type="xml">
+                <form string="Alergias">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
         <!--<record id="medical.alergias_tree_view" model="ir.ui.view">
             <field name="name">medicla.alergias.medical.alergias.tree</field>

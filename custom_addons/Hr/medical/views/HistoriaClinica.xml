@@ -8,12 +8,17 @@
             <field name="arch" type="xml">
                 <form string="Historia Clinica">
                     <sheet>
+                        <widget name="web_ribbon" title="Archivado" bg_color="bg-danger"
+                                attrs="{'invisible':[('active','=',True)]}"/>
                         <group>
+                            <field name="codigo" invisible="1"/>
+                            <field name="active" invisible="1"/>
                             <field name="name" readonly="1"/>
                             <field name="paciente_id" options="{'create':false,'create_edit':true}"/>
-                            <field name="antecedentes" />
-                            <field name="alergias_id" widget="many2many_tags" options="{'create':false,'create_edit':true}"/>
-                            <label for="consultas"><h2>COnsultas</h2></label>
+                            <field name="antecedentes"/>
+                            <field name="alergias_id" widget="many2many_tags" />
+                        </group>
+                        <group string="Consultas">
                             <field name="consultas" nolabel="1" colspan="2"/>
                         </group>
                     </sheet>
@@ -39,18 +44,17 @@
             </field>
         </record>
 
-        <!--        <record id="medical.historia_clinica_search_view" model="ir.ui.view">
-                    <field name="name">.medical.historia_clinica.search</field>
-                    <field name="model">.medical.historia_clinica</field>
-                    <field name="arch" type="xml">
-                        <search string="Historia Clinica">
-                            <group expand="1" string="Group By">
-                                <filter string="Example Field" name="example_field" domain="[]"
-                                        context="{'group_by':'example_field'}"/>
-                            </group>
-                        </search>
-                    </field>
-                </record>-->
+        <record id="medical.historia_clinica_search_view" model="ir.ui.view">
+            <field name="name">medical.historia_clinica.search</field>
+            <field name="model">medical.historia</field>
+            <field name="arch" type="xml">
+                <search string="Historia Clinica">
+                    <field name="paciente_cedula" string="Cedula"/>
+                    <field name="paciente_id"/>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
 
         <record id="medical.historia_clinica_act_window" model="ir.actions.act_window">
             <field name="name">Historias Clínicas</field>
