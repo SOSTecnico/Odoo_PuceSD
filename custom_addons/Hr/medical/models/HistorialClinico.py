@@ -16,8 +16,9 @@ class Consulta(models.Model):
     _name = 'medical.consulta'
     _description = 'Consulta'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'fecha desc'
 
-    name = fields.Char()
+    name = fields.Char(string='Historia Clínica', related='historia_id.name')
 
     fecha = fields.Date(string='Fecha', required=True,
                         default=lambda self: datetime.now(pytz.timezone('America/Guayaquil')), tracking=True)
@@ -25,14 +26,17 @@ class Consulta(models.Model):
     diagnostico = fields.Text(string="Diagnóstico", required=False, tracking=True)
     indicaciones = fields.Text(string="Indicaciones", required=False, tracking=True)
 
-    historia_id = fields.Many2one(comodel_name='medical.historia', string='Historia_id', required=False, tracking=True,
+    historia_id = fields.Many2one(comodel_name='medical.historia', string='Historia Clínica', required=False,
+                                  tracking=True,
                                   ondelete='cascade')
+    paciente = fields.Char(string='Paciente', related='historia_id.paciente_id.name')
 
 
 class HistoriaClinica(models.Model):
     _name = 'medical.historia'
     _description = 'Historia Clínica'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'name desc'
 
     def _codigo_historia(self):
         ultima_historia = self.search([], order='codigo desc', limit=1)
@@ -56,3 +60,11 @@ class HistoriaClinica(models.Model):
                                 required=False, tracking=True)
 
     active = fields.Boolean(string='Active', required=False, default=True)
+
+    # def name_get(self):
+    #     result = []
+    #
+    #     for rec in self:
+    #         result.append((rec.id, '%s - %s - %s' % (rec.name, rec.paciente_cedula,rec.paciente_id.name)))
+    #
+    #     return result

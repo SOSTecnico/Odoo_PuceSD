@@ -38,7 +38,7 @@
                     <field name="name"/>
                     <field name="paciente_id"/>
                     <field name="antecedentes"/>
-                    <field name="alergias_id"/>
+                    <field name="alergias_id" widget="many2many_tags"/>
                     <field name="consultas"/>
                 </tree>
             </field>
