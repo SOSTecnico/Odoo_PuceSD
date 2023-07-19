@@ -16,10 +16,17 @@
                             <field name="name" readonly="1"/>
                             <field name="paciente_id" options="{'create':false,'create_edit':true}"/>
                             <field name="antecedentes"/>
-                            <field name="alergias_id" widget="many2many_tags" />
+                            <field name="alergias_id" widget="many2many_tags"/>
                         </group>
                         <group string="Consultas">
-                            <field name="consultas" nolabel="1" colspan="2"/>
+                            <field name="consultas" nolabel="1" colspan="2">
+                                <tree>
+                                    <field name="fecha"/>
+                                    <field name="motivo"/>
+                                    <field name="diagnostico"/>
+                                    <field name="indicaciones"/>
+                                </tree>
+                            </field>
                         </group>
                     </sheet>
                     <div class="oe_chatter">

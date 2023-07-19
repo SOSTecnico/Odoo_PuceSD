@@ -31,6 +31,27 @@ class Consulta(models.Model):
                                   ondelete='cascade')
     paciente = fields.Char(string='Paciente', related='historia_id.paciente_id.name')
 
+    # Signos Vitales
+
+    temperatura = fields.Integer(string='Temperatura', required=False)
+    presion_arterial = fields.Char(string='Presión Arterial', required=False)
+    pulso = fields.Integer(string='Pulso', required=False)
+    frecuencia_respiratoria = fields.Integer(string='Frecuencia Respiratoria', required=False)
+    peso = fields.Integer(string='Peso', required=False, placeholder='Valor en KG.')
+    talla = fields.Integer(string='Talla', required=False, placeholder='Valor en CM.')
+    imc = fields.Float(string='IMC', required=False)
+
+    @api.onchange('talla', 'peso')
+    def _onchange_imc(self):
+        if self.peso and self.talla:
+            self.imc = self.peso / (self.talla / 100)
+
+    perimetro_abdominal = fields.Integer(string='Perímetro Abdominal', required=False, placeholder='Valor en CM.')
+    pulsioximetria = fields.Integer(string='Pulsioximetria', required=False, placeholder='Valor en %')
+
+    certificado = fields.Binary(string="",  )
+    certificado_name = fields.Char(string='Certificado Médico', required=False)
+
 
 class HistoriaClinica(models.Model):
     _name = 'medical.historia'

@@ -8,7 +8,7 @@
                 <form string="Consulta" create="false">
                     <sheet>
                         <group>
-                            <div class="oe_title oe_readonly" colspan="2">
+                            <div class="oe_title" name="header_container" colspan="2">
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="historia_id"></label>
@@ -29,6 +29,42 @@
                             <field name="diagnostico"/>
                             <field name="indicaciones"/>
                         </group>
+                        <notebook>
+                            <page string="Signos Vitales" name="signos_vitales">
+                                <group col="4">
+                                    <label for="temperatura"/>
+                                    <div class="o_row">
+                                        <field name="temperatura" class="oe_inline"/>
+                                        <label for="temperatura" string="°C"/>
+                                    </div>
+                                    <field name="presion_arterial"/>
+                                    <field name="pulso"/>
+                                    <field name="frecuencia_respiratoria"/>
+                                    <label for="peso"/>
+                                    <div class="o_row">
+                                        <field name="peso"/>
+                                        <label for="peso" string="Kg"/>
+                                    </div>
+                                    <label for="talla"/>
+                                    <div class="o_row">
+                                        <field name="talla"/>
+                                        <label for="talla" string="cm"/>
+                                    </div>
+                                    <field name="imc"/>
+                                    <label for="perimetro_abdominal"/>
+                                    <div class="o_row">
+                                        <field name="perimetro_abdominal"/>
+                                        <label for="perimetro_abdominal" string="cm"/>
+                                    </div>
+                                    <field name="pulsioximetria"/>
+                                </group>
+                            </page>
+                            <page string="Certificado Médico" name="certificado">
+                                <field name="certificado" widget="pdf_viewer" attrs="{'accept':'application/pdf'}"
+                                       filename="certificado_name"/>
+                                <field name="certificado_name" invisible="1"/>
+                            </page>
+                        </notebook>
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
@@ -37,6 +73,18 @@
                 </form>
             </field>
         </record>
+
+        <!--
+                <record id="medical.consulta_form_view_small" model="ir.ui.view">
+                    <field name="name">medical.consulta.form.small</field>
+                    <field name="model">medical.consulta</field>
+                    <field name="arch" type="xml">
+                        <xpath expr="//div[name='header_container']" position="replace">
+
+                        </xpath>
+                    </field>
+                </record>
+        -->
 
         <record id="medical.consulta_tree_view" model="ir.ui.view">
             <field name="name">medical.consulta.tree</field>
