@@ -9,7 +9,7 @@
             <field name="inherit_id" ref="hr.view_employee_form"/>
             <field name="arch" type="xml">
 
-                <xpath expr="//page[@name='hr_settings']" position="after">
+           <!--     <xpath expr="//page[@name='hr_settings']" position="after">
                     <page groups="racetime.group_admin" name="permisos" string="Permisos">
                         <field name="permisos_id">
                             <tree create="false" decoration-success="estado=='aprobado'"
@@ -32,7 +32,7 @@
                             </tree>
                         </field>
                     </page>
-                </xpath>
+                </xpath>-->
 
                 <xpath expr="//field[@name='coach_id']" position="after">
                     <field name="emp_code"/>
