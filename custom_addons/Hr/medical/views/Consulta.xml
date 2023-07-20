@@ -11,23 +11,28 @@
                             <div class="oe_title" name="header_container" colspan="2">
                                 <div class="row">
                                     <div class="col-6">
-                                        <label for="historia_id"></label>
+                                        <label for="historia_id"/>
                                         <h1>
                                             <field name="historia_id" readonly="1"/>
                                         </h1>
                                     </div>
                                     <div class="col-6">
-                                        <label for="paciente"></label>
+                                        <label for="paciente"/>
                                         <h1>
                                             <field name="paciente"/>
                                         </h1>
                                     </div>
                                 </div>
                             </div>
-                            <field name="fecha"/>
-                            <field name="motivo"/>
-                            <field name="diagnostico"/>
-                            <field name="indicaciones"/>
+                            <group col="4" colspan="4">
+                                <field name="fecha"/>
+                                <newline/>
+                                <field name="motivo"/>
+                                <field name="enfermedad_actual"/>
+                                <field name="examen_fisico"/>
+                                <field name="diagnostico"/>
+                                <field name="indicaciones"/>
+                            </group>
                         </group>
                         <notebook>
                             <page string="Signos Vitales" name="signos_vitales">

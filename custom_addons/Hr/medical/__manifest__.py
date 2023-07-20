@@ -30,6 +30,7 @@
         'views/HistoriaClinica.xml',
         'views/Consulta.xml',
         'views/Pacientes.xml',
+        'views/ContactoEmergencia.xml',
 
     ],
     # only loaded in demonstration mode

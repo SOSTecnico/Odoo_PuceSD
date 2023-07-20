@@ -23,6 +23,7 @@
                                 <field name="edad"/>
                                 <field name="celular"/>
                                 <field name="email"/>
+                                <field name="contacto_emergencia_id" options="{'create':false,'create_edit':true}"/>
                             </group>
 
                             <group string="Datos Clinicos">

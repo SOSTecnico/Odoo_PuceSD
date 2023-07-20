@@ -23,7 +23,9 @@ class Consulta(models.Model):
     fecha = fields.Date(string='Fecha', required=True,
                         default=lambda self: datetime.now(pytz.timezone('America/Guayaquil')), tracking=True)
     motivo = fields.Text(string="Motivo", required=True, tracking=True)
+    enfermedad_actual = fields.Text(string="Enfermedad Actual", required=False)
     diagnostico = fields.Text(string="Diagnóstico", required=False, tracking=True)
+    examen_fisico = fields.Text(string="Examen Fisico", required=False, tracking=True)
     indicaciones = fields.Text(string="Indicaciones", required=False, tracking=True)
 
     historia_id = fields.Many2one(comodel_name='medical.historia', string='Historia Clínica', required=False,
@@ -49,7 +51,7 @@ class Consulta(models.Model):
     perimetro_abdominal = fields.Integer(string='Perímetro Abdominal', required=False, placeholder='Valor en CM.')
     pulsioximetria = fields.Integer(string='Pulsioximetria', required=False, placeholder='Valor en %')
 
-    certificado = fields.Binary(string="",  )
+    certificado = fields.Binary(string="", )
     certificado_name = fields.Char(string='Certificado Médico', required=False)
 
 

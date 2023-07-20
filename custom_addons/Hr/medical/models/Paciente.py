@@ -17,6 +17,10 @@ class Paciente(models.Model):
     celular = fields.Char(string='Celular', required=False, tracking=True)
     fecha_nacimiento = fields.Date(string='Fecha de Nacimiento', required=False)
 
+    contacto_emergencia_id = fields.Many2one(comodel_name='medical.contacto_emergencia',
+                                             string='Contacto de Emergencia',
+                                             required=False)
+
     genero = fields.Selection(string='Genero', selection=[('m', 'Masculino'), ('f', 'Femenino'), ('o', 'Otros')],
                               required=True)
 
@@ -39,3 +43,10 @@ class Paciente(models.Model):
         if self.fecha_nacimiento:
             self.edad = datetime.now().year - self.fecha_nacimiento.year
 
+
+class ContactoEmergencia(models.Model):
+    _name = 'medical.contacto_emergencia'
+    _description = 'Contacto Emergencia'
+
+    name = fields.Char(string="Nombre", required=True)
+    celular = fields.Char(string='Celular', required=False, tracking=True)

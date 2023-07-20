@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--        <record id="medical.contacto_emergencia_form_view" model="ir.ui.view">
+                    <field name="name">.medical.contacto_emergencia.form</field>
+                    <field name="model">.medical.contacto_emergencia</field>
+                    <field name="arch" type="xml">
+                        <form string="Contactos">
+                            <sheet>
+
+                            </sheet>
+                        </form>
+                    </field>
+                </record>-->
+
+        <record id="medical.contacto_emergencia_tree_view" model="ir.ui.view">
+            <field name="name">medical.contacto_emergencia.tree</field>
+            <field name="model">medical.contacto_emergencia</field>
+            <field name="arch" type="xml">
+                <tree string="Contactos">
+                    <field name="name"/>
+                    <field name="celular"/>
+                </tree>
+            </field>
+        </record>
+        <!--
+
+                <record id="medical.contacto_emergencia_search_view" model="ir.ui.view">
+                    <field name="name">.medical.contacto_emergencia.search</field>
+                    <field name="model">.medical.contacto_emergencia</field>
+                    <field name="arch" type="xml">
+                        <search string="Contactos">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>
+        -->
+
+        <record id="medical.contacto_emergencia_act_window" model="ir.actions.act_window">
+            <field name="name">Contactos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">medical.contacto_emergencia</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    No hay Contactos de Emergencia.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Contactos de Emergencia" id="medical.contacto_emergencia_menu"
+                  parent="medical.main_menu"
+                  action="medical.contacto_emergencia_act_window"/>
+
+    </data>
+</odoo>
