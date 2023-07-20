@@ -52,7 +52,7 @@
             </field>
         </record>
 
-        <menuitem sequence="100" name="Alergias" id="medical.alergias_menu" parent="medical.main_menu"
+        <menuitem sequence="100" name="Alergias" id="medical.alergias_menu" parent="medical.datos_menu"
                   action="medical.alergias_act_window"/>
 
     </data>

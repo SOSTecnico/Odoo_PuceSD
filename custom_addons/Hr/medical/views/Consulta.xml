@@ -7,6 +7,9 @@
             <field name="arch" type="xml">
                 <form string="Consulta" create="false">
                     <sheet>
+                        <widget name="web_ribbon" title="Archivado" bg_color="bg-danger"
+                                attrs="{'invisible':[('active','=',True)]}"/>
+                        <field name="active" invisible="1"/>
                         <group>
                             <div class="oe_title" name="header_container" colspan="2">
                                 <div class="row">
@@ -55,7 +58,11 @@
                                         <field name="talla"/>
                                         <label for="talla" string="cm"/>
                                     </div>
-                                    <field name="imc"/>
+                                    <label for="imc"/>
+                                    <div class="o_row">
+                                        <field name="imc"/>
+                                        <field name="imc_detalle" readonly="1"/>
+                                    </div>
                                     <label for="perimetro_abdominal"/>
                                     <div class="o_row">
                                         <field name="perimetro_abdominal"/>

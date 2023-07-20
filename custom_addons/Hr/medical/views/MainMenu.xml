@@ -2,7 +2,10 @@
 <odoo>
     <data>
 
-        <menuitem groups="medical.user_group" name="Centro Médico" id="medical.main_menu" web_icon="medical,static/description/icon.png"/>
+        <menuitem groups="medical.user_group" name="Centro Médico" id="medical.main_menu"
+                  web_icon="medical,static/description/icon.png"/>
+
+        <menuitem groups="medical.user_group" sequence="200" name="Datos" id="medical.datos_menu" parent="medical.main_menu"/>
 
     </data>
 </odoo>

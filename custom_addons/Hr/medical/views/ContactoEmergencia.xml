@@ -52,8 +52,8 @@
             </field>
         </record>
 
-        <menuitem name="Contactos de Emergencia" id="medical.contacto_emergencia_menu"
-                  parent="medical.main_menu"
+        <menuitem name="Contactos de Emergencia" sequence="200" id="medical.contacto_emergencia_menu"
+                  parent="medical.datos_menu"
                   action="medical.contacto_emergencia_act_window"/>
 
     </data>

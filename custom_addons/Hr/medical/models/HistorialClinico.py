@@ -19,7 +19,7 @@ class Consulta(models.Model):
     _order = 'fecha desc'
 
     name = fields.Char(string='Historia Clínica', related='historia_id.name')
-
+    active = fields.Boolean(string='Active', required=False, default=True)
     fecha = fields.Date(string='Fecha', required=True,
                         default=lambda self: datetime.now(pytz.timezone('America/Guayaquil')), tracking=True)
     motivo = fields.Text(string="Motivo", required=True, tracking=True)
@@ -41,12 +41,30 @@ class Consulta(models.Model):
     frecuencia_respiratoria = fields.Integer(string='Frecuencia Respiratoria', required=False)
     peso = fields.Integer(string='Peso', required=False, placeholder='Valor en KG.')
     talla = fields.Integer(string='Talla', required=False, placeholder='Valor en CM.')
-    imc = fields.Float(string='IMC', required=False)
+    imc = fields.Float(string='IMC', required=False, digits=(3, 1))
+    imc_detalle = fields.Char(string='Resultado IMC', required=False)
+
+    @api.onchange('imc')
+    def _resultado_imc(self):
+        for rec in self:
+
+            if rec.imc == 0:
+                rec.imc_detalle = ''
+                return
+
+            if rec.imc < 18.5:
+                rec.imc_detalle = 'Bajo peso'
+            elif rec.imc >= 18.5 and rec.imc <= 24.9:
+                rec.imc_detalle = 'Normal'
+            elif rec.imc >= 25 and rec.imc <= 29.9:
+                rec.imc_detalle = 'Sobrepeso'
+            elif rec.imc >= 30:
+                rec.imc_detalle = 'Obesidad'
 
     @api.onchange('talla', 'peso')
     def _onchange_imc(self):
         if self.peso and self.talla:
-            self.imc = self.peso / (self.talla / 100)
+            self.imc = self.peso / ((self.talla / 100) ** 2)
 
     perimetro_abdominal = fields.Integer(string='Perímetro Abdominal', required=False, placeholder='Valor en CM.')
     pulsioximetria = fields.Integer(string='Pulsioximetria', required=False, placeholder='Valor en %')
@@ -62,14 +80,14 @@ class HistoriaClinica(models.Model):
     _order = 'name desc'
 
     def _codigo_historia(self):
-        ultima_historia = self.search([], order='codigo desc', limit=1)
+        ultima_historia = self.search([('active', '=', True), ('active', '=', False)], order='codigo desc', limit=1)
         if not ultima_historia:
             return 1
         else:
             return ultima_historia.codigo + 1
 
     def _codigo_str_historia(self):
-        ultima_historia = self.search([], order='codigo desc', limit=1)
+        ultima_historia = self.search([('active', '=', True), ('active', '=', False)], order='codigo desc', limit=1)
         return f"H-{str(ultima_historia.codigo + 1).zfill(5)}"
 
     name = fields.Char(string='Código', default=_codigo_str_historia)

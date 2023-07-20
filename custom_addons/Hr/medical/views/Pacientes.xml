@@ -8,14 +8,24 @@
             <field name="arch" type="xml">
                 <form string="Pacientes">
                     <sheet>
-                        <div class="oe_title">
-                            <label for="name"/>
-                            <h1>
-                                <field name="name"/>
-                            </h1>
-                        </div>
+                        <widget name="web_ribbon" title="Archivado" bg_color="bg-danger"
+                                attrs="{'invisible':[('active','=',True)]}"/>
+                        <field name="active" invisible="1"/>
                         <group>
-                            <group string="Datos Personales">
+                            <group>
+                                <div class="oe_title">
+                                    <label for="name"/>
+                                    <h1>
+                                        <field name="name"/>
+                                    </h1>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="empleado_id"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group colspan="4" col="4" string="Datos Personales">
                                 <field name="nombres"/>
                                 <field name="apellidos"/>
                                 <field name="cedula"/>
@@ -25,7 +35,6 @@
                                 <field name="email"/>
                                 <field name="contacto_emergencia_id" options="{'create':false,'create_edit':true}"/>
                             </group>
-
                             <group string="Datos Clinicos">
                                 <field name="genero"/>
                                 <field name="tipo_sangre"/>

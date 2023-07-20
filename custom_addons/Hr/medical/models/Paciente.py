@@ -33,6 +33,10 @@ class Paciente(models.Model):
                                               ('ab_negativo', 'AB-'),
                                               ])
 
+    empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado Relacionado', required=False)
+
+    active = fields.Boolean(string='Active', required=False, default=True)
+
     @api.depends('nombres', 'apellidos')
     def _compute_name(self):
         for paciente in self:
@@ -49,4 +53,5 @@ class ContactoEmergencia(models.Model):
     _description = 'Contacto Emergencia'
 
     name = fields.Char(string="Nombre", required=True)
-    celular = fields.Char(string='Celular', required=False, tracking=True)
+    celular = fields.Char(string='Celular', required=True)
+    active = fields.Boolean(string='Active', required=False, default=True)
