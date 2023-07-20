@@ -13,6 +13,10 @@ class Estudiantes(models.Model):
     _description = 'Description'
     _inherit = ['mail.thread']
 
+    _sql_constraints = [
+        ('cedula','unique(cedula)','Ya existe un estudiante ingresado con esa Cédula!')
+    ]
+
     name = fields.Char(compute='_compute_name', store=True, string="Nombre Completo")
 
     nombres = fields.Char(string='Nombres', required=True, tracking=True)

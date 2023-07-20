@@ -11,19 +11,12 @@
                         <widget name="web_ribbon" title="Archivado" bg_color="bg-danger"
                                 attrs="{'invisible':[('active','=',True)]}"/>
                         <field name="active" invisible="1"/>
-                        <group>
-                            <group>
-                                <div class="oe_title">
-                                    <label for="name"/>
-                                    <h1>
-                                        <field name="name"/>
-                                    </h1>
-                                </div>
-                            </group>
-                            <group>
-                                <field name="empleado_id"/>
-                            </group>
-                        </group>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
                         <group>
                             <group colspan="4" col="4" string="Datos Personales">
                                 <field name="nombres"/>
@@ -33,12 +26,24 @@
                                 <field name="edad"/>
                                 <field name="celular"/>
                                 <field name="email"/>
-                                <field name="contacto_emergencia_id" options="{'create':false,'create_edit':true}"/>
+                                <field name="contacto_emergencia_id" options="{'no_quick_create':True}"/>
                             </group>
                             <group string="Datos Clinicos">
                                 <field name="genero"/>
                                 <field name="tipo_sangre"/>
                             </group>
+
+                            <group string="Información Académica">
+                                <field name="estudiante_id"
+                                       context="{'default_nombres':nombres,'default_apellidos':apellidos,'default_cedula':cedula,'default_correo':email,'default_celular':celular}"/>
+                                <field name="carrera_estudiante"/>
+                            </group>
+                            <group string="Recursos Humanos">
+                                <field name="empleado_id"/>
+                                <field name="categoria_empleado" widget="many2many_tags"/>
+                                <field name="cargo_empleado"/>
+                            </group>
+
                         </group>
                     </sheet>
                     <div class="oe_chatter">
@@ -58,24 +63,31 @@
                     <field name="cedula"/>
                     <field name="celular"/>
                     <field name="email"/>
+                    <field name="edad"/>
                 </tree>
             </field>
         </record>
 
-        <!--
-                <record id="medical.paciente_search_view" model="ir.ui.view">
-                    <field name="name">medical.paciente.search</field>
-                    <field name="model">medical.paciente</field>
-                    <field name="arch" type="xml">
-                        <search string="Pacientes">
-                            <group expand="1" string="Group By">
-                                <filter string="Example Field" name="example_field" domain="[]"
-                                        context="{'group_by':'example_field'}"/>
-                            </group>
-                        </search>
-                    </field>
-                </record>
-        -->
+        <record id="medical.paciente_search_view" model="ir.ui.view">
+            <field name="name">medical.paciente.search</field>
+            <field name="model">medical.paciente</field>
+            <field name="arch" type="xml">
+                <search string="Pacientes">
+                    <field name="cedula"/>
+                    <field name="name"/>
+                    <filter name="empleados" string="Empleados" domain="[('empleado_id','!=',False)]"/>
+                    <filter name="estudiantes" string="Estudiantes" domain="[('empleado_id','=',False)]"/>
+
+                    <filter name="pacientes" string="Pacientes" context="{'group_by':'name'}"/>
+                    <group string="group by">
+                        <filter name="carreras" string="Carreras" context="{'group_by':'carrera_estudiante'}"/>
+                    </group>
+                    <group string="asdgroup by">
+                        <filter name="cargo" string="Cargos" context="{'group_by':'cargo_empleado'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
 
         <record id="medical.paciente_act_window" model="ir.actions.act_window">
             <field name="name">Pacientes</field>

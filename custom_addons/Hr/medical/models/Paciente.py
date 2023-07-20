@@ -34,6 +34,14 @@ class Paciente(models.Model):
                                               ])
 
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado Relacionado', required=False)
+    categoria_empleado = fields.Many2many(comodel_name='hr.employee.category', string='Categoría',
+                                          related='empleado_id.category_ids')
+    cargo_empleado = fields.Many2one(comodel_name='hr.job', string='Cargo', required=False,
+                                     related='empleado_id.job_id', store=True)
+
+    estudiante_id = fields.Many2one(comodel_name='estudiantes.estudiantes', string='Estudiante', required=False)
+    carrera_estudiante = fields.Many2one(comodel_name='estudiantes.carreras', string='Carrera',
+                                         related='estudiante_id.carrera_id', store=True)
 
     active = fields.Boolean(string='Active', required=False, default=True)
 

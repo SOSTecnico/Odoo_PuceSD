@@ -56,9 +56,23 @@
             <field name="model">medical.historia</field>
             <field name="arch" type="xml">
                 <search string="Historia Clinica">
-                    <field name="paciente_cedula" string="Cedula"/>
+                    <field name="paciente_cedula" string="Cédula"/>
                     <field name="paciente_id"/>
                     <field name="name"/>
+
+                    <filter name="empleados" string="Empleados" domain="[('empleado','!=',False)]"/>
+                    <filter name="estudiantes" string="Estudiantes" domain="[('estudiante','!=',False)]"/>
+                    <separator/>
+                    <filter name="administrativo" string="Administrativos"
+                            domain="[('categoria_empleado','=','ADMINISTRATIVO')]"/>
+                    <filter name="docente_tc" string="Docentes TC"
+                            domain="[('categoria_empleado','=','DOCENTE TC')]"/>
+                    <filter name="docente_tp" string="Docentes TP"
+                            domain="[('categoria_empleado','=','DOCENTE TP')]"/>
+
+                    <filter name="pacientes" string="Pacientes" context="{'group_by':'paciente_id'}"/>
+                    <filter name="carreras" string="Carreras" context="{'group_by':'carrera_estudiante'}"/>
+
                 </search>
             </field>
         </record>

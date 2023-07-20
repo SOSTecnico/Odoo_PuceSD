@@ -79,21 +79,33 @@ class HistoriaClinica(models.Model):
     _order = 'name desc'
 
     def _codigo_historia(self):
-        ultima_historia = self.search([('active', '=', True), ('active', '=', False)], order='codigo desc', limit=1)
+        ultima_historia = self.search(['|', ('active', '=', True), ('active', '=', False)], order='codigo desc',
+                                      limit=1)
         if not ultima_historia:
             return 1
         else:
             return ultima_historia.codigo + 1
 
     def _codigo_str_historia(self):
-        ultima_historia = self.search([('active', '=', True), ('active', '=', False)], order='codigo desc', limit=1)
+        ultima_historia = self.search(['|', ('active', '=', True), ('active', '=', False)], order='codigo desc',
+                                      limit=1)
         return f"H-{str(ultima_historia.codigo + 1).zfill(5)}"
 
     name = fields.Char(string='Código', default=_codigo_str_historia)
-    codigo = fields.Integer(string='Codigo', required=False, default=_codigo_historia)
+    codigo = fields.Integer(string='_codigo', required=False, default=_codigo_historia)
 
     paciente_id = fields.Many2one(comodel_name='medical.paciente', string='Paciente', required=True, tracking=True)
-    paciente_cedula = fields.Char(string='Paciente Cedula', related='paciente_id.cedula', store=True)
+    paciente_cedula = fields.Char(string='Paciente Cedula', related='paciente_id.cedula')
+
+    empleado = fields.Many2one(comodel_name='hr.employee', string='Empleado', related='paciente_id.empleado_id')
+    categoria_empleado = fields.Many2many(comodel_name='hr.employee.category', string='Categoría',
+                                          related='paciente_id.empleado_id.category_ids')
+
+    estudiante = fields.Many2one(comodel_name='estudiantes.estudiantes', string='Estudiante', required=False,
+                                 related='paciente_id.estudiante_id')
+    carrera_estudiante = fields.Many2one(comodel_name='estudiantes.carreras', string='Carrera Estudiante',
+                                         related='paciente_id.estudiante_id.carrera_id', store=True)
+
     antecedentes = fields.Text(string="Antecedentes personales", required=False, tracking=True)
     alergias_id = fields.Many2many(comodel_name='medical.alergias', string='Alergias', tracking=True)
     consultas = fields.One2many(comodel_name='medical.consulta', inverse_name='historia_id', string='Consultas',
