@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.module.category" id="estudiantes.group_category">
+            <field name="name">Estudiantes</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="estudiantes.user_group" model="res.groups">
+            <field name="name">Usuario</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="estudiantes.group_category"/>
+        </record>
+
+        <record id="estudiantes.responsable_group" model="res.groups">
+            <field name="name">Responsable</field>
+            <field name="category_id" ref="estudiantes.group_category"/>
+            <field name="implied_ids" eval="[(4, ref('estudiantes.user_group'))]"/>
+        </record>
+
+        <record id="estudiantes.admin_group" model="res.groups">
+            <field name="name">Administrador</field>
+            <field name="category_id" ref="estudiantes.group_category"/>
+            <field name="implied_ids" eval="[(4, ref('estudiantes.responsable_group'))]"/>
+        </record>
+
+
+    </data>
+</odoo>
