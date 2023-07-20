@@ -6,6 +6,7 @@ class Carreras(models.Model):
     _description = 'Carreras'
 
     name = fields.Char(string='Carrera', required=True)
+    parent_id = fields.Many2one(comodel_name='estudiantes.carreras', string='Dependencia', required=False)
 
 
 class Estudiantes(models.Model):
@@ -14,7 +15,7 @@ class Estudiantes(models.Model):
     _inherit = ['mail.thread']
 
     _sql_constraints = [
-        ('cedula','unique(cedula)','Ya existe un estudiante ingresado con esa Cédula!')
+        ('cedula', 'unique(cedula)', 'Ya existe un estudiante ingresado con esa Cédula!')
     ]
 
     name = fields.Char(compute='_compute_name', store=True, string="Nombre Completo")
@@ -24,7 +25,8 @@ class Estudiantes(models.Model):
     cedula = fields.Char(string='Cédula', required=True, tracking=True)
     correo = fields.Char(string='Correo', required=False, tracking=True)
     celular = fields.Char(string='Celular', required=False, tracking=True)
-    carrera_id = fields.Many2one(comodel_name='estudiantes.carreras', string='Carrera', required=True, tracking=True)
+    carrera_id = fields.Many2one(comodel_name='estudiantes.carreras', string='Carrera', required=True, tracking=True,
+                                 domain="[('parent_id','!=',False)]")
     active = fields.Boolean(string='Active', required=False, default=True)
 
     @api.depends('nombres', 'apellidos')

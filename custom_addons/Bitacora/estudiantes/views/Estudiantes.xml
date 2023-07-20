@@ -14,7 +14,7 @@
                                 <field name="name" placeholder="......"/>
                             </h1>
                         </div>
-                        <group col="4" colspan="4">
+                        <group>
                             <field name="nombres"/>
                             <field name="apellidos"/>
                             <field name="cedula"/>
@@ -23,6 +23,7 @@
                             <field name="correo"/>
                             <field name="celular"/>
                         </group>
+
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
