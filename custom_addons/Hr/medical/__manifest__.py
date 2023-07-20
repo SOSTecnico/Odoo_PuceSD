@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'mail', 'web_m2x_options', 'hr', 'estudiantes'],
+    'depends': ['base', 'mail', 'hr', 'estudiantes'],
 
     # always loaded
     'data': [
