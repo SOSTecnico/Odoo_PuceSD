@@ -2,17 +2,23 @@
 <odoo>
     <data>
 
-        <!--        <record id="medical.contacto_emergencia_form_view" model="ir.ui.view">
-                    <field name="name">.medical.contacto_emergencia.form</field>
-                    <field name="model">.medical.contacto_emergencia</field>
-                    <field name="arch" type="xml">
-                        <form string="Contactos">
-                            <sheet>
-
-                            </sheet>
-                        </form>
-                    </field>
-                </record>-->
+        <record id="medical.contacto_emergencia_form_view" model="ir.ui.view">
+            <field name="name">medical.contacto_emergencia.form</field>
+            <field name="model">medical.contacto_emergencia</field>
+            <field name="arch" type="xml">
+                <form string="Contactos">
+                    <sheet>
+                        <widget name="web_ribbon" title="Archivado" bg_color="bg-danger"
+                                attrs="{'invisible':[('active','=',True)]}"/>
+                        <group>
+                            <field name="name"/>
+                            <field name="celular"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
         <record id="medical.contacto_emergencia_tree_view" model="ir.ui.view">
             <field name="name">medical.contacto_emergencia.tree</field>

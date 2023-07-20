@@ -34,7 +34,7 @@
                             </group>
 
                             <group string="Información Académica">
-                                <field name="estudiante_id"
+                                <field name="estudiante_id" options="{'no_quick_create':True}"
                                        context="{'default_nombres':nombres,'default_apellidos':apellidos,'default_cedula':cedula,'default_correo':email,'default_celular':celular}"/>
                                 <field name="carrera_estudiante"/>
                             </group>

@@ -14,7 +14,7 @@
                             <field name="codigo" invisible="1"/>
                             <field name="active" invisible="1"/>
                             <field name="name" readonly="1"/>
-                            <field name="paciente_id" options="{'create':false,'create_edit':true}"/>
+                            <field name="paciente_id" options="{'no_quick_create':True}"/>
                             <field name="antecedentes"/>
                             <field name="alergias_id" widget="many2many_tags"/>
                         </group>
