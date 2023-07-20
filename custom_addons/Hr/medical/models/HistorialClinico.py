@@ -18,7 +18,7 @@ class Consulta(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'fecha desc'
 
-    name = fields.Char(string='Historia Clínica', related='historia_id.name')
+    name = fields.Char(string='Historia', related='historia_id.name')
     active = fields.Boolean(string='Active', required=False, default=True)
     fecha = fields.Date(string='Fecha', required=True,
                         default=lambda self: datetime.now(pytz.timezone('America/Guayaquil')), tracking=True)
@@ -29,8 +29,7 @@ class Consulta(models.Model):
     indicaciones = fields.Text(string="Indicaciones", required=False, tracking=True)
 
     historia_id = fields.Many2one(comodel_name='medical.historia', string='Historia Clínica', required=False,
-                                  tracking=True,
-                                  ondelete='cascade')
+                                  tracking=True, ondelete='cascade')
     paciente = fields.Char(string='Paciente', related='historia_id.paciente_id.name')
 
     # Signos Vitales
@@ -39,8 +38,8 @@ class Consulta(models.Model):
     presion_arterial = fields.Char(string='Presión Arterial', required=False)
     pulso = fields.Integer(string='Pulso', required=False)
     frecuencia_respiratoria = fields.Integer(string='Frecuencia Respiratoria', required=False)
-    peso = fields.Integer(string='Peso', required=False, placeholder='Valor en KG.')
-    talla = fields.Integer(string='Talla', required=False, placeholder='Valor en CM.')
+    peso = fields.Integer(string='Peso', required=False)
+    talla = fields.Integer(string='Talla', required=False)
     imc = fields.Float(string='IMC', required=False, digits=(3, 1))
     imc_detalle = fields.Char(string='Resultado IMC', required=False)
 
@@ -66,8 +65,8 @@ class Consulta(models.Model):
         if self.peso and self.talla:
             self.imc = self.peso / ((self.talla / 100) ** 2)
 
-    perimetro_abdominal = fields.Integer(string='Perímetro Abdominal', required=False, placeholder='Valor en CM.')
-    pulsioximetria = fields.Integer(string='Pulsioximetria', required=False, placeholder='Valor en %')
+    perimetro_abdominal = fields.Integer(string='Perímetro Abdominal', required=False)
+    pulsioximetria = fields.Integer(string='Pulsioximetria', required=False)
 
     certificado = fields.Binary(string="", )
     certificado_name = fields.Char(string='Certificado Médico', required=False)
