@@ -11,7 +11,7 @@ class Carreras(models.Model):
 
 class Estudiantes(models.Model):
     _name = 'estudiantes.estudiantes'
-    _description = 'Description'
+    _description = 'Estudiante'
     _inherit = ['mail.thread']
 
     _sql_constraints = [

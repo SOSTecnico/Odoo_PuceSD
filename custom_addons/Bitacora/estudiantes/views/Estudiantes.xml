@@ -33,16 +33,19 @@
             </field>
         </record>
 
-        <!--        <record id="estudiantes_tree_view" model="ir.ui.view">
-                    <field name="name">estudiantes.estudiantes.tree</field>
-                    <field name="model">estudiantes.estudiantes</field>
-                    <field name="arch" type="xml">
-                        <tree string="Estudiantes">
-                            <field name="create_date"/>
-                            <field name="example_field"/>
-                        </tree>
-                    </field>
-                </record>-->
+        <record id="estudiantes_tree_view" model="ir.ui.view">
+            <field name="name">estudiantes.estudiantes.tree</field>
+            <field name="model">estudiantes.estudiantes</field>
+            <field name="arch" type="xml">
+                <tree string="Estudiantes">
+                    <field name="name"/>
+                    <field name="cedula"/>
+                    <field name="correo"/>
+                    <field name="celular"/>
+                    <field name="carrera_id"/>
+                </tree>
+            </field>
+        </record>
 
         <!--        <record id="estudiantes_search_view" model="ir.ui.view">
                     <field name="name">estudiantes.estudiantes.search</field>

@@ -9,3 +9,4 @@ access_medical_paciente,medical.medical_paciente,model_medical_paciente,medical.
 access_medical_paciente_responsable,medical.medical_paciente_responsable,model_medical_paciente,medical.responsable_group,1,1,1,1
 access_medical_contacto_emergencia,medical.medical_contacto_emergencia,model_medical_contacto_emergencia,medical.user_group,1,0,0,0
 access_medical_contacto_emergencia_responsable,medical.medical_contacto_emergencia_responsable,model_medical_contacto_emergencia,medical.responsable_group,1,1,1,1
+access_medical_employee,medical.hr_employee,hr.model_hr_employee_public,medical.user_group,1,0,0,0
