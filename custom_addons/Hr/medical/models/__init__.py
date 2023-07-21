@@ -2,3 +2,4 @@
 
 from . import Paciente
 from . import HistorialClinico
+from . import CIE

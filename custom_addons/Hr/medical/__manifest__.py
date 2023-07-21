@@ -31,6 +31,7 @@
         'views/Consulta.xml',
         'views/Pacientes.xml',
         'views/ContactoEmergencia.xml',
+        'views/Cie10.xml',
 
     ],
     # only loaded in demonstration mode

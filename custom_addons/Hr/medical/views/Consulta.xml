@@ -35,6 +35,7 @@
                                 <field name="examen_fisico"/>
                                 <field name="diagnostico"/>
                                 <field name="indicaciones"/>
+                                <field name="cie_10"/>
                             </group>
                         </group>
                         <notebook>

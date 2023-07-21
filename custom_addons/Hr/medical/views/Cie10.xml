@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--
+                        <record id="medical_form_view" model="ir.ui.view">
+                            <field name="name">.medical.form</field>
+                            <field name="model">.medical</field>
+                            <field name="arch" type="xml">
+                                <form string="CIE 10">
+                                    <sheet>
+                                        <div class="oe_title">
+                                            <label for="example_title"/>
+                                            <h1>
+                                                <field name="example_title" placeholder="Title"/>
+                                            </h1>
+                                        </div>
+                                        <group>
+                                            <group>
+                                                <field name="create_date"/>
+                                            </group>
+                                            <group>
+                                                <field name="example_field"/>
+                                            </group>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </record>-->
+
+        <record id="medical.medical_cie10_tree_view" model="ir.ui.view">
+            <field name="name">medical.cie10.tree</field>
+            <field name="model">medical.cie10</field>
+            <field name="arch" type="xml">
+                <tree string="CIE 10">
+                    <field name="codigo"/>
+                    <field name="descripcion"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="medical.medical_cie10_search_view" model="ir.ui.view">
+            <field name="name">medical.cie10.search</field>
+            <field name="model">medical.cie10</field>
+            <field name="arch" type="xml">
+                <search string="CIE 10">
+                    <field name="descripcion"/>
+                    <field name="codigo"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="medical.cie10_act_window" model="ir.actions.act_window">
+            <field name="name">CIE 10</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">medical.cie10</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Código CIE 10
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="CIE 10" id="medical.cie10_menu" parent="medical.datos_menu" action="medical.cie10_act_window"/>
+
+    </data>
+</odoo>

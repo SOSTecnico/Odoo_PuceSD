@@ -43,6 +43,8 @@ class Consulta(models.Model):
     imc = fields.Float(string='IMC', required=False, digits=(3, 1))
     imc_detalle = fields.Char(string='Resultado IMC', required=False)
 
+    cie_10 = fields.Many2one(comodel_name='medical.cie10', string='CIE 10', required=False)
+
     @api.onchange('imc')
     def _resultado_imc(self):
         for rec in self:
