@@ -26,7 +26,7 @@ class Estudiantes(models.Model):
     correo = fields.Char(string='Correo', required=False, tracking=True)
     celular = fields.Char(string='Celular', required=False, tracking=True)
     carrera_id = fields.Many2one(comodel_name='estudiantes.carreras', string='Carrera', required=True, tracking=True,
-                                 domain="[('parent_id','!=',False)]")
+                                 domain="[('parent_id','!=',False),('name','!=','MAESTRÍAS'),('name','!=','ESPECIALIDADES')]")
     active = fields.Boolean(string='Active', required=False, default=True)
 
     @api.depends('nombres', 'apellidos')
