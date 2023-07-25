@@ -7,19 +7,10 @@ class Api(http.Controller):
     @http.route('/api/user-info', auth='user', type='json')
     def user_img(self, **kw):
         user = request.env.user
-        user_info = user.read()[0]
-        print(user_info)
+        user_info = user.read(['avatar_1920','image_128'])[0]
 
         groups = user.groups_id.get_xml_id()
 
-        # res_groups = request.env['res.groups'].sudo().search([('users', 'in', user.id)])
-        #
-        # groups = []
-        # for g in res_groups:
-        #     if g.category_id:
-        #         groups.append(g.category_id.name)
-        # groups = set(groups)
-        # print(groups)
         return {
             'user_info': user_info,
             'groups': groups
