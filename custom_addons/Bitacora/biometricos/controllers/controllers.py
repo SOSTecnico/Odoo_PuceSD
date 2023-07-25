@@ -6,16 +6,16 @@ from zk import ZK, const
 
 class Biometricos(http.Controller):
 
-    @http.route('/biometricos/biometricos', auth='user', website=True)
-    def index(self, **kw):
-        biometricos = request.env["biometricos.biometricos"].sudo().search([])
-        return request.render("biometricos.list_biometricos", {
-            "biometricos":biometricos
-        })
+    # API
+    @http.route("/api/biometricos", auth='user', type='json')
+    def api_biometricos(self, **data):
+        biometricos = request.env["biometricos.biometricos"].search_read([])
+        return biometricos
 
-    @http.route("/biometricos/open", auth='user')
+    @http.route("/api/biometricos/open", auth='user', type='json')
     def open(self, **data):
-        biometrico = request.env["biometricos.biometricos"].search([('id','=',data['biometrico_id'])])
+        biometrico = request.env["biometricos.biometricos"].search([('id', '=', data['biometrico_id'])])
         zk = ZK(biometrico.ip_address, port=4370, timeout=5, force_udp=True)
         conn = zk.connect()
         conn.unlock()
+        return {}
