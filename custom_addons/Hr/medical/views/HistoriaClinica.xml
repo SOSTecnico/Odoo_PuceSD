@@ -22,6 +22,7 @@
                             <field name="consultas" nolabel="1" colspan="2">
                                 <tree>
                                     <field name="fecha"/>
+                                    <field name="hora" widget="float_time"/>
                                     <field name="motivo"/>
                                     <field name="diagnostico"/>
                                     <field name="indicaciones"/>
@@ -81,7 +82,7 @@
             <field name="name">Historias Clínicas</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">medical.historia</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,graph</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     Aún no hay historias clínicas

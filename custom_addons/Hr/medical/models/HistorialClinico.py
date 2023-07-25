@@ -2,7 +2,7 @@ import pytz
 
 from odoo import fields, models, api
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class Alergias(models.Model):
@@ -22,6 +22,16 @@ class Consulta(models.Model):
     active = fields.Boolean(string='Active', required=False, default=True)
     fecha = fields.Date(string='Fecha', required=True,
                         default=lambda self: datetime.now(pytz.timezone('America/Guayaquil')), tracking=True)
+
+    # Se agrega campo Hora para estadisticas
+
+    def _default_hora(self):
+        minuto = datetime.now().minute
+        hora = datetime.now().hour
+        tiempo = timedelta(hours=(hora - 5), minutes=minuto)
+        return tiempo.total_seconds() / 60 / 60
+
+    hora = fields.Float(string='Hora', default=_default_hora)
     motivo = fields.Text(string="Motivo", required=True, tracking=True)
     enfermedad_actual = fields.Text(string="Enfermedad Actual", required=False)
     diagnostico = fields.Text(string="Diagnóstico", required=False, tracking=True)

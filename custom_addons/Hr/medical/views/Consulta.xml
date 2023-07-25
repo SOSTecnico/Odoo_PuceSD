@@ -29,6 +29,7 @@
                             </div>
                             <group col="4" colspan="4">
                                 <field name="fecha"/>
+                                <field name="hora" widget="float_time"/>
                                 <newline/>
                                 <field name="motivo"/>
                                 <field name="enfermedad_actual"/>
@@ -105,6 +106,7 @@
             <field name="arch" type="xml">
                 <tree string="Consulta" create="false">
                     <field name="fecha"/>
+                    <field name="hora" widget="float_time"/>
                     <field name="historia_id" widget="many2one"/>
                     <field name="motivo"/>
                     <field name="diagnostico"/>
@@ -130,7 +132,7 @@
             <field name="name">Consultas Médicas</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">medical.consulta</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     Aún no hay consultas Médicas.
