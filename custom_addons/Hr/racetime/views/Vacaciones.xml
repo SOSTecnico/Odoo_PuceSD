@@ -19,6 +19,7 @@
                         <group string="Detalle de Vacaciones">
                             <field name="desde"/>
                             <field name="hasta"/>
+                            <field name="observacion"/>
                         </group>
                     </sheet>
                 </form>
