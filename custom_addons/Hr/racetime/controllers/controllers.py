@@ -142,7 +142,7 @@ class Racetime(http.Controller):
         fecha, hora = data['datetime'].split("T")
 
         fecha_hora = datetime.strptime(f"{fecha} {hora}", f"%Y-%m-%d %H:%M:%S")
-        fecha_hora = fecha_hora + timedelta(seconds=random.randint(0, 59))
+        fecha_hora = fecha_hora + timedelta(hours=5, seconds=random.randint(0, 59))
 
         marcacion = request.env['racetime.detalle_marcacion'].search([('id_marcacion', '=', id_marcacion)])
         marcacion.update({
