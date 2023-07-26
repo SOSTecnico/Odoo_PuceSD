@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import random
+
 from odoo.addons.portal.controllers.portal import CustomerPortal, pager
 from odoo import http
 from odoo.http import request
@@ -133,6 +135,30 @@ class Racetime(http.Controller):
             })
 
         return marcaciones_agrupadas
+
+    @http.route('/api/racetime/actualizar-marcacion', auth='user', type='json')
+    def api_actualizar_marcacion(self, **data):
+        id_marcacion = data['id_marcacion']
+        fecha, hora = data['datetime'].split("T")
+
+        fecha_hora = datetime.strptime(f"{fecha} {hora}", f"%Y-%m-%d %H:%M:%S")
+        fecha_hora = fecha_hora + timedelta(seconds=random.randint(0, 59))
+
+        marcacion = request.env['racetime.detalle_marcacion'].search([('id_marcacion', '=', id_marcacion)])
+        marcacion.update({
+            'fecha_hora': fecha_hora
+        })
+
+        sql = f"""UPDATE iclock_transaction SET punch_time = '{fecha_hora}' where id = {id_marcacion};"""
+
+        request.env['racetime.detalle_marcacion'].execute_sql_server(sql)
+
+        return {
+            'msg': 'Ok'
+        }
+
+    def _get_config_sql_server(self):
+        return request.env['racetime.detalle_marcacion'].obtener_parametros_conexion_biotime()
 
 
 class PermisosPortal(CustomerPortal):

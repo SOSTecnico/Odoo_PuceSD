@@ -106,3 +106,24 @@ class DetalleMarcacion(models.Model):
 
         except Error as ex:
             raise ValidationError(f"Ocurrió un error al conectarse a la Base de Datos: {ex}")
+
+
+    def execute_sql_server(self,sql):
+        try:
+            config = self.obtener_parametros_conexion_biotime()
+            conexion = pyodbc.connect(
+                'DRIVER={ODBC Driver 17 for SQL server}; SERVER=' + config['host'] +
+                ',' + config['port'] +
+                ';DATABASE=' + config['db_name'] +
+                ';UID=' + config['db_user'] +
+                ';PWD=' + config['db_password'])
+
+            cursor = conexion.cursor()
+            cursor.execute(sql)
+
+            conexion.commit()
+            cursor.close()
+            conexion.close()
+
+        except Error as ex:
+            raise ValidationError(f"Ocurrió un error al conectarse a la Base de Datos: {ex}")
