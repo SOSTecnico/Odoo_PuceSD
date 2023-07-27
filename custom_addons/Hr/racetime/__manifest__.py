@@ -52,6 +52,7 @@
         'views/CronMarcaciones.xml',
         'views/ReglasDeTiempo.xml',
         'views/Saldos.xml',
+        'views/RecuperacionHoras.xml',
         'data/ReglasDeTiempo.xml',
         'data/Permisos.xml',
         'data/Dias.xml',
