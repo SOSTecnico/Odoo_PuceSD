@@ -105,9 +105,7 @@
             </field>
         </record>
 
-        <!--        <menuitem name="Saldos" id="racetime.saldos_menu" parent="racetime.main_menu"-->
-        <!--                  action="racetime.saldos_act_window"/>-->
-        <menuitem name="Saldos" id="racetime.saldos_menu" parent="racetime.main_menu"/>
+        <menuitem name="Saldos" id="racetime.saldos_menu" parent="racetime.datos_menu"/>
         <menuitem name="Saldos del Personal" id="racetime.saldos_main_menu" parent="racetime.saldos_menu"
                   action="racetime.saldos_act_window"/>
 
