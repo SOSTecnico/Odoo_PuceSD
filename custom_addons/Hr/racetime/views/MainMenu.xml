@@ -3,9 +3,11 @@
     <data>
         <menuitem id="racetime.main_menu" name="Asistencias" web_icon="racetime,static/description/icon.png"/>
 
-        <menuitem id="racetime.config_menu" name="Configuraciones" parent="racetime.main_menu"/>
+        <menuitem sequence="600" id="racetime.config_menu" name="Configuraciones" parent="racetime.main_menu"/>
 
-        <menuitem name="Marcaciones" id="racetime.marcaciones_menu" parent="racetime.main_menu"/>
+        <menuitem sequence="1" name="Marcaciones" id="racetime.marcaciones_menu" parent="racetime.main_menu"/>
+
+        <menuitem name="Datos" id="racetime.datos_menu" parent="racetime.main_menu" sequence="500"/>
 
     </data>
 </odoo>
