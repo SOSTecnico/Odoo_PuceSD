@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="racetime.recuperacion_horas_form_view" model="ir.ui.view">
+            <field name="name">racetime.recuperacion_horas.form</field>
+            <field name="model">racetime.recuperacion_horas</field>
+            <field name="arch" type="xml">
+                <form string="Recuperacion Horas">
+                    <header>
+                        <field name="estado" widget="statusbar" clickable="1"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Archivado" bg_color="bg-danger"
+                                attrs="{'invisible':[('active','=',True)]}"/>
+                        <field name="active" invisible="1"/>
+
+                        <group colspan="4" col="4">
+                            <field name="empleado_id" options="{'no_quick_create':True}"/>
+                            <field name="fecha_envio_correo"/>
+                            <field name="asignatura_id" options="{'no_quick_create':True}"/>
+                            <field name="paralelo"/>
+                            <field name="fecha_inasistencia"/>
+                            <field name="marcacion_id" string="Marcacion" options="{'no_create':True}"/>
+                            <newline/>
+                            <field name="novedad"/>
+                        </group>
+                        <group string="Fechas Recuperacion">
+                            <field name="desde" widget="daterange" options="{'related_end_date': 'hasta'}"/>
+                            <field name="hasta" widget="daterange" options="{'related_start_date': 'desde'}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="racetime.recuperacion_horas_tree_view" model="ir.ui.view">
+            <field name="name">racetime.recuperacion_horas.tree</field>
+            <field name="model">racetime.recuperacion_horas</field>
+            <field name="arch" type="xml">
+                <tree string="Recuperacion Horas">
+                    <field name="empleado_id"/>
+                    <field name="fecha_envio_correo"/>
+                    <field name="asignatura_id"/>
+                    <field name="paralelo"/>
+                    <field name="desde"/>
+                    <field name="hasta"/>
+                    <field name="novedad"/>
+                    <field name="estado" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--        <record id="racetime.recuperacion_horas_search_view" model="ir.ui.view">
+                    <field name="name">racetime.recuperacion_horas.search</field>
+                    <field name="model">racetime.recuperacion_horas</field>
+                    <field name="arch" type="xml">
+                        <search string="Recuperacion Horas">
+
+                        </search>
+                    </field>
+                </record>-->
+
+        <record id="racetime.recuperacion_horas_act_window" model="ir.actions.act_window">
+            <field name="name">Recuperacion Horas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.recuperacion_horas</field>
+            <field name="view_mode">tree,form,kanban,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Recuperacion de Horas
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Recuperacion Horas" id="racetime.recuperacion_horas_menu" parent="racetime.datos_menu"
+                  action="racetime.recuperacion_horas_act_window" sequence="500"/>
+
+    </data>
+</odoo>
