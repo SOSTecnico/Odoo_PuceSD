@@ -88,7 +88,7 @@
             </field>
         </record>
 
-        <menuitem name="Horas" sequence="50" id="racetime.horas_menu" parent="racetime.main_menu"
+        <menuitem name="Horas" sequence="250" id="racetime.horas_menu" parent="racetime.datos_menu"
                   action="racetime.horas_act_window"/>
 
     </data>
