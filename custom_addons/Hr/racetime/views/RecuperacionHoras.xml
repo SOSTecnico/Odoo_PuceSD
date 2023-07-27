@@ -16,12 +16,14 @@
                         <field name="active" invisible="1"/>
 
                         <group colspan="4" col="4">
-                            <field name="empleado_id" options="{'no_quick_create':True}"/>
+                            <field name="empleado_id" options="{'no_create':True}"/>
                             <field name="fecha_envio_correo"/>
                             <field name="asignatura_id" options="{'no_quick_create':True}"/>
                             <field name="paralelo"/>
-                            <field name="fecha_inasistencia"/>
-                            <field name="marcacion_id" string="Marcacion" options="{'no_create':True}"/>
+                            <field name="fecha_inasistencia_desde" widget="daterange"
+                                   options="{'related_end_date': 'fecha_inasistencia_hasta'}"/>
+                            <field name="fecha_inasistencia_hasta" widget="daterange"
+                                   options="{'related_start_date': 'fecha_inasistencia_desde'}"/>
                             <newline/>
                             <field name="novedad"/>
                         </group>

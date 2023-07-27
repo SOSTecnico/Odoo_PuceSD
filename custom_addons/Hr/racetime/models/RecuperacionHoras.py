@@ -23,7 +23,5 @@ class RecuperacionHoras(models.Model):
     desde = fields.Datetime(string='Desde', required=True)
     hasta = fields.Datetime(string='Hasta', required=True)
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=True)
-    fecha_inasistencia = fields.Date(string='Fecha Inasistencia', required=False)
-    marcacion_id = fields.Many2one(comodel_name='racetime.reporte_marcaciones', string='Marcacion',
-                                   required=True,
-                                   domain="[('empleado_id', '=', empleado_id),('observacion','=','sin_marcacion'),('fecha','=',fecha_inasistencia)]")
+    fecha_inasistencia_desde = fields.Datetime(string='Fecha Desde', required=False)
+    fecha_inasistencia_hasta = fields.Datetime(string='Fecha Hasta', required=False)
