@@ -30,6 +30,7 @@
         },
         'web.assets_frontend': {
             'racetime/static/src/js/SolicitudPermiso.js',
+            'racetime/static/src/js/formularioAsistenciaVirtual.js',
         }
     },
     # always loaded
@@ -53,6 +54,7 @@
         'views/ReglasDeTiempo.xml',
         'views/Saldos.xml',
         'views/RecuperacionHoras.xml',
+        'views/AsistenciaVirtual.xml',
         'data/ReglasDeTiempo.xml',
         'data/Permisos.xml',
         'data/Dias.xml',
@@ -63,6 +65,7 @@
         'views/EmailTemplates/SolicitudPermiso.xml',
         'views/Portal/SolicitudPermisos.xml',
         'views/Portal/Marcaciones.xml',
+        'views/Portal/FormularioAsistenciaVirtual.xml',
 
     ],
     # only loaded in demonstration mode
