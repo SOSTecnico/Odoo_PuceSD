@@ -15,7 +15,7 @@
                             <field name="active" invisible="1"/>
                             <field name="name" readonly="1"/>
                             <field name="paciente_id" options="{'no_quick_create':True}"/>
-                            <field name="antecedentes"/>
+                            <field name="antecedentes" groups="medical.medico_group"/>
                             <field name="alergias_id" widget="many2many_tags"/>
                         </group>
                         <group string="Consultas">
@@ -45,7 +45,7 @@
                 <tree string="Historia Clinica">
                     <field name="name"/>
                     <field name="paciente_id"/>
-                    <field name="antecedentes"/>
+                    <field name="antecedentes" groups="medical.medico_group"/>
                     <field name="alergias_id" widget="many2many_tags"/>
                     <field name="consultas"/>
                 </tree>
