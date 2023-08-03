@@ -29,3 +29,5 @@ actividades.on("change", (ev) => {
     }
 })
 
+$("#select_nivel").select2()
+$("#select_carrera").select2()

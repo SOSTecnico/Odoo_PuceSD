@@ -29,7 +29,7 @@
                         <div class="row">
                             <div class="col-12 col-sm-2">
                                 <div class="form-group">
-                                    <label>Fecha</label>
+                                    <label>Fecha Clase</label>
                                     <input type="date" class="form-control" name="fecha" required="required"/>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                             </div>
                             <div class="col-12 col-sm-4">
                                 <label>Carrera</label>
-                                <select class="form-control" name="carrera" required="required">
+                                <select class="form-control" name="carrera" id="select_carrera" required="required">
                                     <option value="" selected="selected">Seleccione...</option>
                                     <t t-foreach="carreras" t-as="carrera">
                                         <option t-attf-value="{{carrera.id}}">
@@ -81,20 +81,13 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group">
                                     <label>Asignatura</label>
-                                    <select name="asignatura" class="form-control" required="required">
-                                        <option value="" selected="selected">Seleccione...</option>
-                                        <t t-foreach="asignaturas" t-as="asignatura">
-                                            <option t-attf-value="{{asignatura.id}}">
-                                                <span t-out="asignatura.name"/>
-                                            </option>
-                                        </t>
-                                    </select>
+                                    <input name="asignatura" class="form-control"/>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group">
                                     <label>Nivel</label>
-                                    <select name="nivel" class="form-control" required="required">
+                                    <select name="nivel" class="form-control" id="select_nivel" required="required">
                                         <option value="" selected="selected">Seleccione...</option>
                                         <option value="1">Primero</option>
                                         <option value="2">Segundo</option>
@@ -233,6 +226,16 @@
                                               class="form-control"
                                               placeholder="Por favor, detalle las actividades"/>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <label>Novedades Estudiantes</label>
+                                <textarea class="form-control" name="novedades"/>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <label>Sugerencias</label>
+                                <textarea class="form-control" name="sugerencias"/>
                             </div>
                         </div>
 

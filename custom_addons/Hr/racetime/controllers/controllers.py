@@ -136,8 +136,8 @@ class Racetime(http.Controller):
                 'aportes_clase': data['aportes_clase'],
                 'actividades_academicas': True if data['actividades'] == 'on' else False,
                 'actividades_academicas_detalle': data['actividades_detalle'],
-                # 'novedades_estudiantes': data['fecha'],
-                # 'sugerencias': data['fecha'],
+                'novedades_estudiantes': data['novedades'],
+                'sugerencias': data['sugerencias'],
                 'hora_inicio': hora_inicio,
                 'hora_fin': hora_fin,
             })
