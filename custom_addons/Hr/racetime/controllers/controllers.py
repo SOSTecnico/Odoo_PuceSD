@@ -115,6 +115,8 @@ class Racetime(http.Controller):
     def formulario_asistencia_virtual(self, **data):
         if data:
             print(data)
+            hora_inicio = datetime.strptime(f"{data['fecha']} {data['hora_inicio']}", "%Y-%m-%d %H:%M")
+            hora_fin = datetime.strptime(f"{data['fecha']} {data['hora_fin']}", "%Y-%m-%d %H:%M")
             request.env['racetime.asistencia_virtual'].sudo().create({
                 'fecha': data['fecha'],
                 'correo': data['email'],
@@ -124,7 +126,7 @@ class Racetime(http.Controller):
                 'programa': data['programa'],
                 'carrera_id': data['carrera'],
                 'asignatura_id': data['asignatura'],
-                'nivel': int(data['nivel']),
+                'nivel': data['nivel'],
                 'paralelo': data['paralelo'],
                 'inquietud': True if data['inquietud'] == 'on' else False,
                 'problemas_tecnicos': True if data['problemas'] == 'on' else False,
@@ -136,8 +138,8 @@ class Racetime(http.Controller):
                 'actividades_academicas_detalle': data['actividades_detalle'],
                 # 'novedades_estudiantes': data['fecha'],
                 # 'sugerencias': data['fecha'],
-                'hora_inicio': data['hora_inicio'],
-                'hora_fin': data['hora_fin'],
+                'hora_inicio': hora_inicio,
+                'hora_fin': hora_fin,
             })
 
             return request.render('racetime.portal_registro_asistencia_existoso')

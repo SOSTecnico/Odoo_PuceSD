@@ -5,9 +5,9 @@ class ModelName(models.Model):
     _name = 'racetime.asistencia_virtual'
     _description = 'Asistencia Virtual'
 
-    name = fields.Char()
+    name = fields.Char(string='Nombre', compute='_compute_name', store=True)
 
-    fecha = fields.Datetime(string='Fecha', required=False)
+    fecha = fields.Date(string='Fecha', required=False)
     correo = fields.Char(string='Correo', required=True)
     nombres = fields.Char(string='Nombres', required=True)
     apellidos = fields.Char(string='Apellidos', required=True)
@@ -25,7 +25,7 @@ class ModelName(models.Model):
     def _niveles(self):
         niveles = []
         for i in range(1, 11):
-            niveles.append((i, i))
+            niveles.append((f"{i}", i))
         return niveles
 
     nivel = fields.Selection(string='Nivel', selection=_niveles, required=True, )
@@ -55,3 +55,8 @@ class ModelName(models.Model):
 
     hora_inicio = fields.Datetime(string='Hora de Inicio', required=True)
     hora_fin = fields.Datetime(string='Hora de Fin', required=True)
+
+    @api.depends('nombres', 'apellidos')
+    def _compute_name(self):
+        for rec in self:
+            rec.name = f"{rec.nombres} {rec.apellidos}"
