@@ -111,7 +111,7 @@ class Racetime(http.Controller):
         }
         return request.render("racetime.lista_marcaciones_template", values)
 
-    @http.route("/asistencia-virtual", auth="public", website=True, methods=['GET', 'POST'])
+    @http.route("/asistencia-virtual", auth="user", website=True, methods=['GET', 'POST'])
     def formulario_asistencia_virtual(self, **data):
         if data:
             print(data)
@@ -150,7 +150,8 @@ class Racetime(http.Controller):
 
         return request.render("racetime.portal_formulario_asistencia_virtual", {
             'carreras': carreras,
-            'asignaturas': asignaturas
+            'asignaturas': asignaturas,
+            'user': request.env.user
         })
 
         # API
