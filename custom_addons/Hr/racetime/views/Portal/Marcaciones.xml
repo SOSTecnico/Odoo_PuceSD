@@ -40,6 +40,7 @@
                     <thead class="thead-dark">
                         <tr>
                             <th>Fecha</th>
+                            <th>Día</th>
                             <th>Hora</th>
                         </tr>
                     </thead>
@@ -48,6 +49,9 @@
                             <tr>
                                 <td>
                                     <span t-out="marcacion['fecha']"/>
+                                </td>
+                                <td>
+                                    <span t-out="marcacion['dia']"/>
                                 </td>
                                 <td>
                                     <span t-out="marcacion['hora']"/>

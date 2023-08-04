@@ -98,6 +98,7 @@ class Racetime(http.Controller):
             marc.append({
                 'fecha': tiempo.strftime('%Y-%m-%d'),
                 'hora': tiempo.strftime("%H:%M:%S"),
+                'dia': tiempo.strftime('%A')
             })
 
         values = {
