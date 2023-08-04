@@ -94,9 +94,10 @@ class Racetime(http.Controller):
         marc = []
 
         for m in marcaciones:
+            tiempo = m.fecha_hora - timedelta(hours=5)
             marc.append({
-                'fecha': m.fecha_hora.strftime('%Y-%m-%d'),
-                'hora': (m.fecha_hora - timedelta(hours=5)).strftime("%H:%M:%S")
+                'fecha': tiempo.strftime('%Y-%m-%d'),
+                'hora': tiempo.strftime("%H:%M:%S"),
             })
 
         values = {
