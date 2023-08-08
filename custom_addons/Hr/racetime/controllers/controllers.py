@@ -94,9 +94,11 @@ class Racetime(http.Controller):
         marc = []
 
         for m in marcaciones:
+            tiempo = m.fecha_hora - timedelta(hours=5)
             marc.append({
-                'fecha': m.fecha_hora.strftime('%Y-%m-%d'),
-                'hora': (m.fecha_hora - timedelta(hours=5)).strftime("%H:%M:%S")
+                'fecha': tiempo.strftime('%Y-%m-%d'),
+                'hora': tiempo.strftime("%H:%M:%S"),
+                'dia': tiempo.strftime('%A')
             })
 
         values = {
@@ -110,6 +112,49 @@ class Racetime(http.Controller):
             'search_in': search_in
         }
         return request.render("racetime.lista_marcaciones_template", values)
+
+    @http.route("/asistencia-virtual", auth="user", website=True, methods=['GET', 'POST'])
+    def formulario_asistencia_virtual(self, **data):
+        if data:
+            print(data)
+            hora_inicio = datetime.strptime(f"{data['fecha']} {data['hora_inicio']}", "%Y-%m-%d %H:%M")
+            hora_fin = datetime.strptime(f"{data['fecha']} {data['hora_fin']}", "%Y-%m-%d %H:%M")
+            request.env['racetime.asistencia_virtual'].sudo().create({
+                'fecha': data['fecha'],
+                'correo': data['email'],
+                'nombres': data['nombres'],
+                'apellidos': data['apellidos'],
+                'actividad': data['tipo_actividad'],
+                'programa': data['programa'],
+                'carrera_id': data['carrera'],
+                'asignatura_id': data['asignatura'],
+                'nivel': data['nivel'],
+                'paralelo': data['paralelo'],
+                'inquietud': True if data['inquietud'] == 'on' else False,
+                'problemas_tecnicos': True if data['problemas'] == 'on' else False,
+                'problemas_tecnicos_desc': data['descripcion_problemas'],
+                'espacios_dialogo': True if data['espacios_dialogo'] == 'on' else False,
+                'motivacion_asignatura': True if data['motivacion'] == 'on' else False,
+                'aportes_clase': data['aportes_clase'],
+                'actividades_academicas': True if data['actividades'] == 'on' else False,
+                'actividades_academicas_detalle': data['actividades_detalle'],
+                'novedades_estudiantes': data['novedades'],
+                'sugerencias': data['sugerencias'],
+                'hora_inicio': hora_inicio,
+                'hora_fin': hora_fin,
+            })
+
+            return request.render('racetime.portal_registro_asistencia_existoso')
+        carreras = request.env['estudiantes.carreras'].sudo().search(
+            [('parent_id', '!=', False), ('name', '!=', 'MAESTRÍAS'), ('name', '!=', 'ESPECIALIDADES')])
+
+        asignaturas = request.env['racetime.asignaturas'].sudo().search([])
+
+        return request.render("racetime.portal_formulario_asistencia_virtual", {
+            'carreras': carreras,
+            'asignaturas': asignaturas,
+            'user': request.env.user
+        })
 
         # API
 
@@ -152,8 +197,6 @@ class Racetime(http.Controller):
         marcacion.update({
             'fecha_hora': fecha_hora + timedelta(hours=5)
         })
-
-
 
         return {
             'msg': 'Ok'

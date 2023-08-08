@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="racetime.portal_formulario_asistencia_virtual" name="Portal: Formulario Asistencia Virtual">
+            <t t-call="website.layout">
+                <div class="container">
+                    <form class="bg-white rounded shadow border p-3 my-3" method="POST">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <h1>Formulario de Asistencia Virtual</h1>
+                        <h4 class="font-weight-bold">Datos Generales</h4>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>Correo Electrónico</label>
+                                    <input class="form-control" t-attf-value="{{user.email}}" type="email" name="email"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Nombre Completo</label>
+                                    <input class="form-control" t-attf-value="{{user.name}}" name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-2">
+                                <div class="form-group">
+                                    <label>Fecha Clase</label>
+                                    <input type="date" class="form-control" name="fecha" required="required"/>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-2">
+                                <div class="form-group">
+                                    <label>Hora de Inicio</label>
+                                    <input type="time" class="form-control" name="hora_fin" required="required"/>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-2">
+                                <div class="form-group">
+                                    <label>Hora de Finalización</label>
+                                    <input type="time" class="form-control" name="hora_inicio" required="required"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-4">
+                                <label>Tipo de Actividad</label>
+                                <select class="form-control" name="tipo_actividad" required="required">
+                                    <option value="" selected="selected">Seleccione...</option>
+                                    <option value="cd">Clases y Actividades de Docencia</option>
+                                    <option value="d">Actividades de Docencia</option>
+                                    <option value="c">Solo Clases</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <label>Programa</label>
+                                <select class="form-control" name="programa" required="required">
+                                    <option value="" selected="selected">Seleccione...</option>
+                                    <option value="g">GRADO</option>
+                                    <option value="p">POSTGRADO</option>
+                                    <option value="tec">PUCETEC</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <label>Carrera</label>
+                                <select class="form-control" name="carrera" id="select_carrera" required="required">
+                                    <option value="" selected="selected">Seleccione...</option>
+                                    <t t-foreach="carreras" t-as="carrera">
+                                        <option t-attf-value="{{carrera.id}}">
+                                            <span t-out="carrera.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>Asignatura</label>
+                                    <input name="asignatura" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>Nivel</label>
+                                    <select name="nivel" class="form-control" id="select_nivel" required="required">
+                                        <option value="" selected="selected">Seleccione...</option>
+                                        <option value="1">Primero</option>
+                                        <option value="2">Segundo</option>
+                                        <option value="3">Tercero</option>
+                                        <option value="4">Cuarto</option>
+                                        <option value="5">Quinto</option>
+                                        <option value="6">Sexto</option>
+                                        <option value="7">Séptimo</option>
+                                        <option value="8">Octavo</option>
+                                        <option value="9">Noveno</option>
+                                        <option value="10">Décimo</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>Paralelo</label>
+                                    <select name="paralelo" class="form-control">
+                                        <option value="A" selected="SELECTED">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                        <option value="F">F</option>
+                                        <option value="G">G</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group d-flex">
+                                    <p>¿He despejado las inquietudes presentadas por los estudiantes durante la clase?
+                                    </p>
+                                    <div class="ml-4">
+                                        <label for="inquietud_si">Sí</label>
+                                        <input type="radio" name="inquietud" id="inquietud_si"
+                                               required="required"
+                                               class="mr-2"/>
+                                        <label for="inquietud_no">No</label>
+                                        <input type="radio" name="inquietud" id="inquietud_no" required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-8 pr-0">
+                                <div class="form-group d-flex">
+                                    <p>¿Has tenido problemas tecnológicos con tu equipo/internet durante la clase?
+                                    </p>
+                                    <div class="ml-4">
+                                        <label for="problemas_si">Sí</label>
+                                        <input type="radio" name="problemas" id="problemas_si"
+                                               required="required"
+                                               class="mr-2"/>
+                                        <label for="problemas_no">No</label>
+                                        <input type="radio" name="problemas" id="problemas_no"
+                                               required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4 pl-0">
+                                <textarea class="form-control" name="descripcion_problemas" id="txt_detalle_problemas"
+                                          placeholder="Describe los inconvenientes presentados" style="display:none"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group d-flex">
+                                    <p>¿He posibilitado espacios de dialogo sobre la asignatura con los estudiantes,
+                                        basados en el respeto mutuo?
+                                    </p>
+                                    <div class="ml-4">
+                                        <label for="espacios_dialogo_si">Sí</label>
+                                        <input type="radio" name="espacios_dialogo" id="espacios_dialogo_si"
+                                               required="required" class="mr-2"/>
+                                        <label for="espacios_dialogo_no">No</label>
+                                        <input type="radio" name="espacios_dialogo" id="espacios_dialogo_no"
+                                               required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4 pl-0">
+                                <textarea class="form-control" name="descripcion_problemas" id="txt_detalle_problemas"
+                                          placeholder="Describe los inconvenientes presentados" style="display:none"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group d-flex">
+                                    <p>¿He promovido en la clase de hoy en los estudiantes el interés y motivación por
+                                        la asignatura?
+                                    </p>
+                                    <div class="ml-4">
+                                        <label for="motivacion_si">Sí</label>
+                                        <input type="radio" name="motivacion" id="motivacion_si"
+                                               required="required" class="mr-2"/>
+                                        <label for="motivacion_no">No</label>
+                                        <input type="radio" name="motivacion" id="motivacion_no"
+                                               required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4 pl-0">
+                                <textarea class="form-control" name="descripcion_problemas" id="txt_detalle_problemas"
+                                          placeholder="Describe los inconvenientes presentados" style="display:none"/>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>¿Qué te ha aportado hoy la jornada laboral para tu crecimiento personal y
+                                        profesional
+                                    </label>
+                                    <textarea name="aportes_clase" class="form-control" id="aportes_clase"/>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group d-flex">
+                                    <p>¿Ha realizado actividades académicas?
+                                    </p>
+                                    <div class="ml-4">
+                                        <label for="actividades_si">Sí</label>
+                                        <input type="radio" name="actividades" id="actividades_si" required="required"
+                                               class="mr-2"/>
+                                        <label for="actividades_no">No</label>
+                                        <input type="radio" name="actividades" id="actividades_no" required="required"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <textarea style="display:none" name="actividades_detalle" id="actividades_detalle"
+                                              class="form-control"
+                                              placeholder="Por favor, detalle las actividades"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <label>Novedades Estudiantes</label>
+                                <textarea class="form-control" name="novedades"/>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <label>Sugerencias</label>
+                                <textarea class="form-control" name="sugerencias"/>
+                            </div>
+                        </div>
+
+                        <div class="row my-3">
+                            <div class="col-12 col-sm-3 mx-auto">
+                                <button class="btn btn-block btn-primary">ENVIAR</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </t>
+        </template>
+
+        <template id="racetime.portal_registro_asistencia_existoso"
+                  name="Portal: Registro de Asistencia Virtual Exitoso">
+            <t t-call="website.layout">
+                <div class="container mt-5">
+                    <div class="card p-4">
+                        <div class="card-content">
+                            <h2>Se ha registrado su asistencia correctamente!</h2>
+                            <a href="/asistencia-virtual" class="btn btn-lg btn-success">Regresar</a>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>
