@@ -28,6 +28,7 @@
         'views/MainMenu.xml',
         'views/Carreras.xml',
         'views/Estudiantes.xml',
+        'views/Config.xml',
 
     ],
     # only loaded in demonstration mode

@@ -22,6 +22,8 @@
                                    options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open':True}"/>
                             <field name="correo"/>
                             <field name="celular"/>
+                            <field name="estado_portas" widget="boolean_toggle"/>
+
                         </group>
 
                     </sheet>
@@ -72,8 +74,33 @@
             </field>
         </record>
 
-        <menuitem sequence="100" name="Nómina" id="estudiantes_menu" parent="estudiantes.main_menu"
+        <menuitem sequence="100" name="Nómina" id="estudiantes.estudiantes_menu" parent="estudiantes.main_menu"
                   action="estudiantes_act_window"/>
+
+        <record id="estudiantes.sincronizacion_act_window" model="ir.actions.act_window">
+            <field name="name">Sincronizacion Portas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">estudiantes.sincronizacion</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem sequence="400" name="Sincronizacion" id="estudiantes.sincronizacion_menu" parent="estudiantes.main_menu"
+                  action="estudiantes.sincronizacion_act_window" groups="estudiantes.admin_group"/>
+
+        <record id="estudiantes.sincronizacion_form_view" model="ir.ui.view">
+            <field name="name">estudiantes.sincronizacion.form</field>
+            <field name="model">estudiantes.sincronizacion</field>
+            <field name="arch" type="xml">
+                <form string="Estudiantes">
+                    <sheet>
+                        <footer>
+                             <button name="sincronizar_portas" string="SINCRONIZAR" type="object" confirm="SE ENCUENTRA SEGURO DE REALIZAR ESTA ACCION"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
     </data>
 </odoo>
