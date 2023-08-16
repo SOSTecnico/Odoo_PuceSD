@@ -17,5 +17,6 @@ class Biometricos(http.Controller):
         biometrico = request.env["biometricos.biometricos"].search([('id', '=', data['biometrico_id'])])
         zk = ZK(biometrico.ip_address, port=4370, timeout=5, force_udp=True)
         conn = zk.connect()
-        conn.unlock()
+        conn.unlock(time=3)
+        zk.disconnect()
         return {}
