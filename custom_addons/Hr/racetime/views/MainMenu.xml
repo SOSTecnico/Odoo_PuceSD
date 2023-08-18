@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <menuitem id="racetime.main_menu" name="Asistencias" web_icon="racetime,static/description/icon.png"/>
+        <menuitem groups="racetime.group_user" id="racetime.main_menu" name="Asistencias" web_icon="racetime,static/description/icon.png"/>
 
         <menuitem sequence="600" id="racetime.config_menu" name="Configuraciones" parent="racetime.main_menu"/>
 
