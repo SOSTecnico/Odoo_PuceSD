@@ -23,7 +23,7 @@
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="">Email Jefe Inmediato</label>
-                                                <input class="form-control" name="email_jefe" required="required"
+                                                <input class="form-control" readonly="readonly" t-attf-value="{{user.employee_id.parent_id.work_email}}" name="email_jefe" required="required"
                                                        type="email"/>
                                             </div>
                                         </div>
