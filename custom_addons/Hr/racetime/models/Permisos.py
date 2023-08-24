@@ -84,7 +84,7 @@ class Permisos(models.Model):
     def calcular_saldos(self, values=None):
         permiso = self if self else values
 
-        if permiso.tipo_permiso_id.name == 'PERSONAL':
+        if permiso.tipo_permiso_id.name == 'PERSONAL' or permiso.tipo_permiso_id.name == 'DIAS DE ANTIGÜEDAD':
 
             if permiso.todo_el_dia:
                 res = (permiso.hasta_fecha - permiso.desde_fecha) + timedelta(days=1)
@@ -288,7 +288,7 @@ class PermisosReport(models.AbstractModel):
                         total_horas = horas
                     else:
                         horas = ((hora_fin - hora_inicio) + datetime.min).strftime("%H:%M")
-                        total_horas = round((hora_fin - hora_inicio).total_seconds() / 3600,2)
+                        total_horas = round((hora_fin - hora_inicio).total_seconds() / 3600, 2)
 
                     sheets['GENERAL'].write(f"F{fila_empleado + 1}",
                                             f"{horas}")
