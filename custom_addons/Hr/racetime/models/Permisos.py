@@ -28,8 +28,8 @@ class Permisos(models.Model):
     active = fields.Boolean(string='Active', required=False, tracking=True, default=True)
     todo_el_dia = fields.Boolean(string='Todo el Día', required=False, tracking=True)
     estado = fields.Selection(string='Estado', default='aprobado', required=True, tracking=True,
-                              selection=[('pendiente', 'PENDIENTE'),
-                                         ('aprobado', 'APROBADO'), ])
+                              selection=[('pendiente', 'PENDIENTE'), ('aprobado', 'APROBADO'),
+                                         ('rechazado', 'RECHAZADO')])
 
     # @api.constrains('desde_fecha', 'hasta_fecha', 'desde_hora', 'hasta_hora')
     # def _check_permisos_choques(self):

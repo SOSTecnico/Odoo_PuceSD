@@ -23,7 +23,7 @@
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="">Email Jefe Inmediato</label>
-                                                <input class="form-control" readonly="readonly"
+                                                <input class="form-control"
                                                        t-attf-value="{{user.employee_id.parent_id.work_email}}"
                                                        name="email_jefe" required="required"
                                                        type="email"/>
@@ -131,7 +131,7 @@
                                     </div>
                                     <div class="card-body">
                                         <p class="text-center">¡Tu solicitud ha sido registrada correctamente!</p>
-                                        <p class="text-center">Nuestro equipo se pondrá en contacto contigo pronto.</p>
+                                        <p class="text-center">Ahora debes esperar a que tu jefe inmediato apruebe tu solicitud, mientras tanto puedes revisar tus permisos :3</p>
                                     </div>
                                     <div class="card-footer text-center">
                                         <a href="/my/home" class="btn btn-primary">Ver mis Permisos</a>

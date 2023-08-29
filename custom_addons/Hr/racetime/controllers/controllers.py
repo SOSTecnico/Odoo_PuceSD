@@ -28,9 +28,8 @@ class Racetime(http.Controller):
         jefe_inmediato = request.env["hr.employee"].sudo().search([("work_email", '=', data['email_jefe'])])
 
         aprobado_por = [(4, jefe_inmediato.id)] if jefe_inmediato else False
-        aa = request.env["racetime.permisos"].sudo()
 
-        res = aa.create({
+        res = request.env["racetime.permisos"].sudo().create({
             'estado': 'pendiente',
             'empleado_id': request.env.user.employee_id.id,
             'aprobado_por_id': aprobado_por,
@@ -66,7 +65,23 @@ class Racetime(http.Controller):
     def solicitud_registrada(self):
         return request.render("racetime.solicitud_permiso_registrada_template")
 
+    @http.route("/permisos/aprobar", auth="user", website=True)
+    def aprobar_permiso(self, **data):
+        if data:
+            permiso = request.env['racetime.permisos'].sudo().search(['id', '=', request.get('permiso_id')])
+            if permiso:
+                if permiso.estado == 'pendiente':
+                    status = request.get('estado')
+                    permiso.update({
+                        'estado': status
+                    })
+                else:
+                    return "El permiso ya no puede ser modificado"
+            else:
+                return "No existe ningun permiso que coincida con los registros"
+
     # Marcaciones
+
     @http.route(['/mis-marcaciones', '/mis-marcaciones/page/<int:page>'], auth='user', website=True)
     def marcaciones(self, page=1, sortby='fecha', search='', search_in='all', **kw):
         obj_m = request.env["racetime.detalle_marcacion"].sudo()
