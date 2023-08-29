@@ -28,8 +28,9 @@ class Racetime(http.Controller):
         jefe_inmediato = request.env["hr.employee"].sudo().search([("work_email", '=', data['email_jefe'])])
 
         aprobado_por = [(4, jefe_inmediato.id)] if jefe_inmediato else False
+        aa = request.env["racetime.permisos"].sudo()
 
-        res = request.env["racetime.permisos"].sudo().create({
+        res = aa.create({
             'estado': 'pendiente',
             'empleado_id': request.env.user.employee_id.id,
             'aprobado_por_id': aprobado_por,
@@ -44,7 +45,7 @@ class Racetime(http.Controller):
         })
 
         template_id = request.env.ref("racetime.solicitud_permiso_email_template").id
-        request.env["mail.template"].browse(template_id).send_mail(res.id, force_send=True)
+        request.env["mail.template"].sudo().browse(template_id).send_mail(res.id, force_send=True)
 
         return self.solicitud_registrada()
 

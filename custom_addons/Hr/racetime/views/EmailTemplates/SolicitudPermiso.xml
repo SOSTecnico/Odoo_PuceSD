@@ -9,44 +9,167 @@
             <field name="email_to">{{object.aprobado_por_id.work_email}}</field>
             <field name="email_from">{{object.empleado_id.work_email}}</field>
             <field name="reply_to">dadministrativad@pucesd.edu.ec</field>
-            <field name="subject">Solicitud de Permiso - {{object.tipo_permiso_id.name}}</field>
+            <field name="subject">Solicitud de Permiso - {{object.tipo_permiso_id.name}} - {{object.id}}</field>
             <field name="body_html" type="html">
-                <p>
-                    Estimad@
-                    <strong t-out="object.aprobado_por_id.name"></strong>
-                </p>
-                <p>
-                    Mediante el presente correo se solicita un permiso de tipo -
-                    <strong t-out="object.tipo_permiso_id.name"></strong>
-                    -
-                    por parte de: <strong t-out="object.empleado_id.name"></strong>
-                    con los siguientes detalles:
-                </p>
-                <br/>
-                <p>
-                    <strong>Fecha Inicio:</strong>
-                    <span t-out="object.desde_fecha"></span>
-                </p>
-                <p>
-                    <strong>Fecha Fin:</strong>
-                    <span t-out="object.hasta_fecha"></span>
-                </p>
-                <strong>Durante:</strong>
-                <t t-if="object.todo_el_dia">
-                    <span>Todo el Dia</span>
-                </t>
-                <t t-else="">
-                    <p>
-                        <strong >Hora Inicio:</strong>
-                        <span t-out="'{0:02.0f}:{1:02.0f}'.format(*divmod(object.desde_hora * 60, 60))"></span>
-                    </p>
-                    <p>
-                        <strong>Hora Fin:</strong>
-                        <span t-out="'{0:02.0f}:{1:02.0f}'.format(*divmod(object.hasta_hora * 60, 60))"></span>
-                    </p>
-                </t>
+                <style>
+                    body{
+                    background-color: rgb(206, 206, 206);
+                    }
+                    .container{
+                    margin-left:auto ;
+                    margin-right:auto ;
+                    width: 50%;
+                    background-color: rgb(246, 246, 246);
+                    border-radius: 2rem;
+                    padding: 1rem;
+                    }
+
+                    .img-container{
+                    text-align: center;
+                    margin-left:auto ;
+                    margin-right:auto ;
+                    }
+
+                    #logo{
+                    width: 100%;
+                    }
+
+                    .content{
+                    padding: 1rem;
+                    }
 
 
+                    .actions {
+                    text-align: center;
+                    }
+
+                    .buttons-container {
+                    display: flex;
+                    justify-content: space-evenly;
+                    }
+
+
+                    /* CSS */
+                    .button-25 {
+                    border-radius: 4px;
+                    box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+                    color: #FFFFFF;
+                    cursor: pointer;
+                    display: block;
+                    font-family: -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                    font-size: 17px;
+                    line-height: 100%;
+                    margin: 0;
+                    outline: 0;
+                    padding: 11px 15px 12px;
+                    text-align: center;
+                    transition: box-shadow .05s ease-in-out, opacity .05s ease-in-out;
+                    user-select: none;
+                    -webkit-user-select: none;
+                    touch-action: manipulation;
+                    /* width: 100%; */
+                    }
+
+                    .button-25:hover {
+                    box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset, rgba(0, 0, 0, 0.4) 0 1px 2px;
+                    text-decoration: none;
+                    transition-duration: .15s, .15s;
+                    }
+
+                    .button-25:active {
+                    box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset, rgba(0, 0, 0, 0.4) 0 1px 1px;
+                    }
+
+                    .button-25:disabled {
+                    cursor: not-allowed;
+                    opacity: .6;
+                    }
+
+                    .button-25:disabled:active {
+                    pointer-events: none;
+                    }
+
+                    .button-25:disabled:hover {
+                    box-shadow: none;
+                    }
+
+                    .aceptar {
+                    background-color: #36A9AE;
+                    background-image: linear-gradient(#37ADB2, #329CA0);
+                    border: 1px solid #2A8387;
+                    }
+
+                    .rechazar {
+                    background-color: #ae3636;
+                    background-image: linear-gradient(#b23737, #a03232);
+                    border: 1px solid #872a2a;
+                    }
+                </style>
+                <div class="container">
+                    <div class="img-container">
+                        <img id="logo" t-attf-src="data:image/png;base64,{{request.env.user.company_id.logo}}"/>
+                    </div>
+                    <hr/>
+                    <div class="content">
+                        Estimad@
+                        <strong t-out="object.aprobado_por_id.name"/>
+                        <br/>
+                        Mediante el presente correo se solicita un permiso con los siguientes detalles:
+
+                        <ul>
+                            <li>
+                                <strong>Solicitante:</strong>
+                                <span t-out="object.empleado_id.name"/>
+                            </li>
+                            <li>
+                                <strong>Tipo Permiso:</strong>
+                                <span t-out="object.tipo_permiso_id.name"/>
+                            </li>
+                            <li>
+                                <strong>Fecha Inicio:</strong>
+                                <span t-out="object.desde_fecha"/>
+                            </li>
+                            <li>
+                                <strong>Fecha Fin:</strong>
+                                <span t-out="object.hasta_fecha"/>
+                            </li>
+                            <li>
+                                <strong>Durante:</strong>
+                                <ul>
+                                    <t t-if="object.todo_el_dia">
+                                        <li>Todo el dia</li>
+                                    </t>
+                                    <t t-else="">
+                                        <li>
+                                            <strong>Hora Inicio:</strong>
+                                            <span t-out="'{0:02.0f}:{1:02.0f}'.format(*divmod(object.desde_hora * 60, 60))"/>
+                                        </li>
+                                        <li>
+                                            <strong>Hora Fin:</strong>
+                                            <span t-out="'{0:02.0f}:{1:02.0f}'.format(*divmod(object.hasta_hora * 60, 60))"/>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </li>
+                        </ul>
+                        <p>
+                            <strong>Detalle del Permiso</strong>
+                        </p>
+                        <p t-out="object.descripcion"/>
+                        <div class="actions">
+                            <p>Desea aprobar el permiso solicitado?</p>
+
+                            <div class="buttons-container">
+                                <div>
+                                    <button class="button-25 aceptar">APROBAR</button>
+                                </div>
+                                <div>
+                                    <button class="button-25 rechazar">RECHAZAR</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </field>
         </record>
 
