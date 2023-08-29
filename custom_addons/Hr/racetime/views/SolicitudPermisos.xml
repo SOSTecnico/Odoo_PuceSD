@@ -9,7 +9,7 @@
                         <div class="row">
                             <div class="col col-md-6 mx-auto">
                                 <h2 class="my-3 font-weight-bold">Solicitud de Permiso</h2>
-                                <form action="/agendar-permiso" method="POST">
+                                <form action="/agendar-permiso" method="POST" enctype="multipart/form-data">
                                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                                     <div class="row">
                                         <div class="col">
@@ -23,7 +23,9 @@
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="">Email Jefe Inmediato</label>
-                                                <input class="form-control" readonly="readonly" t-attf-value="{{user.employee_id.parent_id.work_email}}" name="email_jefe" required="required"
+                                                <input class="form-control" readonly="readonly"
+                                                       t-attf-value="{{user.employee_id.parent_id.work_email}}"
+                                                       name="email_jefe" required="required"
                                                        type="email"/>
                                             </div>
                                         </div>
@@ -89,10 +91,19 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="adjunto">Archivo</label>
+                                                <br/>
+                                                <input name="adjunto"  accept="application/pdf" type="file"/>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row mt-3">
                                         <div class="col">
                                             <div class="form-group">
-                                                <button type="submit" class="btn btn-primary btn-block shadow">
+                                                <button type="submit" class="btn btn-info btn-block shadow">
                                                     SOLICITAR
                                                 </button>
                                             </div>
@@ -123,7 +134,7 @@
                                         <p class="text-center">Nuestro equipo se pondrá en contacto contigo pronto.</p>
                                     </div>
                                     <div class="card-footer text-center">
-                                        <a href="/" class="btn btn-primary">Volver al inicio</a>
+                                        <a href="/my/home" class="btn btn-primary">Ver mis Permisos</a>
                                     </div>
                                 </div>
                             </div>

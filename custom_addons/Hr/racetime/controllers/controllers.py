@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import base64
 import random
 
 from odoo.addons.portal.controllers.portal import CustomerPortal, pager
@@ -16,7 +17,7 @@ class Racetime(http.Controller):
             [('name', '!=', 'MÉDICO'), ('name', '!=', 'CARGO A VACACIONES'),
              ('name', '!=', 'RECUPERACION CLASE TP'), ('name', '!=', 'RECUPERACIÓN HORAS'),
              ('name', '!=', 'DIAS DE ANTIGÜEDAD')])
-        print(tipos_permiso)
+
         return request.render('racetime.solicitud_permiso_template', {
             'user': request.env.user,
             'tipos_permiso': tipos_permiso
@@ -38,7 +39,8 @@ class Racetime(http.Controller):
             'hasta_hora': self.string_to_time(data["hora_fin"]),
             'tipo_permiso_id': int(data['tipo_permiso_id']),
             'todo_el_dia': True if 'todo_el_dia' in data else False,
-            'descripcion': data['descripcion']
+            'descripcion': data['descripcion'],
+            'adjunto': base64.b64encode(data.get('adjunto').read()) or False
         })
 
         template_id = request.env.ref("racetime.solicitud_permiso_email_template").id
