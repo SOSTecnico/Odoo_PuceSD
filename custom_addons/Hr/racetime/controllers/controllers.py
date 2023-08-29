@@ -12,7 +12,11 @@ import itertools
 class Racetime(http.Controller):
     @http.route('/solicitud-permiso', auth='user', website=True)
     def index(self, **kw):
-        tipos_permiso = request.env["racetime.tipos_permiso"].search([])
+        tipos_permiso = request.env["racetime.tipos_permiso"].sudo().search(
+            [('name', '!=', 'MÉDICO'), ('name', '!=', 'CARGO A VACACIONES'),
+             ('name', '!=', 'RECUPERACION CLASE TP'), ('name', '!=', 'RECUPERACIÓN HORAS'),
+             ('name', '!=', 'DIAS DE ANTIGÜEDAD')])
+        print(tipos_permiso)
         return request.render('racetime.solicitud_permiso_template', {
             'user': request.env.user,
             'tipos_permiso': tipos_permiso
