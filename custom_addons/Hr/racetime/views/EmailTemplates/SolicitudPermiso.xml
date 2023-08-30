@@ -7,12 +7,13 @@
             <field name="model_id" ref="model_racetime_permisos"/>
             <field name="auto_delete" eval="True"/>
             <field name="email_to">{{object.aprobado_por_id.work_email}}</field>
-            <field name="email_from">{{object.empleado_id.work_email}}</field>
+            <field name="email_from">{{object.empleado_id.user_id.email_formatted}}</field>
             <field name="reply_to">dadministrativad@pucesd.edu.ec</field>
             <field name="subject">Solicitud de Permiso - {{object.tipo_permiso_id.name}} - {{object.id}}</field>
             <field name="body_html" type="html">
 
                 <div class="container" style="margin-left:auto ;
+                    border: 1px solid black;
                     margin-right:auto ;
                     width: 75%;
                     background-color: rgb(246, 246, 246);
@@ -50,7 +51,7 @@
                                 <strong>Durante:</strong>
                                 <ul>
                                     <t t-if="object.todo_el_dia">
-                                        <li>Todo el dia</li>
+                                        <li>Todo el día</li>
                                     </t>
                                     <t t-else="">
                                         <li>
@@ -71,12 +72,13 @@
                         <p t-out="object.descripcion"/>
                         <hr/>
                         <div class="actions">
-                            <p>Desea aprobar el permiso solicitado?</p>
+                            <p>¿Desea aprobar el permiso solicitado?</p>
                             <div style="display:flex;">
-                                <form t-attf-action="{{base_url}}/permisos/aprobar" method="POST">
+                                <form t-attf-action="{{object.web_base_url_for_email_template()}}/permisos/aprobar"
+                                      method="POST">
                                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                                     <input type="hidden" name="permiso_id" t-attf-value="{{object.id}}"/>
-                                    <input type="hidden" name="estado" value="APROBADO"/>
+                                    <input type="hidden" name="estado" value="aprobado"/>
                                     <button type="submit" style='border-radius: 4px;
                      box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
                      color: #FFFFFF;
@@ -99,27 +101,34 @@
                      border: 1px solid #2A8387;'>APROBAR
                                     </button>
                                 </form>
+                                <form t-attf-action="{{object.web_base_url_for_email_template()}}/permisos/aprobar"
+                                      method="POST">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input type="hidden" name="permiso_id" t-attf-value="{{object.id}}"/>
+                                    <input type="hidden" name="estado" value="rechazado"/>
+                                    <button style='border-radius: 4px;
+                                                     box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+                                                     color: #FFFFFF;
+                                                     cursor: pointer;
+                                                     display: block;
+                                                     font-family: -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                                                     font-size: 17px;
+                                                     line-height: 100%;
+                                                     margin: 0;
+                                                     outline: 0;
+                                                     padding: 11px 15px 12px;
+                                                     text-align: center;
+                                                     transition: box-shadow .05s ease-in-out, opacity .05s ease-in-out;
+                                                     user-select: none;
+                                                     -webkit-user-select: none;
+                                                     touch-action: manipulation;
+                                                        background-color: #ae3636;
+                                                     background-image: linear-gradient(#b23737, #a03232);
+                                                     border: 1px solid #872a2a;'>
+                                        RECHAZAR
+                                    </button>
+                                </form>
 
-                                <button style='border-radius: 4px;
-                     box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
-                     color: #FFFFFF;
-                     cursor: pointer;
-                     display: block;
-                     font-family: -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
-                     font-size: 17px;
-                     line-height: 100%;
-                     margin: 0;
-                     outline: 0;
-                     padding: 11px 15px 12px;
-                     text-align: center;
-                     transition: box-shadow .05s ease-in-out, opacity .05s ease-in-out;
-                     user-select: none;
-                     -webkit-user-select: none;
-                     touch-action: manipulation;
-                        background-color: #ae3636;
-                     background-image: linear-gradient(#b23737, #a03232);
-                     border: 1px solid #872a2a;'>RECHAZAR
-                                </button>
                             </div>
                         </div>
                     </div>

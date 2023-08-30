@@ -65,16 +65,17 @@ class Racetime(http.Controller):
     def solicitud_registrada(self):
         return request.render("racetime.solicitud_permiso_registrada_template")
 
-    @http.route("/permisos/aprobar", auth="user", website=True)
+    @http.route("/permisos/aprobar", auth='public', csrf=False)
     def aprobar_permiso(self, **data):
         if data:
-            permiso = request.env['racetime.permisos'].sudo().search(['id', '=', request.get('permiso_id')])
+            permiso = request.env['racetime.permisos'].sudo().search([('id', '=', data.get('permiso_id'))])
             if permiso:
                 if permiso.estado == 'pendiente':
-                    status = request.get('estado')
+                    status = data.get('estado')
                     permiso.update({
                         'estado': status
                     })
+                    return "El permiso fue registrado Correctamente"
                 else:
                     return "El permiso ya no puede ser modificado"
             else:

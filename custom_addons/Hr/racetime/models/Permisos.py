@@ -132,6 +132,8 @@ class Permisos(models.Model):
         }
         return super(Permisos, self).copy(default)
 
+    def web_base_url_for_email_template(self):
+        return self.env['ir.config_parameter'].get_param('web.base.url')
 
 class PermisosReportWizard(models.TransientModel):
     _name = 'racetime.permisos_report_wizard'
