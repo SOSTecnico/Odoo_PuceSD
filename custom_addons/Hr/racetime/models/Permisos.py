@@ -84,7 +84,8 @@ class Permisos(models.Model):
     def calcular_saldos(self, values=None):
         permiso = self if self else values
 
-        if permiso.tipo_permiso_id.name == 'PERSONAL' or permiso.tipo_permiso_id.name == 'DIAS DE ANTIGÜEDAD':
+        if permiso.estado == 'aprobado' and (
+                permiso.tipo_permiso_id.name == 'PERSONAL' or permiso.tipo_permiso_id.name == 'DIAS DE ANTIGÜEDAD'):
 
             if permiso.todo_el_dia:
                 res = (permiso.hasta_fecha - permiso.desde_fecha) + timedelta(days=1)
@@ -134,6 +135,7 @@ class Permisos(models.Model):
 
     def web_base_url_for_email_template(self):
         return self.env['ir.config_parameter'].get_param('web.base.url')
+
 
 class PermisosReportWizard(models.TransientModel):
     _name = 'racetime.permisos_report_wizard'
