@@ -65,7 +65,7 @@ class Saldos(models.Model):
 
             data = []
             for permiso in permisos_del_empleado:
-                if permiso.tipo_permiso_id.name == 'PERSONAL':
+                if permiso.estado == 'aprobado' and permiso.tipo_permiso_id.name == 'PERSONAL':
                     detalle_saldo = saldos.detalle_saldos.filtered_domain([('permiso_id', '=', permiso.id)])
                     if not detalle_saldo:
                         if permiso.todo_el_dia:

@@ -154,7 +154,8 @@
             <field name="auto_delete" eval="True"/>
             <field name="email_to">{{object.empleado_id.work_email}}</field>
             <field name="email_from">{{object.aprobado_por_id.user_id.email_formatted}}</field>
-            <field name="email_cc">dadministrativad@pucesd.edu.ec</field>
+            <field name="email_cc">dadministrativad@pucesd.edu.ec,{{object.aprobado_por_id.user_id.email_formatted}}
+            </field>
             <field name="reply_to">dadministrativad@pucesd.edu.ec</field>
             <field name="subject">Solicitud de Permiso - {{object.tipo_permiso_id.name}} - {{object.id}}</field>
             <field name="body_html" type="html">
@@ -167,13 +168,12 @@
     padding: 1rem;">
                     <div>
                         <img style="width: 50%;"
-                             t-attf-src="{{object.web_base_url_for_email_template()}}/web/image/res.company/1/logo"/>
+                             t-attf-src="{{object.web_base_url_for_email_template()}}/web/image/res.company/{{request.env.user.company_id.id}}/logo"/>
                     </div>
                     <hr/>
                     <div class="content" style=" padding: 1rem;">
-                        Estimado/a
+                        <p>Mediante el presente correo se informa que la solicitud de permiso ha sido:</p>
                         <br/>
-                        <p>Mediante el presente correo se informa que su solicitud de permiso ha sido:</p>
                         <t t-if="object.estado == 'aprobado'">
 
                             <h3>
@@ -189,10 +189,51 @@
                                 </span>
                             </h3>
                         </t>
-
+                        <br/>
+                        <h4>Detalles del Permiso</h4>
+                        <ul>
+                            <li>
+                                <strong>Solicitante:</strong>
+                                <span t-out="object.empleado_id.name"/>
+                            </li>
+                            <li>
+                                <strong>Tipo Permiso:</strong>
+                                <span t-out="object.tipo_permiso_id.name"/>
+                            </li>
+                            <li>
+                                <strong>Fecha Inicio:</strong>
+                                <span t-out="object.desde_fecha"/>
+                            </li>
+                            <li>
+                                <strong>Fecha Fin:</strong>
+                                <span t-out="object.hasta_fecha"/>
+                            </li>
+                            <li>
+                                <strong>Durante:</strong>
+                                <ul>
+                                    <t t-if="object.todo_el_dia">
+                                        <li>Todo el día</li>
+                                    </t>
+                                    <t t-else="">
+                                        <li>
+                                            <strong>Hora Inicio:</strong>
+                                            <span t-out="'{0:02.0f}:{1:02.0f}'.format(*divmod(object.desde_hora * 60, 60))"/>
+                                        </li>
+                                        <li>
+                                            <strong>Hora Fin:</strong>
+                                            <span t-out="'{0:02.0f}:{1:02.0f}'.format(*divmod(object.hasta_hora * 60, 60))"/>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </li>
+                        </ul>
+                        <p>
+                            <strong>Descripción del Permiso</strong>
+                        </p>
+                        <p t-out="object.descripcion"/>
                         <hr/>
-                        <p>Si tiene dudas respecto a la respuesta a su solicitud por favor comuníquese con el
-                            departamento administrativo
+                        <p>Si tiene dudas respecto a la respuesta a la solicitud por favor comuníquese con la
+                            dirección administrativa
                         </p>
                         <p style="margin:0">Unitec</p>
                         <a href="https://unitec.pucesd.edu.ec" style="margin:0; color:rgb(107, 107, 107)">

@@ -112,6 +112,9 @@ class Permisos(models.Model):
                     'horas': -horas,
                     'fecha': permiso.desde_fecha
                 })
+        else:
+            detalle_saldo = self.env['racetime.detalle_saldos'].search([('permiso_id', '=', permiso.id)])
+            detalle_saldo.unlink()
 
     @api.model
     def create(self, values):
