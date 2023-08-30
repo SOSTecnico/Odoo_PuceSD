@@ -42,23 +42,34 @@
                         <tr>
                             <th>#</th>
                             <th>Tipo de Permiso</th>
+                            <th>Estado</th>
                             <th>Todo el Dia</th>
                             <th>Fecha Inicio</th>
                             <th>Fecha Fin</th>
                             <th>Hora Inicio</th>
                             <th>Hora Fin</th>
                             <th>Descripcion</th>
-                            <!--                            <th></th>-->
                         </tr>
                     </thead>
                     <tbody>
                         <t t-foreach="permisos" t-as="permiso">
                             <tr>
                                 <td class="text-center">
-                                    <span t-out="permiso_index+1"/>
+                                    <span t-out="permiso.id"/>
                                 </td>
                                 <td class="text-center">
                                     <span t-esc="permiso.tipo_permiso_id.name"/>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="permiso.estado == 'aprobado'">
+                                        <span class="badge badge-success" t-out="permiso.estado"/>
+                                    </t>
+                                    <t t-elif="permiso.estado == 'rechazado'">
+                                        <span class="badge badge-danger" t-out="permiso.estado"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span class="badge badge-primary" t-out="permiso.estado"/>
+                                    </t>
                                 </td>
                                 <td class="text-center">
                                     <t t-if="permiso.todo_el_dia">Si</t>
@@ -83,16 +94,8 @@
                                     </t>
                                 </td>
                                 <td>
-                                    <a href="#" t-out="permiso.descripcion"/>
+                                    <span t-out="permiso.descripcion"/>
                                 </td>
-                                <!--                            <td>-->
-                                <!--                                <t t-if="permiso.estado == 'pendiente'">-->
-                                <!--                                    <button class="btn btn-primary btn-sm">Editar</button>-->
-                                <!--                                    <button class="btn btn-danger btn-sm btn_eliminar_permiso"-->
-                                <!--                                            t-attf-permiso_id="{{permiso.id}}">Eliminar-->
-                                <!--                                    </button>-->
-                                <!--                                </t>-->
-                                <!--                            </td>-->
                             </tr>
                         </t>
                     </tbody>

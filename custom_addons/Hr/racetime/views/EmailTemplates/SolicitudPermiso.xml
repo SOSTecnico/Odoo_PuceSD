@@ -25,7 +25,7 @@
                     </div>
                     <hr/>
                     <div class="content" style=" padding: 1rem;">
-                        Estimad@
+                        Estimado/a
                         <strong t-out="object.aprobado_por_id.name"/>
                         <br/>
                         Mediante el presente correo se solicita un permiso con los siguientes detalles:
@@ -131,10 +131,15 @@
 
                             </div>
                         </div>
+                        <br/>
+                        <p style="margin:0">Unitec</p>
+                        <a href="https://unitec.pucesd.edu.ec" style="margin:0; color:rgb(107, 107, 107)">
+                            https://unitec.pucesd.edu.ec
+                        </a>
                     </div>
                 </div>
                 <footer style="text-align:center">
-                    <div style="color: #b3b3b3">
+                    <div style="color: #929292">
                         <small>Desarrollado en el departamento de DTI - PUCESD por Ing. Jonathan Moreno</small>
                     </div>
                 </footer>
@@ -142,6 +147,66 @@
             </field>
         </record>
 
+        <!--Plantilla de correo de respuesta aprobación/negación de permiso-->
+        <record id="racetime.respuesta_permiso_email_template" model="mail.template">
+            <field name="name">Respuesta de Solicitud Permiso</field>
+            <field name="model_id" ref="model_racetime_permisos"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_to">{{object.empleado_id.work_email}}</field>
+            <field name="email_from">{{object.aprobado_por_id.user_id.email_formatted}}</field>
+            <field name="email_cc">dadministrativad@pucesd.edu.ec</field>
+            <field name="reply_to">dadministrativad@pucesd.edu.ec</field>
+            <field name="subject">Solicitud de Permiso - {{object.tipo_permiso_id.name}} - {{object.id}}</field>
+            <field name="body_html" type="html">
+                <div class="container" style="margin-left:auto ;
+    border: 1px solid black;
+    margin-right:auto ;
+    width: 75%;
+    background-color: rgb(246, 246, 246);
+    border-radius: 2rem;
+    padding: 1rem;">
+                    <div>
+                        <img style="width: 50%;"
+                             t-attf-src="{{object.web_base_url_for_email_template()}}/web/image/res.company/1/logo"/>
+                    </div>
+                    <hr/>
+                    <div class="content" style=" padding: 1rem;">
+                        Estimado/a
+                        <br/>
+                        <p>Mediante el presente correo se informa que su solicitud de permiso ha sido:</p>
+                        <t t-if="object.estado == 'aprobado'">
+
+                            <h3>
+                                <span style="padding: .8rem; background-color: rgb(34, 157, 179); color:rgb(255, 255, 255); border-radius: 1rem; ">
+                                    APROBADO
+                                </span>
+                            </h3>
+                        </t>
+                        <t t-else="">
+                            <h3>
+                                <span style="padding: .8rem; background-color: rgb(179, 34, 34); color:rgb(255, 255, 255); border-radius: 1rem; ">
+                                    RECHAZADO
+                                </span>
+                            </h3>
+                        </t>
+
+                        <hr/>
+                        <p>Si tiene dudas respecto a la respuesta a su solicitud por favor comuníquese con el
+                            departamento administrativo
+                        </p>
+                        <p style="margin:0">Unitec</p>
+                        <a href="https://unitec.pucesd.edu.ec" style="margin:0; color:rgb(107, 107, 107)">
+                            https://unitec.pucesd.edu.ec
+                        </a>
+                    </div>
+                </div>
+                <footer style="text-align:center">
+                    <div style="color: #929292">
+                        <small>Desarrollado en el departamento de DTI - PUCESD por Ing. Jonathan Moreno</small>
+                    </div>
+                </footer>
+            </field>
+        </record>
 
     </data>
 </odoo>
