@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="visitas.visitas_form_view" model="ir.ui.view">
+            <field name="name">visitas.visitas.form</field>
+            <field name="model">visitas.visitas</field>
+            <field name="arch" type="xml">
+                <form string="Visitas">
+                    <header>
+                        <button name="generarQR" string="Generar QR" type="object" class="btn btn-primary"/>
+                    </header>
+                    <sheet>
+                        <field name="active" invisible="1"/>
+                        <widget name="web_ribbon" title="ARCHIVADO" bg_color="bg-danger"
+                                attrs="{'invisible':[('active','=',True)]}"/>
+                        <group>
+                            <field name="fecha_inicio" widget="daterange" options="{'related_end_date':'fecha_fin'}"/>
+                            <field name="fecha_fin" widget="daterange" options="{'related_start_date':'fecha_inicio'}"/>
+                            <field name="visitante_id" options="{'no_quick_create':True}"/>
+                            <field name="receptor_id" options="{'no_create':True, 'no_open':True}"/>
+                            <field name="departamento_id" options="{'no_create':True, 'no_open':True}"/>
+                            <field name="motivo"/>
+                            <field name="qr" widget="image" style="width: 300px"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="visitas.visitas_tree_view" model="ir.ui.view">
+            <field name="name">visitas.visitas.tree</field>
+            <field name="model">visitas.visitas</field>
+            <field name="arch" type="xml">
+                <tree string="Visitas">
+                    <field name="fecha_inicio"/>
+                    <field name="fecha_fin"/>
+                    <field name="visitante_id"/>
+                    <field name="receptor_id"/>
+                    <field name="departamento_id"/>
+                    <field name="motivo"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--        <record id="visitas.visitas_search_view" model="ir.ui.view">
+                    <field name="name">visitas.visitas.visitas.search</field>
+                    <field name="model">visitas.visitas.visitas</field>
+                    <field name="arch" type="xml">
+                        <search string="Visitas">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>
+                -->
+
+        <record id="visitas.visitas_act_window" model="ir.actions.act_window">
+            <field name="name">Visitas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">visitas.visitas</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Visitas.
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="1" name="Visitas" id="visitas.visitas_menu" parent="visitas.main_menu"
+                  action="visitas.visitas_act_window"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_visitas_visitantes,visitas.visitantes,model_visitas_visitantes,visitas.user_group,1,0,0,0
+access_visitas_visitantes_responsable,visitas.visitantes_responsable,model_visitas_visitantes,visitas.responsable_group,1,1,1,1
+access_visitas_visitas,visitas.visitas,model_visitas_visitas,visitas.user_group,1,0,0,0
+access_visitas_visitas_responsable,visitas.visitas_responsable,model_visitas_visitas,visitas.responsable_group,1,1,1,1

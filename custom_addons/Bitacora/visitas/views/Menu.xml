@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem groups="visitas.user_group" name="Visitas" id="visitas.main_menu"
+                  web_icon="visitas,static/description/icon.png"/>
+
+    </data>
+</odoo>
