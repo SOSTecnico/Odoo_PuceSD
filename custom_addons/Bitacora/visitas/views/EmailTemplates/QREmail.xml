@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--Plantilla de correo para envío de QR-->
+        <record id="visitas.codigo_qr_email_template" model="mail.template">
+            <field name="name">Visitas: Envío de Código QR</field>
+            <field name="model_id" ref="visitas.model_visitas_visitas"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_to">{{object.visitante_id.correo}}</field>
+            <field name="email_from">no-replay@pucesd.edu.ec</field>
+            <field name="reply_to">cdti@pucesd.edu.ec</field>
+            <field name="subject">Solicitud de Ingreso - PUCESD - {{object.fecha_inicio}}</field>
+            <field name="body_html" type="html">
+
+                <div class="container" style="margin-left:auto ;
+                    border: 1px solid black;
+                    margin-right:auto ;
+                    width: 75%;
+                    background-color: rgb(246, 246, 246);
+                    border-radius: 2rem;
+                    padding: 1rem;">
+                    <div>
+                        <img style="width: 50%;"
+                             t-attf-src="/web/image/res.company/{{request.env.user.company_id.id}}/logo"/>
+                    </div>
+                    <hr/>
+                    <div class="content" style=" padding: 1rem;">
+                        Estimado/a
+                        <strong t-out="object.visitante_id.name"/>
+                        <br/>
+                        Mediante el presente correo se le informa que ha sido autorizado para el ingreso a la PUCESD.
+                        <br/>
+                        Por favor, descargue la imagen QR adjunto a este correo y presentela al guardia de seguridad
+                        al momento de ingresar a la institución.
+                        <br/>
+                        <img t-attf-src="data:image/jpeg;base64,{{object.qr}}" style="max-width:75%"/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        Si no ha solicitado el ingreso a la PUCESD, por favor ignore este correo.
+                        <hr/>
+                        <br/>
+                        <p style="margin:0">Unitec</p>
+                        <a href="https://unitec.pucesd.edu.ec" style="margin:0; color:rgb(107, 107, 107)">
+                            https://unitec.pucesd.edu.ec
+                        </a>
+                    </div>
+                </div>
+                <footer style="text-align:center">
+                    <div style="color: #929292">
+                        <small>Desarrollado en el departamento de DTI - PUCESD por Ing. Jonathan Moreno</small>
+                    </div>
+                </footer>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

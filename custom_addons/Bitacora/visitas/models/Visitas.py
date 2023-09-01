@@ -41,8 +41,6 @@ class Visitas(models.Model):
         logo = logo.resize((basewidth, hsize), Image.ANTIALIAS)
         QRcode = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
 
-        secret = self.create_date.strftime("%Y-%m-%d").encode('ascii')
-
         info = {
             'fecha_inicio': self.fecha_inicio.strftime("%Y-%m-%d"),
             'fecha_fin': self.fecha_fin.strftime("%Y-%m-%d") if self.fecha_fin else '',
@@ -54,11 +52,10 @@ class Visitas(models.Model):
             },
             'departamento': self.departamento_id.name or '',
             'motivo': self.motivo,
-            # 'x_x': base64.b64encode(secret).decode('ascii')
         }
-        print(info)
+
         data = base64.b64encode(str(info).encode('utf-8'))
-        print(data)
+
         # adding URL or text to QRcode
         QRcode.add_data(data)
 
@@ -81,7 +78,9 @@ class Visitas(models.Model):
         self.qr = qr_image
 
     def enviarQR(self):
-        pass
+        template_id = self.env.ref("visitas.codigo_qr_email_template").id
+        for rec in self:
+            self.env["mail.template"].sudo().browse(template_id).send_mail(rec.id, force_send=True)
 
     @api.model
     def create(self, values):

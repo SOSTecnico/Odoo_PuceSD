@@ -29,6 +29,7 @@
         'views/Menu.xml',
         'views/Visitantes.xml',
         'views/Visitas.xml',
+        'views/EmailTemplates/QREmail.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
