@@ -41,24 +41,26 @@ class Visitas(models.Model):
         logo = logo.resize((basewidth, hsize), Image.ANTIALIAS)
         QRcode = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
 
-        secret = b'{self.create_date.strftime("%Y-%m-%d")}'
+        secret = self.create_date.strftime("%Y-%m-%d").encode('ascii')
 
         info = {
             'fecha_inicio': self.fecha_inicio.strftime("%Y-%m-%d"),
-            'fecha_fin': self.fecha_fin.strftime("%Y-%m-%d"),
+            'fecha_fin': self.fecha_fin.strftime("%Y-%m-%d") if self.fecha_fin else '',
             'receptor': self.receptor_id.name,
             'visitante': {
                 'nombre': self.visitante_id.name,
-                'cedula': self.visitante_id.cedula,
-                'correo': self.visitante_id.correo,
+                'cedula': self.visitante_id.cedula or '',
+                'correo': self.visitante_id.correo or '',
             },
-            'departamento': self.departamento_id.name,
+            'departamento': self.departamento_id.name or '',
             'motivo': self.motivo,
-            'x_x': base64.b64encode(secret).decode('ascii')
+            # 'x_x': base64.b64encode(secret).decode('ascii')
         }
-
+        print(info)
+        data = base64.b64encode(str(info).encode('utf-8'))
+        print(data)
         # adding URL or text to QRcode
-        QRcode.add_data(info)
+        QRcode.add_data(data)
 
         # generating QR code
         QRcode.make(fit=True)
