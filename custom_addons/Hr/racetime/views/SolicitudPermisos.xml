@@ -96,7 +96,7 @@
                                             <div class="form-group">
                                                 <label for="adjunto">Archivo</label>
                                                 <br/>
-                                                <input name="adjunto"  accept="application/pdf" type="file"/>
+                                                <input name="adjunto" accept="application/pdf" type="file"/>
                                             </div>
                                         </div>
                                     </div>
@@ -131,12 +131,71 @@
                                     </div>
                                     <div class="card-body">
                                         <p class="text-center">¡Tu solicitud ha sido registrada correctamente!</p>
-                                        <p class="text-center">Ahora debes esperar a que tu jefe inmediato apruebe tu solicitud, mientras tanto puedes revisar tus permisos :3</p>
+                                        <p class="text-center">Ahora debes esperar a que tu jefe inmediato apruebe tu
+                                            solicitud, mientras tanto puedes revisar tus permisos :3
+                                        </p>
                                     </div>
                                     <div class="card-footer text-center">
                                         <a href="/my/home" class="btn btn-primary">Ver mis Permisos</a>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!--Template Solicitud Registrada por El Jefe Inmediato-->
+        <template id="racetime.solicitud_permiso_registrada_jefe_template" name="Solicitud Permiso Registrada">
+            <t t-call="website.layout">
+                <div class="oe_structure">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6 offset-md-3">
+                                <t t-if="status==200">
+                                    <div class="card mt-5">
+                                        <div class="card-header">
+                                            <h3 class="text-center">Solicitud de Permiso Registrada</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="text-center">¡La Solicitud fue Registrada en el Sistema!</p>
+                                        </div>
+                                        <div class="card-footer text-center">
+                                            <a href="/my/home" class="btn btn-primary">Regresar al Inicio</a>
+                                        </div>
+                                    </div>
+                                </t>
+                                <t t-if="status==500">
+                                    <div class="card mt-5">
+                                        <div class="card-header">
+                                            <h3 class="text-center">¡Atención!</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="text-center">No se puede modificar el permiso, si se trata de un
+                                                error comuníquese con la Dirección Administrativa
+                                            </p>
+                                        </div>
+                                        <div class="card-footer text-center">
+                                            <a href="/my/home" class="btn btn-primary">Regresar al Inicio</a>
+                                        </div>
+                                    </div>
+                                </t>
+                                <t t-if="status==404">
+                                    <div class="card mt-5">
+                                        <div class="card-header">
+                                            <h3 class="text-center">¡Lo sentimos!</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="text-center">El permiso que intenta modificar
+                                                <strong>NO EXISTE</strong>
+                                            </p>
+                                        </div>
+                                        <div class="card-footer text-center">
+                                            <a href="/my/home" class="btn btn-primary">Regresar al Inicio</a>
+                                        </div>
+                                    </div>
+                                </t>
                             </div>
                         </div>
                     </div>

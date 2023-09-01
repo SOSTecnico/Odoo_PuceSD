@@ -5,6 +5,7 @@ from odoo.http import request
 import base64
 from datetime import timedelta
 
+
 class PermisosController(http.Controller):
 
     @http.route('/solicitud-permiso', auth='user', website=True)
@@ -61,7 +62,7 @@ class PermisosController(http.Controller):
     def solicitud_registrada(self):
         return request.render("racetime.solicitud_permiso_registrada_template")
 
-    @http.route("/permisos/aprobar", auth='public', csrf=False)
+    @http.route("/permisos/aprobar", auth='public', csrf=False, website=True)
     def aprobar_permiso(self, **data):
         if data:
             permiso = request.env['racetime.permisos'].sudo().search([('id', '=', data.get('permiso_id'))])
@@ -75,8 +76,16 @@ class PermisosController(http.Controller):
                     template_id = request.env.ref("racetime.respuesta_permiso_email_template").id
                     request.env["mail.template"].sudo().browse(template_id).send_mail(permiso.id, force_send=True)
 
-                    return "El permiso fue registrado Correctamente"
+                    return request.render("racetime.solicitud_permiso_registrada_jefe_template", {
+                        'status': 200
+                    })
                 else:
-                    return "El permiso ya no puede ser modificado"
+                    return request.render("racetime.solicitud_permiso_registrada_jefe_template", {
+                        'status': 500,
+                        'msg': 'No se puede modificar el permiso'
+                    })
             else:
-                return "No existe ningun permiso que coincida con los registros"
+                return request.render("racetime.solicitud_permiso_registrada_jefe_template", {
+                    'status': 404,
+                    'msg': 'No se puede modificar el permiso'
+                })
