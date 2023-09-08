@@ -80,7 +80,8 @@ class Visitas(models.Model):
     def enviarQR(self):
         template_id = self.env.ref("visitas.codigo_qr_email_template").id
         for rec in self:
-            self.env["mail.template"].sudo().browse(template_id).send_mail(rec.id, force_send=True)
+            if rec.visitante_id.correo:
+                self.env["mail.template"].sudo().browse(template_id).send_mail(rec.id, force_send=True)
 
     @api.model
     def create(self, values):
