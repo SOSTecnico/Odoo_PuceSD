@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="banner.usuarios_banner_form_view" model="ir.ui.view">
+            <field name="name">banner.usuarios_banner.form</field>
+            <field name="model">banner.usuarios</field>
+            <field name="arch" type="xml">
+                <form string="Usuarios Banner" create="false" edit="false">
+                    <header>
+                        <button name="enviarCorreo" class="btn btn-primary btn-lg" type="object" string="Enviar Notificación" confirm="¿Seguro de Enviar Notificación?"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="cedula"/>
+                            <field name="username"/>
+                            <field name="correo"/>
+                            <field name="pin"/>
+                            <field name="banner_id"/>
+                            <field name="claim"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="banner.usuarios_banner_tree_view" model="ir.ui.view">
+            <field name="name">banner.usuarios_banner.tree</field>
+            <field name="model">banner.usuarios</field>
+            <field name="arch" type="xml">
+                <tree default_order="name asc" string="Usuarios Banner" create="false" edit="false">
+                    <field name="name"/>
+                    <field name="cedula"/>
+                    <field name="username"/>
+                    <field name="pin"/>
+                    <field name="correo"/>
+                    <field name="banner_id"/>
+                    <field name="claim"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="banner.usuarios_banner_search_view" model="ir.ui.view">
+            <field name="name">banner.usuarios_banner.search</field>
+            <field name="model">banner.usuarios</field>
+            <field name="arch" type="xml">
+                <search string="Usuarios Banner">
+                    <field name="cedula"/>
+                    <field name="banner_id"/>
+                    <field name="username" string="Correo"/>
+                    <field name="name" string="Nombres"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="banner.usuarios_banner_act_window" model="ir.actions.act_window">
+            <field name="name">Usuarios Banner</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">banner.usuarios</field>
+            <field name="view_mode">tree,form,kanban,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Usuarios Banner.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Usuarios Banner" id="banner.usuarios_banner_menu" parent="banner.main_menu"
+                  action="banner.usuarios_banner_act_window"/>
+
+
+        <record model="ir.actions.server" id="banner.obtener_usuarios_banner_as">
+            <field name="name">Obtener Usuarios Banner</field>
+            <field name="model_id" ref="model_banner_usuarios"/>
+            <field name="state">code</field>
+            <field name="code">
+                self.obtenerUsuarios()
+            </field>
+        </record>
+
+        <record id="banner.obtener_usuarios_cron" model="ir.cron">
+            <field name="name">Actualizar Usuarios Banner</field>
+            <field name="model_id" ref="banner.model_banner_usuarios"/>
+            <field name="state">code</field>
+            <field name="code">model.obtenerUsuarios()</field>
+            <field name="active" eval="True"/>
+            <field name="interval_number">2</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+    </data>
+</odoo>
