@@ -2,7 +2,7 @@
 <odoo>
     <data>
 
-        <template id="racetime.solicitud_permiso_template" name="Solicitud de Permiso">
+        <template id="racetime.solicitud_permiso_template" name="Asistencias: Solicitud de Permiso">
             <t t-call="website.layout">
                 <div class="">
                     <div class="container mb-5">
@@ -20,13 +20,21 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col">
+                                        <div class="col-12">
                                             <div class="form-group">
                                                 <label for="">Email Jefe Inmediato</label>
-                                                <input class="form-control"
+                                                <input readonly="readonly" class="form-control"
                                                        t-attf-value="{{user.employee_id.parent_id.work_email}}"
                                                        name="email_jefe" required="required"
                                                        type="email"/>
+                                                <span style="text-decoration: underline;"
+                                                      t-out="user.employee_id.name"/>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label>Email(s) adicional(es)</label>
+                                                <input name="email_cc" class="form-control" placeholder="Ingrese los correos que desee separados por coma (,)"/>
                                             </div>
                                         </div>
                                     </div>
@@ -77,7 +85,7 @@
                                                 <option selected="selected" value="">Seleccione...</option>
                                                 <t t-foreach="tipos_permiso" t-as="tp">
                                                     <option t-att-value="tp.id">
-                                                        <span t-out="tp.name"></span>
+                                                        <span t-out="tp.name"/>
                                                     </option>
                                                 </t>
                                             </select>
