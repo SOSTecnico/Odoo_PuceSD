@@ -28,7 +28,7 @@
                                                        name="email_jefe" required="required"
                                                        type="email"/>
                                                 <span style="text-decoration: underline;"
-                                                      t-out="user.employee_id.name"/>
+                                                      t-out="user.employee_id.parent_id.name"/>
                                             </div>
                                         </div>
                                         <div class="col">
