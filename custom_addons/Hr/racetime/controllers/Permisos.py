@@ -79,12 +79,26 @@ class PermisosController(http.Controller):
             if permiso:
                 if permiso.estado == 'pendiente':
                     status = data.get('estado')
+
+                    template_id = request.env.ref("racetime.respuesta_permiso_email_template").id
+                    email = request.env["mail.template"].sudo().browse(template_id)
                     permiso.update({
                         'estado': status
                     })
 
-                    template_id = request.env.ref("racetime.respuesta_permiso_email_template").id
-                    request.env["mail.template"].sudo().browse(template_id).send_mail(permiso.id, force_send=True)
+                    if data.get('estado') == 'aprobado':
+                        emails_cc = []
+                        for e in email.email_cc.split(","):
+                            emails_cc.append(e.strip())
+
+                        emails_cc.append("cmedico@pucesd.edu.ec")
+                        emails_cc.append("cmedicoa@pucesd.edu.ec")
+
+                        email.update({
+                            'email_cc': emails_cc
+                        })
+
+                    email.send_mail(permiso.id, force_send=True)
 
                     return request.render("racetime.solicitud_permiso_registrada_jefe_template", {
                         'status': 200
