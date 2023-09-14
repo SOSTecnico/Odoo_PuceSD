@@ -10,3 +10,13 @@ $("#fecha_inicio").on("change", () => {
     if ($("#fecha_fin").val() == "")
         $("#fecha_fin").val($("#fecha_inicio").val())
 })
+
+
+$("#tipo_permiso").on("change", (e) => {
+    console.log($("#tipo_permiso").val())
+    if ($("#tipo_permiso").val() == 11 || $("#tipo_permiso").val() == 12) {
+        $("#inp_adjunto").prop("required", true)
+    } else {
+        $("#inp_adjunto").prop("required", false)
+    }
+})

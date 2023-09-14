@@ -81,7 +81,7 @@
                                     <div class="row">
                                         <div class="col">
                                             <label>Tipo de Permiso</label>
-                                            <select name="tipo_permiso_id" class="form-control" required="required">
+                                            <select name="tipo_permiso_id" id="tipo_permiso" class="form-control" required="required">
                                                 <option selected="selected" value="">Seleccione...</option>
                                                 <t t-foreach="tipos_permiso" t-as="tp">
                                                     <option t-att-value="tp.id">
@@ -104,7 +104,7 @@
                                             <div class="form-group">
                                                 <label for="adjunto">Archivo</label>
                                                 <br/>
-                                                <input name="adjunto" accept="application/pdf" type="file"/>
+                                                <input name="adjunto" id="inp_adjunto" accept="application/pdf" type="file"/>
                                             </div>
                                         </div>
                                     </div>
