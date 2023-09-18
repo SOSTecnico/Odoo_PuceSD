@@ -146,8 +146,8 @@ class Racetime(http.Controller):
 
         request.env['racetime.detalle_marcacion'].execute_sql_server(sql)
 
-        marcacion = request.env['racetime.detalle_marcacion'].search([('id_marcacion', '=', id_marcacion)])
-        marcacion.update({
+        marcacion = request.env['racetime.detalle_marcacion'].sudo().search([('id_marcacion', '=', id_marcacion)])
+        marcacion.sudo().update({
             'fecha_hora': fecha_hora + timedelta(hours=5)
         })
 
