@@ -633,7 +633,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
     #     METODO SENCILLO
     def generar_marcaciones(self):
-
+        print("INicianding")
         # Empezamos con la fecha Inicio
         fecha_ = self.fecha_inicio
 
@@ -861,8 +861,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
                     'detalle': detalle
                 })
 
-            self.env['racetime.reporte_marcaciones'].create(reporte)
-
+            self.env['racetime.reporte_marcaciones'].sudo().create(reporte)
+            print("creanding")
 
 class ReporteMarcaciones(models.Model):
     _name = 'racetime.reporte_marcaciones'
