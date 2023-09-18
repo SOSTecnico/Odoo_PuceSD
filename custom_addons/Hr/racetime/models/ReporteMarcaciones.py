@@ -688,6 +688,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
             # Empezamos a iterar día tras día desde la fecha inicial hasta llegar a la fecha final
             while fecha_ <= self.fecha_fin:
+                print("Fechaaaa", fecha_)
                 # Obtenemos el horario activo para el día en el que nos encontramos dentro de las fechas seleccionadas
                 # Para ello buscamos el horario según el día en el que estamos, dentro de las
                 # fechas inicio y fin del horario.
