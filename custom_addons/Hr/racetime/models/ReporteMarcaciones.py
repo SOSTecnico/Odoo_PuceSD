@@ -711,6 +711,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
                 fecha_ = fecha_ + timedelta(days=1)
             fecha_ = self.fecha_inicio
         # raise ValidationError("posi")
+        print("Marcaciones Calculadas")
 
         return {
             'type': 'tree',
