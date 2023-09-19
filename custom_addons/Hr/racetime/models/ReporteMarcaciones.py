@@ -708,7 +708,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
                     [('desde_fecha', '<=', fecha_), ('hasta_fecha', '>=', fecha_)])
 
                 feriados_del_dia = feriados.filtered_domain([('desde', '<=', fecha_), ('hasta', '>=', fecha_)])
-
+                _logger.info("***** Horario Activo *****")
+                _logger.info(horario_activo)
                 self.generar_marcaciones_diarias(marcaciones=marcaciones_del_empleado, feriados=feriados_del_dia,
                                                  fecha=fecha_,
                                                  empleado=empleado, horario=horario_activo, reglas=reglas_de_tiempo,
