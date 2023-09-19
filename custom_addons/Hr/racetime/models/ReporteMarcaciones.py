@@ -747,6 +747,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
         _logger.info(horario.horario)
         _logger.info(f"Fecha Actuallll: {fecha}")
         for h in horario.horario:
+            _logger.info(fecha.strftime("%A"))
+            _logger.info(h.dias)
             if fecha.strftime("%A") in h.dias.mapped('name'):
                 # Según su horario se generan 4 marcaciones
                 horario_marcaciones = [
