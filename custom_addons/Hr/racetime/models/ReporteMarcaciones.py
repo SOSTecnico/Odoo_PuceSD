@@ -5,7 +5,7 @@ from odoo import fields, models, api
 from odoo.exceptions import ValidationError
 import logging
 import locale
-locale.setlocale(locale.LC_TIME, "es_ES")
+locale.setlocale(locale.LC_TIME, "es_EC.UTF-8")
 
 _logger = logging.getLogger(__name__)
 _logger.info("******************************************")
