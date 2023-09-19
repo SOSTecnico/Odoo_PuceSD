@@ -6,7 +6,7 @@ from odoo.exceptions import ValidationError
 import logging
 import locale
 
-locale.setlocale(locale.LC_TIME, "es_ES")
+
 _logger = logging.getLogger(__name__)
 
 class ReporteMarcacionesWizard(models.TransientModel):
