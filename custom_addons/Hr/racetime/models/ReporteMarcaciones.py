@@ -4,7 +4,9 @@ import calendar
 from odoo import fields, models, api
 from odoo.exceptions import ValidationError
 import logging
+import locale
 
+locale.setlocale(locale.LC_TIME, "es_ES")
 _logger = logging.getLogger(__name__)
 
 class ReporteMarcacionesWizard(models.TransientModel):
@@ -635,8 +637,6 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
     #     METODO SENCILLO
     def generar_marcaciones(self):
-        _logger.info("*****************")
-        _logger.info("Inciando...")
         # Empezamos con la fecha Inicio
         fecha_ = self.fecha_inicio
 
@@ -664,8 +664,6 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
         # Empezamos a iterar cada usuario para registrar sus marcaciones
         for empleado in self.empleados_ids:
-            _logger.info("*****************")
-            _logger.info(f"empleado: {empleado}")
             # ---El siguiente proceso se realiza por cada empleado---
 
             # Obtenemos todas las marcaciones del empleado entre la fecha de inicio y fecha final seleccionadas
@@ -708,8 +706,6 @@ class ReporteMarcacionesWizard(models.TransientModel):
                     [('desde_fecha', '<=', fecha_), ('hasta_fecha', '>=', fecha_)])
 
                 feriados_del_dia = feriados.filtered_domain([('desde', '<=', fecha_), ('hasta', '>=', fecha_)])
-                _logger.info("***** Horario Activo *****")
-                _logger.info(horario_activo)
                 self.generar_marcaciones_diarias(marcaciones=marcaciones_del_empleado, feriados=feriados_del_dia,
                                                  fecha=fecha_,
                                                  empleado=empleado, horario=horario_activo, reglas=reglas_de_tiempo,
@@ -731,7 +727,6 @@ class ReporteMarcacionesWizard(models.TransientModel):
         }
 
     def generar_marcaciones_diarias(self, marcaciones, feriados, fecha, empleado, horario, reglas, permisos):
-        _logger.info("1 ----------------------------------")
         # Se estable la fecha de inicio y fin, recordando que segun el horario UTC debe ser 5 horas adelante a la hora actual
         f_inicio = datetime.combine(fecha, (datetime.min + timedelta(hours=5)).time())
         f_fin = datetime.combine(fecha,
@@ -743,16 +738,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
         # La siguiente variable nos permitirá guardar el horario del empleado, es decir las horas en las que debería marcar
         horario_marcaciones = []
-        _logger.info(" ------- Mostrando Horario --------")
-        _logger.info(horario.horario)
-        _logger.info(f"Fecha Actuallll: {fecha}")
         for h in horario.horario:
-            _logger.info(fecha.strftime("%A"))
-            _logger.info(h.dias.mapped('name'))
             if fecha.strftime("%A") in h.dias.mapped('name'):
-                _logger.info("**********************************-----------------------------")
-                _logger.info(h.dias.mapped('name'))
-                _logger.info(fecha.strftime("%A"))
                 # Según su horario se generan 4 marcaciones
                 horario_marcaciones = [
                     datetime.combine(f_inicio, (datetime.min + timedelta(hours=h.marcacion_1)).time()),
@@ -774,7 +761,6 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
         # Tiempo que se considera para DESCUENTO A ROL
         descuento_rol = timedelta(minutes=reglas.descuento_rol)
-        _logger.info("2 ----------------------------------")
         # Si existe un feriado, genera un solo registro y continua la siguiente fecha
         if horario_marcaciones and feriados:
             reporte.append({
@@ -804,7 +790,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
             if p and p.estado == 'aprobado':
                 if p.todo_el_dia:
                     break
-        _logger.info(horario_marcaciones)
+
         if horario_marcaciones:
             for i, m in enumerate(marcaciones_del_dia):
                 marcacion = m.fecha_hora
@@ -875,7 +861,6 @@ class ReporteMarcacionesWizard(models.TransientModel):
                 })
 
             res = self.env['racetime.reporte_marcaciones'].sudo().create(reporte)
-            _logger.info(res)
 
 class ReporteMarcaciones(models.Model):
     _name = 'racetime.reporte_marcaciones'
