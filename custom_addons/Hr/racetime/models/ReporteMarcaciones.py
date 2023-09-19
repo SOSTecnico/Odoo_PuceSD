@@ -3,7 +3,9 @@ import calendar
 
 from odoo import fields, models, api
 from odoo.exceptions import ValidationError
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class ReporteMarcacionesWizard(models.TransientModel):
     _name = 'racetime.calculo_marcaciones'
@@ -633,7 +635,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
     #     METODO SENCILLO
     def generar_marcaciones(self):
-        print("INicianding")
+        _logger.info("*****************")
+        _logger.info("Inciando...")
         # Empezamos con la fecha Inicio
         fecha_ = self.fecha_inicio
 
@@ -661,6 +664,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
         # Empezamos a iterar cada usuario para registrar sus marcaciones
         for empleado in self.empleados_ids:
+            _logger.info("*****************")
+            _logger.info(f"empleado: {empleado}")
             # ---El siguiente proceso se realiza por cada empleado---
 
             # Obtenemos todas las marcaciones del empleado entre la fecha de inicio y fecha final seleccionadas
@@ -688,7 +693,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
             # Empezamos a iterar día tras día desde la fecha inicial hasta llegar a la fecha final
             while fecha_ <= self.fecha_fin:
-                print("Fechaaaa", fecha_)
+                _logger.info(f"Fecha: {fecha_}")
                 # Obtenemos el horario activo para el día en el que nos encontramos dentro de las fechas seleccionadas
                 # Para ello buscamos el horario según el día en el que estamos, dentro de las
                 # fechas inicio y fin del horario.
@@ -712,7 +717,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
                 fecha_ = fecha_ + timedelta(days=1)
             fecha_ = self.fecha_inicio
         # raise ValidationError("posi")
-        print("Marcaciones Calculadas")
+        _logger.info("Marcaciones Calculadas")
 
         return {
             'type': 'tree',
@@ -862,7 +867,6 @@ class ReporteMarcacionesWizard(models.TransientModel):
                 })
 
             self.env['racetime.reporte_marcaciones'].sudo().create(reporte)
-            print("creanding")
 
 class ReporteMarcaciones(models.Model):
     _name = 'racetime.reporte_marcaciones'
