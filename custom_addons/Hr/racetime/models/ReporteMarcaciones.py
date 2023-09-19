@@ -743,7 +743,9 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
         # La siguiente variable nos permitirá guardar el horario del empleado, es decir las horas en las que debería marcar
         horario_marcaciones = []
-
+        _logger.info(" ------- Mostrando Horario --------")
+        _logger.info(horario.horario)
+        _logger.info(f"Fecha Actuallll: {fecha}")
         for h in horario.horario:
             if fecha.strftime("%A") in h.dias.mapped('name'):
                 # Según su horario se generan 4 marcaciones
