@@ -796,7 +796,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
             if p and p.estado == 'aprobado':
                 if p.todo_el_dia:
                     break
-
+        _logger.info(horario_marcaciones)
         if horario_marcaciones:
             for i, m in enumerate(marcaciones_del_dia):
                 marcacion = m.fecha_hora
