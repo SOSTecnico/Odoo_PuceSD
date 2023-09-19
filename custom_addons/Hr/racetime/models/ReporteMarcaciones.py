@@ -730,7 +730,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
         }
 
     def generar_marcaciones_diarias(self, marcaciones, feriados, fecha, empleado, horario, reglas, permisos):
-
+        _logger.info("1 ----------------------------------")
         # Se estable la fecha de inicio y fin, recordando que segun el horario UTC debe ser 5 horas adelante a la hora actual
         f_inicio = datetime.combine(fecha, (datetime.min + timedelta(hours=5)).time())
         f_fin = datetime.combine(fecha,
@@ -766,7 +766,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
         # Tiempo que se considera para DESCUENTO A ROL
         descuento_rol = timedelta(minutes=reglas.descuento_rol)
-
+        _logger.info("2 ----------------------------------")
         # Si existe un feriado, genera un solo registro y continua la siguiente fecha
         if horario_marcaciones and feriados:
             reporte.append({
