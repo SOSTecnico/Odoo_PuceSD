@@ -5,9 +5,13 @@ from odoo import fields, models, api
 from odoo.exceptions import ValidationError
 import logging
 import locale
-
+locale.setlocale(locale.LC_TIME, "es_ES")
 
 _logger = logging.getLogger(__name__)
+_logger.info("******************************************")
+_logger.info("******************************************")
+_logger.info("******************************************")
+_logger.info(datetime.now().strftime("%A"))
 
 class ReporteMarcacionesWizard(models.TransientModel):
     _name = 'racetime.calculo_marcaciones'
@@ -691,7 +695,6 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
             # Empezamos a iterar día tras día desde la fecha inicial hasta llegar a la fecha final
             while fecha_ <= self.fecha_fin:
-                _logger.info(f"Fecha: {fecha_}")
                 # Obtenemos el horario activo para el día en el que nos encontramos dentro de las fechas seleccionadas
                 # Para ello buscamos el horario según el día en el que estamos, dentro de las
                 # fechas inicio y fin del horario.
@@ -713,8 +716,6 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
                 fecha_ = fecha_ + timedelta(days=1)
             fecha_ = self.fecha_inicio
-        # raise ValidationError("posi")
-        _logger.info("Marcaciones Calculadas")
 
         return {
             'type': 'tree',
