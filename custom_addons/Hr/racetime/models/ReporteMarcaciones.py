@@ -866,7 +866,8 @@ class ReporteMarcacionesWizard(models.TransientModel):
                     'detalle': detalle
                 })
 
-            self.env['racetime.reporte_marcaciones'].sudo().create(reporte)
+            res = self.env['racetime.reporte_marcaciones'].sudo().create(reporte)
+            _logger.info(res)
 
 class ReporteMarcaciones(models.Model):
     _name = 'racetime.reporte_marcaciones'
