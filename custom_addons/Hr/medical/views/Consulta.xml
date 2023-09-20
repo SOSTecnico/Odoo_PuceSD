@@ -140,7 +140,7 @@
             </field>
         </record>
 
-        <menuitem sequence="50" name="Consultas" id="medical.consulta_menu" parent="medical.main_menu"
+        <menuitem sequence="5" name="Consultas" id="medical.consulta_menu" parent="medical.historia_clinica_menu"
                   action="medical.consulta_act_window"/>
 
     </data>

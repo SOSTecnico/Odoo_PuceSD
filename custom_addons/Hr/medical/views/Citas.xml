@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--
+                <record id="medical.citas_form_view" model="ir.ui.view">
+                    <field name="name">medical.medical.citas.form</field>
+                    <field name="model">medical.medical.citas</field>
+                    <field name="arch" type="xml">
+                        <form string="Citas">
+                            <sheet>
+                                <div class="oe_title">
+                                    <label for="example_title"/>
+                                    <h1>
+                                        <field name="example_title" placeholder="Title"/>
+                                    </h1>
+                                </div>
+                                <group>
+                                    <group>
+                                        <field name="create_date"/>
+                                    </group>
+                                    <group>
+                                        <field name="example_field"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </record>
+        -->
+
+        <!--
+                <record id="medical.citas_tree_view" model="ir.ui.view">
+                    <field name="name">medical.medical.citas.tree</field>
+                    <field name="model">medical.medical.citas</field>
+                    <field name="arch" type="xml">
+                        <tree string="Citas">
+                            <field name="create_date"/>
+                            <field name="example_field"/>
+                        </tree>
+                    </field>
+                </record>
+        -->
+
+        <!--
+                <record id="medical.citas_search_view" model="ir.ui.view">
+                    <field name="name">medical.medical.citas.search</field>
+                    <field name="model">medical.medical.citas</field>
+                    <field name="arch" type="xml">
+                        <search string="Citas">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>
+        -->
+
+        <record id="medical.citas_act_window" model="ir.actions.act_window">
+            <field name="name">Citas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">medical.citas</field>
+            <field name="view_mode">calendar,tree,form,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Citas.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Citas" id="medical.citas_menu" parent="medical.main_menu"/>
+        <menuitem name="Calendario" id="medical.citas_calendario_menu" parent="medical.citas_menu" action="medical.citas_act_window"/>
+
+    </data>
+</odoo>

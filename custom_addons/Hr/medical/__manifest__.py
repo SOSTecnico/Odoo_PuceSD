@@ -32,7 +32,10 @@
         'views/Pacientes.xml',
         'views/ContactoEmergencia.xml',
         'views/Cie10.xml',
-
+        'views/Citas.xml',
+        'views/Horario.xml',
+        #     DATA
+        'data/HorarioDefault.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
