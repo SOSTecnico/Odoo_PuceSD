@@ -14,4 +14,4 @@ access_medical_cie10,medical.medical_cie10,model_medical_cie10,medical.user_grou
 access_medical_cie10_admin,medical.medical_cie10_admin,model_medical_cie10,medical.admin_group,1,1,1,1
 access_medical_citas,medical.medical_citas,model_medical_citas,medical.user_group,1,0,0,0
 access_medical_citas_responsable,medical.medical_citas_responsable,model_medical_citas,medical.responsable_group,1,1,1,1
-access_medical_horario_responsable,medical.medical_horario_responsable,model_medical_horario,medical.responsable_group,1,1,1,1
+access_medical_horario_responsable,medical.medical_horario_responsable,model_medical_horario,medical.responsable_group,1,1,1,0

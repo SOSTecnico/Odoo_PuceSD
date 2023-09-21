@@ -18,6 +18,12 @@
     'category': 'Health',
     'version': '0.1',
 
+    'assets': {
+        'web.assets_frontend': [
+            'medical/static/src/scss/solicitud-cita-medica.scss'
+        ]
+    },
+
     # any module necessary for this one to work correctly
     'depends': ['base', 'mail', 'hr', 'estudiantes'],
 
@@ -35,7 +41,9 @@
         'views/Citas.xml',
         'views/Horario.xml',
         #     DATA
-        'data/HorarioDefault.xml'
+        'data/HorarioDefault.xml',
+        #   Website Templates
+        'views/Website/SolicitudCitaMedica.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
