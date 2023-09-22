@@ -1,7 +1,10 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_rolpago_rubros,rolpago.permiso_rubros,model_rolpago_rubros,rolpago.rolpago_administrador,1,1,1,1
+access_rolpago_rubros,rolpago.permiso_rubros,model_rolpago_rubros,rolpago.rolpago_gestor,1,0,0,0
+access_rolpago_rubros_admin,rolpago.permiso_rubros_admin,model_rolpago_rubros,rolpago.rolpago_administrador,1,1,1,1
 access_rolpago_roles,rolpago.permiso_roles,model_rolpago_roles,rolpago.rolpago_administrador,1,1,1,1
+access_rolpago_roles_gestor,rolpago.permiso_roles_gestor,model_rolpago_roles,rolpago.rolpago_gestor,1,0,0,0
 access_rolpago_roles_user,rolpago.permiso_roles_user,model_rolpago_roles,base.group_user,1,1,0,0
 access_rolpago_acciones,rolpago.permiso_acciones,model_rolpago_acciones,rolpago.rolpago_administrador,1,1,1,1
-access_rolpago_tipo_rubro,rolpago.permiso_tipo_rubro,model_rolpago_tipo_rubro,rolpago.rolpago_administrador,1,1,1,1
+access_rolpago_tipo_rubro_admin,rolpago.permiso_tipo_rubro_admin,model_rolpago_tipo_rubro,rolpago.rolpago_administrador,1,1,1,1
+access_rolpago_tipo_rubro,rolpago.permiso_tipo_rubro,model_rolpago_tipo_rubro,rolpago.rolpago_gestor,1,0,0,0
 
