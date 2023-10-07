@@ -11,8 +11,8 @@ class Visitante(models.Model):
 
     nombres = fields.Char(string='Nombres', required=True)
     apellidos = fields.Char(string='Apellidos', required=True)
-    cedula = fields.Char(string='Cédula')
-    correo = fields.Char(string='Correo')
+    cedula = fields.Char(string='Cédula', required=True)
+    correo = fields.Char(string='Correo', required=True)
 
     @api.depends('nombres', 'apellidos')
     def _compute_name(self):

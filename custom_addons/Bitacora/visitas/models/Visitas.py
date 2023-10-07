@@ -6,6 +6,10 @@ import qrcode
 from PIL import Image
 from io import BytesIO
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 class Visitas(models.Model):
     _name = 'visitas.visitas'
@@ -15,13 +19,17 @@ class Visitas(models.Model):
     active = fields.Boolean(string='Active', required=False, default=True)
     name = fields.Char(string='Name', required=False, related='visitante_id.name')
 
-    fecha_inicio = fields.Date(string='Fecha', required=True)
-    fecha_fin = fields.Date(string='Fecha Fin', required=False)
+    # fecha_inicio = fields.Date(string='Fecha', required=True)
+    # fecha_fin = fields.Date(string='Fecha Fin', required=False)
     visitante_id = fields.Many2one(comodel_name='visitas.visitantes', string='Visitante', required=False)
-    receptor_id = fields.Many2one(comodel_name='hr.employee', string='Receptor', required=True)
+    receptor_id = fields.Many2one(comodel_name='hr.employee', string='Receptor')
     departamento_id = fields.Many2one(comodel_name='hr.department', string='Departamento')
     motivo = fields.Text(string="Motivo", required=True)
     qr = fields.Image(string="Código QR", readonly=True)
+
+    valido_hasta = fields.Date(string='Válido Hasta', required=False, tracking=True)
+    estado = fields.Selection(string='Estado', selection=[('valido', 'Válido'), ('no_valido', 'No Válido'), ],
+                              default='valido', tracking=True)
 
     @api.onchange('receptor_id')
     def onchange_receptor(self):
@@ -29,11 +37,10 @@ class Visitas(models.Model):
             self.departamento_id = self.receptor_id.department_id
 
     def generarQR(self):
-        image_path = modules.module.get_resource_path("visitas", "static/assets", "logoPUCESD.jpeg")
-        logo = Image.open(image_path)
+        image_path = modules.module.get_resource_path("visitas", "static/assets", "logo.png")
+        logo = Image.open(image_path).convert("RGBA")
 
-        # taking base width
-        basewidth = 200
+        basewidth = 150
 
         # adjust image size
         wpercent = (basewidth / float(logo.size[0]))
@@ -42,16 +49,9 @@ class Visitas(models.Model):
         QRcode = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
 
         info = {
-            'fecha_inicio': self.fecha_inicio.strftime("%Y-%m-%d"),
-            'fecha_fin': self.fecha_fin.strftime("%Y-%m-%d") if self.fecha_fin else '',
-            'receptor': self.receptor_id.name,
-            'visitante': {
-                'nombre': self.visitante_id.name,
-                'cedula': self.visitante_id.cedula or '',
-                'correo': self.visitante_id.correo or '',
-            },
-            'departamento': self.departamento_id.name or '',
-            'motivo': self.motivo,
+            'id': self.id,
+            'valido_hasta': self.valido_hasta,
+            'estado': self.estado
         }
 
         data = base64.b64encode(str(info).encode('utf-8'))
@@ -68,7 +68,7 @@ class Visitas(models.Model):
         # set size of QR code
         pos = ((QRimg.size[0] - logo.size[0]) // 2,
                (QRimg.size[1] - logo.size[1]) // 2)
-        QRimg.paste(logo, pos)
+        QRimg.paste(logo, pos, logo)
 
         temp = BytesIO()
 
@@ -82,6 +82,15 @@ class Visitas(models.Model):
         for rec in self:
             if rec.visitante_id.correo:
                 self.env["mail.template"].sudo().browse(template_id).send_mail(rec.id, force_send=True)
+        _logger.info(f"{len(self)} Correo(s) Enviado(s) Correctamente!")
+
+    def cambiar_a_valido(self):
+        for r in self:
+            r.estado = 'valido'
+
+    def cambiar_a_no_valido(self):
+        for r in self:
+            r.estado = 'no_valido'
 
     @api.model
     def create(self, values):
