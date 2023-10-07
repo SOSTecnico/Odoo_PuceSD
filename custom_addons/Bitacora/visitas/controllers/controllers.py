@@ -1,11 +1,30 @@
 # -*- coding: utf-8 -*-
-# from odoo import http
+from odoo import http
+from odoo.http import request
 
 
-# class Visitas(http.Controller):
-#     @http.route('/visitas/visitas', auth='public')
-#     def index(self, **kw):
-#         return "Hello, world"
+class Visitas(http.Controller):
+    @http.route('/visitas/verificar', auth='public', type='json')
+    def verificar(self, **data):
+        if data:
+            model = request.env['visitas.visitas'].sudo()
+            record = model.browse(data['id'])
+            values = {
+                'access': 0
+            }
+            if record:
+                rec = record.read()[0]
+                receptor = record.receptor_id.read(['name']) or ''
+                values.update({
+                    'visitante': rec['name'],
+                    'receptor': receptor
+                })
+
+                if record.estado == 'valido':
+                    values.update({'access': 1})
+                    return values
+
+        return False
 
 #     @http.route('/visitas/visitas/objects', auth='public')
 #     def list(self, **kw):
