@@ -4,27 +4,15 @@ from odoo.http import request
 
 
 class Visitas(http.Controller):
-    @http.route('/visitas/verificar', auth='public', type='json')
-    def verificar(self, **data):
-        if data:
-            model = request.env['visitas.visitas'].sudo()
-            record = model.browse(data['id'])
-            values = {
-                'access': 0
-            }
-            if record:
-                rec = record.read()[0]
-                receptor = record.receptor_id.read(['name']) or ''
-                values.update({
-                    'visitante': rec['name'],
-                    'receptor': receptor
-                })
-
-                if record.estado == 'valido':
-                    values.update({'access': 1})
-                    return values
-
-        return False
+    @http.route('/api/visitas/check-access/<model("visitas.visitas"):visita>', auth='public', type='json')
+    def verificar(self, visita):
+        date = visita.valido_hasta.strftime("%Y-%m-%d") if visita.valido_hasta else 0
+        info = {
+            'estado': visita.estado,
+            'visitante': visita.visitante_id.name,
+            'valido_hasta': date
+        }
+        return info
 
 #     @http.route('/visitas/visitas/objects', auth='public')
 #     def list(self, **kw):

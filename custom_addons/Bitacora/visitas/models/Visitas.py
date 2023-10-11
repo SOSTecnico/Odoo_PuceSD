@@ -47,10 +47,10 @@ class Visitas(models.Model):
         hsize = int((float(logo.size[1]) * float(wpercent)))
         logo = logo.resize((basewidth, hsize), Image.ANTIALIAS)
         QRcode = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
-
+        date = self.valido_hasta.strftime("%Y-%m-%d") if self.valido_hasta else 0
         info = {
             'id': self.id,
-            'valido_hasta': self.valido_hasta,
+            'valido_hasta': date,
             'estado': self.estado
         }
 
