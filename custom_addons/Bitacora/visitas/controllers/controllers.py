@@ -4,7 +4,7 @@ from odoo.http import request
 
 
 class Visitas(http.Controller):
-    @http.route('/api/visitas/check-access/<model("visitas.visitas"):visita>', auth='public', type='json')
+    @http.route('/api/visitas/check-access/<model("visitas.visitas"):visita>', auth='public', type='json', cors='*',  csrf=False)
     def verificar(self, visita):
         date = visita.valido_hasta.strftime("%Y-%m-%d") if visita.valido_hasta else 0
         info = {
