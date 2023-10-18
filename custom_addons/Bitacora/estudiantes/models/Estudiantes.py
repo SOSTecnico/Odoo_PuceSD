@@ -30,6 +30,31 @@ class Estudiantes(models.Model):
         ('correo', 'unique(correo)', 'Ya existe un estudiante ingresado con esa Correo!')
     ]
 
+    pidm = fields.Char(
+        string='PIDM',
+        required=False)
+
+    id_banner = fields.Char(
+        string='ID BANNER',
+        required=False)
+
+    codigosap = fields.Char(
+        string='CODSAP',
+        required=False)
+
+    puceclaim = fields.Char(
+        string='PUCECLAIM',
+        required=False)
+
+    nombredeusuario = fields.Char(
+        string='NOMBRE DE USUARIO',
+        required=False)
+
+    pin = fields.Char(
+        string='COMTRASEÑA',
+        required=False)
+
+
     name = fields.Char(compute='_compute_name', store=True, string="Nombre Completo")
 
     nombres = fields.Char(string='Nombres', required=True, tracking=True)
@@ -86,21 +111,7 @@ class Estudiantes(models.Model):
             raise ValidationError(f"Ocurrió un error al conectarse a la Base de Datos: {ex}")
 
 
-    #@api.model
-    def ILG001 (self):
-        # Día actual
-        today = date.today()
-        resultados = []
-        url = f"https://pucewsd.puce.edu.ec/usuario/datosUsuario/E5DSjP2?fecha_inicio=1900-01-01&fecha_fin={today}"
-        # url = "https://POP_WS:Puc3S4p1@pucesapwd.puce.edu.ec:44400/RESTAdapter/personal/?sociedad=6000&areap=0102"
 
-        response = requests.get(url,
-                                auth=('user_sdo', 'BTq[4@M9$kL3'), verify=False)
-        respuesta = response.json()
-        resultados = []
-        for value in respuesta["USER"]:
-            resultados= value["USERNAME"]+"@PUCESD.EDU.EC"
-        return resultados
     @api.model
     def sincronizar_estudiantes_Portas (self):
         try:
