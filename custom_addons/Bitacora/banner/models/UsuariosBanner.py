@@ -43,18 +43,18 @@ class UsuarioBanner(models.Model):
         data = json.loads(response.content)
 
         model = self.env['banner.usuarios']
-        users = model.search([])
-        users.unlink()
+        users = model.search([]).mapped('cedula')
 
         for user in data['USER']:
-            model.create({
-                'pidm': user['PIDM'],
-                'banner_id': user['ID_BANNER'],
-                'cedula': user['NUMDOC'],
-                'claim': user['PUCE_CLAIM'],
-                'username': user['USERNAME'],
-                'pin': user['PIN'],
-                'nombres': f"{user['PRIMER_NOMBRE']} {user['SEGUNDO_NOMBRE']}",
-                'apellidos': f"{user['PRIMER_APELLIDO']} {user['SEGUNDO_APELLIDO']}",
-                'correo': f"{user['USERNAME'].lower()}@pucesd.edu.ec",
-            })
+            if not user['NUMDOC'] in users:
+                model.create({
+                    'pidm': user['PIDM'],
+                    'banner_id': user['ID_BANNER'],
+                    'cedula': user['NUMDOC'],
+                    'claim': user['PUCE_CLAIM'],
+                    'username': user['USERNAME'],
+                    'pin': user['PIN'],
+                    'nombres': f"{user['PRIMER_NOMBRE']} {user['SEGUNDO_NOMBRE']}",
+                    'apellidos': f"{user['PRIMER_APELLIDO']} {user['SEGUNDO_APELLIDO']}",
+                    'correo': f"{user['USERNAME'].lower()}@pucesd.edu.ec",
+                })

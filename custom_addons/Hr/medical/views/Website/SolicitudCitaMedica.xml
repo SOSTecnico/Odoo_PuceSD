@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--Solicitud Cita Médica - Check usuario-->
+        <template id="medical.solicitud_cita_check_usuario" name="Centro Médico: Solicitud Cita - Check Usuario">
+            <t t-call="website.layout">
+                <div class="container my-4">
+                    <div class="card p-3 p-sm-4 shadow-lg">
+                        <div class="card-container">
+                            <form method="POST">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="row">
+                                    <div class="col-10 col-sm-3 mx-auto">
+                                        <img class="image-logo "
+                                             src="/medical/static/src/images/logo-pucesd.png"/>
+                                    </div>
+                                    <div class="col-12 col-sm-6 my-4 text-justify">
+                                        <p>
+                                            <strong>Bienvenido/a</strong>
+                                            al registro de citas del Centro Médico de la <span
+                                                class="sky-text font-weight-bold">
+                                            PUCESD</span>, para
+                                            continuar necesitamos confirmar sus datos antes de agendar
+                                            la cita.
+                                        </p>
+                                        <div class="form-group">
+                                            <label>Ingrese su número de cédula</label>
+                                            <input autocomplete="off" required="required" name="cedula"
+                                                   class="form-control" value="2300349640"/>
+                                        </div>
+                                        <button class="btn btn-info btn-pucesd">Verificar</button>
+                                    </div>
+                                    <div class="col-6 col-sm-3 p-sm-5 mx-auto">
+                                        <img class="image-logo"
+                                             src="/medical/static/src/images/medical-logo-heart.png"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </t>
+        </template>
+
+
+        <template id="medical.solicitud_cita_no_user" name="Centro Médico: Solicitud Cita - No User">
+            <t t-call="website.layout">
+                <div class="container my-4">
+                    <div class="card">
+                        <div class="card-container">
+                            Oops, lo sentimos no se encuentran sus datos!
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!--Solicitud Cita Médica - Formulario Cita -->
+        <template id="medical.solicitud_cita_formulario" name="Centro Médico: Solicitud Cita - Formulario">
+            <t t-call="website.layout">
+                <div class="container my-4">
+                    <form class="bg-white rounded shadow border px-4">
+                        <div class="row">
+                            <div class="col-10 col-sm-6 my-auto">
+                                <img class="image-logo"
+                                     src="/medical/static/src/images/logo-pucesd-h.png"/>
+                            </div>
+                            <div class="col-10 offset-sm-4 col-sm-2 my-auto">
+                                <img class="image-logo"
+                                     src="/medical/static/src/images/doc.svg"/>
+                            </div>
+                        </div>
+                        <h2 class="border-bottom rounded">
+                            <span class="sky-text font-weight-bold">Solicitud Cita Médica</span>
+                        </h2>
+                        <div class="row">
+                            <div class="col-12 col-sm-3">
+                                <div class="form-group">
+                                    <label>Usuario</label>
+                                    <input class="form-control" name="usuario" readonly="readonly"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Cédula</label>
+                                    <input class="form-control" name="cedula" readonly="readonly"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Correo</label>
+                                    <input class="form-control" name="correo" readonly="readonly"/>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-info btn-block btn-lg">AGENDAR</button>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-9">
+                                <div class="form-group">
+                                    <label>Fecha:</label>
+                                    <input required="required" name="fecha" id="fecha" type="date" class="form-control w-sm-25"
+                                           t-att-min="datetime.datetime.now().strftime('%Y-%m-%d')"/>
+                                </div>
+                                <label>Horario:</label>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <ul id="primera_jornada" class="list-group"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 border-left">
+                                        <ul id="segunda_jornada" class="list-group"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

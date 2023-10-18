@@ -90,7 +90,9 @@
             </field>
         </record>
 
-        <menuitem sequence="1" name="Historias Clínicas" id="medical.historia_clinica_menu" parent="medical.main_menu"
+        <menuitem sequence="1" name="Historias Clínicas" id="medical.historia_clinica_menu" parent="medical.main_menu"/>
+
+        <menuitem sequence="1" name="Historias" id="medical.historias_menu" parent="medical.historia_clinica_menu"
                   action="medical.historia_clinica_act_window"/>
 
     </data>

@@ -48,7 +48,7 @@ class Paciente(models.Model):
     @api.depends('nombres', 'apellidos')
     def _compute_name(self):
         for paciente in self:
-            paciente.name = f"{paciente.nombres} {paciente.apellidos}"
+            paciente.name = f"{paciente.apellidos} {paciente.nombres}"
 
     @api.onchange('fecha_nacimiento')
     def _onchange_nacimiento(self):

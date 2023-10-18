@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="medical.horario_default" model="medical.horario">
+            <field name="name">Horario de Atención</field>
+            <field name="hora_inicio_1">8</field>
+            <field name="hora_fin_1">13</field>
+            <field name="hora_inicio_2">15</field>
+            <field name="hora_fin_2">18</field>
+        </record>
+
+        <record id="medical.dia_lunes" model="medical.dias">
+            <field name="name">lunes</field>
+        </record>
+        <record id="medical.dia_martes" model="medical.dias">
+            <field name="name">martes</field>
+        </record>
+        <record id="medical.dia_miercoles" model="medical.dias">
+            <field name="name">miércoles</field>
+        </record>
+        <record id="medical.dia_jueves" model="medical.dias">
+            <field name="name">jueves</field>
+        </record>
+        <record id="medical.dia_viernes" model="medical.dias">
+            <field name="name">viernes</field>
+        </record>
+        <record id="medical.dia_sabado" model="medical.dias">
+            <field name="name">sábado</field>
+        </record>
+        <record id="medical.dia_domingo" model="medical.dias">
+            <field name="name">domingo</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="medical.cita_agendada_email" model="mail.template">
+            <field name="name">Medical: Confirmación de Cita</field>
+            <field name="model_id" ref="model_medical_citas"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_from">cmedico@pucesd.edu.ec</field>
+            <field name="reply_to">cmedicoa@pucesd.edu.ec</field>
+            <field name="subject">Confirmación de Cita - {{ object.date_start }}</field>
+            <field name="body_html" type="html">
+                <div class="container" style="margin-left:auto ;
+                    border: 1px solid black;
+                    margin-right:auto ;
+                    width: 75%;
+                    border-radius: 2rem;
+                    padding: 1rem;">
+                    <div>
+                        <img style="width: 50%;"
+                             t-attf-src="/web/image/res.company/{{request.env.user.company_id.id}}/logo"/>
+                    </div>
+                    <hr/>
+                    <div class="content" style=" padding: 1rem;">
+                        <p>Saludos Cordiales,</p>
+                        <p>Mediante el presente correo se detalla la reservación de una cita en el centro Médico de la
+                            PUCESD con los siguientes datos:
+                        </p>
+                        <ul>
+                            <li>
+                                <strong>Fecha:</strong>
+                                <span t-out="object.date_start.strftime('%d de %B del %Y ')"/>
+                            </li>
+                            <li>
+                                <strong>Hora Inicio:</strong>
+                                <span t-out="object.hora_inicio"/>
+                            </li>
+                            <li>
+                                <strong>Hora Fin:</strong>
+                                <span t-out="object.hora_fin"/>
+                            </li>
+                        </ul>
+                        <p>Favor presentarse unos 5 minutos antes de la cita establecida</p>
+                        <hr/>
+                        <p style="margin:0">Unitec</p>
+                        <a href="https://unitec.pucesd.edu.ec" style="margin:0; color:rgb(107, 107, 107)">
+                            https://unitec.pucesd.edu.ec
+                        </a>
+                    </div>
+                </div>
+                <footer style="text-align:center">
+                    <div style="color: #929292">
+                        <small>Desarrollado en el departamento de DTI - PUCESD por Ing. Jonathan Moreno</small>
+                    </div>
+                </footer>
+            </field>
+        </record>
+
+    </data>
+</odoo>

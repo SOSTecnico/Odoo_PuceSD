@@ -17,9 +17,17 @@
     # for the full list
     'category': 'Health',
     'version': '0.1',
+    'assets': {
+        'web.assets_frontend': {
+            'medical/static/src/scss/solicitud-cita-medica.scss',
+            'medical/static/src/js/moment.tz.js',
+            'medical/static/src/js/moment.js',
+            'medical/static/src/js/solicitud-cita.js',
+        }
+    },
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'mail', 'hr', 'estudiantes'],
+    'depends': ['base', 'mail', 'hr', 'estudiantes', 'web'],
 
     # always loaded
     'data': [
@@ -32,7 +40,12 @@
         'views/Pacientes.xml',
         'views/ContactoEmergencia.xml',
         'views/Cie10.xml',
-
+        'views/Citas.xml',
+        'views/Horario.xml',
+        #     DATA
+        'data/HorarioDefault.xml',
+        #   Email Templates
+        'views/EmailTemplates/ConfirmacionCita.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

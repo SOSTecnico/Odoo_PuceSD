@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="medical.horario_form_view" model="ir.ui.view">
+            <field name="name">medical.horario.form</field>
+            <field name="model">medical.horario</field>
+            <field name="arch" type="xml">
+                <form string="Horario" create="false">
+                    <sheet>
+                        <h1>Horario de Atención</h1>
+                        <group>
+                            <group string="Primera Jornada">
+                                <field string="Hora Inicio" widget="float_time" name="hora_inicio_1"/>
+                                <field string="Hora Fin" widget="float_time" name="hora_fin_1"/>
+                            </group>
+                            <group string="Segunda Jornada">
+                                <field string="Hora Inicio" widget="float_time" name="hora_inicio_2"/>
+                                <field string="Hora Fin" widget="float_time" name="hora_fin_2"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <field name="dias" widget="many2many_checkboxes"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="medical.horario_view_tree" model="ir.ui.view">
+            <field name="name">medical.horario_view_tree</field>
+            <field name="model">medical.horario</field>
+            <field name="arch" type="xml">
+                <tree string="medical.horario_tree" create="false">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="medical.horario_act_window" model="ir.actions.act_window">
+            <field name="name">Horario</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">medical.horario</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="1000" name="Configuración" id="medical.configuracion" parent="medical.main_menu"/>
+        <menuitem name="Horario Atención" id="medical.horario_menu" parent="medical.configuracion"
+                  action="medical.horario_act_window"/>
+
+    </data>
+</odoo>

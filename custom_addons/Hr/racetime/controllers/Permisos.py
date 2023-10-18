@@ -86,17 +86,18 @@ class PermisosController(http.Controller):
                         'estado': status
                     })
 
-                    if data.get('estado') == 'aprobado':
-                        emails_cc = []
-                        for e in email.email_cc.split(","):
-                            emails_cc.append(e.strip())
-
-                        emails_cc.append("cmedico@pucesd.edu.ec")
-                        emails_cc.append("cmedicoa@pucesd.edu.ec")
-
-                        email.update({
-                            'email_cc': emails_cc
-                        })
+                    # if data.get('estado') == 'aprobado':
+                    #     if permiso.tipo_permiso_id.name == 'CITA MÉDICA' or permiso.tipo_permiso_id.name == 'REPOSO MÉDICO':
+                    #         emails_cc = []
+                    #         for e in email.email_cc.split(","):
+                    #             emails_cc.append(e.strip())
+                    #
+                    #         emails_cc.append("cmedico@pucesd.edu.ec")
+                    #         emails_cc.append("cmedicoa@pucesd.edu.ec")
+                    #
+                    #         email.update({
+                    #             'email_cc': emails_cc
+                    #         })
 
                     email.send_mail(permiso.id, force_send=True)
 

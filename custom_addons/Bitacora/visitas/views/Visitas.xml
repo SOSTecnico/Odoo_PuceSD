@@ -8,16 +8,22 @@
             <field name="arch" type="xml">
                 <form string="Visitas">
                     <header>
-                        <button name="generarQR" string="Generar QR" type="object" class="btn btn-primary"/>
-                        <button confirm="¿Seguro de Enviar la Notificación?" name="enviarQR" string="Enviar QR" type="object" class="btn btn-success"/>
+                        <button name="cambiar_a_valido" attrs="{'invisible':[('estado','=','valido')]}" type="object"
+                                string="Validar" class="btn btn-success oe_read_only"/>
+                        <button name="cambiar_a_no_valido" attrs="{'invisible':[('estado','=','no_valido')]}"
+                                type="object" string="Invalidar" class="btn btn-danger oe_read_only"/>
+                        <!--                        <button name="generarQR" string="Generar QR" type="object" class="btn btn-primary oe_read_only "/>-->
+                        <button confirm="¿Seguro de Enviar la Notificación?" name="enviarQR" string="Enviar QR"
+                                type="object" class="btn btn-info oe_read_only"/>
+                        <field name="estado" widget="statusbar"/>
+
                     </header>
                     <sheet>
                         <field name="active" invisible="1"/>
                         <widget name="web_ribbon" title="ARCHIVADO" bg_color="bg-danger"
                                 attrs="{'invisible':[('active','=',True)]}"/>
                         <group>
-                            <field name="fecha_inicio" widget="daterange" options="{'related_end_date':'fecha_fin'}"/>
-                            <field name="fecha_fin" widget="daterange" options="{'related_start_date':'fecha_inicio'}"/>
+                            <field name="valido_hasta"/>
                             <field name="visitante_id" options="{'no_quick_create':True}"/>
                             <field name="receptor_id" options="{'no_create':True, 'no_open':True}"/>
                             <field name="departamento_id" options="{'no_create':True, 'no_open':True}"/>
@@ -39,14 +45,15 @@
             <field name="arch" type="xml">
                 <tree string="Visitas">
                     <header>
-                        <button confirm="¿Seguro de Enviar Notificaciones a los registros Seleccionados?" name="enviarQR" string="Enviar QR" type="object" class="btn btn-success"/>
+                        <button name="cambiar_a_valido" type="object" string="Validar" class="btn btn-success"/>
+                        <button name="cambiar_a_no_valido" type="object" string="Invalidar" class="btn btn-danger"/>
+                        <button name="enviarQR" string="Enviar QR" type="object" class="btn btn-info"/>
                     </header>
-                    <field name="fecha_inicio"/>
-                    <field name="fecha_fin"/>
                     <field name="visitante_id"/>
                     <field name="receptor_id"/>
                     <field name="departamento_id"/>
                     <field name="motivo"/>
+                    <field name="estado" widget=""/>
                 </tree>
             </field>
         </record>

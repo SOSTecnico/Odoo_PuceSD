@@ -10,7 +10,7 @@
             <field name="email_to">{{object.visitante_id.correo}}</field>
             <field name="email_from">no-replay@pucesd.edu.ec</field>
             <field name="reply_to">cdti@pucesd.edu.ec</field>
-            <field name="subject">Solicitud de Ingreso - PUCESD - {{object.fecha_inicio}}</field>
+            <field name="subject">Solicitud de Ingreso - PUCESD - {{object.id}}</field>
             <field name="body_html" type="html">
 
                 <div class="container" style="margin-left:auto ;
