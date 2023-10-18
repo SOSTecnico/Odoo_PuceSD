@@ -1,4 +1,7 @@
 import json
+from datetime import datetime, timedelta
+import dateutil.parser
+import pytz
 
 from odoo import http
 from odoo.http import request
@@ -6,41 +9,61 @@ from odoo.http import request
 
 class CitasController(http.Controller):
 
-    # Vistas
-    @http.route('/centro-medico/solicitud-cita', auth="public", website=True)
-    def formulario_cedula(self, **data):
+    @http.route('/medical/check-user', auth='public', type='json')
+    def check_user(self, **data):
         if data:
-
-            cedula = data['cedula']
-            user = {
-                'nombre': '',
-                'cedula': '',
-                'correo': ''
-            }
-
-            model_empleado = request.env['hr.employee'].sudo()
-            model_estudiante = request.env['banner.usuarios'].sudo()
-
-            usuario = model_empleado.search([('identification_id', '=', cedula)])
-
+            vals = {}
+            usuario = request.env['hr.employee'].sudo().search([('identification_id', '=', data['dni'])])
             if not usuario:
-                usuario = model_estudiante.search([('cedula', '=', cedula)])
-
+                usuario = request.env['banner.usuarios'].sudo().search([('cedula', '=', data['dni'])])
                 if not usuario:
-                    return request.render('medical.solicitud_cita_no_user')
-
-                user.update({
-                    'nombre': usuario.name,
-                    'cedula': usuario.cedula,
-                    'correo': usuario.correo
+                    return {
+                        'msg': 'Usuario no existe',
+                        'code': 404
+                    }
+                vals.update({
+                    'correo': usuario.correo,
+                    'nombre': usuario.name
                 })
             else:
-                user.update({
-                    'nombre': usuario.name,
-                    'cedula': usuario.identification_id,
-                    'correo': usuario.work_email
+                vals.update({
+                    'correo': usuario.work_email,
+                    'nombre': usuario.name
                 })
+            return {
+                'msg': 'exito',
+                'code': 200,
+                'result': vals
+            }
 
-            return request.render('medical.solicitud_cita_formulario', {'usuario': user})
+    @http.route('/medical/get-appointments', auth='public', type='json')
+    def obtener_citas(self, **data):
+        inicio = dateutil.parser.parse(data['start'])
+        fin = dateutil.parser.parse(data['end'])
+        citas = request.env['medical.citas'].sudo().search_read(
+            [('date_start', '>=', inicio), ('date_stop', '<=', fin)])
 
-        return request.render("medical.solicitud_cita_check_usuario")
+        return citas
+
+    @http.route('/medical/set-appointment', auth='public', type='json')
+    def establecer_cita(self, **data):
+
+        model_citas = request.env['medical.citas'].sudo()
+        paciente = request.env['medical.paciente'].sudo().search([('name', '=', data['user'])])
+
+        cita = model_citas.create({
+            'date_start': data['start'],
+            'date_stop': data['end'],
+            'paciente': data['user'],
+            'paciente_id': paciente or False,
+            'name': data['user']
+        })
+
+        template_id = request.env.ref('').id
+        request.env["mail.template"].sudo().browse(template_id).send_mail(res.id, force_send=True)
+
+        return {
+            'msg': 'exito',
+            'code': 200,
+            'result': cita.read()[0]
+        }

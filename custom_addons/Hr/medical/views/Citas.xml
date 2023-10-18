@@ -2,45 +2,36 @@
 <odoo>
     <data>
 
-        <!--
-                <record id="medical.citas_form_view" model="ir.ui.view">
-                    <field name="name">medical.medical.citas.form</field>
-                    <field name="model">medical.medical.citas</field>
-                    <field name="arch" type="xml">
-                        <form string="Citas">
-                            <sheet>
-                                <div class="oe_title">
-                                    <label for="example_title"/>
-                                    <h1>
-                                        <field name="example_title" placeholder="Title"/>
-                                    </h1>
-                                </div>
-                                <group>
-                                    <group>
-                                        <field name="create_date"/>
-                                    </group>
-                                    <group>
-                                        <field name="example_field"/>
-                                    </group>
-                                </group>
-                            </sheet>
-                        </form>
-                    </field>
-                </record>
-        -->
+        <record id="medical.citas_form_view" model="ir.ui.view">
+            <field name="name">medical.citas.form</field>
+            <field name="model">medical.citas</field>
+            <field name="arch" type="xml">
+                <form string="Citas">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="date_start" string="Fecha Inicio"/>
+                            <field name="date_stop" string="Fecha Fin"/>
+                            <field name="paciente_id"/>
+                            <field name="paciente" string="Nombre Paciente"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
-        <!--
-                <record id="medical.citas_tree_view" model="ir.ui.view">
-                    <field name="name">medical.medical.citas.tree</field>
-                    <field name="model">medical.medical.citas</field>
-                    <field name="arch" type="xml">
-                        <tree string="Citas">
-                            <field name="create_date"/>
-                            <field name="example_field"/>
-                        </tree>
-                    </field>
-                </record>
-        -->
+        <record id="medical.citas_tree_view" model="ir.ui.view">
+            <field name="name">medical.citas.tree</field>
+            <field name="model">medical.citas</field>
+            <field name="arch" type="xml">
+                <tree string="Citas">
+                    <field name="name"/>
+                    <field name="date_start"/>
+                    <field name="date_stop"/>
+                    <field name="paciente" string="Nombre de Paciente"/>
+                </tree>
+            </field>
+        </record>
 
         <!--
                 <record id="medical.citas_search_view" model="ir.ui.view">

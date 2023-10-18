@@ -9,13 +9,19 @@
                 <form string="Horario" create="false">
                     <sheet>
                         <h1>Horario de Atención</h1>
-                        <group string="Primera Jornada">
-                            <field string="Hora Inicio" widget="float_time" name="hora_inicio_1"/>
-                            <field string="Hora Fin" widget="float_time" name="hora_fin_1"/>
+                        <group>
+                            <group string="Primera Jornada">
+                                <field string="Hora Inicio" widget="float_time" name="hora_inicio_1"/>
+                                <field string="Hora Fin" widget="float_time" name="hora_fin_1"/>
+                            </group>
+                            <group string="Segunda Jornada">
+                                <field string="Hora Inicio" widget="float_time" name="hora_inicio_2"/>
+                                <field string="Hora Fin" widget="float_time" name="hora_fin_2"/>
+                            </group>
                         </group>
-                        <group string="Segunda Jornada">
-                            <field string="Hora Inicio" widget="float_time" name="hora_inicio_2"/>
-                            <field string="Hora Fin" widget="float_time" name="hora_fin_2"/>
+
+                        <group>
+                            <field name="dias" widget="many2many_checkboxes"/>
                         </group>
                     </sheet>
                 </form>
