@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="estudiantes.notificacion_credenciales_portas_mt" model="mail.template">
+            <field name="name">Estudiantes: Envío de Credenciales Portas</field>
+            <field name="model_id" ref="estudiantes.model_estudiantes_estudiantes"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_to">{{object.correo}}</field>
+            <field name="email_from">no-reply@pucesd.edu.ec</field>
+            <field name="reply_to">cdti@pucesd.edu.ec</field>
+            <field name="email_cc">cdti@pucesd.edu.ec</field>
+            <field name="subject">Notificación Credenciales Portas</field>
+            <field name="body_html" type="html">
+                <div style="margin-left:auto ;
+                        border: 1px solid black;
+                        margin-right:auto ;
+                        width: 75%;
+                        border-radius: 2rem;
+                        padding: 1rem;">
+                    <header>
+                        <img style="width: 50%;"
+                             t-attf-src="/web/image/res.company/{{request.env.user.company_id.id}}/logo"/>
+                    </header>
+                    <hr/>
+                    <main>
+                        <p>Estimado/a,
+                            <span t-out="object.name"/>
+                        </p>
+                        <p>El presente correo contiene información para acceder a Portas Plus, sus credenciales se
+                            detallan a
+                            continuación:
+                        </p>
+                        <ul>
+                            <li>
+                                <strong>Usuario:</strong>
+                                <span t-out="object.correo"/>
+                            </li>
+                            <li>
+                                <strong>Contraseña:</strong>
+                                <span>Pucesd_<span t-out="datetime.datetime.now().strftime('%Y')"/>
+                                </span>
+                            </li>
+                        </ul>
+                        <p>Para Acceder a Portas Plus puede hacerlo a través de la siguiente dirección
+                            <a href="https://portas.pucesd.edu.ec">Click Aquí</a>
+                        </p>
+                        <p>Al momento de ingresar a Portas Plus se le pedirá que cambie su contraseña, por favor no
+                            comparta sus credenciales con nadie.
+                        </p>
+                    </main>
+
+                </div>
+
+                <footer style="text-align:center">
+                    <div style="color: #929292">
+                        <small>Desarrollado en el departamento de DTI - PUCESD por Ing. Jonathan Moreno</small>
+                    </div>
+                </footer>
+
+            </field>
+        </record>
+    </data>
+</odoo>

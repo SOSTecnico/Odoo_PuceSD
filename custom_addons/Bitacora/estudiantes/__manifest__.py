@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','mail'],
+    'depends': ['base', 'mail'],
 
     # always loaded
     'data': [
@@ -29,6 +29,7 @@
         'views/Carreras.xml',
         'views/Estudiantes.xml',
         'views/Config.xml',
+        'views/EmailTemplates/CredencialesPortas.xml'
 
     ],
     # only loaded in demonstration mode
