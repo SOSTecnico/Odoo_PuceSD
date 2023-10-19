@@ -10,7 +10,7 @@
             <field name="email_from">no-reply@pucesd.edu.ec</field>
             <field name="reply_to">cdti@pucesd.edu.ec</field>
             <field name="email_cc">cdti@pucesd.edu.ec</field>
-            <field name="subject">Notificación Credenciales Portas</field>
+            <field name="subject">Notificación Credenciales Portas {{object.cedula}}</field>
             <field name="body_html" type="html">
                 <div style="margin-left:auto ;
                         border: 1px solid black;
@@ -38,12 +38,13 @@
                             </li>
                             <li>
                                 <strong>Contraseña:</strong>
-                                <span>Pucesd_<span t-out="datetime.datetime.now().strftime('%Y')"/>
+                                <span>Pucesd_
+                                    <span t-out="datetime.datetime.now().strftime('%Y')"/>
                                 </span>
                             </li>
                         </ul>
                         <p>Para Acceder a Portas Plus puede hacerlo a través de la siguiente dirección
-                            <a href="https://portas.pucesd.edu.ec">Click Aquí</a>
+                            <a href="https://portas.pucesd.edu.ec/login">Click Aquí</a>
                         </p>
                         <p>Al momento de ingresar a Portas Plus se le pedirá que cambie su contraseña, por favor no
                             comparta sus credenciales con nadie.
