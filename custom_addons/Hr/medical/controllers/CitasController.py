@@ -9,7 +9,7 @@ from odoo.http import request
 
 class CitasController(http.Controller):
 
-    @http.route('/medical/check-user', auth='public', type='json')
+    @http.route('/medical/check-user', auth='public', type='json', cors='*', csrf=False)
     def check_user(self, **data):
         if data:
             vals = {}
@@ -36,7 +36,7 @@ class CitasController(http.Controller):
                 'result': vals
             }
 
-    @http.route('/medical/get-appointments', auth='public', type='json')
+    @http.route('/medical/get-appointments', auth='public', type='json', cors='*', csrf=False)
     def obtener_citas(self, **data):
         inicio = dateutil.parser.parse(data['start'])
         fin = dateutil.parser.parse(data['end'])
@@ -45,7 +45,7 @@ class CitasController(http.Controller):
 
         return citas
 
-    @http.route('/medical/set-appointment', auth='public', type='json')
+    @http.route('/medical/set-appointment', auth='public', type='json', cors='*', csrf=False)
     def establecer_cita(self, **data):
 
         model_citas = request.env['medical.citas'].sudo()
