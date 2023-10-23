@@ -18,7 +18,7 @@
                     padding: 1rem;">
                     <div>
                         <img style="width: 50%;"
-                             t-attf-src="/web/image/res.company/{{request.env.user.company_id.id}}/logo"/>
+                             t-attf-src="/web/image/res.company/1/logo"/>
                     </div>
                     <hr/>
                     <div class="content" style=" padding: 1rem;">
