@@ -59,8 +59,12 @@ class CitasController(http.Controller):
             'name': data['user']
         })
 
-        template_id = request.env.ref('').id
-        request.env["mail.template"].sudo().browse(template_id).send_mail(res.id, force_send=True)
+        template_id = request.env.ref('medical.cita_agendada_email').id
+        email = request.env["mail.template"].sudo().browse(template_id)
+        email.update({
+            'email_to': data['email']
+        })
+        email.send_mail(cita.id, force_send=True)
 
         return {
             'msg': 'exito',
