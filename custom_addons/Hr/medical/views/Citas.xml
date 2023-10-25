@@ -7,6 +7,9 @@
             <field name="model">medical.citas</field>
             <field name="arch" type="xml">
                 <form string="Citas">
+                    <header>
+                        <field name="estado" widget="statusbar" clickable="1"/>
+                    </header>
                     <sheet>
                         <group>
                             <field name="name"/>
@@ -47,6 +50,16 @@
                     </field>
                 </record>
         -->
+
+        <record id="medical.citas_view_calendar" model="ir.ui.view">
+            <field name="name">medical.citas_view_tree</field>
+            <field name="model">medical.citas</field>
+            <field name="arch" type="xml">
+                <calendar date_start="date_start" color="paciente_id" quick_add="false" event_open_popup="true">
+                    <field name="estado" filters="1"/>
+                </calendar>
+            </field>
+        </record>
 
         <record id="medical.citas_act_window" model="ir.actions.act_window">
             <field name="name">Citas</field>

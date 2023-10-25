@@ -16,7 +16,11 @@ class Citas(models.Model):
     hora_inicio = fields.Char(compute='compute_fecha_inicio')
     hora_fin = fields.Char(compute='compute_fecha_inicio')
 
-    @api.depends('date_start','date_stop')
+    estado = fields.Selection(string='Estado', default='pendiente',
+                              selection=[('pendiente', 'PENDIENTE'), ('no_asiste', 'NO ASISTE'),
+                                         ('atendido', 'ATENDIDO'), ])
+
+    @api.depends('date_start', 'date_stop')
     def compute_fecha_inicio(self):
         for rec in self:
             rec.hora_inicio = rec.date_start.astimezone(pytz.timezone('America/Guayaquil')).strftime('%H:%M')
@@ -27,6 +31,7 @@ class Citas(models.Model):
         for rec in self:
             rec.paciente = rec.paciente_id.name
             rec.name = rec.paciente_id.name
+
 
 class Horario(models.Model):
     _name = 'medical.horario'

@@ -6,7 +6,7 @@
             <field name="name">Medical: Confirmación de Cita</field>
             <field name="model_id" ref="model_medical_citas"/>
             <field name="auto_delete" eval="True"/>
-            <field name="email_from">cmedico@pucesd.edu.ec</field>
+            <field name="email_from">"Centro Médico" &lt;cmedico@pucesd.edu.ec></field>
             <field name="reply_to">cmedicoa@pucesd.edu.ec</field>
             <field name="subject">Confirmación de Cita - {{ object.date_start }}</field>
             <field name="body_html" type="html">
