@@ -30,7 +30,7 @@
             <field name="view_mode">form</field>
         </record>
 
-        <menuitem sequence="2" name="Cálculo de Marcaciones" id="racetime.calculo_marcaciones_menu"
+        <menuitem sequence="30" name="Cálculo de Marcaciones" id="racetime.calculo_marcaciones_menu"
                   parent="racetime.marcaciones_menu" action="racetime.calculo_marcaciones_act_window"/>
 
         <!--Reporte de Marcaciones-->
