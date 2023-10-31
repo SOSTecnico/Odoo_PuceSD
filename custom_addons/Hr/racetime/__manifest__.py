@@ -55,11 +55,13 @@
         'views/Saldos.xml',
         'views/RecuperacionHoras.xml',
         'views/AsistenciaVirtual.xml',
+        'views/ReporteAtrasos.xml',
         'data/ReglasDeTiempo.xml',
         'data/Permisos.xml',
         'data/Dias.xml',
         'report/PermisosReport.xml',
         'report/SaldosReport.xml',
+        'report/ReporteAtrasos.xml',
         #     Templates
         'views/SolicitudPermisos.xml',
         'views/EmailTemplates/SolicitudPermiso.xml',

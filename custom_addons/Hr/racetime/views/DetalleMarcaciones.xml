@@ -57,7 +57,7 @@
             </field>
         </record>
 
-        <menuitem name="Detalle Marcaciones" sequence="11" id="racetime.detalle_marcaciones_menu"
+        <menuitem name="Detalle Marcaciones" sequence="100" id="racetime.detalle_marcaciones_menu"
                   parent="racetime.marcaciones_menu" action="racetime.detalle_marcaciones_act_window"/>
 
 

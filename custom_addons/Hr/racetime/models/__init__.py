@@ -13,3 +13,4 @@ from . import ReglasTiempo
 from . import Saldos
 from . import RecuperacionHoras
 from . import AsistenciaVirtual
+from . import ReporteAtrasos

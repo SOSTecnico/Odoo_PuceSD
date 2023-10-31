@@ -5,6 +5,7 @@ from odoo import fields, models, api
 from odoo.exceptions import ValidationError
 import logging
 import locale
+
 locale.setlocale(locale.LC_TIME, "es_EC.UTF-8")
 
 _logger = logging.getLogger(__name__)
@@ -12,6 +13,7 @@ _logger.info("******************************************")
 _logger.info("******************************************")
 _logger.info("******************************************")
 _logger.info(datetime.now().strftime("%A"))
+
 
 class ReporteMarcacionesWizard(models.TransientModel):
     _name = 'racetime.calculo_marcaciones'
@@ -863,6 +865,7 @@ class ReporteMarcacionesWizard(models.TransientModel):
 
             res = self.env['racetime.reporte_marcaciones'].sudo().create(reporte)
 
+
 class ReporteMarcaciones(models.Model):
     _name = 'racetime.reporte_marcaciones'
     _description = 'Reporte Marcaciones'
@@ -880,7 +883,6 @@ class ReporteMarcaciones(models.Model):
         for rec in self:
             rec.diferencia_en_minutos = (datetime.min + timedelta(minutes=rec.diferencia)).strftime("%H:%M:%S")
 
-
     observacion = fields.Selection(string='Observación', required=False,
                                    selection=[('atraso', 'ATRASO'), ('adelanto', 'ADELANTO'), ('exceso', 'EXCESO'),
                                               ('a_tiempo', 'A TIEMPO'), ('sin_marcacion', 'SIN MARCACIÓN'),
@@ -894,6 +896,10 @@ class ReporteMarcaciones(models.Model):
     fecha = fields.Date(string='Fecha', required=False)
 
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado', required=False)
+    # Se agrega campo relacionado para filtro etiquetas
+    etiquetas_empleado = fields.Many2many(
+        comodel_name='hr.employee.category',
+        string='Etiqueta', related='empleado_id.category_ids')
 
     permiso_id = fields.Many2one(comodel_name='racetime.permisos', string='Permiso', required=False)
 

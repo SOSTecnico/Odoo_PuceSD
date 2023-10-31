@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="racetime.reporte_atrasos_view_form" model="ir.ui.view">
+            <field name="name">racetime.reporte_atrasos_view_form</field>
+            <field name="model">racetime.reporte_atrasos</field>
+            <field name="arch" type="xml">
+                <form string="racetime.reporte_atrasos_form">
+                    <sheet>
+                        <group>
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_final"/>
+                        </group>
+                        <group string="Empleados">
+                            <field name="empleados_id" nolabel="1"
+                                   context="{'tree_view_ref':'racetime.empleados_tree_view_inherit'}"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="generar_reporte" type="object" string="GENERAR REPORTE"
+                                class="btn btn-lg btn-primary shadow"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="racetime.reporte_atrasos_action" model="ir.actions.act_window">
+            <field name="name">Reporte Atrasos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.reporte_atrasos</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="racetime.reporte_atrasos_menu" name="Reporte Atrasos" parent="racetime.marcaciones_menu"
+                  sequence="20" action="racetime.reporte_atrasos_action"/>
+
+    </data>
+</odoo>

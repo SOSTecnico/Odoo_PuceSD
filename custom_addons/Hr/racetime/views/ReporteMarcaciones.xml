@@ -30,7 +30,7 @@
             <field name="view_mode">form</field>
         </record>
 
-        <menuitem sequence="2" name="Cálculo de Marcaciones" id="racetime.calculo_marcaciones_menu"
+        <menuitem sequence="30" name="Cálculo de Marcaciones" id="racetime.calculo_marcaciones_menu"
                   parent="racetime.marcaciones_menu" action="racetime.calculo_marcaciones_act_window"/>
 
         <!--Reporte de Marcaciones-->
@@ -98,6 +98,7 @@
                     <filter name="group_horario" string="Fecha" context="{'group_by':'fecha:month:day'}"/>
                     <filter name="group_observacion" context="{'group_by':'observacion'}"
                             domain="[('observacion','!=','feriado')]"/>
+                    <filter name="docentes_tp" string="DOCENTES TP" domain="[('etiquetas_empleado','ilike','DOCENTE TP')]"/>
                 </search>
             </field>
         </record>

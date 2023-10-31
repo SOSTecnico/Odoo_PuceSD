@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="racetime.reporte_atrasos_report_xlsx" model="ir.actions.report">
+            <field name="name">Reporte de Atrasos</field>
+            <field name="model">racetime.reporte_atrasos</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">racetime.reporte_atrasos</field>
+            <field name="report_file">atrasos_report</field>
+            <field name="binding_type">report</field>
+            <field name="print_report_name">'Reporte de Atrasos'</field>
+        </record>
+    </data>
+</odoo>
