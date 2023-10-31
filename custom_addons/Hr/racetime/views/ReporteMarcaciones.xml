@@ -98,6 +98,7 @@
                     <filter name="group_horario" string="Fecha" context="{'group_by':'fecha:month:day'}"/>
                     <filter name="group_observacion" context="{'group_by':'observacion'}"
                             domain="[('observacion','!=','feriado')]"/>
+                    <filter name="docentes_tp" string="DOCENTES TP" domain="[('etiquetas_empleado','ilike','DOCENTE TP')]"/>
                 </search>
             </field>
         </record>
