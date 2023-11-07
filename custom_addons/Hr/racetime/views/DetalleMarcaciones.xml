@@ -61,5 +61,40 @@
                   parent="racetime.marcaciones_menu" action="racetime.detalle_marcaciones_act_window"/>
 
 
+        <!--Richard-->
+        <!-- Vista para obtener reportes de marcaciones de los empleados en un lapso de tiempo establecido-->
+        <record id="racetime.obtener_marcacion_view_form" model="ir.ui.view">
+            <field name="name">racetime.obtener_marcacion_view_form</field>
+            <field name="model">racetime.obtener_marcacion</field>
+            <field name="arch" type="xml">
+                <form string="Reporte Marcaciones">
+                    <sheet>
+                        <group>
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_final"/>
+                            <field name="empleados_id"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="generar_listado" type="object" string="GENERAR REPORTE"
+                                class="btn btn-lg btn-primary shadow"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--ventana para seleccionar la fecha especifica para el listado de marcaciones-->
+        <record id="racetime.obtener_marcacion_act_window" model="ir.actions.act_window">
+            <field name="target">new</field>
+            <field name="name">Listado Marcaciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">racetime.obtener_marcacion</field>
+            <field name="view_mode">form</field>
+        </record>
+
+
+        <!--vista menu para Listado Marcaciones-->
+        <menuitem id="racetime.obtener_marcacion_menu" name="Listado Marcaciones" parent="racetime.marcaciones_menu"
+                  sequence="110" action="racetime.obtener_marcacion_act_window"/>
     </data>
 </odoo>
