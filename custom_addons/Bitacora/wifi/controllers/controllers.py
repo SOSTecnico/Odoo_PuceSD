@@ -15,31 +15,14 @@ class Wifi(http.Controller):
 
     @http.route('/wifi/generar_usuarios', auth='user', website=True)
     def generar_script(self, **data):
-        if not 'cedulas' in data:
-            return request.redirect('/wifi/formulario')
-
-        if request.env.user.has_group('wifi.group_admin'):
-            cedulas = data['cedulas'].split(',')
-            UsuariosModel = request.env['wifi.docentes']
-            try:
-                result = UsuariosModel.obtener_usuarios(cedulas)
-                pidms = request.env['wifi.docentes'].search([]).mapped('pidm')
-                for usuario in result:
-                    if str(usuario['PIDM']) not in pidms:
-                        request.env['wifi.docentes'].create({
-                            'name': '',
-                            'primer_nombre': usuario['PRIMER_NOMBRE'].upper(),
-                            'segundo_nombre': usuario['SEGUNDO_NOMBRE'].upper(),
-                            'primer_apellido': usuario['APELLIDOS'].split('/')[0].upper(),
-                            'segundo_apellido': usuario['APELLIDOS'].split('/')[1].upper(),
-                            'password': usuario['CEDULA'],
-                            'pidm': usuario['PIDM'],
-                            'cedula': usuario['CEDULA'],
-                        })
-                usuarios = request.env['wifi.docentes'].search([('cedula', 'in', cedulas)])
-
-                return request.render('wifi.template_docentes_script', {'usuarios': usuarios})
-            except Error:
-                return request.render('wifi.template_generar_usuario',
-                                      {'error': 'Ocurrió un Error, favor comuníquese con el Desarrollador',
-                                       'message': Error})
+        # Se consulta a los usuarios de banner, se busca la cedula apartado por una coma
+        usuarios = request.env["banner.usuarios"].search([("cedula", "in", data["cedulas"].split(","))])
+        # Mediante la condicional for a usuarios se imprime los datos que se desean aparece
+        for i in usuarios:
+            print(i.nombres)
+            print(i.apellidos)
+            print(i.pidm)
+            print(i.correo)
+            print(i.cedula)
+        # Se retorna el pedido renderizando la vista en docentes con nombre wifi template, leyendo los datos en usuario
+        return request.render('wifi.template_docentes_script', {'usuarios': usuarios.read()})
