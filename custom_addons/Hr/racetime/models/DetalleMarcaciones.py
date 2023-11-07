@@ -107,8 +107,7 @@ class DetalleMarcacion(models.Model):
         except Error as ex:
             raise ValidationError(f"Ocurrió un error al conectarse a la Base de Datos: {ex}")
 
-
-    def execute_sql_server(self,sql):
+    def execute_sql_server(self, sql):
         try:
             config = self.obtener_parametros_conexion_biotime()
             conexion = pyodbc.connect(
@@ -127,3 +126,33 @@ class DetalleMarcacion(models.Model):
 
         except Error as ex:
             raise ValidationError(f"Ocurrió un error al conectarse a la Base de Datos: {ex}")
+
+
+# clase para obtener listado de marcaciones de empleados.
+class ObtenerMarcaciones(models.TransientModel):
+    _name = 'racetime.obtener_marcacion'
+    _description = 'Obtener Marcaciones'
+
+    name = fields.Char()
+
+    # campos solicitados para generar el listado.
+    empleados_id = fields.Many2many(comodel_name='hr.employee', string='Empleados', required=True)
+    fecha_inicio = fields.Datetime(string='Fecha Inicial', required=True)
+    fecha_final = fields.Datetime(string='Fecha Final', required=False)
+
+
+    # función para hacer una consulta a la base de datos, para generar listado de marcaciones.
+    def generar_listado(self):
+        # cambio de zona horario de los campos, a la zona actual que se esta.
+        self.fecha_inicio = self.fecha_inicio + timedelta(hours=-5)
+        self.fecha_final = self.fecha_final + timedelta(hours=-5)
+
+        ids = str(self.empleados_id.mapped('emp_code')).replace('[', '').replace(']', '')
+
+
+        # consulta a la base de datos, de los tiempos de marcaciones e ids de empleados.
+        query = f"""select * from iclock_transaction
+                    where punch_time 
+                    between '{self.fecha_inicio.strftime("%Y-%m-%d %H:%M:%S")}'
+                    and '{self.fecha_final.strftime("%Y-%m-%d %H:%M:%S")}' and emp_code in ({ids})"""
+        result = self.env["racetime.detalle_marcacion"].obtener_marcaciones(sql=query)
