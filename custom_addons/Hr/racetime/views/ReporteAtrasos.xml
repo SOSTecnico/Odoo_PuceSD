@@ -18,7 +18,7 @@
                         </group>
                     </sheet>
                     <footer>
-                        <button name="generar_reporte" type="object" string="GENERAR REPORTE"
+                        <button name="generar_reporte" type="object" string="REPORTE ATRASOS"
                                 class="btn btn-lg btn-primary shadow"/>
                     </footer>
                 </form>
@@ -33,7 +33,7 @@
             <field name="target">new</field>
         </record>
 
-        <menuitem id="racetime.reporte_atrasos_menu" name="Reporte Atrasos" parent="racetime.marcaciones_menu"
+        <menuitem id="racetime.reporte_atrasos_menu" name="Reportes" parent="racetime.marcaciones_menu"
                   sequence="20" action="racetime.reporte_atrasos_action"/>
 
     </data>

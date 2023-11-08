@@ -24,5 +24,11 @@ class Wifi(http.Controller):
             print(i.pidm)
             print(i.correo)
             print(i.cedula)
+            print(i.pin)
+      # Se hace un for en el cual los usuarios que no tengan datos en el campo pidm se remplace por el campo pin
+        for e in usuarios:
+           if not e.pidm:
+               e.pidm = e.pin
+
         # Se retorna el pedido renderizando la vista en docentes con nombre wifi template, leyendo los datos en usuario
         return request.render('wifi.template_docentes_script', {'usuarios': usuarios.read()})
