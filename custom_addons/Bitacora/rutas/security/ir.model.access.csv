@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rutas_usuarios,Rutas: Usuarios,model_rutas_usuarios,rutas.user_group,1,0,0,0
+access_rutas_usuarios_responsable,Rutas: Usuarios - Responsable,model_rutas_usuarios,rutas.responsable_group,1,1,1,1
+access_rutas_choferes,Rutas: Choferes,model_rutas_choferes,rutas.user_group,1,0,0,0
+access_rutas_choferes_responsable,Rutas: Choferes - Responsable,model_rutas_choferes,rutas.responsable_group,1,1,1,1
+access_rutas_buses,Rutas: Buses,model_rutas_buses,rutas.user_group,1,0,0,0
+access_rutas_buses_responsable,Rutas: Buses - Responsable,model_rutas_buses,rutas.responsable_group,1,1,1,1
+access_rutas_paradas,Rutas: Paradas,model_rutas_paradas,rutas.user_group,1,0,0,0
+access_rutas_paradas_responsable,Rutas: Paradas - Responsable,model_rutas_paradas,rutas.responsable_group,1,1,1,1
+access_rutas_rutas,Rutas: Rutas,model_rutas_rutas,rutas.user_group,1,0,0,0
+access_rutas_rutas_responsable,Rutas: Rutas - Responsable,model_rutas_rutas,rutas.responsable_group,1,1,1,1
+access_rutas_bitacora,Rutas: Bitácora,model_rutas_bitacora,rutas.user_group,1,0,0,0
+access_rutas_bitacora_responsable,Rutas: Bitácora - Responsable,model_rutas_bitacora,rutas.responsable_group,1,1,1,1
+access_rutas_bus_ruta,Rutas: Estado Rutas,model_rutas_bus_ruta,rutas.user_group,1,0,0,0
+access_rutas_bus_ruta_responsable,Rutas: Estado Rutas - Responsable,model_rutas_bus_ruta,rutas.responsable_group,1,1,1,1
+access_rutas_ruta_parada,Rutas: Rutas Paradas,model_rutas_ruta_parada,rutas.user_group,1,0,0,0
+access_rutas_ruta_parada_responsable,Rutas: Rutas Paradas - Responsable,model_rutas_ruta_parada,rutas.responsable_group,1,1,1,1

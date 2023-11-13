@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="rutas.buses_form_view" model="ir.ui.view">
+            <field name="name">Rutas: Buses Form</field>
+            <field name="model">rutas.buses</field>
+            <field name="arch" type="xml">
+                <form string="Buses">
+                    <field name="active" invisible="1"/>
+                    <sheet>
+                        <widget name="web_ribbon" title="ARCHIVADO" bg_color="bg-danger"
+                                attrs="{'invisible':[('active','=',True)]}"/>
+                        <group>
+                            <field name="name"/>
+                            <field name="chofer_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="rutas.buses_tree_view" model="ir.ui.view">
+            <field name="name">Rutas: Buses Tree</field>
+            <field name="model">rutas.buses</field>
+            <field name="arch" type="xml">
+                <tree string="Buses">
+                    <field name="name"/>
+                    <field name="chofer_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--<record id="rutas.buses_search_view" model="ir.ui.view">
+            <field name="name">rutas.rutas.buses.search</field>
+            <field name="model">rutas.rutas.buses</field>
+            <field name="arch" type="xml">
+                <search string="Buses">
+                    <group expand="1" string="Group By">
+                        <filter string="Example Field" name="example_field" domain="[]"
+                                context="{'group_by':'example_field'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>-->
+
+        <record id="rutas.buses_act_window" model="ir.actions.act_window">
+            <field name="name">Buses</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rutas.buses</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    No hay Buses
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="30" name="Buses" id="rutas.buses_menu" parent="rutas.main_menu"
+                  action="rutas.buses_act_window"/>
+
+    </data>
+</odoo>
