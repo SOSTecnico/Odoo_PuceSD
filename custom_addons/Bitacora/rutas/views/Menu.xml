@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem groups="rutas.user_group" id="rutas.main_menu" name="Rutas"
+                  web_icon="rutas,static/description/icon.png"/>
+
+    </data>
+</odoo>

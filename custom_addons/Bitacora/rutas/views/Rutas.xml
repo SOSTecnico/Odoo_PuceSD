@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem sequence="40" name="Rutas" id="rutas.rutas_main_menu" parent="rutas.main_menu"/>
+
+        <record id="rutas.paradas_form_view" model="ir.ui.view">
+            <field name="name">Rutas: Paradas Form</field>
+            <field name="model">rutas.paradas</field>
+            <field name="arch" type="xml">
+                <form string="Paradas">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="rutas.paradas_tree_view" model="ir.ui.view">
+            <field name="name">Rutas: Paradas Tree</field>
+            <field name="model">rutas.paradas</field>
+            <field name="arch" type="xml">
+                <tree string="Paradas">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--        <record id="rutas.paradas_search_view" model="ir.ui.view">
+                    <field name="name">rutas.rutas.paradas.search</field>
+                    <field name="model">rutas.paradas</field>
+                    <field name="arch" type="xml">
+                        <search string="Paradas">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>-->
+
+        <record id="rutas.paradas_act_window" model="ir.actions.act_window">
+            <field name="name">Paradas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rutas.paradas</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    No hay paradas
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="10" id="rutas.paradas_menu" name="Paradas" action="rutas.paradas_act_window"
+                  parent="rutas.rutas_main_menu"/>
+
+        <!-- ********** RUTAS ******* -->
+
+        <record id="rutas.rutas_form_view" model="ir.ui.view">
+            <field name="name">Rutas: Rutas Form</field>
+            <field name="model">rutas.rutas</field>
+            <field name="arch" type="xml">
+                <form string="Rutas">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="buses_id" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="rutas_paradas" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="parada_id"/>
+                                </tree>
+                            </field>
+                            <field name="buses_rutas" nolabel="1">
+                                <tree editable="bottom" create="false" edit="false">
+                                    <field name="bus_id" readonly="1"/>
+                                    <field name="estado" readonly="1"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="rutas.rutas_tree_view" model="ir.ui.view">
+            <field name="name">Rutas: Rutas Tree</field>
+            <field name="model">rutas.rutas</field>
+            <field name="arch" type="xml">
+                <tree string="Rutas">
+                    <field name="name"/>
+                    <field name="buses_id" widget="many2many_tags" optional="show"/>
+<!--                    <field name="paradas_id" widget="many2many_tags" optional="show"/>-->
+                </tree>
+            </field>
+        </record>
+
+        <!--        <record id="rutas.rutas_search_view" model="ir.ui.view">
+                    <field name="name">rutas.rutas.rutas.search</field>
+                    <field name="model">rutas.rutas</field>
+                    <field name="arch" type="xml">
+                        <search string="Rutas">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>-->
+
+        <record id="rutas.rutas_act_window" model="ir.actions.act_window">
+            <field name="name">Rutas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rutas.rutas</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    No hay rutas
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="1" id="rutas.rutas_menu" name="Rutas" action="rutas.rutas_act_window"
+                  parent="rutas.rutas_main_menu"/>
+
+
+    </data>
+</odoo>

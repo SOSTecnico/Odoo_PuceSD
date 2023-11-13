@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="rutas.bitacora_form_view" model="ir.ui.view">
+            <field name="name">Rutas: Bitacora Form</field>
+            <field name="model">rutas.bitacora</field>
+            <field name="arch" type="xml">
+                <form string="Bitácora">
+                    <sheet>
+                        <group>
+                            <field name="fecha_hora"/>
+                            <field name="usuario_id"/>
+                            <field name="bus_id"/>
+                            <field name="ruta_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="rutas.bitacora_tree_view" model="ir.ui.view">
+            <field name="name">rutas.rutas.bitacora.tree</field>
+            <field name="model">rutas.bitacora</field>
+            <field name="arch" type="xml">
+                <tree string="Bitacora">
+                    <field name="fecha_hora"/>
+                    <field name="usuario_id"/>
+                    <field name="bus_id"/>
+                    <field name="ruta_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--
+                <record id="rutas.bitacora_search_view" model="ir.ui.view">
+                    <field name="name">rutas.rutas.bitacora.search</field>
+                    <field name="model">rutas.rutas.bitacora</field>
+                    <field name="arch" type="xml">
+                        <search string="Bitacora">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>
+        -->
+
+        <record id="rutas.bitacora_act_window" model="ir.actions.act_window">
+            <field name="name">Bitácora</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rutas.bitacora</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Bitacora.
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="50" name="Bitácora" id="rutas.bitacora_menu" parent="rutas.main_menu"
+                  action="rutas.bitacora_act_window"/>
+
+    </data>
+</odoo>
