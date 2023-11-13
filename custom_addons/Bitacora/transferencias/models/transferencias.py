@@ -75,3 +75,16 @@ class Transferencia(models.Model):
 
         return res
 
+    @api.onchange("codigo")
+    def codigo_tranferencia(self):
+        codigos=self.env["transferencias.transferencias"].search([], order="codigo DESC",limit=1)
+
+        codi=codigos.codigo.split("-")
+        codi1="DTI-0"
+
+        codi_final=int(codi[1]) + 1
+        self.codigo=f"{codi1.zfill(3)}{codi_final}"
+
+
+
+
