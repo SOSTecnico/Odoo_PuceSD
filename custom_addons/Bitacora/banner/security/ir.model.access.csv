@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_banner_usuarios,banner.usuarios,model_banner_usuarios,banner.user_group,1,0,0,0
 access_banner_usuarios_responsable,banner.usuarios_responsable,model_banner_usuarios,banner.responsable_group,1,1,1,1
+access_banner_historial_notificacion,permiso historial notificacion,model_banner_historial_notificacion,banner.responsable_group,1,1,1,1

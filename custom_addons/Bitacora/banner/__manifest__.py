@@ -28,7 +28,11 @@
         'views/MainMenu.xml',
         'views/UsuariosBanner.xml',
         # ***Email Templates***
-        'views/EmailTemplates/CredencialesBanner.xml'
+        'views/EmailTemplates/CredencialesBanner.xml',
+        # ***website***
+        'views/website/credenciales.xml',
+        # ***historial**
+        'views/historial/tipohistorial.xml'
 
         # 'views/views.xml',
         # 'views/templates.xml',

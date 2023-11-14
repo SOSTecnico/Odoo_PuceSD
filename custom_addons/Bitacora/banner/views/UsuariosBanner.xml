@@ -20,6 +20,11 @@
                             <field name="banner_id"/>
                             <field name="claim"/>
                         </group>
+                        <notebook>
+                            <page name="Histor_page" string="Ver Notificaciones">
+                                <field nolabel="1" name="notifi"></field>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
@@ -37,6 +42,7 @@
                     <field name="correo"/>
                     <field name="banner_id"/>
                     <field name="claim"/>
+                    <field name="notifi"/>
                 </tree>
             </field>
         </record>

@@ -21,7 +21,7 @@ class UsuarioBanner(models.Model):
     nombres = fields.Char(string='Nombres', required=False)
     apellidos = fields.Char(string='Apellidos', required=False)
     correo = fields.Char(string='Correo', required=False)
-
+    notifi=fields.One2many(string='Notificaciones', comodel_name='banner.historial_notificacion', inverse_name='usuario')
     @api.depends('nombres', 'apellidos')
     def _compute_name(self):
         for user in self:
@@ -32,6 +32,8 @@ class UsuarioBanner(models.Model):
         for rec in self:
             if rec.correo:
                 self.env["mail.template"].sudo().browse(template).send_mail(rec.id, force_send=True)
+                print(rec.id)
+                self.env["banner.historial_notificacion"].create({"fecha":datetime.now(),"usuario":rec.id})
 
     @api.model
     def obtenerUsuarios(self):
@@ -58,3 +60,4 @@ class UsuarioBanner(models.Model):
                     'apellidos': f"{user['PRIMER_APELLIDO']} {user['SEGUNDO_APELLIDO']}",
                     'correo': f"{user['USERNAME'].lower()}@pucesd.edu.ec",
                 })
+
