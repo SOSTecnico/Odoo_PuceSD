@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Banner",
+    'name': "PUCESD Rutas",
 
     'summary': """
-        Módulo que contiene Información de Banner""",
+      Módulo para gestionar las rutas de la PUCESD""",
 
     'description': """
         Long description of module's purpose
@@ -25,17 +25,14 @@
     'data': [
         'security/Groups.xml',
         'security/ir.model.access.csv',
-        'views/MainMenu.xml',
-        'views/UsuariosBanner.xml',
-        # ***Email Templates***
-        'views/EmailTemplates/CredencialesBanner.xml',
-        # ***website***
-        'views/website/credenciales.xml',
-        # ***historial**
-        'views/historial/tipohistorial.xml'
+        # Vistas
+        'views/Menu.xml',
+        'views/Usuarios.xml',
+        'views/Choferes.xml',
+        'views/Buses.xml',
+        'views/Rutas.xml',
+        'views/Bitacora.xml',
 
-        # 'views/views.xml',
-        # 'views/templates.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

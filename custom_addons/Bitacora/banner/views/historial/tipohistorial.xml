@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="banner.historial_notificacion_tree_view" model="ir.ui.view">
+            <field name="name">banner.historial_notificacion.tree</field>
+            <field name="model">banner.historial_notificacion</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="fecha"/>
+                    <field name="usuario"/>
+                </tree>
+            </field>
+        </record>
+        <record id="banner.historial_notificacion_form_view" model="ir.ui.view">
+            <field name="name">banner.historial_notificacion.form</field>
+            <field name="model">banner.historial_notificacion</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="fecha"/>
+                    <field name="usuario"/>
+                </form>
+            </field>
+
+        </record>
+        <record id="banner.accion_historial_view" model="ir.actions.act_window">
+            <field name="name">Accion de vista del historial</field>
+            <field name="res_model">banner.historial_notificacion</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem name="Historial Banner" id="banner.historial_notificacion_menu" parent="banner.main_menu"
+                  action="accion_historial_view"></menuitem>
+    </data>
+</odoo>
