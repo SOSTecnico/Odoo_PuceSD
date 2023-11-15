@@ -56,8 +56,11 @@ class CitasController(http.Controller):
             'date_stop': data['end'],
             'paciente': data['user'],
             'paciente_id': paciente or False,
-            'name': data['user']
+            'name': data['user'],
+
         })
+        print(data['start'])
+        print(data['end'])
 
         template_id = request.env.ref('medical.cita_agendada_email').id
         email = request.env["mail.template"].sudo().browse(template_id)
