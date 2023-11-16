@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!--        <record id="banner.credenciales_form_view" model="ir.ui.view">-->
+<!--            <field name="name">banner credenciales.form</field>-->
+<!--            <field name="model">banner.credenciales</field>-->
+<!--            <field name="view_mode">tree,form</field>-->
+<!--            <field name="arch" type="xml"></field>-->
+<!--        </record>-->
+        <template id="banner.template_credenciales_website">
+            <t t-call="website.layout">
+                <div class="container mt-4">
+                    <h1>holaaa</h1>
+                </div>
+            </t>
+        </template>
+
+
+
+
+
+
+
+<!--        <template id="wifi.template_generar_usuario">-->
+<!--            <t t-call="website.layout">-->
+<!--                <div class="container mt-4">-->
+<!--                    <div>-->
+<!--                        <p class="alert alert-danger" t-if="error">-->
+<!--                            <t t-esc="error"/>-->
+<!--                            <t t-esc="message"></t>-->
+<!--                        </p>-->
+<!--                    </div>-->
+<!--                    <form class="bg-white rounded mx-5 p-4 shadow" method="POST" action="/wifi/generar_usuarios">-->
+<!--                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>-->
+<!--                        <div>-->
+<!--                            <label>Ingrese las Cédulas:</label>-->
+<!--                            <input name="cedulas" class="form-control"></input>-->
+<!--                        </div>-->
+<!--                        <button class="btn btn-primary mt-3">CONSULTAR</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </t>-->
+<!--        </template>-->
+
+    </data>
+</odoo>
+
