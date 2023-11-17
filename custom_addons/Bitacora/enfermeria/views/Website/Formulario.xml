@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="enfermeria.formulario_asistencia_template" name="Enfermería: Formulario Asistencia">
+            <t t-call="website.layout">
+                <div class="container mt-3">
+                    <form action="" method="POST">
+                        <div class="form-group">
+                            <label>Cédula:</label>
+                            <input name="cedula" class="form-control"/>
+                        </div>
+                        <div>
+                            asdsa
+                        </div>
+                    </form>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>

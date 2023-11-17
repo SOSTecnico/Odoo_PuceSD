@@ -32,6 +32,8 @@
         'views/Asignaturas.xml',
         'views/Laboratorios.xml',
         'views/Registros.xml',
+        # Website
+        'views/Website/Formulario.xml'
 
     ],
     # only loaded in demonstration mode

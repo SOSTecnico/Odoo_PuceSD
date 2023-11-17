@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-# from odoo import http
+from odoo import http
+from odoo.http import request
 
 
-# class Enfermeria(http.Controller):
-#     @http.route('/enfermeria/enfermeria', auth='public')
-#     def index(self, **kw):
-#         return "Hello, world"
+class Enfermeria(http.Controller):
+    @http.route('/enfermeria/formulario-asistencia', auth='public', website=True)
+    def formulario(self, **kw):
+        return request.render('enfermeria.formulario_asistencia_template')
 
 #     @http.route('/enfermeria/enfermeria/objects', auth='public')
 #     def list(self, **kw):
