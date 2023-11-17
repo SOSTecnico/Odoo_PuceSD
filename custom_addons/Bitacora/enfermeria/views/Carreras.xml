@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--        <record id="enfermeria.carreras_form_view" model="ir.ui.view">
+                    <field name="name">Enfermeria: Carreras Form</field>
+                    <field name="model">enfermeria.enfermeria.carreras</field>
+                    <field name="arch" type="xml">
+                        <form string="Carreras">
+                            <sheet>
+                                <div class="oe_title">
+                                    <label for="example_title"/>
+                                    <h1>
+                                        <field name="example_title" placeholder="Title"/>
+                                    </h1>
+                                </div>
+                                <group>
+                                    <group>
+                                        <field name="create_date"/>
+                                    </group>
+                                    <group>
+                                        <field name="example_field"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </record>
+
+                <record id="enfermeria.carreras_tree_view" model="ir.ui.view">
+                    <field name="name">enfermeria.enfermeria.carreras.tree</field>
+                    <field name="model">enfermeria.enfermeria.carreras</field>
+                    <field name="arch" type="xml">
+                        <tree string="Carreras">
+                            <field name="create_date"/>
+                            <field name="example_field"/>
+                        </tree>
+                    </field>
+                </record>
+
+                <record id="enfermeria.carreras_search_view" model="ir.ui.view">
+                    <field name="name">enfermeria.enfermeria.carreras.search</field>
+                    <field name="model">enfermeria.enfermeria.carreras</field>
+                    <field name="arch" type="xml">
+                        <search string="Carreras">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>-->
+
+        <record id="enfermeria.carreras_act_window" model="ir.actions.act_window">
+            <field name="name">Carreras</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">enfermeria.carreras</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    No Hay Carreras
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="60" name="Carreras" id="enfermeria.carreras_menu" parent="enfermeria.main_menu"
+                  action="enfermeria.carreras_act_window"/>
+
+    </data>
+</odoo>

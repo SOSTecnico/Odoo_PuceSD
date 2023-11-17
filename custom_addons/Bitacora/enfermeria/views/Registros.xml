@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--        <record id="enfermeria.registros_form_view" model="ir.ui.view">
+                    <field name="name">.enfermeria.registros.form</field>
+                    <field name="model">.enfermeria.registros</field>
+                    <field name="arch" type="xml">
+                        <form string="Registros">
+                            <sheet>
+                                <div class="oe_title">
+                                    <label for="example_title"/>
+                                    <h1>
+                                        <field name="example_title" placeholder="Title"/>
+                                    </h1>
+                                </div>
+                                <group>
+                                    <group>
+                                        <field name="create_date"/>
+                                    </group>
+                                    <group>
+                                        <field name="example_field"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </record>
+
+                <record id="enfermeria.registros_tree_view" model="ir.ui.view">
+                    <field name="name">.enfermeria.registros.tree</field>
+                    <field name="model">.enfermeria.registros</field>
+                    <field name="arch" type="xml">
+                        <tree string="Registros">
+                            <field name="create_date"/>
+                            <field name="example_field"/>
+                        </tree>
+                    </field>
+                </record>
+
+                <record id="enfermeria.registros_search_view" model="ir.ui.view">
+                    <field name="name">.enfermeria.registros.search</field>
+                    <field name="model">.enfermeria.registros</field>
+                    <field name="arch" type="xml">
+                        <search string="Registros">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>-->
+
+        <record id="enfermeria.registros_act_window" model="ir.actions.act_window">
+            <field name="name">Registros</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">enfermeria.registros</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    No Hay Registros
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="1" name="Registros" id="enfermeria.registros_menu" parent="enfermeria.main_menu"
+                  action="enfermeria.registros_act_window"/>
+
+    </data>
+</odoo>
