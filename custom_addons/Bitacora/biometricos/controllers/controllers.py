@@ -23,16 +23,17 @@ class Biometricos(http.Controller):
 
     @http.route('/biometricos/dti', auth='user', website=True)
     def open_dti(self, **data):
-        biometricos = request.env["biometricos.biometricos"].sudo().search(
-            ['|', ('name', '=', 'DTI Oficina'), ('name', '=', 'DTI_ESIS')])
-        print(data)
-        if data:
-            bio = biometricos.filtered_domain([('id', '=', int(data['biometrico_id']))])
-            zk = ZK(bio.ip_address, port=4370, timeout=5, force_udp=True)
+        if request.env.user.has_group('biometricos.group_user'):
+            biometricos = request.env["biometricos.biometricos"].sudo().search(
+                ['|', ('name', '=', 'DTI Oficina'), ('name', '=', 'DTI_ESIS')])
 
-            conn = zk.connect()
-            conn.unlock(time=3)
-            zk.disconnect()
-        return request.render('biometricos.esis_template', {
-            'biometricos': biometricos
-        })
+            if data:
+                bio = biometricos.filtered_domain([('id', '=', int(data['biometrico_id']))])
+                zk = ZK(bio.ip_address, port=4370, timeout=5, force_udp=True)
+
+                conn = zk.connect()
+                conn.unlock(time=3)
+                zk.disconnect()
+            return request.render('biometricos.esis_template', {
+                'biometricos': biometricos
+            })
