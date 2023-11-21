@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--     <record id="enfermeria.asignatura_form_view" model="ir.ui.view">
+                 <field name="name">.enfermeria.asignatura.form</field>
+                 <field name="model">.enfermeria.asignatura</field>
+                 <field name="arch" type="xml">
+                     <form string="Asignatura">
+                         <sheet>
+                             <div class="oe_title">
+                                 <label for="example_title"/>
+                                 <h1>
+                                     <field name="example_title" placeholder="Title"/>
+                                 </h1>
+                             </div>
+                             <group>
+                                 <group>
+                                     <field name="create_date"/>
+                                 </group>
+                                 <group>
+                                     <field name="example_field"/>
+                                 </group>
+                             </group>
+                         </sheet>
+                     </form>
+                 </field>
+             </record>
+
+             <record id="enfermeria.asignatura_tree_view" model="ir.ui.view">
+                 <field name="name">.enfermeria.asignatura.tree</field>
+                 <field name="model">.enfermeria.asignatura</field>
+                 <field name="arch" type="xml">
+                     <tree string="Asignatura">
+                         <field name="create_date"/>
+                         <field name="example_field"/>
+                     </tree>
+                 </field>
+             </record>
+
+             <record id="enfermeria.asignatura_search_view" model="ir.ui.view">
+                 <field name="name">.enfermeria.asignatura.search</field>
+                 <field name="model">.enfermeria.asignatura</field>
+                 <field name="arch" type="xml">
+                     <search string="Asignatura">
+                         <group expand="1" string="Group By">
+                             <filter string="Example Field" name="example_field" domain="[]"
+                                     context="{'group_by':'example_field'}"/>
+                         </group>
+                     </search>
+                 </field>
+             </record>-->
+
+        <record id="enfermeria.asignaturas_act_window" model="ir.actions.act_window">
+            <field name="name">Asignaturas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">enfermeria.asignaturas</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    No hay Asignaturas
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="50" name="Asignatura" id="enfermeria.asignatura_menu" parent="enfermeria.main_menu"
+                  action="enfermeria.asignaturas_act_window"/>
+
+    </data>
+</odoo>

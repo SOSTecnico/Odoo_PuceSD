@@ -23,6 +23,7 @@
                             <field name="apellidos"/>
                             <field name="cedula"/>
                             <field name="correo"/>
+                            <field name="password" password="1"/>
                         </group>
                     </sheet>
                     <div class="oe_chatter">

@@ -20,8 +20,6 @@
     'assets': {
         'web.assets_frontend': {
             'medical/static/src/scss/solicitud-cita-medica.scss',
-            'medical/static/src/js/moment.tz.js',
-            'medical/static/src/js/moment.js',
             'medical/static/src/js/solicitud-cita.js',
         }
     },

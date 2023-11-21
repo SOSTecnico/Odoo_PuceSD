@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_enfermeria_carrera,Enfermeria: Carrera,model_enfermeria_carreras,enfermeria.user_group,1,0,0,0
+access_enfermeria_carrera_responsable,Enfermeria: Carrera - Responsable,model_enfermeria_carreras,enfermeria.responsable_group,1,1,1,1
+access_enfermeria_asignatura,Enfermeria: Asignatura,model_enfermeria_asignaturas,enfermeria.user_group,1,0,0,0
+access_enfermeria_asignatura_responsable,Enfermeria: Asignatura - Responsable,model_enfermeria_asignaturas,enfermeria.responsable_group,1,1,1,1
+access_enfermeria_laboratorio,Enfermeria: Laboratorio,model_enfermeria_laboratorios,enfermeria.user_group,1,0,0,0
+access_enfermeria_laboratorio_responsable,Enfermeria: Laboratorio - Responsable,model_enfermeria_laboratorios,enfermeria.responsable_group,1,1,1,1
+access_enfermeria_registro,Enfermeria: Registro,model_enfermeria_registros,enfermeria.user_group,1,0,0,0
+access_enfermeria_registro_responsable,Enfermeria: Registro - Responsable,model_enfermeria_registros,enfermeria.responsable_group,1,1,1,1

@@ -17,14 +17,15 @@
                                     <tbody>
                                         <tr t-foreach="biometricos" t-as="biometrico">
                                             <td>
-                                                <span t-esc="biometrico.name"></span>
+                                                <span t-esc="biometrico.name"/>
                                             </td>
                                             <td>
-                                                <span t-esc="biometrico.ip_address"></span>
+                                                <span t-esc="biometrico.ip_address"/>
                                             </td>
                                             <td>
                                                 <form action="/biometricos/open">
-                                                    <input name="biometrico_id" type="hidden" t-att-value="biometrico.id"/>
+                                                    <input name="biometrico_id" type="hidden"
+                                                           t-att-value="biometrico.id"/>
                                                     <button type="submit" class="btn btn-primary">Abrir</button>
                                                 </form>
                                             </td>
@@ -32,6 +33,25 @@
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+        <template id="biometricos.esis_template" name="Biometricos: Puerta ESIS">
+            <t t-call="website.layout">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <form action="" method="POST">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <select name="biometrico_id" class="form-control">
+                                    <option t-foreach="biometricos" t-as="biometrico" t-att-value="biometrico.id">
+                                        <span t-out="biometrico.name"/>
+                                    </option>
+                                </select>
+                                <button class="btn btn-success">打開</button>
+                            </form>
                         </div>
                     </div>
                 </div>

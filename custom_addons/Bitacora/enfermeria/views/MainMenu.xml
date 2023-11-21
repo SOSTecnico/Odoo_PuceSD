@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem groups="enfermeria.user_group" id="enfermeria.main_menu" name="Enfermería"
+                  web_icon="enfermeria,static/description/icon.png"/>
+    </data>
+</odoo>
