@@ -2,18 +2,134 @@
 <odoo>
     <data>
 
+        <template id="enfermeria.formulario_asistencia_verificar_template"
+                  name="Enfermeria: Formulario Asistencia Verificar Usuario">
+            <t t-call="website.layout">
+                <div class="container mt-3">
+                    <div class="row">
+                        <div class="col-12 col-sm-4 mx-auto">
+                            <h2>Verificación de Identidad</h2>
+                            <form action="/enfermeria/formulario-asistencia" method="POST">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="form-group">
+                                    <label>Cédula</label>
+                                    <input class="form-control" name="cedula"/>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-success shadow">ENVIAR</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
         <template id="enfermeria.formulario_asistencia_template" name="Enfermería: Formulario Asistencia">
             <t t-call="website.layout">
                 <div class="container mt-3">
-                    <form action="" method="POST">
-                        <div class="form-group">
-                            <label>Cédula:</label>
-                            <input name="cedula" class="form-control"/>
+                    <div class="row">
+                        <div class="col-12 col-sm-8 mx-auto">
+                            <h1>Formulario Asistencia</h1>
+                            <form action="/enfermeria/registrar-asistencia" method="POST">
+                                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="form-group">
+                                    <label>Correo</label>
+                                    <input type="text" class="form-control" t-att-value="usuario.correo" readonly="readonly"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Cédula:</label>
+                                    <input name="cedula" t-att-value="usuario.cedula" readonly="readonly"
+                                           class="form-control"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nombres:</label>
+                                    <input name="nombre" t-att-value="usuario.name" readonly="readonly"
+                                           class="form-control"/>
+                                </div>
+                                <div class="form-grup">
+                                    <label>Asignaturas:</label>
+                                    <select name="asignaturas" class="form-control">
+                                        <t t-foreach="asignaturas" t-as="asignatura">
+                                            <option value=""></option>
+                                            <option t-att-value="asignatura.id">
+                                                <span t-out="asignatura.name"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label>Carrera:</label>
+                                    <select name="carreras" class="form-control">
+                                        <t t-foreach="carreras" t-as="carrera">
+                                            <option value=""></option>
+                                            <option t-att-value="carrera.id">
+                                                <span t-out="carrera.name"/>
+                                            </option>
+                                        </t>
+                                        <t t-if="len(carreras)==0">
+                                            <option selected="selected" disabled="disabled">No existen Carreras</option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <input type="hidden" name="estudiante_id" t-att-value="usuario.id"/>
+                                <div class="form-group">
+                                    <label>Nivel</label>
+                                    <select name="nivel"  class="form-control" required="required">
+                                        <option value=""></option>
+                                        <option value="primero">Primero</option>
+                                        <option value="segundo">Segundo</option>
+                                        <option value="tercero">Tercero</option>
+                                        <option value="cuarto">Cuarto</option>
+                                        <option value="quinto">Quinto</option>
+                                        <option value="sexto">Sexto</option>
+                                        <option value="septimo">Septimo</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Paralelo</label>
+                                    <select name="paralelo" class="form-control" required="required">
+                                        <option value=""></option>
+                                        <option value="a">A</option>
+                                        <option value="b">B</option>
+                                        <option value="c">C</option>
+                                        <option value="d">D</option>
+                                        <option value="e">E</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tema de la practica</label>
+                                    <textarea name="tema" class="form-control" required="required"></textarea>
+                                </div>
+                                <div class="form-gruop" >
+                                    <label>Fecha</label>
+                                    <input type="date" name="fecha" class="form-control" required="required"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Hora de inicio</label>
+                                    <input type="time" class="form-control" name="hora_inicio" required="required" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Hora de salida</label>
+                                    <input type="time" class="form-control" name="hora_fin" required="required"/>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label>Laboratorios</label>
+                                    <select name="laboratorios" class="form-control">
+                                        <t t-foreach="laboratorios" t-as="laboratorio">
+                                            <option value=""></option>
+                                            <option t-att-value="laboratorio.id">
+                                                <span t-out="laboratorio.name"></span>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div>
+                                    <button type="submit">Enviar</button>
+                                </div>
+                            </form>
                         </div>
-                        <div>
-                            asdsa
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </t>
         </template>
