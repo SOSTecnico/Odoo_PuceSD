@@ -79,11 +79,22 @@ class ReporteAtrasosReport(models.AbstractModel):
 
                 horat = m.marcacion_tiempo + timedelta(hours=-5)
                 minutos1 = m.marcacion_tiempo + timedelta(minutes=-5)
+                atraso1 = m.diferencia_en_minutos.split(":")
+                atrasotota = int(atraso1[0])
+                if atrasotota < 10:
+                    atrasotota = str(atrasotota).zfill(2)
+                    print(atrasotota)
+                atrasotota1 = int(atraso1[1]) + 1
+                if atrasotota1 < 10:
+                    atrasotota1 = str(atrasotota1).zfill(2)
+
+                atrass1 = f'{atrasotota}:{atrasotota1}'
 
                 sheet.write(f"B{celda_inicio + j}", m.marcacion_tiempo.strftime("%Y-%m-%d"))
                 sheet.write(f"C{celda_inicio + j}", m.hora)
                 sheet.write(f"D{celda_inicio + j}", horat.strftime("%H:%M"))
-                sheet.write(f"E{celda_inicio + j}", minutos1.strftime("00:%M"))
+                # sheet.write(f"E{celda_inicio + j}", minutos1.strftime("00:%M"))
+                sheet.write(f"E{celda_inicio + j}", atrass1)
                 sheet.write(f"F{celda_inicio + j}", m.observacion)
                 sheet.write(f"G{celda_inicio + j}", m.permiso_id.name or "")
 
