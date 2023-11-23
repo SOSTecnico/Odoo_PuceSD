@@ -1,9 +1,11 @@
 from odoo import fields, models, api
-class $ModelName$ (models.Model):
-    _name = '$ProjectName$.$TableName$'
-    _description = '$Description$'
+
+
+class Evidencias(models.Model):
+    _name = 'recruit.evidencias'
+    _description = 'Description'
 
     name = fields.Char()
-    $END$
 
-
+    evidencia = fields.Char(string="Evidencias")
+    archivo = fields.Binary(string="Archivo pdf(10mb)")

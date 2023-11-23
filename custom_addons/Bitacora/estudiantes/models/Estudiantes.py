@@ -3,6 +3,8 @@ from urllib.request import urlopen
 import pyodbc
 import mysql.connector
 import requests
+import paramiko
+import time
 
 import json
 from datetime import date
@@ -136,6 +138,24 @@ class Estudiantes(models.Model):
             self.create(values)
         except Exception as e:
             raise ValidationError(f"Ocurrió un error: {e}")
+
+    def actualizarBanner(self):
+        HOST='192.168.250.23'
+        USER='Administrator'
+
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect('192.168.250.23',username='Administrator', password='As1redes')
+
+        gmail="emvillareall@pucesd.edu.ec"
+        pass_banner='123456789'
+
+        std_in, std_out, std_err = client.exec_command(f"python change_password.py {gmail} {pass_banner}")
+        time.sleep(1)
+        resultado=std_out.read().decode()
+
+        #print(resultado)
+
 
 
 class Sincronizacion(models.TransientModel):

@@ -1,9 +1,8 @@
 from odoo import fields, models, api
-class $ModelName$ (models.Model):
-    _name = '$ProjectName$.$TableName$'
-    _description = '$Description$'
-
-    name = fields.Char()
-    $END$
 
 
+class Actividades(models.Model):
+    _name = 'recruit.actividades'
+    _description = 'Description'
+
+    name = fields.Char(string="Actividades")

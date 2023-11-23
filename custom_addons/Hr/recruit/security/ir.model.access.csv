@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_recruit_postulaciones,recruit.postulaciones,model_recruit_postulaciones,recruit.group_admin,1,1,1,1
+access_recruit_postulante,recruit.postulante,model_recruit_postulantes,recruit.group_admin,1,1,1,1
+access_recruit_titulosycertificados,recruit.titulosycertificados,model_recruit_titulosycertificados,recruit.group_admin,1,1,1,1
+access_recruit_discapacidad,recruit.discapacidad,model_recruit_discapacidad,recruit.group_admin,1,1,1,1
+access_recruit_evidencias,recruit.evidencias,model_recruit_evidencias,recruit.group_admin,1,1,1,1
+access_recruit_actividades,recruit.actividades,model_recruit_actividades,recruit.group_admin,1,1,1,1
+access_recruit_conocimientoespecifico,recruit.conocimientoespecifico,model_recruit_conocimientoespecifico,recruit.group_admin,1,1,1,1
+access_recruit_habilidades,recruit.habilidades,model_recruit_habilidades,recruit.group_admin,1,1,1,1
+access_recruit_contactoemergencia,recruit.contactoemergencia,model_recruit_contactoemergencia,recruit.group_admin,1,1,1,1
+access_recruit_familiarcondiscapacidad,recruit.familiarcondiscapacidad,model_recruit_familiarcondiscapacidad,recruit.group_admin,1,1,1,1

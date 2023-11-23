@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="recruit.formulario_recruit_template" name="Formulario Recruit">
+            <t t-call="website.layout">
+                <div>
+
+                  <div class="container">
+                    <form class="bg-white rounded shadow border p-3 my-3" method="POST">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <h1>Formulario de Postulante</h1>
+                        <h4 class="font-weight-bold">REQUISITOS</h4>
+                        <t t-foreach="resul" t-as="i">
+                            <p><t t-out="i.name" /></p>
+                        </t>
+                        <hr/>
+
+
+                        <br/>
+
+                        <h4 class="font-weight-bold">DATOS PERSONALES</h4>
+
+                        <hr/>
+                        <div class="row">
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Numero de Cédula:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Nombres:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Apellidos:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Genero:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Correo Electrónico</label>
+                                    <input class="form-control" type="email" name="email"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Estado Civil:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Direccion:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Fecha de Nacimiento:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Nacionalidad:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Provincia:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Lugar de Nacimiento:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Tipo Sangre:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Celular:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Telefono Fijo:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <h4 class="font-weight-bold">DATOS PERSONALES</h4>
+
+                        <hr/>
+                        <div class="row">
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Numero de Cédula:</label>
+                                    <input class="form-control"  name="nombres"
+                                           required="required" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row my-3">
+                            <div class="col-12 col-sm-3 mx-auto">
+                                <button class="btn btn-block btn-primary">ENVIAR</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </t>
+    </template>
+
+   </data>
+</odoo>
