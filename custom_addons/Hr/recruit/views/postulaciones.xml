@@ -1,8 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        
-        $END$
-    
+
+<!--              <record id="recruit.postulaciones_form_view" model="ir.ui.view">-->
+<!--            <field name="name">recruit.postulaciones.form</field>-->
+<!--            <field name="model">recruit.postulaciones</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Postulaciones">-->
+<!--                    <sheet>-->
+<!--                        <div class="oe_title">-->
+<!--                            <label for="name"/>-->
+<!--                            <h1>-->
+<!--                                <field name="name" placeholder="......"/>-->
+<!--                            </h1>-->
+<!--                        </div>-->
+
+<!--                        <group>-->
+<!--                            <field name="formacion"/>-->
+<!--                            <field name="experiencia"/>-->
+<!--                            <field name="conocimiento"/>-->
+<!--                            <field name="departamento"/>-->
+<!--                            <field name="tipo_contraro"/>-->
+
+<!--                        </group>-->
+
+<!--                    </sheet>-->
+
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="postulaciones_tree_view" model="ir.ui.view">-->
+<!--            <field name="name">recruit.postulaciones.tree</field>-->
+<!--            <field name="model">recruit.postulaciones</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree string="Postulaciones">-->
+<!--                    <field name="formacion"/>-->
+<!--                            <field name="experiencia"/>-->
+<!--                            <field name="conocimiento"/>-->
+<!--                            <field name="departamento"/>-->
+<!--                            <field name="tipo_contraro"/>-->
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <!--        <record id="estudiantes_search_view" model="ir.ui.view">
+                    <field name="name">estudiantes.estudiantes.search</field>
+                    <field name="model">estudiantes.estudiantes</field>
+                    <field name="arch" type="xml">
+                        <search string="Estudiantes">
+                            <group expand="1" string="Group By">
+                                <filter string="Example Field" name="example_field" domain="[]"
+                                        context="{'group_by':'example_field'}"/>
+                            </group>
+                        </search>
+                    </field>
+                </record>-->
+
+        <record id="recruit.postulaciones_act_window" model="ir.actions.act_window">
+            <field name="name">Postulaciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">recruit.postulaciones</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Aún no hay Vacantes de Empleo
+                </p>
+            </field>
+        </record>
+
+        <menuitem sequence="100" name="Postulaciones" id="recruit.postulaciones_menu" parent="recruit.main_menu"
+                  action="recruit.postulaciones_act_window"/>
+
+<!--        <record id="estudiantes.sincronizacion_act_window" model="ir.actions.act_window">-->
+<!--            <field name="name">Sincronizacion Portas</field>-->
+<!--            <field name="type">ir.actions.act_window</field>-->
+<!--            <field name="res_model">estudiantes.sincronizacion</field>-->
+<!--            <field name="target">new</field>-->
+<!--            <field name="view_mode">form</field>-->
+<!--        </record>-->
+
+<!--        <menuitem sequence="400" name="Sincronizacion" id="estudiantes.sincronizacion_menu" parent="estudiantes.main_menu"-->
+<!--                  action="estudiantes.sincronizacion_act_window" groups="estudiantes.admin_group"/>-->
+
     </data>
 </odoo>
