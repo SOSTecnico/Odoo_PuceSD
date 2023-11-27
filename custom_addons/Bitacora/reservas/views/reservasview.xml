@@ -1,33 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
         <record id="reservas.reservaciones_form_view" model="ir.ui.view">
             <field name="name">reservas.reservaciones.form</field>
             <field name="model">reservas.reservaciones</field>
             <field name="arch" type="xml">
-                <form string="ModelTitle">
-                    <field name="sala"/>
-<!--                    <sheet>-->
-<!--                        <div class="oe_title">-->
-<!--                            <label for="example_title"/>-->
-<!--                            <h1>-->
-<!--                                <field name="example_title" placeholder="Title"/>-->
-<!--                            </h1>-->
-<!--                        </div>-->
-<!--                        <group>-->
-<!--                            <group>-->
-<!--                                <field name="create_date"/>-->
-<!--                            </group>-->
-<!--                            <group>-->
-<!--                                <field name="example_field"/>-->
-<!--                            </group>-->
-<!--                        </group>-->
-<!--                    </sheet>-->
+                <form>
+                    <sheet>
+                        <group>
+                            <form string="_form"/>
+                            <field name="codigo"/>
+                            <field name="sala"/>
+                            <field name="asignatura"/>
+                            <field name="responsable"/>
+                            <field name="fecha_inicio"/>
+                            <field name="hora_inicio"/>
+                            <field name="hora_final"/>
+                            <field name="fecha_final"/>
+                        </group>
+                    </sheet>
                 </form>
             </field>
         </record>
-
 
 
         <record id="reservas.reservaciones_tree_view" model="ir.ui.view">
@@ -35,24 +29,18 @@
             <field name="model">reservas.reservaciones</field>
             <field name="arch" type="xml">
                 <tree string="ModelTitle">
+                    <field name="codigo"/>
                     <field name="sala"/>
+
+                    <field name="asignatura"/>
+                    <field name="responsable"/>
+                    <field name="fecha_inicio"/>
+                    <field name="hora_inicio"/>
+                    <field name="hora_final"/>
+                    <field name="fecha_final"/>
                 </tree>
             </field>
         </record>
-
-
-        <!--     <record id="reservas.reservaciones_search_view" model="ir.ui.view">
-                 <field name="name">ProjectName.reservas.reservaciones.search</field>
-                 <field name="model">ProjectName.reservas.reservaciones</field>
-                 <field name="arch" type="xml">
-                     <search string="ModelTitle">
-                         <group expand="1" string="Group By">
-                             <filter string="Example Field" name="example_field" domain="[]"
-                                     context="{'group_by':'example_field'}"/>
-                         </group>
-                     </search>
-                 </field>
-             </record>-->
 
         <record id="reservas.reservaciones_act_window" model="ir.actions.act_window">
             <field name="name">Reservaciones</field>
