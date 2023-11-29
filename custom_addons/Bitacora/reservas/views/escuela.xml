@@ -1,0 +1,34 @@
+<odoo>
+    <data>
+        <record id="reservas.escuela_view_form" model="ir.ui.view">
+            <field name="name">reservas.escuela.form</field>
+            <field name="model">reservas.escuela</field>
+            <field name="arch" type="xml">
+                <form string="_form">
+                    <sheet>
+                        <group>
+                            <field name="carrera"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="reservas.escuela_view_tree" model="ir.ui.view">
+            <field name="name">reservas.escuela.tree</field>
+            <field name="model">reservas.escuela</field>
+            <field name="arch" type="xml">
+                <tree string="reserva.escuela_tree">
+                    <field name="carrera"/>
+                </tree>
+            </field>
+        </record>
+        <record id="reservas.escuela_action" model="ir.actions.act_window">
+            <field name="name">Escuela Carrera</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reservas.escuela</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem name="Carrera" id="reservas.escuela_menu" parent="reservas.main_menu"
+                  action="reservas.escuela_action"/>
+    </data>
+</odoo>

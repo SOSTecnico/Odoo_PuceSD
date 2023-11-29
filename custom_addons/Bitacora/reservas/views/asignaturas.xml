@@ -1,0 +1,34 @@
+<odoo>
+    <data>
+        <record id="reservas.asignatura_form_view" model="ir.ui.view">
+            <field name="name">reservas.asignaturas.form</field>
+            <field name="model">reservas.asignatura</field>
+            <field name="arch" type="xml">
+                <form string="_form">
+                    <sheet>
+                        <group>
+                            <field name="materia"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="reservas.asignatura_tree_view" model="ir.ui.view">
+            <field name="name">reservas.asignaturas.tree</field>
+            <field name="model">reservas.asignatura</field>
+            <field name="arch" type="xml">
+                <tree string="_tree">
+                    <field name="materia"/>
+                </tree>
+            </field>
+        </record>
+        <record id="reservas.asignatura_action" model="ir.actions.act_window">
+            <field name="name">Asignaturas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reservas.asignatura</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem name="Asignaturas" id="reservas.asignatura_menu" parent="reservas.main_menu"
+                  action="reservas.asignatura_action"/>
+    </data>
+</odoo>
