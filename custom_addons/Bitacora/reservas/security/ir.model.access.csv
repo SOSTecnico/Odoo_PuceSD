@@ -1,4 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_reservas_reservaciones,reservas.reservaciones,model_reservas_reservaciones,base.group_user,1,1,1,1
-access_reservas_asignatura,reservas.asignatura,model_reservas_asignatura,base.group_user,1,1,1,1
-access_reservas_escuela,reserva.escuela,model_reservas_escuela,base.group_user,1,1,1,1

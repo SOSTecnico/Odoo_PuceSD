@@ -4,11 +4,10 @@ from datetime import datetime, timedelta
 
 
 class reservas(models.Model):
-    _name ='reservas.reservaciones'
+    _name = 'reservas.reservaciones'
     _description = 'reservaciones'
 
     codigo = fields.Char(string='Codigo de Sala')
-    # sala = fields.Char(string='Sala')
     sala = fields.Selection(
         string='Sala',
         selection=[('sala computo 1', 'SALA COMPUTO 1'),
@@ -20,8 +19,7 @@ class reservas(models.Model):
 
     responsable = fields.Char(string='Responsable')
     asignatura = fields.Char(string='Asignatura')
-    fecha_inicio = fields.Date(string='Fecha inicio')
-    hora_inicio = fields.Float(string='Hora inicio')
-    hora_final = fields.Float(string='Hora Final')
-    fecha_final = fields.Date(string='Fecha Final')
-
+    fecha_inicio = fields.Date('Fecha inicio')
+    hora_inicio = fields.Datetime('Hora inicio')
+    hora_final = fields.Datetime('Hora Final')
+    fecha_final = fields.Date('Fecha Final')

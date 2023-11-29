@@ -27,8 +27,7 @@
         'views/menuitem.xml',
         'views/templates.xml',
         'views/reservasview.xml',
-        'views/asignaturas.xml',
-        'views/escuela.xml'
+        'views/website/formulario.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

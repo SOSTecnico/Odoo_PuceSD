@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="reservas.reservaciones_website">
+            <t t-call="website.layout">
+                <div class="container mt-4">
+                    <h1>holaaa</h1>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>
