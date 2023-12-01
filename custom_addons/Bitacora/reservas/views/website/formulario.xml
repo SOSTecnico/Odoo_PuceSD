@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="reservas.reservaciones_website" name="Reservaciones Laboratorios">
+            <t t-call="website.layout">
+                <div>
+                    <div class="container mt-5">
+                        <div class="col col-md-6 mx-auto">
+                            <h2 class="my-3 font-weight-bold">Solicitud de Reservación Laboratorios</h2>
+                            <form action="/permiso-laboratorio" method="POST" enctype="multipart/form-data"/>
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="user">Solicitante</label>
+                                        <input class="form-control" readonly="1" t-att-value="request.env.user.name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="">Asignatura</label>
+                                        <input name="asignatura_cc" class="form-control"
+                                               placeholder="Ingrese el nombre de la asignatura "/>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="">Carrera</label>
+                                        <input name="carrera_cc" class="form-control"
+                                               placeholder="Ingrese el nombre de la carrera"/>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="">Sala</label>
+                                        <input name="sala_cc" class="form-control"
+                                               placeholder="Ejemplo:Sala Computo 1"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="group">
+                                        <label for="">
+                                            Fecha inicio
+                                        </label>
+                                        <input type="date" id="fecha_inicio" name="fecha_inicio"
+                                               required="required"
+                                               class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="">Fecha Fin</label>
+                                        <input type="date" id="fecha_fin" name="fecha_fin" required="1"
+                                               class="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row horas-container mt-2">
+                                <div class="col col-md-6">
+                                    <div class="form-group">
+                                        <label for="">Hora Inicio</label>
+                                        <input type="time" name="hora_inicio"
+                                               class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="col col-md-6">
+                                    <div class="form-group">
+                                        <label for="">Hora Fin</label>
+                                        <input type="time" name="hora_fin" class="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>
