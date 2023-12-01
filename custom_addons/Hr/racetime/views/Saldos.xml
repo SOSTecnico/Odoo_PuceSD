@@ -118,8 +118,11 @@
             <field name="arch" type="xml">
                 <form string="racetime.detalle_saldos_form">
                     <sheet>
+                        <widget name="web_ribbon" title="ARCHIVADO" bg_color="bg-danger"
+                                attrs="{'invisible':[('active','=',True)]}"/>
                         <group>
                             <field name="tipo"/>
+                            <field name="active"/>
                             <field name="horas" widget="float_time"/>
                             <field name="fecha" required="1"/>
                             <field name="horas_id" readonly="1"/>

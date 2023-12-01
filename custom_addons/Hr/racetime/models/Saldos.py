@@ -17,6 +17,24 @@ class Saldos(models.Model):
     detalle_saldos = fields.One2many(comodel_name='racetime.detalle_saldos', inverse_name='saldo_id',
                                      string='Detalle de Saldos', required=False)
 
+    @api.onchange('active')
+    def saldos_archivados(self):
+        print('hola ')
+        for detalle_saldo in self.detalle_saldos:
+            detalle_saldo.active=self.active
+            print(detalle_saldo)
+
+
+
+    def write(self, values):
+        # Add code here
+        archivos= super(Saldos, self).write(values)
+        if 'active' in values:
+            for detalle_saldo in self.detalle_saldos:
+                detalle_saldo.active = self.active
+
+        return archivos
+
     @api.depends('detalle_saldos')
     def _compute_saldo_total(self):
         for rec in self:
@@ -155,6 +173,7 @@ class DetalleSaldos(models.Model):
     _order = 'fecha desc, horas desc'
 
     name = fields.Char(string="Concepto")
+    active = fields.Boolean(string='Active', required=False, default=True)
     saldo_id = fields.Many2one(comodel_name='racetime.saldos', string='Saldo ID', required=False, ondelete='cascade',
                                tracking=True)
     permiso_id = fields.Many2one(comodel_name='racetime.permisos', string='Permisos ID', required=False,
