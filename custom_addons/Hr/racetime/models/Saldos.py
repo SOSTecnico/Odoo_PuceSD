@@ -17,12 +17,6 @@ class Saldos(models.Model):
     detalle_saldos = fields.One2many(comodel_name='racetime.detalle_saldos', inverse_name='saldo_id',
                                      string='Detalle de Saldos', required=False)
 
-    @api.onchange('active')
-    def saldos_archivados(self):
-        print('hola ')
-        for detalle_saldo in self.detalle_saldos:
-            detalle_saldo.active=self.active
-            print(detalle_saldo)
 
 
 
@@ -30,8 +24,18 @@ class Saldos(models.Model):
         # Add code here
         archivos= super(Saldos, self).write(values)
         if 'active' in values:
-            for detalle_saldo in self.detalle_saldos:
-                detalle_saldo.active = self.active
+            if values ['active']:
+                detalle_saldos =self.env['racetime.detalle_saldos'].search([('saldo_id','=',self.id),('active','=',False)])
+                print(detalle_saldos)
+                for detalle_saldo in detalle_saldos:
+                    detalle_saldo.active=True
+            else:
+
+                for detalle_saldo in self.detalle_saldos:
+                    detalle_saldo.active = self.active
+
+
+
 
         return archivos
 
