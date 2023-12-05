@@ -42,6 +42,7 @@ class PermisosController(http.Controller):
 
         template_id = request.env.ref("racetime.solicitud_permiso_email_template").id
         email = request.env["mail.template"].sudo().browse(template_id)
+
         if 'email_cc' in data and data['email_cc']:
             emails = []
             for e in data['email_cc'].split(','):
@@ -52,6 +53,10 @@ class PermisosController(http.Controller):
             })
 
         request.env["mail.template"].sudo().browse(template_id).send_mail(res.id, force_send=True)
+
+        email.update({
+            'email_cc': 'dadministrativad@pucesd.edu.ec'
+        })
 
         return self.solicitud_registrada()
 
