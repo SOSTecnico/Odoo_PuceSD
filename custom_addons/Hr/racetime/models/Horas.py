@@ -26,6 +26,11 @@ class Horas(models.Model):
     aprobado_por_id = fields.Many2many(comodel_name='hr.employee', string='Aprobado por', required=False, tracking=True)
     active = fields.Boolean(string='Active', required=False, default=True, tracking=True)
 
+    saldo_id = fields.One2many(
+        comodel_name='racetime.detalle_saldos',
+        inverse_name='horas_id',
+        string='Saldo_id',
+        required=False)
     @api.onchange('fecha_desde')
     def onchange_fecha_desde(self):
         if self.fecha_desde:
