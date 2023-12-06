@@ -17,25 +17,21 @@ class Saldos(models.Model):
     detalle_saldos = fields.One2many(comodel_name='racetime.detalle_saldos', inverse_name='saldo_id',
                                      string='Detalle de Saldos', required=False)
 
-
-
-
     def write(self, values):
         # Add code here
-        archivos= super(Saldos, self).write(values)
+        archivos = super(Saldos, self).write(values)
         if 'active' in values:
-            if values ['active']:
-                detalle_saldos =self.env['racetime.detalle_saldos'].search([('saldo_id','=',self.id),('active','=',False)])
+            if values['active']:
+                detalle_saldos = self.env['racetime.detalle_saldos'].search(
+                    [('saldo_id', '=', self.id)
+                        , ('active', '=', False)])
                 print(detalle_saldos)
                 for detalle_saldo in detalle_saldos:
-                    detalle_saldo.active=True
+                    detalle_saldo.active = True
             else:
 
                 for detalle_saldo in self.detalle_saldos:
                     detalle_saldo.active = self.active
-
-
-
 
         return archivos
 
@@ -196,6 +192,34 @@ class DetalleSaldos(models.Model):
 
     # saldo = fields.Float(string='Saldo', required=False)
 
+    def write(self, values):
+        # Add code here
+        archivos = super(DetalleSaldos, self).write(values)
+        if 'active' in values:
+            if values['active']:
+                detalle_saldo = self.env['racetime.permisos'].search(
+                    [ ('saldo_id', '=', self.id)
+                        , ('active', '=', False)])
+                print(detalle_saldo)
+                for detalle_saldo in detalle_saldo:
+                    detalle_saldo.active = True
+
+                detalle_saldo1 = self.env['racetime.horas'].search(
+                    [('saldo_id', '=', self.id)
+                        , ('active', '=', False)])
+
+                for detalle_saldo in detalle_saldo1:
+                    detalle_saldo.active = True
+            else:
+
+                for detalle_saldo in self.permiso_id:
+                    detalle_saldo.active = self.active
+
+                for detalle_saldo in self.horas_id:
+                    detalle_saldo.active = self.active
+                print(archivos)
+
+        return archivos
     @api.onchange('horas', 'tipo')
     def onchange_horas(self):
         if self.horas:
