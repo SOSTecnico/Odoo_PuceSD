@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
-# from odoo import http
+from odoo import http
+from odoo.http import request
 
 
-# class Banner(http.Controller):
-#     @http.route('/banner/banner', auth='public')
-#     def index(self, **kw):
-#         return "Hello, world"
+class Banner(http.Controller):
+    @http.route('/banner/check-usuario', auth='public', csrf=False, cors='*', type='json')
+    def verificar_datos(self, **data):
 
-#     @http.route('/banner/banner/objects', auth='public')
-#     def list(self, **kw):
-#         return http.request.render('banner.listing', {
-#             'root': '/banner/banner',
-#             'objects': http.request.env['banner.banner'].search([]),
-#         })
+        usuario = request.env['banner.usuarios'].sudo().search([('cedula', '=', data['cedula'])])
 
-#     @http.route('/banner/banner/objects/<model("banner.banner"):obj>', auth='public')
-#     def object(self, obj, **kw):
-#         return http.request.render('banner.object', {
-#             'object': obj
-#         })
+        if usuario:
+            datos = {
+                'cedula': usuario.read()[0]['cedula'],
+                'nombres': usuario.read()[0]['nombres'],
+                'apellidos': usuario.read()[0]['apellidos'],
+                'correo': usuario.read()[0]['correo'],
+            }
+            return datos
+        else:
+            return {}
