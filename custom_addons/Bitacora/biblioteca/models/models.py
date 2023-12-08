@@ -29,6 +29,7 @@ class Ingresos(models.Model):
     name = fields.Char(related='usuario_id.name', store=True)
     fecha = fields.Datetime(string='Fecha', required=True, tracking=True, default=lambda self: datetime.now())
     usuario_id = fields.Many2one(comodel_name='biblioteca.usuarios', string='Usuario', required=True, tracking=True)
+    cedula_usuario = fields.Char(string='Cédula', related="usuario_id.cedula")
     email = fields.Char(
         string='Email',
         required=False, related='usuario_id.email')
@@ -44,3 +45,7 @@ class Ingresos(models.Model):
     carrera = fields.Char(
         string='Carrera',
         required=False, related='usuario_id.carrera', store=True)
+
+    seccion = fields.Selection(string='Seccion', default="planta_baja", required=True,
+                               selection=[('planta_baja', 'PLANTA BAJA'),
+                                          ('planta_alta', 'PLANTA ALTA'), ])
