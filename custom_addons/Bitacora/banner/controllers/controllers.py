@@ -10,7 +10,7 @@ class Banner(http.Controller):
     @http.route('/banner/check-usuario', auth='public', csrf=False, cors='*', type='json')
     def verificar_datos(self, **data):
 
-        usuario = request.env['banner.usuarios'].sudo().search([('cedula', '=', data['cedula'])])
+        usuario = request.env['biblioteca.usuarios'].sudo().search([('cedula', '=', data['cedula'])])
 
         if usuario:
 

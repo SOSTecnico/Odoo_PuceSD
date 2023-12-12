@@ -30,6 +30,7 @@ class UsuarioBanner(models.Model):
     correo = fields.Char(string='Correo', required=False)
     notifi = fields.One2many(string='Notificaciones', comodel_name='banner.historial_notificacion',
                              inverse_name='usuario')
+    facultad = fields.Char(string='Facultad', required=False)
 
     @api.depends('nombres', 'apellidos')
     def _compute_name(self):
@@ -68,6 +69,20 @@ class UsuarioBanner(models.Model):
                     'nombres': f"{user['PRIMER_NOMBRE']} {user['SEGUNDO_NOMBRE']}",
                     'apellidos': f"{user['PRIMER_APELLIDO']} {user['SEGUNDO_APELLIDO']}",
                     'correo': f"{user['USERNAME'].lower()}@pucesd.edu.ec",
+                    'facultad': user['FACULTAD']
+                })
+
+        modelBiblioteca = self.env['biblioteca.usuarios']
+        usersBiblioteca = modelBiblioteca.search([]).mapped('cedula')
+
+        for u in data['USER']:
+            if not u['NUMDOC'] in usersBiblioteca:
+                modelBiblioteca.create({
+                    'cedula': u['NUMDOC'],
+                    'nombres': f"{u['PRIMER_NOMBRE']} {u['SEGUNDO_NOMBRE']}",
+                    'apellidos': f"{u['PRIMER_APELLIDO']} {u['SEGUNDO_APELLIDO']}",
+                    'email': f"{u['USERNAME'].lower()}@pucesd.edu.ec",
+                    'carrera': u['FACULTAD']
                 })
 
     @api.onchange('pin')
