@@ -19,7 +19,7 @@ class Banner(http.Controller):
                 'cedula': usuario.read()[0]['cedula'],
                 'nombres': usuario.read()[0]['nombres'],
                 'apellidos': usuario.read()[0]['apellidos'],
-                'correo': usuario.read()[0]['correo'],
+                'correo': usuario.read()[0]['email'],
             }
 
             qr.add_data(info)
