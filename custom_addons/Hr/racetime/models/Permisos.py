@@ -30,7 +30,11 @@ class Permisos(models.Model):
     estado = fields.Selection(string='Estado', default='aprobado', required=True, tracking=True,
                               selection=[('pendiente', 'PENDIENTE'), ('aprobado', 'APROBADO'),
                                          ('rechazado', 'RECHAZADO')])
-
+    saldo_id = fields.One2many(
+        comodel_name='racetime.detalle_saldos',
+        inverse_name='permiso_id',
+        string='Saldo_id',
+        required=False)
     # @api.constrains('desde_fecha', 'hasta_fecha', 'desde_hora', 'hasta_hora')
     # def _check_permisos_choques(self):
     #     permisos_del_empleado = self.env['racetime.permisos'].search(

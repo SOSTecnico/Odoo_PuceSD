@@ -10,6 +10,8 @@
                     <header>
                         <button groups="estudiantes.responsable_group" name="enviarCorreo" type="object" string="Notificar Credenciales"
                                 confirm="¿Seguro de Notificar las credenciales?" class="btn btn-primary"/>
+                        <button name="actualizarBanner" string="Actualización Banner" type="object"
+                                    confirm="SE ENCUENTRA SEGURO DE REALIZAR ESTA ACCION"/>
                     </header>
                     <sheet>
                         <div class="oe_title">

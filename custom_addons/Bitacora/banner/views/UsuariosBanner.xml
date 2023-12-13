@@ -8,7 +8,8 @@
             <field name="arch" type="xml">
                 <form string="Usuarios Banner" create="false" edit="false">
                     <header>
-                        <button groups="banner.responsable_group" name="enviarCorreo" class="btn btn-primary btn-lg" type="object" string="Enviar Notificación" confirm="¿Seguro de Enviar Notificación?"/>
+                        <button groups="banner.responsable_group" name="enviarCorreo" class="btn btn-primary btn-lg"
+                                type="object" string="Enviar Notificación" confirm="¿Seguro de Enviar Notificación?"/>
                     </header>
                     <sheet>
                         <group>
@@ -95,6 +96,39 @@
             <field name="interval_type">hours</field>
             <field name="numbercall">-1</field>
         </record>
+
+
+        <record id="banner.usuarios_password_view_form" model="ir.ui.view">
+            <field name="name">banner.usuarios_password_view_form</field>
+            <field name="model">banner.usuarios</field>
+            <field name="arch" type="xml">
+                <form string="banner.usuarios_password_form" create="false">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="pin"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.server" id="banner.server_action_password">
+            <field name="name">Cambiar Contraseña</field>
+            <field name="model_id" ref="model_banner_usuarios"/>
+            <field name="binding_model_id" ref="model_banner_usuarios"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = {
+                "type": "ir.actions.act_window",
+                'target':'new',
+                "res_model": record._name,
+                "res_id": record.id,
+                'views': [(request.env.ref('banner.usuarios_password_view_form').id,'form')]
+                }
+            </field>
+        </record>
+
 
     </data>
 </odoo>
