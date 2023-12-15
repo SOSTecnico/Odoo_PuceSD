@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="reservas.reservas_form_view" model="ir.ui.view">
+            <field name="name">reservas.reservas.reservas.form</field>
+            <field name="model">reservas.reservaciones</field>
+            <field name="arch" type="xml">
+                <form string="Reservas">
+                    <sheet>
+                        <group>
+                            <field name="codigo"/>
+                            <field name="laboratorio_id"/>
+                            <field name="responsable_id" context="{'form_view_ref':'hr.view_employee_form'}"/>
+                            <field name="asignatura_id"/>
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_final"/>
+                        </group>
+                        <field name="detalle_reserva_id" nolabel="1"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--        <record id="reservas.reservas_tree_view" model="ir.ui.view">
+                    <field name="name">reservas.reservas.reservas.tree</field>
+                    <field name="model">reservas.reservas.reservas</field>
+                    <field name="arch" type="xml">
+                        <tree string="Reservas">
+                            <field name="create_date"/>
+                            <field name="example_field"/>
+                        </tree>
+                    </field>
+                </record>-->
+
+        <!--<record id="reservas.reservas_search_view" model="ir.ui.view">
+            <field name="name">reservas.reservas.reservas.search</field>
+            <field name="model">reservas.reservas.reservas</field>
+            <field name="arch" type="xml">
+                <search string="Reservas">
+                    <group expand="1" string="Group By">
+                        <filter string="Example Field" name="example_field" domain="[]"
+                                context="{'group_by':'example_field'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>-->
+
+        <record id="reservas.reservas_act_window" model="ir.actions.act_window">
+            <field name="name">Reservas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reservas.reservaciones</field>
+            <field name="view_mode">tree,form,kanban,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Reservas.
+                </p>
+            </field>
+        </record>
+
+        <menuitem groups="reservas.user_group" name="Reservaciones" id="reservas.reservas_menu"
+                  parent="reservas.main_menu"
+                  action="reservas.reservas_act_window" sequence="1"/>
+
+    </data>
+</odoo>

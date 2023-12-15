@@ -8,7 +8,8 @@ class Reserva(models.Model):
 
     codigo = fields.Char(string='Código Reserva')
     laboratorio_id = fields.Many2one(comodel_name='reservas.laboratorios', string='Laboratorio', required=True)
-    responsable_id = fields.Many2one(comodel_name='hr.employee', string='Responsable', required=True)
+    responsable_id = fields.Many2one(comodel_name='hr.employee', string='Responsable', required=True,
+                                     domain=[('category_ids', '=like', 'DOCENTE')])
     asignatura_id = fields.Many2one(comodel_name='reservas.asignaturas', string='Asignatura', required=False)
     fecha_inicio = fields.Date(string='Fecha Inicio', required=True)
     fecha_final = fields.Date(string='Fecha Final', required=True)

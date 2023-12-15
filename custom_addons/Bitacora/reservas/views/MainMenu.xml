@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="reservas.main_menu" name="Reservas" web_icon="reservas,static/description/icon.png"/>
+
+    </data>
+</odoo>
