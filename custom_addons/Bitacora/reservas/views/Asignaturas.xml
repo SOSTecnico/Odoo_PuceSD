@@ -66,5 +66,34 @@
         <menuitem groups="reservas.user_group" name="Asignaturas" id="reservas.asignaturas_menu"
                   parent="reservas.main_menu" action="reservas.asignaturas_act_window"/>
 
+
+        <!--Reglas de Registro-->
+        <record id="reservas.asignaturas_rule" model="ir.rule">
+            <field name="name">Reservas: Asignatura Regla</field>
+            <field ref="reservas.model_reservas_asignaturas" name="model_id"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <!-- You can attach this rule to a specific group, Or make it Global -->
+            <field name="groups" eval="[(4, ref('reservas.tecnico_group'))]"/>
+
+        </record>
+
+        <!--Reglas de Registro-->
+        <record id="reservas.asignaturas_rule_admin" model="ir.rule">
+            <field name="name">Reservas: Asignatura Regla Admins</field>
+            <field ref="reservas.model_reservas_asignaturas" name="model_id"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <!-- You can attach this rule to a specific group, Or make it Global -->
+            <field name="groups" eval="[(4, ref('reservas.responsable_group'))]"/>
+
+        </record>
+
     </data>
 </odoo>

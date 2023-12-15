@@ -11,27 +11,45 @@
                         <group>
                             <field name="codigo"/>
                             <field name="laboratorio_id"/>
-                            <field name="responsable_id" context="{'form_view_ref':'hr.view_employee_form'}"/>
+                            <field name="responsable_id" options="{'no_open':True}"/>
                             <field name="asignatura_id"/>
                             <field name="fecha_inicio"/>
                             <field name="fecha_final"/>
                         </group>
-                        <field name="detalle_reserva_id" nolabel="1"/>
+                        <field name="detalle_reserva_id" nolabel="1">
+                            <form>
+                                <group>
+                                    <field name="dias_" widget="many2many_tags"/>
+                                    <field name="hora_inicio" widget="float_time"/>
+                                    <field name="hora_fin" widget="float_time"/>
+                                </group>
+                            </form>
+                            <tree>
+                                <field name="dias_" widget="many2many_tags"/>
+                                <field name="hora_inicio" widget="float_time"/>
+                                <field name="hora_fin" widget="float_time"/>
+                            </tree>
+                        </field>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <!--        <record id="reservas.reservas_tree_view" model="ir.ui.view">
-                    <field name="name">reservas.reservas.reservas.tree</field>
-                    <field name="model">reservas.reservas.reservas</field>
-                    <field name="arch" type="xml">
-                        <tree string="Reservas">
-                            <field name="create_date"/>
-                            <field name="example_field"/>
-                        </tree>
-                    </field>
-                </record>-->
+        <record id="reservas.reservas_tree_view" model="ir.ui.view">
+            <field name="name">reservas.reservas.reservas.tree</field>
+            <field name="model">reservas.reservaciones</field>
+            <field name="arch" type="xml">
+                <tree string="Reservas">
+                    <field name="codigo"/>
+                    <field name="asignatura_id"/>
+                    <field name="laboratorio_id"/>
+                    <field name="responsable_id"/>
+                    <field name="fecha_inicio"/>
+                    <field name="fecha_final"/>
+                </tree>
+            </field>
+        </record>
+
 
         <!--<record id="reservas.reservas_search_view" model="ir.ui.view">
             <field name="name">reservas.reservas.reservas.search</field>
@@ -59,8 +77,32 @@
         </record>
 
         <menuitem groups="reservas.user_group" name="Reservaciones" id="reservas.reservas_menu"
-                  parent="reservas.main_menu"
-                  action="reservas.reservas_act_window" sequence="1"/>
+                  parent="reservas.main_menu" sequence="1"/>
+
+        <menuitem id="reservas.reservaciones" name="Registro Reserva" action="reservas.reservas_act_window"
+                  parent="reservas.reservas_menu" sequence="1"/>
+
+        <!--********************DETALLE RESERVAS (CALENDARIO)********************-->
+
+        <record id="reservas.reservas_calendar_view" model="ir.ui.view">
+            <field name="name">reservas.reservas.reservas.tree</field>
+            <field name="model">reservas.registro_reservas</field>
+            <field name="arch" type="xml">
+                <calendar date_start="inicio" date_stop="fin">
+
+                </calendar>
+            </field>
+        </record>
+
+        <record id="reservas.registro_reservas_action" model="ir.actions.act_window">
+            <field name="name">Reservaciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reservas.registro_reservas</field>
+            <field name="view_mode">calendar</field>
+        </record>
+
+        <menuitem id="reservas.registro_reservas_menu" name="Calendario" action="reservas.registro_reservas_action"
+                  parent="reservas.reservas_menu" sequence="5"/>
 
     </data>
 </odoo>

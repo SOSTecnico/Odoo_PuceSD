@@ -11,3 +11,9 @@ access_reservas_reservas,Reservas: Reservas,model_reservas_reservaciones,reserva
 access_reservas_reservas_tecnico,Reservas: Reservas - Tecnico,model_reservas_reservaciones,reservas.tecnico_group,1,1,1,1
 access_reservas_reservas_detalle,Reservas: Reservas,model_reservas_detalle_reservacion,reservas.user_group,1,0,0,0
 access_reservas_reservas_detalle_tecnico,Reservas: Reservas Detalle - Tecnico,model_reservas_detalle_reservacion,reservas.tecnico_group,1,1,1,1
+access_reservas_empleado_tecnico,Reservas: Empleados - Tecnico,hr.model_hr_employee,reservas.tecnico_group,1,0,0,0
+access_reservas_dias_tecnico,Reservas: Días - Técnico,model_reservas_dias,reservas.tecnico_group,1,0,0,0
+access_reservas_dias_admin,Reservas: Días - Admin,model_reservas_dias,reservas.admin_group,1,1,1,1
+access_reservas_registro_reservas,Reservas: Registro Reserva,model_reservas_registro_reservas,reservas.user_group,1,0,0,0
+access_reservas_registro_reservas_tecnico,Reservas: Registro Reserva - Técnico,model_reservas_registro_reservas,reservas.tecnico_group,1,1,1,1
+
