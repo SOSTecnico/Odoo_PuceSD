@@ -28,6 +28,8 @@
         'views/Asignaturas.xml',
         'views/Laboratorios.xml',
         'views/Reservas.xml',
+        #     Data
+        'data/dias.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

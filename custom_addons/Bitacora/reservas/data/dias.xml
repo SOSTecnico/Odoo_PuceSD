@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="reservas.dias_lunes" model="reservas.dias">
+            <field name="name">lunes</field>
+        </record>
+        <record id="reservas.dias_martes" model="reservas.dias">
+            <field name="name">martes</field>
+        </record>
+        <record id="reservas.dias_miércoles" model="reservas.dias">
+            <field name="name">miércoles</field>
+        </record>
+        <record id="reservas.dias_jueves" model="reservas.dias">
+            <field name="name">jueves</field>
+        </record>
+        <record id="reservas.dias_viernes" model="reservas.dias">
+            <field name="name">viernes</field>
+        </record>
+        <record id="reservas.dias_sábado" model="reservas.dias">
+            <field name="name">sábado</field>
+        </record>
+        <record id="reservas.dias_domingo" model="reservas.dias">
+            <field name="name">domingo</field>
+        </record>
+
+    </data>
+</odoo>

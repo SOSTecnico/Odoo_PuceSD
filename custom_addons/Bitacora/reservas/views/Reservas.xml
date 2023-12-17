@@ -2,6 +2,30 @@
 <odoo>
     <data>
 
+
+        <record id="reservas.registro_reserva_rule" model="ir.rule">
+            <field name="name">Reservas: Regla para ELIMINAR o EDITAR sólo reservas Propias</field>
+            <field ref="reservas.model_reservas_reservaciones" name="model_id"/>
+            <field name="domain_force">[('create_uid', '=', user.id )]</field>
+            <field name="perm_unlink" eval="1"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_read" eval="0"/>
+            <field name="groups" eval="[(4, ref('reservas.tecnico_group'))]"/>
+        </record>
+
+        <record id="reservas.registro_reserva_rule_admin" model="ir.rule">
+            <field name="name">Reservas: Regla para ELIMINAR o EDITAR Todas las Reservas</field>
+            <field ref="reservas.model_reservas_reservaciones" name="model_id"/>
+            <field name="domain_force">[(1, '=', 1 )]</field>
+            <field name="perm_unlink" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_read" eval="1"/>
+            <field name="groups" eval="[(4, ref('reservas.responsable_group'))]"/>
+        </record>
+
+
         <record id="reservas.reservas_form_view" model="ir.ui.view">
             <field name="name">reservas.reservas.reservas.form</field>
             <field name="model">reservas.reservaciones</field>
@@ -9,7 +33,7 @@
                 <form string="Reservas">
                     <sheet>
                         <group>
-                            <field name="codigo"/>
+                            <field name="codigo" readonly="1"/>
                             <field name="laboratorio_id"/>
                             <field name="responsable_id" options="{'no_open':True}"/>
                             <field name="asignatura_id"/>
@@ -19,13 +43,13 @@
                         <field name="detalle_reserva_id" nolabel="1">
                             <form>
                                 <group>
-                                    <field name="dias_" widget="many2many_tags"/>
                                     <field name="hora_inicio" widget="float_time"/>
                                     <field name="hora_fin" widget="float_time"/>
+                                    <field name="dias" widget="many2many_checkboxes"/>
                                 </group>
                             </form>
                             <tree>
-                                <field name="dias_" widget="many2many_tags"/>
+                                <field name="dias" widget="many2many_tags"/>
                                 <field name="hora_inicio" widget="float_time"/>
                                 <field name="hora_fin" widget="float_time"/>
                             </tree>
@@ -46,6 +70,7 @@
                     <field name="responsable_id"/>
                     <field name="fecha_inicio"/>
                     <field name="fecha_final"/>
+                    <field name="create_uid" optional="hide"/>
                 </tree>
             </field>
         </record>
@@ -88,8 +113,11 @@
             <field name="name">reservas.reservas.reservas.tree</field>
             <field name="model">reservas.registro_reservas</field>
             <field name="arch" type="xml">
-                <calendar date_start="inicio" date_stop="fin">
-
+                <calendar date_start="inicio" date_stop="fin" color="create_uid" >
+                    <field name="docente"/>
+                    <field name="asignatura"/>
+                    <field name="laboratorio" filters="1"/>
+                    <field name="reserva_id"/>
                 </calendar>
             </field>
         </record>
