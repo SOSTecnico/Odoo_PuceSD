@@ -42,21 +42,67 @@ class Reserva(models.Model):
     fecha_inicio = fields.Date(string='Fecha Inicio', required=True)
     fecha_final = fields.Date(string='Fecha Final', required=True)
 
+    recurrente = fields.Boolean(string='Recurrente', required=False, default=False)
+    hora_inicio = fields.Float(string='Hora Inicio', )
+    hora_fin = fields.Float(string='Hora Fin', )
+
     @api.onchange('fecha_inicio')
     def onchange_fecha_inicio(self):
         if self.fecha_inicio:
-            self.fecha_final = self.fecha_inicio
+            self.fecha_final = self.fecha_inicio + timedelta(days=1)
 
-    @api.constrains('fecha_inicio', 'fecha_final')
+    @api.constrains('fecha_inicio', 'fecha_final', 'hora_inicio', 'hora_fin')
     def _check_fechas(self):
         for rec in self:
             if rec.fecha_inicio > rec.fecha_final:
-                raise ValidationError("Error: La fecha de inicio no puede ser menor a la fecha final")
+                raise UserError("La fecha de inicio no puede ser menor a la fecha final")
+
+            if not rec.recurrente and rec.hora_inicio >= rec.hora_fin:
+                raise UserError("La Hora de inicio no puede ser igual o menor a la hora fin")
 
     detalle_reserva_id = fields.One2many(comodel_name='reservas.detalle_reservacion', inverse_name='reserva_id',
                                          string='Detalle de Reservación', required=False)
     registros_reserva_ids = fields.One2many(comodel_name='reservas.registro_reservas', inverse_name='reserva_id',
                                             string='Registros_reserva_ids', required=False)
+
+    @api.constrains('recurrente', 'detalle_reserva_id')
+    def _check_recurrencia(self):
+        for rec in self:
+            if rec.recurrente and len(rec.detalle_reserva_id) == 0:
+                raise UserError("No se puede registrar una reservación recurrente sin especificar los días ni la hora")
+
+    @api.model
+    def create(self, values):
+        res = super(Reserva, self).create(values)
+        if not res.recurrente:
+            res.crear_registro_reserva()
+        return res
+
+    def write(self, values):
+        print(values)
+
+        res = super(Reserva, self).write(values)
+        if not self.recurrente:
+            self.registros_reserva_ids.sudo().unlink()
+            self.crear_registro_reserva()
+        else:
+            self.registros_reserva_ids.search([("detalle_reserva_id", "=", False)]).sudo().unlink()
+
+        return res
+
+    def crear_registro_reserva(self):
+
+        h_i = timedelta(hours=self.hora_inicio)
+        h_f = timedelta(hours=self.hora_fin)
+        hora_inicio = datetime.combine(self.fecha_inicio, (datetime.min + h_i).time()) + timedelta(hours=5)
+        hora_fin = datetime.combine(self.fecha_inicio, (datetime.min + h_f).time()) + timedelta(hours=5)
+
+        self.env["reservas.registro_reservas"].sudo().create({
+            "inicio": hora_inicio,
+            "fin": hora_fin,
+            "reserva_id": self.id
+        })
+        return True
 
 
 class DetalleReserva(models.Model):
@@ -156,7 +202,8 @@ class RegistroReserva(models.Model):
 
     inicio = fields.Datetime(string='Inicio', required=False)
     fin = fields.Datetime(string='Fin', required=False)
-    reserva_id = fields.Many2one(comodel_name='reservas.reservaciones', string='Reservación', required=False)
+    reserva_id = fields.Many2one(comodel_name='reservas.reservaciones', string='Reservación', required=False,
+                                 ondelete='cascade')
     detalle_reserva_id = fields.Many2one(comodel_name='reservas.detalle_reservacion', string='Detalle_reserva_id',
                                          required=False, ondelete='cascade')
     asignatura = fields.Char(string='Asignatura', related="reserva_id.asignatura_id.asignatura")
@@ -180,6 +227,30 @@ class RegistroReserva(models.Model):
     #                               f"\nFecha: {registros.inicio.date()}"
     #                               f"\nHora: {f_i} - {f_f}")
 
-    def check_reservacion(self,laboratorio, hora_inicio, hora_fin):
-        # Verificar si no existe una reservacion con los datos proporcionados
-        pass
+    @api.constrains("inicio", "fin", "laboratorio")
+    def check_reg(self):
+        self.check_reservacion(laboratorio=self.laboratorio, hora_inicio=self.inicio, hora_fin=self.fin)
+
+    def check_reservacion(self, laboratorio, hora_inicio, hora_fin):
+        # Verificar si no existe una reservación con los datos proporcionados
+        reservas_existente = self.env['reservas.registro_reservas'].search([
+            ('id', '!=', self.id),
+            ('fin', '>', hora_inicio),
+            ('inicio', '<', hora_fin),
+        ])
+
+        if reservas_existente:
+            coincidencias = reservas_existente.filtered(
+                lambda r: r.inicio.date() == hora_inicio.date() and r.fin.time() == hora_inicio.time()
+            )
+
+            if coincidencias:
+                f_i = coincidencias[0].inicio.astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
+                f_f = coincidencias[0].fin.astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
+                raise ValidationError("Error: El laboratorio ya está reservado para ese periodo de tiempo."
+                                      f"\nDETALLES:"
+                                      f"\nCódigo de la Reserva: {coincidencias[0].reserva_id.codigo}"
+                                      f"\nFecha: {coincidencias[0].inicio.date()}"
+                                      f"\nHora: {f_i} - {f_f}")
+
+        print("Estás verificando")
