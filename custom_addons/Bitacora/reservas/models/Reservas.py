@@ -227,30 +227,23 @@ class RegistroReserva(models.Model):
     #                               f"\nFecha: {registros.inicio.date()}"
     #                               f"\nHora: {f_i} - {f_f}")
 
-    @api.constrains("inicio", "fin", "laboratorio")
-    def check_reg(self):
-        self.check_reservacion(laboratorio=self.laboratorio, hora_inicio=self.inicio, hora_fin=self.fin)
 
-    def check_reservacion(self, laboratorio, hora_inicio, hora_fin):
-        # Verificar si no existe una reservación con los datos proporcionados
-        reservas_existente = self.env['reservas.registro_reservas'].search([
-            ('id', '!=', self.id),
-            ('fin', '>', hora_inicio),
-            ('inicio', '<', hora_fin),
-        ])
+    @api.constrains("inicio", "fin")
+    def check_registro(self):
+        for rec in self:
+            reservas_existente = self.env['reservas.registro_reservas'].search([
+                ('id', '!=', rec.id),  # Excluir la reserva actual
+                ('laboratorio', '=', rec.laboratorio.id),
+                ('fin', '>', rec.inicio),
+                ('inicio', '<', rec.fin),
+            ])
 
-        if reservas_existente:
-            coincidencias = reservas_existente.filtered(
-                lambda r: r.inicio.date() == hora_inicio.date() and r.fin.time() == hora_inicio.time()
-            )
-
-            if coincidencias:
-                f_i = coincidencias[0].inicio.astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
-                f_f = coincidencias[0].fin.astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
+            if reservas_existente:
+                f_i = reservas_existente[0].inicio.astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
+                f_f = reservas_existente[0].fin.astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
                 raise ValidationError("Error: El laboratorio ya está reservado para ese periodo de tiempo."
                                       f"\nDETALLES:"
-                                      f"\nCódigo de la Reserva: {coincidencias[0].reserva_id.codigo}"
-                                      f"\nFecha: {coincidencias[0].inicio.date()}"
+                                      f"\nCódigo de la Reserva: {reservas_existente[0].reserva_id.codigo}"
+                                      f"\nFecha: {reservas_existente[0].inicio.date()}"
                                       f"\nHora: {f_i} - {f_f}")
 
-        print("Estás verificando")
