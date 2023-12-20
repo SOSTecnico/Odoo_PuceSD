@@ -127,38 +127,40 @@ class DetalleReserva(models.Model):
 
     def create(self, values):
 
-        res = super(DetalleReserva, self).create(values)
+        detalle_reserva = super(DetalleReserva, self).create(values)
 
-        f_inicio = res.reserva_id.fecha_inicio
-        f_fin = res.reserva_id.fecha_final
+        for res in detalle_reserva:
 
-        while (f_inicio <= f_fin):
+            f_inicio = res.reserva_id.fecha_inicio
+            f_fin = res.reserva_id.fecha_final
 
-            if f_inicio.strftime("%A") in res.dias.mapped("name"):
+            while (f_inicio <= f_fin):
 
-                hora_inicio = datetime.combine(f_inicio,
-                                               (datetime.min + timedelta(hours=res.hora_inicio)).time()) + timedelta(
-                    hours=5)
+                if f_inicio.strftime("%A") in res.dias.mapped("name"):
 
-                hora_fin = datetime.combine(f_inicio,
-                                            (datetime.min + timedelta(hours=res.hora_fin)).time()) + timedelta(hours=5)
+                    hora_inicio = datetime.combine(f_inicio,
+                                                   (datetime.min + timedelta(hours=res.hora_inicio)).time()) + timedelta(
+                        hours=5)
 
-                if hora_inicio >= hora_fin:
-                    raise ValidationError(
-                        "La hora inicial no debe ser inferior a la hora final en el detalle: %s" % res.dias.mapped(
-                            "name"))
+                    hora_fin = datetime.combine(f_inicio,
+                                                (datetime.min + timedelta(hours=res.hora_fin)).time()) + timedelta(hours=5)
 
-                res.sudo().write({
-                    "registros_reserva_id": [(0, 0, {
-                        "inicio": hora_inicio,
-                        "fin": hora_fin,
-                        "reserva_id": res.reserva_id.id
-                    })]
-                })
+                    if hora_inicio >= hora_fin:
+                        raise ValidationError(
+                            "La hora inicial no debe ser inferior a la hora final en el detalle: %s" % res.dias.mapped(
+                                "name"))
 
-            f_inicio = f_inicio + timedelta(days=1)
+                    res.sudo().write({
+                        "registros_reserva_id": [(0, 0, {
+                            "inicio": hora_inicio,
+                            "fin": hora_fin,
+                            "reserva_id": res.reserva_id.id
+                        })]
+                    })
 
-        return res
+                f_inicio = f_inicio + timedelta(days=1)
+
+        return detalle_reserva
 
     def write(self, vals):
         res = super(DetalleReserva, self).write(vals)
@@ -210,22 +212,6 @@ class RegistroReserva(models.Model):
     docente = fields.Char(comodel_name='hr.employee', string='Responsable', related="reserva_id.responsable_id.name")
     laboratorio = fields.Many2one(comodel_name='reservas.laboratorios', string='Laboratorio',
                                   related="reserva_id.laboratorio_id")
-
-    # @api.constrains("inicio", "fin")
-    # def check_registro(self):
-    #     registros = self.env['reservas.registro_reservas'].search(
-    #         [("id", "!=", self.id), ("inicio", ">=", self.inicio), ("fin", "<=", self.fin)], limit=1)
-    #
-    #
-    #     if registros:
-    #         f_i = registros.inicio.astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
-    #         f_f = registros.fin.astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
-    #
-    #         raise ValidationError(f"No se puede crear una reservación en una fecha ocupada."
-    #                               f"\nDETALLES:"
-    #                               f"\nCódigo de la Reserva: {registros.reserva_id.codigo}"
-    #                               f"\nFecha: {registros.inicio.date()}"
-    #                               f"\nHora: {f_i} - {f_f}")
 
 
     @api.constrains("inicio", "fin")
