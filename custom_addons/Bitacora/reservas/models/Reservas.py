@@ -86,7 +86,8 @@ class Reserva(models.Model):
             self.registros_reserva_ids.sudo().unlink()
             self.crear_registro_reserva()
         else:
-            self.registros_reserva_ids.search([("detalle_reserva_id", "=", False)]).sudo().unlink()
+            self.registros_reserva_ids.search(
+                [("detalle_reserva_id", "=", False), ("reserva_id", self.id)]).sudo().unlink()
 
         return res
 
@@ -139,11 +140,13 @@ class DetalleReserva(models.Model):
                 if f_inicio.strftime("%A") in res.dias.mapped("name"):
 
                     hora_inicio = datetime.combine(f_inicio,
-                                                   (datetime.min + timedelta(hours=res.hora_inicio)).time()) + timedelta(
+                                                   (datetime.min + timedelta(
+                                                       hours=res.hora_inicio)).time()) + timedelta(
                         hours=5)
 
                     hora_fin = datetime.combine(f_inicio,
-                                                (datetime.min + timedelta(hours=res.hora_fin)).time()) + timedelta(hours=5)
+                                                (datetime.min + timedelta(hours=res.hora_fin)).time()) + timedelta(
+                        hours=5)
 
                     if hora_inicio >= hora_fin:
                         raise ValidationError(
@@ -211,25 +214,24 @@ class RegistroReserva(models.Model):
     asignatura = fields.Char(string='Asignatura', related="reserva_id.asignatura_id.asignatura")
     docente = fields.Char(comodel_name='hr.employee', string='Responsable', related="reserva_id.responsable_id.name")
     laboratorio = fields.Many2one(comodel_name='reservas.laboratorios', string='Laboratorio',
-                                  related="reserva_id.laboratorio_id")
+                                  related="reserva_id.laboratorio_id", store=True)
 
+    @api.model
+    def create(self, values):
+        print(values)
 
-    @api.constrains("inicio", "fin")
-    def check_registro(self):
-        for rec in self:
-            reservas_existente = self.env['reservas.registro_reservas'].search([
-                ('id', '!=', rec.id),  # Excluir la reserva actual
-                ('laboratorio', '=', rec.laboratorio.id),
-                ('fin', '>', rec.inicio),
-                ('inicio', '<', rec.fin),
-            ])
+        reservacion = self.env['reservas.reservaciones'].sudo().search([("id", "=", values['reserva_id'])])
 
-            if reservas_existente:
-                f_i = reservas_existente[0].inicio.astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
-                f_f = reservas_existente[0].fin.astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
-                raise ValidationError("Error: El laboratorio ya está reservado para ese periodo de tiempo."
-                                      f"\nDETALLES:"
-                                      f"\nCódigo de la Reserva: {reservas_existente[0].reserva_id.codigo}"
-                                      f"\nFecha: {reservas_existente[0].inicio.date()}"
-                                      f"\nHora: {f_i} - {f_f}")
+        sql = f"""
+            SELECT * FROM reservas_registro_reservas 
+            WHERE reserva_id <> {values["reserva_id"]} and laboratorio = {reservacion.laboratorio_id.id} and ('{values["inicio"]}' , '{values["fin"]}') overlaps (inicio, fin)
+        """
+        self.env.cr.execute(sql)
+        reservas = self.env.cr.dictfetchall()
+        print(reservas)
+        if reservas:
+            raise ValidationError("Error existe una reserva en el periodo de tiempo seleccionado"
+                                  "\nCódigo:")
+        res = super(RegistroReserva, self).create(values)
 
+        return res
