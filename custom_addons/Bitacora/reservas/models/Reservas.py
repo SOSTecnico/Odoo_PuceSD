@@ -218,20 +218,41 @@ class RegistroReserva(models.Model):
 
     @api.model
     def create(self, values):
-        print(values)
 
         reservacion = self.env['reservas.reservaciones'].sudo().search([("id", "=", values['reserva_id'])])
 
         sql = f"""
             SELECT * FROM reservas_registro_reservas 
-            WHERE reserva_id <> {values["reserva_id"]} and laboratorio = {reservacion.laboratorio_id.id} and ('{values["inicio"]}' , '{values["fin"]}') overlaps (inicio, fin)
+            WHERE reserva_id <> {values["reserva_id"]} and laboratorio = {reservacion.laboratorio_id.id} and ('{values["inicio"]}' , '{values["fin"]}') overlaps (inicio, fin);
+
         """
+
+        #            JOIN reservas_registro_reservas ON description
         self.env.cr.execute(sql)
         reservas = self.env.cr.dictfetchall()
-        print(reservas)
         if reservas:
-            raise ValidationError("Error existe una reserva en el periodo de tiempo seleccionado"
-                                  "\nCódigo:")
+            for reserva in reservas:
+                f_i = reserva['inicio'].astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
+                f_f = reserva['fin'].astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
+                fecha_reserva = reserva['inicio'].astimezone(pytz.timezone("America/Guayaquil")).strftime("%Y-%m-%d")
+                raise ValidationError("Error: Existe una reserva en el período de tiempo seleccionado."
+                                      #f"\nCódido de la reserva: {reservacion.reserva_id.description}"
+                                      f"\nLaboratorio: {reserva['laboratorio']}"
+                                      f"\nHora de inicio: {f_i}"
+                                      f"\nHora de finalización: {f_f}"
+                                      f"\nFecha ya programada: {fecha_reserva}"
+                                      f"\nAsignatura: {reservacion.asignatura_id.asignatura}")
         res = super(RegistroReserva, self).create(values)
 
         return res
+
+
+        # if reservas_existente:
+       # f"\nCódigo de la nueva reserva: {values['reserva_id']}")
+        #     f_i = reservas_existente[0].inicio.astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
+        #     f_f = reservas_existente[0].fin.astimezone(pytz.timezone("America/Guayaquil")).strftime("%H:%M")
+        #     raise ValidationError("Error: El laboratorio ya está reservado para ese periodo de tiempo."
+        #                           f"\nDETALLES:"
+        #                           f"\nCódigo de la Reserva: {reservas_existente[0].reserva_id.codigo}"
+        #                           f"\nFecha: {reservas_existente[0].inicio.date()}"
+        #                           f"\nHora: {f_i} - {f_f}")
