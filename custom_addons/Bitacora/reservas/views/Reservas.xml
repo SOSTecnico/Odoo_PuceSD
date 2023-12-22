@@ -118,13 +118,13 @@
         <!--********************DETALLE RESERVAS (CALENDARIO)********************-->
 
         <record id="reservas.reservas_calendar_view" model="ir.ui.view">
-            <field name="name">reservas.reservas.reservas.tree</field>
+            <field name="name">reservas.reservas.tree</field>
             <field name="model">reservas.registro_reservas</field>
             <field name="arch" type="xml">
-                <calendar date_start="inicio" date_stop="fin" color="create_uid">
+                <calendar date_start="inicio" date_stop="fin" color="asignatura">
                     <field name="docente"/>
-                    <field name="asignatura"/>
                     <field name="laboratorio" filters="1"/>
+                    <field name="asignatura" filters="1"/>
                     <field name="reserva_id"/>
                 </calendar>
             </field>
@@ -134,7 +134,7 @@
             <field name="name">Reservaciones</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">reservas.registro_reservas</field>
-            <field name="view_mode">calendar,tree</field>
+            <field name="view_mode">calendar,tree,form,graph,pivot</field>
         </record>
 
         <menuitem id="reservas.registro_reservas_menu" name="Calendario" action="reservas.registro_reservas_action"
