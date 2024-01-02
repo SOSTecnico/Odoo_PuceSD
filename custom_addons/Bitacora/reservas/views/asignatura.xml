@@ -1,7 +1,0 @@
-<odoo>
-    <data>
-        <record id="reservas.asignatura_form_view" model="ir.ui.view">
-            <field name="name"></field>
-        </record>
-    </data>
-</odoo>

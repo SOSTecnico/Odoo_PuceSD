@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from . import models
-from . import reservas
+from . import Asignaturas
+from . import Laboratorios
+from . import Reservas

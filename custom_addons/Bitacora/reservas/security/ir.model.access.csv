@@ -1,2 +1,19 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_reservas_reservaciones,reservas.reservaciones,model_reservas_reservaciones,base.group_user,1,1,1,1
+access_reservas_asignaturas,Reservas: Asignaturas,model_reservas_asignaturas,reservas.user_group,1,0,0,0
+access_reservas_asignaturas_tecnico,Reservas: Asignaturas - Tecnico,model_reservas_asignaturas,reservas.tecnico_group,1,1,1,1
+access_reservas_laboratorios,Reservas: Laboratorios,model_reservas_laboratorios,reservas.user_group,1,0,0,0
+access_reservas_laboratorios_tecnico,Reservas: Laboratorios - Tecnico,model_reservas_laboratorios,reservas.admin_group,1,1,1,1
+access_reservas_programas,Reservas: Programas,model_reservas_programas,reservas.user_group,1,0,0,0
+access_reservas_programas_tecnico,Reservas: Programas - Tecnico,model_reservas_programas,reservas.responsable_group,1,1,1,1
+access_reservas_laboratorios_programas,Reservas: Laboratorios Programas,model_reservas_laboratorio_programa,reservas.user_group,1,0,0,0
+access_reservas_laboratorios_programas_tecnico,Reservas: Laboratorios Programas - Tecnico,model_reservas_laboratorio_programa,reservas.responsable_group,1,1,1,1
+access_reservas_reservas,Reservas: Reservas,model_reservas_reservaciones,reservas.user_group,1,0,0,0
+access_reservas_reservas_tecnico,Reservas: Reservas - Tecnico,model_reservas_reservaciones,reservas.tecnico_group,1,1,1,1
+access_reservas_reservas_detalle,Reservas: Reservas,model_reservas_detalle_reservacion,reservas.user_group,1,0,0,0
+access_reservas_reservas_detalle_tecnico,Reservas: Reservas Detalle - Tecnico,model_reservas_detalle_reservacion,reservas.tecnico_group,1,1,1,1
+access_reservas_empleado_tecnico,Reservas: Empleados - Tecnico,hr.model_hr_employee,reservas.tecnico_group,1,0,0,0
+access_reservas_dias_tecnico,Reservas: Días - Técnico,model_reservas_dias,reservas.tecnico_group,1,0,0,0
+access_reservas_dias_admin,Reservas: Días - Admin,model_reservas_dias,reservas.admin_group,1,1,1,1
+access_reservas_registro_reservas,Reservas: Registro Reserva,model_reservas_registro_reservas,reservas.user_group,1,0,0,0
+access_reservas_registro_reservas_admin,Reservas: Registro Reserva - Admin,model_reservas_registro_reservas,reservas.admin_group,1,1,1,1
+

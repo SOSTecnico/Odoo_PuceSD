@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="reservas.registro_reserva_rule" model="ir.rule">
+            <field name="name">Reservas: Regla para ELIMINAR o EDITAR sólo reservas Propias</field>
+            <field ref="reservas.model_reservas_reservaciones" name="model_id"/>
+            <field name="domain_force">[('create_uid', '=', user.id )]</field>
+            <field name="perm_unlink" eval="1"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_read" eval="0"/>
+            <field name="groups" eval="[(4, ref('reservas.tecnico_group'))]"/>
+        </record>
+
+        <record id="reservas.registro_reserva_rule_admin" model="ir.rule">
+            <field name="name">Reservas: Regla para ELIMINAR o EDITAR Todas las Reservas</field>
+            <field ref="reservas.model_reservas_reservaciones" name="model_id"/>
+            <field name="domain_force">[(1, '=', 1 )]</field>
+            <field name="perm_unlink" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_read" eval="1"/>
+            <field name="groups" eval="[(4, ref('reservas.responsable_group'))]"/>
+        </record>
+
+
+        <record id="reservas.reservas_form_view" model="ir.ui.view">
+            <field name="name">reservas.reservas.reservas.form</field>
+            <field name="model">reservas.reservaciones</field>
+            <field name="arch" type="xml">
+                <form string="Reservas">
+                    <sheet>
+                        <group col="4">
+                            <field name="codigo" readonly="1"/>
+                            <newline/>
+                            <field name="laboratorio_id"/>
+                            <field name="responsable_id" options="{'no_open':True}"/>
+                            <field name="asignatura_id"/>
+                            <newline/>
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_final" attrs="{'invisible':[('recurrente','=',False)]}"/>
+                            <newline/>
+                            <field name="hora_inicio" widget="float_time"
+                                   attrs="{'required':[('recurrente','=',False)],'invisible':[('recurrente','=',True)]}"/>
+                            <field name="hora_fin" widget="float_time"
+                                   attrs="{'required':[('recurrente','=',False)],'invisible':[('recurrente','=',True)]}"/>
+                            <field name="recurrente" widget="boolean_toggle" class="oe_edit_only"/>
+                        </group>
+                        <field name="detalle_reserva_id" nolabel="1" attrs="{'invisible':[('recurrente','=',False)]}">
+                            <form>
+                                <group>
+                                    <field name="hora_inicio" widget="float_time"/>
+                                    <field name="hora_fin" widget="float_time"/>
+                                    <field name="dias" widget="many2many_checkboxes"/>
+                                </group>
+                            </form>
+                            <tree>
+                                <field name="dias" widget="many2many_tags"/>
+                                <field name="hora_inicio" widget="float_time"/>
+                                <field name="hora_fin" widget="float_time"/>
+                            </tree>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="reservas.reservas_tree_view" model="ir.ui.view">
+            <field name="name">reservas.reservas.reservas.tree</field>
+            <field name="model">reservas.reservaciones</field>
+            <field name="arch" type="xml">
+                <tree string="Reservas">
+                    <field name="codigo"/>
+                    <field name="asignatura_id"/>
+                    <field name="laboratorio_id"/>
+                    <field name="responsable_id"/>
+                    <field name="fecha_inicio"/>
+                    <field name="fecha_final"/>
+                    <field name="create_uid" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!--<record id="reservas.reservas_search_view" model="ir.ui.view">
+            <field name="name">reservas.reservas.reservas.search</field>
+            <field name="model">reservas.reservas.reservas</field>
+            <field name="arch" type="xml">
+                <search string="Reservas">
+                    <group expand="1" string="Group By">
+                        <filter string="Example Field" name="example_field" domain="[]"
+                                context="{'group_by':'example_field'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>-->
+
+        <record id="reservas.reservas_act_window" model="ir.actions.act_window">
+            <field name="name">Reservas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reservas.reservaciones</field>
+            <field name="view_mode">tree,form,kanban,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Reservas.
+                </p>
+            </field>
+        </record>
+
+        <menuitem groups="reservas.user_group" name="Reservaciones" id="reservas.reservas_menu"
+                  parent="reservas.main_menu" sequence="1"/>
+
+        <menuitem id="reservas.reservaciones" name="Registro Reserva" action="reservas.reservas_act_window"
+                  parent="reservas.reservas_menu" sequence="1"/>
+
+        <!--********************DETALLE RESERVAS (CALENDARIO)********************-->
+
+        <record id="reservas.reservas_calendar_view" model="ir.ui.view">
+            <field name="name">reservas.reservas.tree</field>
+            <field name="model">reservas.registro_reservas</field>
+            <field name="arch" type="xml">
+                <calendar date_start="inicio" date_stop="fin" color="asignatura">
+                    <field name="docente"/>
+                    <field name="laboratorio" filters="1"/>
+                    <field name="asignatura" filters="1"/>
+                    <field name="reserva_id"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="reservas.registro_reservas_action" model="ir.actions.act_window">
+            <field name="name">Reservaciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reservas.registro_reservas</field>
+            <field name="view_mode">calendar,tree,form,graph,pivot</field>
+        </record>
+
+        <menuitem id="reservas.registro_reservas_menu" name="Calendario" action="reservas.registro_reservas_action"
+                  parent="reservas.reservas_menu" sequence="5"/>
+
+    </data>
+</odoo>

@@ -18,16 +18,18 @@
     'version': '2.0',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
+    'depends': ['base', "hr"],
 
     # always loaded
     'data': [
+        'security/Groups.xml',
         'security/ir.model.access.csv',
-        'views/views.xml',
-        'views/menuitem.xml',
-        'views/templates.xml',
-        'views/reservasview.xml',
-        'views/website/formulario.xml',
+        'views/MainMenu.xml',
+        'views/Asignaturas.xml',
+        'views/Laboratorios.xml',
+        'views/Reservas.xml',
+        #     Data
+        'data/dias.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
