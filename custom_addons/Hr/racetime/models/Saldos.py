@@ -17,6 +17,10 @@ class Saldos(models.Model):
     detalle_saldos = fields.One2many(comodel_name='racetime.detalle_saldos', inverse_name='saldo_id',
                                      string='Detalle de Saldos', required=False)
 
+    estado = fields.Selection(string='Estado',
+                              selection=[('activo', 'ACTIVO'),
+                                         ('inactivo', 'INACTIVO'), ], default='activo')
+
     def write(self, values):
         # Add code here
         archivos = super(Saldos, self).write(values)
@@ -198,7 +202,7 @@ class DetalleSaldos(models.Model):
         if 'active' in values:
             if values['active']:
                 detalle_saldo = self.env['racetime.permisos'].search(
-                    [ ('saldo_id', '=', self.id)
+                    [('saldo_id', '=', self.id)
                         , ('active', '=', False)])
                 print(detalle_saldo)
                 for detalle_saldo in detalle_saldo:
@@ -220,6 +224,7 @@ class DetalleSaldos(models.Model):
                 print(archivos)
 
         return archivos
+
     @api.onchange('horas', 'tipo')
     def onchange_horas(self):
         if self.horas:
