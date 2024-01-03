@@ -70,31 +70,51 @@ class RolAcciones(models.TransientModel):
         print(admins)
         for fecha in fechas:
             for empleado in empleados:
+                dni = empleado.passport_id if empleado.passport_id else empleado.identification_id
+                tipodoc = '02' if empleado.passport_id else '01'
                 self.env['rolpago.roles'].search([('estado_rol', '=', 'publicado'), ('empleado_id', '=', empleado.id),
                                                   ('fecha', 'like', f"{fecha.strftime('%Y-%m')}")]).unlink()
 
-                url = f"https://pucesapwd.puce.edu.ec:44400/RESTAdapter/RoldePago/{empleado.identification_id}" \
-                      f"?tipdoc=01&mes={fecha.strftime('%m')}&ano={fecha.strftime('%Y')}&socie=6000"
+                url = f"https://pucesapwd.puce.edu.ec:44400/RESTAdapter/RoldePago/{dni}" \
+                      f"?tipdoc={tipodoc}&mes={fecha.strftime('%m')}&ano={fecha.strftime('%Y')}&socie=6000"
 
                 data = requests.get(url, headers, auth=('POP_WS', 'Puc3S4p1')).json()
 
                 if data['MT_IHR006_RoldePago_Out_Resp']['Log']['TipoMensaje'] != 'E':
                     rubros = data['MT_IHR006_RoldePago_Out_Resp']['Detalle']
                     model_rubros = []
-                    for rubro in rubros:
-                        tipo_rubro = tipos_de_rubros.filtered_domain([('name', '=', rubro['TextoConcepto'])])
+                    if isinstance(rubros, list):
+                        for rubro in rubros:
+                            tipo_rubro = tipos_de_rubros.filtered_domain([('name', '=', rubro['TextoConcepto'])])
+
+                            if not tipo_rubro:
+                                tipo_rubro = self.env['rolpago.tipo_rubro'].create({
+                                    'name': rubro['TextoConcepto'],
+                                    'tipo': 'I' if rubro['Signo'] == '+' else 'D',
+                                })
+
+                                tipos_de_rubros = self.env['rolpago.tipo_rubro'].sudo().search([])
+
+                            model_rubros.append((0, 0, {
+                                'valor': rubro['Monto'],
+                                'horas_laborables': rubro['Horas'],
+                                'tipo_rubro_id': tipo_rubro.id,
+                            }))
+
+                    else:
+                        tipo_rubro = tipos_de_rubros.filtered_domain([('name', '=', rubros['TextoConcepto'])])
 
                         if not tipo_rubro:
                             tipo_rubro = self.env['rolpago.tipo_rubro'].create({
-                                'name': rubro['TextoConcepto'],
-                                'tipo': 'I' if rubro['Signo'] == '+' else 'D',
+                                'name': rubros['TextoConcepto'],
+                                'tipo': 'I' if rubros['Signo'] == '+' else 'D',
                             })
 
                             tipos_de_rubros = self.env['rolpago.tipo_rubro'].sudo().search([])
 
                         model_rubros.append((0, 0, {
-                            'valor': rubro['Monto'],
-                            'horas_laborables': rubro['Horas'],
+                            'valor': rubros['Monto'],
+                            'horas_laborables': rubros['Horas'],
                             'tipo_rubro_id': tipo_rubro.id,
                         }))
 
