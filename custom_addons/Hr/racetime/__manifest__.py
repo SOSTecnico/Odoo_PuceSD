@@ -63,6 +63,7 @@
         'report/PermisosReport.xml',
         'report/SaldosReport.xml',
         'report/ReporteAtrasos.xml',
+        'report/NovedadesMarcaciones.xml',
         #     Templates
         'views/SolicitudPermisos.xml',
         'views/EmailTemplates/SolicitudPermiso.xml',

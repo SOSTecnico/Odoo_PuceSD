@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="racetime.reporte_novedades_marcaciones_report_xlsx" model="ir.actions.report">
+            <field name="name">Novedades Marcaciones</field>
+            <field name="model">racetime.reporte_atrasos</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">racetime.reporte_novedades_marcaciones</field>
+            <field name="report_file">novedades_marcaciones</field>
+            <field name="binding_type">report</field>
+            <field name="print_report_name">'Reporte Novedades Marcaciones'</field>
+        </record>
+    </data>
+</odoo>
