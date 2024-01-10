@@ -17,25 +17,24 @@ class Saldos(models.Model):
     detalle_saldos = fields.One2many(comodel_name='racetime.detalle_saldos', inverse_name='saldo_id',
                                      string='Detalle de Saldos', required=False)
 
-    estado = fields.Selection(string='Estado',
-                              selection=[('activo', 'ACTIVO'),
-                                         ('inactivo', 'INACTIVO'), ], default='activo')
+    estado = fields.Selection(selection=[('activo', 'ACTIVO'), ('inactivo', 'INACTIVO'), ], default='activo')
 
     def write(self, values):
         # Add code here
         archivos = super(Saldos, self).write(values)
-        if 'active' in values:
-            if values['active']:
+        if 'estado' in values:
+            if values['estado'] == 'activo':
                 detalle_saldos = self.env['racetime.detalle_saldos'].search(
                     [('saldo_id', '=', self.id)
                         , ('active', '=', False)])
-                print(detalle_saldos)
+
                 for detalle_saldo in detalle_saldos:
                     detalle_saldo.active = True
+                    detalle_saldo.estado = 'activo'
             else:
-
                 for detalle_saldo in self.detalle_saldos:
                     detalle_saldo.active = self.active
+                    detalle_saldo.estado = 'inactivo'
 
         return archivos
 
@@ -195,6 +194,7 @@ class DetalleSaldos(models.Model):
     horas = fields.Float(string='Horas', required=False, tracking=True)
 
     # saldo = fields.Float(string='Saldo', required=False)
+    estado = fields.Selection(selection=[('activo', 'ACTIVO'), ('inactivo', 'INACTIVO'), ], default='activo')
 
     def write(self, values):
         # Add code here
@@ -204,7 +204,6 @@ class DetalleSaldos(models.Model):
                 detalle_saldo = self.env['racetime.permisos'].search(
                     [('saldo_id', '=', self.id)
                         , ('active', '=', False)])
-                print(detalle_saldo)
                 for detalle_saldo in detalle_saldo:
                     detalle_saldo.active = True
 
@@ -221,7 +220,6 @@ class DetalleSaldos(models.Model):
 
                 for detalle_saldo in self.horas_id:
                     detalle_saldo.active = self.active
-                print(archivos)
 
         return archivos
 
@@ -270,7 +268,6 @@ class SaldosReportWizard(models.TransientModel):
                 [('fecha', '=', self.fecha_corte), ('tipo', '=', 'SC')])
 
             corte = saldo_empleado.detalle_saldos.filtered_domain([('tipo', '=', 'SC')]).sorted(lambda c: c.fecha)
-            print(corte)
             if len(corte) > 0:
                 corte = corte[-1]
 
@@ -372,26 +369,32 @@ class SaldosReport(models.AbstractModel):
 
         dias_antiguedad = self.env['racetime.detalle_saldos'].search(
             [('empleado_id', 'in', empleados.ids), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin),
+             ('estado', '=', 'activo'),
              ('tipo', '=', 'DA')])
 
         dias_beneficio = self.env['racetime.detalle_saldos'].search(
             [('empleado_id', 'in', empleados.ids), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin),
+             ('estado', '=', 'activo'),
              ('tipo', '=', 'DB')])
 
         saldos_al_corte = self.env['racetime.detalle_saldos'].search(
             [('empleado_id', 'in', empleados.ids), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin),
+             ('estado', '=', 'activo'),
              ('tipo', '=', 'SC')], order='fecha asc')
 
         horas = self.env['racetime.detalle_saldos'].search(
             [('empleado_id', 'in', empleados.ids), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin),
+             ('estado', '=', 'activo'),
              ('tipo', '=', 'H')])
 
         permisos = self.env['racetime.detalle_saldos'].search(
             [('empleado_id', 'in', empleados.ids), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin),
+             ('estado', '=', 'activo'),
              ('tipo', '=', 'P')])
 
         descuentos_horas = self.env['racetime.detalle_saldos'].search(
             [('empleado_id', 'in', empleados.ids), ('fecha', '>=', fecha_inicio), ('fecha', '<=', fecha_fin),
+             ('estado', '=', 'activo'),
              ('tipo', '=', 'DH')])
 
         estilos_table = workbook.add_format({'border': 1})

@@ -23,6 +23,14 @@ class ReporteAtrasosWizard(models.TransientModel):
         }
         return self.env.ref("racetime.reporte_atrasos_report_xlsx").report_action(self, data=data)
 
+    def generar_reporte_novedades_marcaciones(self):
+        data = {
+            'fecha_inicio': self.fecha_inicio,
+            'fecha_fin': self.fecha_final,
+            'empleados_ids': self.empleados_id.mapped('id')
+        }
+        return self.env.ref("racetime.reporte_novedades_marcaciones_report_xlsx").report_action(self, data=data)
+
 
 class ReporteAtrasosReport(models.AbstractModel):
     _name = 'report.racetime.reporte_atrasos'
@@ -181,3 +189,15 @@ class ReporteAtrasosReport(models.AbstractModel):
             # print(atrass)
             # print(minutot)
             # print(m.diferencia_en_minutos)
+
+
+class ReporteAtrasosReport(models.AbstractModel):
+    _name = 'report.racetime.reporte_novedades_marcaciones'
+    _inherit = 'report.report_xlsx.abstract'
+    _description = 'Reporte Novedades Marcaciones'
+
+    def generate_xlsx_report(self, workbook, data, records):
+        print("generar reporte")
+        print(data)
+        sheet = workbook.add_worksheet("Reporte")
+        sheet.write("A1", "Prueba")

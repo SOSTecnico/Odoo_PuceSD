@@ -20,6 +20,8 @@
                     <footer>
                         <button name="generar_reporte" type="object" string="REPORTE ATRASOS"
                                 class="btn btn-lg btn-primary shadow"/>
+                        <button name="generar_reporte_novedades_marcaciones" type="object" string="NOVEDADES MARCACIONES"
+                                class="btn btn-lg btn-info shadow"/>
                     </footer>
                 </form>
             </field>
