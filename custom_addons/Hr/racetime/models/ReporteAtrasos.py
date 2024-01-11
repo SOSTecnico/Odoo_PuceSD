@@ -3,6 +3,10 @@ from fileinput import filename
 import xlsxwriter
 from datetime import datetime, timedelta
 from odoo import fields, models, api
+import calendar
+from openpyxl.utils import get_column_letter
+
+from odoo.exceptions import ValidationError
 
 
 class ReporteAtrasosWizard(models.TransientModel):
@@ -197,121 +201,65 @@ class ReporteAtrasosReport(models.AbstractModel):
     _description = 'Reporte Novedades Marcaciones'
 
     def generate_xlsx_report(self, workbook, data, records):
-        fecha_inicio = data['fecha_inicio']
-        fecha_fin = data['fecha_fin']
+        fecha_inicio =  datetime.strptime(data['fecha_inicio'], "%Y-%m-%d %H:%M:%S")
+        fecha_fin =  datetime.strptime(data['fecha_fin'], "%Y-%m-%d %H:%M:%S")
         sheet = workbook.add_worksheet("Reporte de Atrasos Desempeño")
         bold = workbook.add_format({'bold': True})
         sheet.merge_range("A1:B1", f"Desde: {fecha_inicio} || Hasta: {fecha_fin}", bold)
         nombre_mes_inicio = datetime.strptime(data['fecha_inicio'], "%Y-%m-%d %H:%M:%S").strftime("%B")
 
+        f_temp = fecha_inicio
+
+        #while f_temp < fecha_fin:
+        #    print(f_temp.strftime("%d"))
+        #    f_temp = f_temp + timedelta(days=1)
+
+       # raise ValidationError("Error")
+
+        # IMPRESION DE LOS DÍAS
+        #mes_actual = datetime.now().month
+        #calendario_actual = calendar.monthcalendar(datetime.now().year, mes_actual)
 
         sheet.write("A3", "NOMBRES", bold)
-        sheet.write("B3", nombre_mes_inicio, bold)
+        sheet.write("B2", nombre_mes_inicio, bold)
 
         sheet.set_column('A:A', 45)
-        sheet.set_column('B:AD', 8)
+        sheet.set_column('B:AD', 10)
+
+        # impresión de los días
+        columna_dias = 1  # Comienza en la columna B
+
+        #POR FOR
+        #for asd in range(fecha_inicio, fecha_fin):
+        #    sheet.write(f"{get_column_letter(columna_dias)}3", asd)
+        #    columna_dias += 1
 
 
-"""
-
-empleado = self.env["hr.employee"].search([('id', 'in', data['empleados_ids'])])
-
-marcaciones = self.env["racetime.reporte_marcaciones"].search(
-    [('empleado_id', 'in', data['empleados_ids']), ('marcacion_tiempo', '>=', data['fecha_inicio']),
-     ('marcacion_tiempo', '<=', data['fecha_fin'])],
-    order='empleado_id ASC,marcacion_tiempo ASC')
-
-empleados = marcaciones.mapped('empleado_id')
-celda_inicio = 3
-for i, empleado in enumerate(empleados):
-    sheet.write(f"A{celda_inicio}", empleado.name)
-    sheet.write(f"D{celda_inicio}", "Estado de Asistencia")  # Cambié el encabezado
-
-    marc = marcaciones.filtered_domain([('empleado_id', '=', empleado.id), ('detalle', '=', 'ed')])
-
-    # Revisar si hay atrasos
-    estado_asistencia = "ATRASO" if any(m.diferencia_en_minutos for m in marc) else "OK"
-    sheet.write(f"E{celda_inicio}", estado_asistencia)  # Mostrar "ATRASO" o "OK"
-
-    celda_inicio = celda_inicio + 1
-    insert = timedelta(hours=0, minutes=0, seconds=0)
-    total_minutos = timedelta(minutes=0)
-
-    for j, m in enumerate(marc):
-        hora, minuto, segundo = m.diferencia_en_minutos.split(":")
-        total_minutos = total_minutos + timedelta(minutes=float(minuto) - 5)
-        insert = insert + timedelta(hours=float(hora), minutes=float(minuto), seconds=float(segundo))
-
-        horat = m.marcacion_tiempo + timedelta(hours=-5)
-        minutos1 = m.marcacion_tiempo + timedelta(minutes=-5)
-        atraso1 = m.diferencia_en_minutos.split(":")
-        atrasotota = int(atraso1[0])
-        if atrasotota < 10:
-            atrasotota = str(atrasotota).zfill(2)
-        atrasotota1 = int(atraso1[1]) - 5
-        if atrasotota1 < 10:
-            atrasotota1 = str(atrasotota1).zfill(2)
-            print(atrasotota1)
-
-        atrass1 = f'{atrasotota}:{atrasotota1}'
-
-        sheet.write(f"B{celda_inicio + j}", m.marcacion_tiempo.strftime("%Y-%m-%d"))
-        sheet.write(f"C{celda_inicio + j}", m.hora)
-        sheet.write(f"D{celda_inicio + j}", horat.strftime("%H:%M"))
-        # sheet.write(f"E{celda_inicio + j}", minutos1.strftime("00:%M"))
-        sheet.write(f"E{celda_inicio + j}", atrass1)
-        sheet.write(f"F{celda_inicio + j}", m.observacion)
-        sheet.write(f"G{celda_inicio + j}", m.permiso_id.name or "")
-
-    sheet.write(f"D{len(marc) + celda_inicio}", " Total minutos ")
-    sheet.write(f"E{len(marc) + celda_inicio}", total_minutos.total_seconds() / 60)
-
-    celda_inicio = celda_inicio + len(marc) + 1
+        #CONSERVANDO EL WHILE
+        while f_temp < fecha_fin:
+            sheet.write(2, columna_dias, f_temp.strftime('%d'))
+            columna_dias += 1
+            f_temp += timedelta(days=1)
 
 
-
-"""
-
-
-"""
-fecha_inicio = data['fecha_inicio']
-        fecha_fin = data['fecha_fin']
-        sheet = workbook.add_worksheet("Reporte de Atrasos Desempeño")
-        bold = workbook.add_format({'bold': True})
-        sheet.merge_range("A1:B1", f"Desde: {fecha_inicio} || Hasta: {fecha_fin}", bold)
-
-        sheet.write("B2", "Fecha", bold)
-        sheet.write("C2", "Horario", bold)
-        sheet.write("D1", "REPORTE DE ATRASOS", bold)
-        sheet.write("D2", "Marcación Empleado", bold)
-        sheet.write("E2", "Diferencia en minutos", bold)
-        sheet.write("F2", "Observaciones", bold)
-        sheet.write("G2", "Permisos", bold)
-
-        sheet.set_column('A:A', 45)
-        sheet.set_column('B:B', 15)
-        sheet.set_column('C:C', 20)
-        sheet.set_column('D:D', 20)
-        sheet.set_column('E:E', 20)
-        sheet.set_column('F:F', 15)
-        sheet.set_column('G:G', 50)
-
-        # ***********************
         empleado = self.env["hr.employee"].search([('id', 'in', data['empleados_ids'])])
 
         marcaciones = self.env["racetime.reporte_marcaciones"].search(
-            [('empleado_id', 'in', data['empleados_ids']), ('observacion', '=', 'atraso'),
-             ('marcacion_tiempo', '>=', data['fecha_inicio']), ('marcacion_tiempo', '<=', data['fecha_fin'])],
+            [('empleado_id', 'in', data['empleados_ids']), ('marcacion_tiempo', '>=', data['fecha_inicio']),
+             ('marcacion_tiempo', '<=', data['fecha_fin'])],
             order='empleado_id ASC,marcacion_tiempo ASC')
 
         empleados = marcaciones.mapped('empleado_id')
-        celda_inicio = 3
+        celda_inicio = 4
         for i, empleado in enumerate(empleados):
             sheet.write(f"A{celda_inicio}", empleado.name)
-            sheet.write(f"D{celda_inicio}", "Numero de atrasos")
 
             marc = marcaciones.filtered_domain([('empleado_id', '=', empleado.id), ('detalle', '=', 'ed')])
-            sheet.write(f"E{celda_inicio}", len(marc))
+
+            # Revisar si hay atrasos
+            estado_asistencia = "NOVEDAD" if any(m.diferencia_en_minutos for m in marc) else "OK"
+            sheet.write(f"E{celda_inicio}", estado_asistencia)  # Mostrar "ATRASO" o "OK"
+
             celda_inicio = celda_inicio + 1
             insert = timedelta(hours=0, minutes=0, seconds=0)
             total_minutos = timedelta(minutes=0)
@@ -330,21 +278,8 @@ fecha_inicio = data['fecha_inicio']
                 atrasotota1 = int(atraso1[1]) - 5
                 if atrasotota1 < 10:
                     atrasotota1 = str(atrasotota1).zfill(2)
-                    print(atrasotota1)
 
                 atrass1 = f'{atrasotota}:{atrasotota1}'
 
-                sheet.write(f"B{celda_inicio + j}", m.marcacion_tiempo.strftime("%Y-%m-%d"))
-                sheet.write(f"C{celda_inicio + j}", m.hora)
-                sheet.write(f"D{celda_inicio + j}", horat.strftime("%H:%M"))
-                # sheet.write(f"E{celda_inicio + j}", minutos1.strftime("00:%M"))
-                sheet.write(f"E{celda_inicio + j}", atrass1)
-                sheet.write(f"F{celda_inicio + j}", m.observacion)
-                sheet.write(f"G{celda_inicio + j}", m.permiso_id.name or "")
-
-            sheet.write(f"D{len(marc) + celda_inicio}", " Total minutos ")
-            sheet.write(f"E{len(marc) + celda_inicio}", total_minutos.total_seconds() / 60)
-
             celda_inicio = celda_inicio + len(marc) + 1
 
-"""
