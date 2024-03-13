@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="aleatoria.list">
+      <field name="name">Aleatoria list</field>
+      <field name="model">aleatoria.aleatoria</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="aleatoria.action_window">
+      <field name="name">Aleatoria window</field>
+      <field name="res_model">aleatoria.aleatoria</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="aleatoria.action_server">
+      <field name="name">Aleatoria server</field>
+      <field name="model_id" ref="model_aleatoria_aleatoria"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="Aleatoria" id="aleatoria.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="aleatoria.menu_1" parent="aleatoria.menu_root"/>
+    <menuitem name="Menu 2" id="aleatoria.menu_2" parent="aleatoria.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="aleatoria.menu_1_list" parent="aleatoria.menu_1"
+              action="aleatoria.action_window"/>
+    <menuitem name="Server to list" id="aleatoria" parent="aleatoria.menu_2"
+              action="aleatoria.action_server"/>
+-->
+  </data>
+</odoo>
